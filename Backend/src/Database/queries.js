@@ -1,4 +1,4 @@
 export const queries={
-    getUsers: "SELECT 1 "
+    getUsers: "SELECT * from estudiantes "
 }
 
