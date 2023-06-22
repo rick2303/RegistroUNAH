@@ -1,4 +1,4 @@
 export const queries={
-    getUsers: "SELECT * from estudiantes "
+    get_Docentes: "SELECT * from dbo.empleados where rol='Docente' and subrol= 'Docente' "
 }
 

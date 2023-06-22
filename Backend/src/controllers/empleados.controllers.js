@@ -1,9 +1,9 @@
 import { getConnection, queries} from "../Database"
 
-export const getUsuarios = async (req,res)=> {
+export const getDocentes = async (req,res)=> {
     try{
         const pool = await getConnection();
-        const result = await pool.request().query(queries.getUsers);
+        const result = await pool.request().query(queries.get_Docentes);
         console.log(result);
         res.json(result.recordset);
     }catch(error){

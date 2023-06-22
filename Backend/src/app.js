@@ -1,6 +1,6 @@
 import express from "express";
 import config from './config';
-import usuariosRoute from './routes/usuarios.routes'
+import empleadosRoute from './routes/empleados.routes'
 
 const app= express();
 
@@ -11,7 +11,7 @@ app.use(express.urlencoded({ extended:false}));
 
 console.log(config.port);
 
-app.use(usuariosRoute);
+app.use(empleadosRoute);
 
 export default app
 
