@@ -48,7 +48,7 @@ export function Login({ setUser }) {
                     onChange={(e) => setPassword(e.target.value)}
                 />
                 <p></p>
-                <button>Accerder</button>
+                <button>Acceder</button>
             </form>
             {error && <p className="error">Debes completar todos los campos</p>}
 
