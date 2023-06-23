@@ -9,7 +9,7 @@ export const loginUsuarios = async (req,res)=>{
         //setea correo para realizar la validacion de la contraseña
         const result= await pool.request()
         .input("contrasena",sql.VarChar,contraseña)
-        .input("Id",sql.VarChar,Id)
+        .input("Id",sql.Int,Id)
         .query(queries.accessLogin);
         //obtiene la contraseña adjunta al correo segun la BD
         const contraseñaBD= result.recordset[0].Constrasena
