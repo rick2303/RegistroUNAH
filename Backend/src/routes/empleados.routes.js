@@ -1,13 +1,11 @@
 import {Router} from 'express';
 
-import {getDocentes,registrarDocente,loginUsuarios} from '../controllers/empleados.controllers';
+import {getDocentes,registrarDocente} from '../controllers/empleados.controllers';
 
-const router = Router();
+const routerEmpleados = Router();
 
-router.get('/docentes', getDocentes);
+routerEmpleados.get('/docentes', getDocentes);
 
-router.post('/registrarDocentes', registrarDocente);
+routerEmpleados.post('/registrarDocentes', registrarDocente);
 
-router.post('/login',loginUsuarios)
-
-export default router;
+export default routerEmpleados;
