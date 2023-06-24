@@ -6,7 +6,7 @@ import { FcConferenceCall } from "react-icons/fc";
 import "bootstrap/dist/css/bootstrap.min.css"
 
 
-function MenuDocente() {
+function MenuDocente() { 
   return (
     <section className="bg-white md:mt-5">
       <h1 className="text-2xl  text-center font-bold pt-2 text-gray-900 sm:text-3xl">

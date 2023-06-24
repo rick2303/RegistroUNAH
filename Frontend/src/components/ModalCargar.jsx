@@ -8,7 +8,7 @@ function ModalCargar() {
     
    const {modal, setModal} = React.useState(false);    
 
-
+ 
   return (
     <>
 

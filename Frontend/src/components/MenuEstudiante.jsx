@@ -119,6 +119,6 @@ function MenuEstudiante() {
       </div>
     </section>
   );
-}
+} 
 
 export default MenuEstudiante;

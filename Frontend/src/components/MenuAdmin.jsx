@@ -5,7 +5,7 @@ import { FcBusinessman } from "react-icons/fc";
 import { FcConferenceCall } from "react-icons/fc";
 import "bootstrap/dist/css/bootstrap.min.css"
 
-
+  
 function MenuAdmin() {
   return (
     <section className="bg-white md:mt-5">

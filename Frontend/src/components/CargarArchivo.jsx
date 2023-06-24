@@ -6,7 +6,7 @@ function CargarArchivo() {
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
-  };
+  };  
 
   const handleSubmit = (event) => {
     event.preventDefault();
