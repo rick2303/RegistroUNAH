@@ -53,6 +53,7 @@ export function Login({ setUser }) {
             {error && <p className="error">Debes completar todos los campos</p>}
 
             {loading && <span class="loader"></span>}
+            <a href="/src/html/Administracion.html">¿Olvidaste tu contraseña?</a>
 
         </>
     )
