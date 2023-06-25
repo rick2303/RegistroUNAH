@@ -3,7 +3,7 @@
 * Con npm i mssql express morgan cors dotenv
 
 ## Para frontend
-dependencies a installar
+Dependencias a instalar
 * Vite: npm install
 * Tailwind: npm install -D tailwindcss postcss 
 * para Tailwind hay que ir a la documentación ya que hay más pasos
