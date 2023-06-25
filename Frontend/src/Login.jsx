@@ -54,6 +54,7 @@ export function Login({ setUser }) {
         <p></p>
         <button>Acceder</button>
       </form>
+      <br></br>
       {error && <p className="error">Debes completar todos los campos</p>}
 
       {loading && <span className="loader"></span>}
