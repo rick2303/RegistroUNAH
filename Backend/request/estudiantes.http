@@ -10,7 +10,7 @@ POST http://localhost:5000/students
 Content-Type: application/json
 
 {
-    "NumCuenta": "20221003672",
+    "NumCuenta": "20212083672",
     "DNI": "080120016054",
     "Nombre": "Giancarlo Josue",
     "Apellido": "Raudales Martinez",

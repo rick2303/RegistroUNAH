@@ -25,9 +25,25 @@ export function Login({ setUser }) {
             setLoading(false)
             setUser(usuario)
         }, 2000)
-
+        data = {
+            usuario: usuario,
+            pass: password
+        }
+        fetch('http://localhost:5000/iswAdmin', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          })
+            .then(response => {
+              // Manejar la respuesta del backend
+            })
+            .catch(error => {
+              // Manejar cualquier error que ocurra durante la solicitud
+            });
     }
-
+    
     return (
         <>
             <img src={logo}></img>
@@ -56,5 +72,7 @@ export function Login({ setUser }) {
             <a href="/src/html/Administracion.html">¿Olvidaste tu contraseña?</a>
 
         </>
+        
     )
 }
+

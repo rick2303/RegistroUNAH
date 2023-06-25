@@ -8,7 +8,7 @@ routerDireccionamientos.get('/iswCoordinacion', paginaCoordinacion);
 
 routerDireccionamientos.get('/iswJefatura',paginaJefatura);
 
-routerDireccionamientos.get('/iswAdmin',paginaAdmin);
+routerDireccionamientos.post('/iswAdmin',paginaAdmin);
 
 routerDireccionamientos.get('/iswEstudiantes',paginaEstudianttes);
 

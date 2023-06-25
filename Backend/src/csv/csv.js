@@ -12,7 +12,7 @@ export function procesarArchivo(filePath) {
   // Ruta del archivo CSV subido desde el frontend
   const csvFilePath = filePath;
 
-  var students = [];
+  const students = [];
 
 
 fs.createReadStream(csvFilePath)
@@ -56,7 +56,7 @@ fs.createReadStream(csvFilePath)
   })
   .on("end", () => {
 
-    // console.log("Datos cargados:", students);
+    //console.log("Datos cargados:", students);
     for (let index = 0; index < students.length; index++) {
       CreacionCCC(students[index].correo,students[index].DNI,students[index].nombre, students[index].apellido,students[index].telefono,students[index].FechaNacimiento,students[index].anioIngreso,students[index].direccion, students[index].centro, students[index].periodoIngreso, students[index].carrera, students[index].puntajePAA)      
       
@@ -66,7 +66,6 @@ fs.createReadStream(csvFilePath)
 
 }
 //export default students;
-
 function CreacionCCC(correopersonal,dni, firstName, lastName,tel,fechaNaci, anioIngresoPAC,direc, centro, periodo, carreraIngreso, puntaje) {
   const existingEmails = new Set();
 
@@ -216,8 +215,8 @@ const numerosCuentaGenerados = [];
 
   const uniqueEmail = generateUniqueEmail(firstNameOnly, lastNameOnly);
   const password = generateRandomPassword(firstNameOnly);
-  // console.log('Correo único generado:', uniqueEmail);
-  // console.log('Contraseña:', password);
+  //console.log('Correo único generado:', uniqueEmail);
+  //console.log('Contraseña:', password);
   //console.log('Número de cuenta:',  Cuenta);
 
   //enviarEmail(correopersonal,firstName,lastName,uniqueEmail, Cuenta,password, carreraIngreso);
@@ -225,25 +224,39 @@ const numerosCuentaGenerados = [];
 
   const express = require('express');
   const app = express();
-  
-  app.post('/students', (req, res) => {
-    const Cuenta = req.body.NumCuenta;
-    const dni = req.body.DNI;
-    const firstName = req.body.Nombre;
-    const lastName = req.body.Apellido;
-    const tel = req.body.NumeroTelefono;
-    const uniqueEmail = req.body.CorreoInstitucional;
-    const correopersonal = req.body.CorreoPersonal;
-    const password = req.body.Contrasena;
-    const fechaNaci = req.body.FechaNacimiento;
-    const carreraIngreso = req.body.Carrera;
-    const direc = req.body.Direccion;
-    const centro = req.body.CentroRegional;
-    const puntaje = req.body.PuntajePAA;
-  
-    createNewStudent(req, res);
-  });
 
+  const req = {
+    body: {
+      NumCuenta: Cuenta,
+      DNI: dni,
+      Nombre: firstName,
+      Apellido: lastName,
+      NumeroTelefono: tel,
+      CorreoInstitucional: uniqueEmail,
+      CorreoPersonal: correopersonal,
+      Contrasena: password,
+      FechaNacimiento: fechaNaci,
+      Carrera: carreraIngreso,
+      Direccion: direc,
+      CentroRegional: centro,
+      PuntajePAA: puntaje
+    }
+  };
+
+  const res = {
+    json: (data) => {
+      console.log('Estudiante guardado:', data);
+    },
+    status: (code) => {
+      console.log('Código de estado:', code);
+      return res;
+    },
+    send: (message) => {
+      console.log('Error:', message);
+    }
+  };
+
+  createNewStudent(req, res)
 }
 
 
@@ -261,7 +274,7 @@ async function enviarEmail(correo,nombre,apellido,correoinst,numeroCuenta,contra
   };
 
   const mensaje = {
-    from : 'gelenamador26@gmail.com',
+    from : 'dippunah@gmail.com',
     to: `${correo}`,
     subject: 'Bienvenido a la UNAH',
     html: `<h1>Felicitaciones ${nombre} ${apellido} por entrar a la Carrera de ${carreraIngre}</h1><p>Te hacemos entrega de tus credenciales:</p><ul><li>Tu correo institucional es: ${correoinst}</li><li>Tu número de cuenta es: ${numeroCuenta}</li><li>Tu clave para acceder a registro es: ${contrasena}</li></ul><p>Por favor, no compartas tu contraseña con nadie.</p><p>Para más información o preguntas, escríbenos a consultas_dipp@unah.edu.hn o llámanos a nuestros teléfonos: (+504) 2216-3002 / 2216-3003 / 2216-3004</p>`
@@ -272,6 +285,3 @@ async function enviarEmail(correo,nombre,apellido,correoinst,numeroCuenta,contra
   const info = await transport.sendMail(mensaje);
   console.log(info);
 }
-
-
-
