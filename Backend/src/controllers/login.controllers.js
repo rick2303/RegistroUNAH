@@ -27,7 +27,7 @@ export const loginUsuarios = async (req,res)=>{
                 res.redirect('/iswCoordinacion');
             }
             if(rol==null && subrol==null){
-                res.redirect('/iswEstudiante');
+                res.redirect('/iswEstudiantes');
             }
             if(rol=='DOCENTE' && subrol=='JEFE DEPARTAMENTO'){
                 res.redirect('/iswJefatura');
