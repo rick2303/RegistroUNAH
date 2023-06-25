@@ -1,11 +1,47 @@
 import {USEREMAIL,PASS} from "../../.env"
 import {createNewStudent} from '../controllers/usuarios.controllers';
-const csv = require("csv-parser");
-const fs = require("fs");
 
-const students = [];
+const express = require('express');
+const multer = require('multer');
 
-fs.createReadStream("./src/csv/ListadoEstudiantes.csv")
+const router = express.Router();
+
+// Configuración de multer para guardar los archivos en la carpeta "uploads"
+const upload = multer({ dest: 'uploads/' });
+
+// Ruta para recibir el archivo de estudiantes desde el frontend
+router.post('/ReceiveStudents', upload.single('file'), (req, res) => {
+  // Obtener el archivo subido desde el frontend
+  const file = req.file;
+
+  // Verificar si se envió un archivo
+  if (!file) {
+    return res.status(400).json({ error: 'No se ha proporcionado ningún archivo' });
+  }
+
+  // Obtener la ruta del archivo subido
+  const filePath = file.path;
+
+  // Llamar a la función para procesar el archivo y guardarlo en la base de datos
+  procesarArchivo(filePath);
+
+  // Enviar respuesta exitosa al frontend
+  res.status(200).json({ message: 'Archivo recibido y procesado correctamente' });
+});
+
+module.exports = router;
+
+
+const csv = require('csv-parser');
+const fs = require('fs');
+
+function procesarArchivo(filePath) {
+  // Ruta del archivo CSV subido desde el frontend
+  const csvFilePath = filePath;
+
+  var students = [];
+
+fs.createReadStream(csvFilePath)
   .pipe(csv())
   .on("data", (data) => {
     const {
@@ -54,6 +90,7 @@ fs.createReadStream("./src/csv/ListadoEstudiantes.csv")
 
   });
 
+}
 export default students;
 
 function CreacionCCC(correopersonal,dni, firstName, lastName,tel,fechaNaci, anioIngresoPAC,direc, centro, periodo, carreraIngreso, puntaje) {
@@ -205,17 +242,17 @@ const numerosCuentaGenerados = [];
 
   const uniqueEmail = generateUniqueEmail(firstNameOnly, lastNameOnly);
   const password = generateRandomPassword(firstNameOnly);
-  console.log('Correo único generado:', uniqueEmail);
-  console.log('Contraseña:', password);
-  console.log('Número de cuenta:',  Cuenta);
+  // console.log('Correo único generado:', uniqueEmail);
+  // console.log('Contraseña:', password);
+  //console.log('Número de cuenta:',  Cuenta);
 
-  enviarEmail(correopersonal,firstName,lastName,uniqueEmail, Cuenta,password, carreraIngreso);
+  //enviarEmail(correopersonal,firstName,lastName,uniqueEmail, Cuenta,password, carreraIngreso);
 
 
   const express = require('express');
   const app = express();
   
-  app.post('/ruta', (req, res) => {
+  app.post('/students', (req, res) => {
     const Cuenta = req.body.NumCuenta;
     const dni = req.body.DNI;
     const firstName = req.body.Nombre;
@@ -261,5 +298,7 @@ async function enviarEmail(correo,nombre,apellido,correoinst,numeroCuenta,contra
   const info = await transport.sendMail(mensaje);
   console.log(info);
 }
+
+
 
 
