@@ -1,6 +1,6 @@
 import {Router} from 'express';
 
-import {getEstudiantes, createNewStudent} from '../controllers/usuarios.controllers';
+import {getEstudiantes, createNewStudent, receiveNewStudent} from '../controllers/usuarios.controllers';
 
 const router = Router();
 
