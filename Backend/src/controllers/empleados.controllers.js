@@ -1,5 +1,5 @@
 import { getConnection,sql, queries} from "../Database"
-const bcrypt = require('bcrypt');
+
 
 export const getDocentes = async (req,res)=> {
     try{
@@ -24,17 +24,14 @@ export const registrarDocente= async (req,res)=>{
         Contrasena,
         FechaNacimiento,
         FechaContratacion,
-        Id_Carrera,
+        Carrera,
         Direccion,
         Foto,
-        ID_CentroRegional,
+        CentroRegional,
         Rol,
         SubRol
         } = req.body;
     try {
-        // Genera un hash de la Contrasena utilizando bcrypt
-        const hashedCContrasena = await bcrypt.hash(Contrasena, 10);
-        console.log(hashedCContrasena);
         // Establece la conexión a la base de datos
         const pool = await getConnection();
         // Inserta el nombre de usuario y la Contrasena en la tabla de usuarios
@@ -45,15 +42,15 @@ export const registrarDocente= async (req,res)=>{
         .input("NumeroTelefono",sql.VarChar,NumeroTelefono)
         .input("CorreoInstitucional",sql.VarChar,CorreoInstitucional)
         .input("CorreoPersonal",sql.VarChar,CorreoPersonal)
-        .input("Contrasena",sql.VarChar,hashedCContrasena)
+        .input("Contrasena",sql.VarChar,Contrasena)
         .input("FechaNacimiento",sql.Date,FechaNacimiento)
         .input("FechaContratacion",sql.Date,FechaContratacion)
-        .input("Id_Carrera",sql.Int, Id_Carrera)
+        .input("Carrera",sql.VarChar, Carrera.toUpperCase())
         .input("Direccion",sql.VarChar,Direccion)
         .input("Foto",sql.VarChar,Foto)
-        .input("ID_CentroRegional",sql.Int,ID_CentroRegional)
-        .input("Rol",sql.VarChar,Rol)
-        .input("SubRol", sql.VarChar,SubRol)
+        .input("CentroRegional",sql.VarChar,CentroRegional.toUpperCase())
+        .input("Rol",sql.VarChar,Rol.toUpperCase())
+        .input("SubRol", sql.VarChar,SubRol.toUpperCase())
         .query(queries.insert_Docentes);
         res.status(200).json({ message: 'Docente registrado correctamente.' });  
     } catch (error) {

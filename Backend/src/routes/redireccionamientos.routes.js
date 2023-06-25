@@ -1,18 +1,18 @@
-import {Router} from 'express';
+export const paginaCoordinacion= async (req,res)=>{
+    res.redirect('http://127.0.0.1:5173/src/html/Coordinacion.html');
+}
 
-import {paginaCoordinacion,paginaJefatura,paginaAdmin,paginaEstudianttes,paginaDocente} from '../controllers/redireccionamientos.controllers';
+export const paginaJefatura= async (req,res)=>{
+    res.redirect('http://127.0.0.1:5173/src/html/Jefatura.html');
+}
+export const paginaAdmin= async (req,res)=>{
+    res.redirect('http://127.0.0.1:5173/src/html/Administracion.html');
+}
 
-const routerDireccionamientos = Router();
+export const paginaEstudianttes= async (req,res)=>{
+    res.redirect('http://127.0.0.1:5173/src/html/Estudiante.html');
+}
 
-routerDireccionamientos.get('/iswCoordinacion', paginaCoordinacion);
-
-routerDireccionamientos.get('/iswJefatura',paginaJefatura);
-
-routerDireccionamientos.get('/iswAdmin',paginaAdmin);
-
-routerDireccionamientos.get('/iswEstudiantes',paginaEstudianttes);
-
-routerDireccionamientos.get('/iswDocente',paginaDocente);
-
-
-export default routerDireccionamientos;
+export const paginaDocente= async (req,res)=>{
+    res.redirect('http://127.0.0.1:5173/src/html/Administracion.html');
+}
