@@ -1,6 +1,9 @@
 import {USEREMAIL,PASS} from "../../.env"
 import {createNewStudent} from '../controllers/usuarios.controllers';
 
+
+
+
 //./src/csv/ListadoEstudiantes.csv
 const csv = require('csv-parser');
 const fs = require('fs');
@@ -10,9 +13,8 @@ export function procesarArchivo(filePath) {
   const csvFilePath = filePath;
 
   var students = [];
-}
 
-fs.createReadStream(csvFilePath)
+
 fs.createReadStream(csvFilePath)
   .pipe(csv())
   .on("data", (data) => {
@@ -217,11 +219,7 @@ const numerosCuentaGenerados = [];
   // console.log('Correo único generado:', uniqueEmail);
   // console.log('Contraseña:', password);
   //console.log('Número de cuenta:',  Cuenta);
-  // console.log('Correo único generado:', uniqueEmail);
-  // console.log('Contraseña:', password);
-  //console.log('Número de cuenta:',  Cuenta);
 
-  //enviarEmail(correopersonal,firstName,lastName,uniqueEmail, Cuenta,password, carreraIngreso);
   //enviarEmail(correopersonal,firstName,lastName,uniqueEmail, Cuenta,password, carreraIngreso);
 
 
