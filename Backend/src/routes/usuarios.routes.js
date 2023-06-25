@@ -8,6 +8,8 @@ router.get('/students', getEstudiantes);
 
 router.post("/students", createNewStudent);
 
+router.post("/ReceiveStudents", receiveNewStudent);
+
 console.log('router funcionando')
 
 
