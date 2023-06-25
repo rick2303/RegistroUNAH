@@ -1,9 +1,6 @@
 import {USEREMAIL,PASS} from "../../.env"
 import {createNewStudent} from '../controllers/usuarios.controllers';
 
-
-
-
 //./src/csv/ListadoEstudiantes.csv
 const csv = require('csv-parser');
 const fs = require('fs');
