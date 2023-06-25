@@ -1,46 +1,39 @@
 import { useState } from "react"
+import axios from "axios";
 import "./Login.css"
 
 
 export function Login({ setUser }) {
-    const [usuario, setUsuario] = useState("")
-    const [password, setPassword] = useState("")
-    const [error, setError] = useState(false)
-    const [loading, setLoading] = useState(false)
+    const [Id, setIdId] = useState("");
+    const [contraseña, setContrasena] = useState("");
+    const [error, setError] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault()
 
 
-        if ([usuario, password].includes("")) {
-            setError(true)
-            return
-        }
-        setError(false)
-
-        setLoading(true)
-        setTimeout(() => {
-            setLoading(false)
-            setUser(usuario)
-        }, 2000)
-        data = {
-            usuario: usuario,
-            pass: password
-        }
-        fetch('http://localhost:5000/iswAdmin', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
+        if ([Id, contraseña].includes("")) {
+            setError(true);
+            return;
+          }
+          setError(false);
+          setLoading(true);
+      
+          // Send ID and password to the backend
+          axios
+            .post("http://localhost:5000/login", { Id, contraseña })
+            .then((response) => {
+              setLoading(false);
+              const responseData = response.data; // Obtener la respuesta del backend
+              window.location.href=responseData;
             })
-            .then(response => {
-              // Manejar la respuesta del backend
-            })
-            .catch(error => {
-              // Manejar cualquier error que ocurra durante la solicitud
+            .catch((error) => {
+              setLoading(false);
+              // Handle error
+              // ...
             });
-    }
+        };
     
     return (
         <>
@@ -52,13 +45,13 @@ export function Login({ setUser }) {
             <h3>Número de cuenta</h3>
                 <input
                     type="text"
-                    value={usuario}
-                    onChange={(e) => setUsuario(e.target.value)}
+                    value={Id}
+                    onChange={(e) => setIdId(e.target.value)}
                 />
             <h3>Contraseña</h3>
                 <input
                     type="password"
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => setContrasena(e.target.value)}
                 />
                 <p></p>
                 <button>Accerder</button>
