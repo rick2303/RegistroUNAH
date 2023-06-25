@@ -12,3 +12,6 @@ Bootstrap: npm i bootstrap
 Reactstrap: npm i reactstrap
 React-icons: npm install react-icons --save
 Material UI: npm i @material-tailwind/react 
+
+Agregar Cors para las peticiones http
+npm i cors

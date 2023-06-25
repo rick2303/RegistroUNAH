@@ -1,5 +1,5 @@
 
-@api = http://localhost:6000/students
+@api = http://localhost:5000/students
 
 
 ### get product

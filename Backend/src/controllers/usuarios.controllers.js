@@ -48,12 +48,11 @@ export const createNewStudent = async (req, res) => {
 };
 
 export const receiveNewStudent = async (req, res) => {
-    const { NumCuenta, DNI, Nombre, Apellido, NumeroTelefono, CorreoInstitucional, CorreoPersonal, Contrasena, FechaNacimiento, Carrera, Direccion, CentroRegional, PuntajePAA } = req.bodyReceive;
+   const { NumCuenta, DNI, Nombre, Apellido, NumeroTelefono, CorreoInstitucional, CorreoPersonal, Contrasena, FechaNacimiento, Carrera, Direccion, CentroRegional, PuntajePAA } = req.bodyReceive;
     // Validación
     if (NumCuenta == null || DNI == null || Nombre == null || Apellido == null || NumeroTelefono == null || CorreoInstitucional == null || CorreoPersonal == null || Contrasena == null || FechaNacimiento == null || Carrera == null || Direccion == null || CentroRegional == null || PuntajePAA == null) {
     return res.status(400).json({ msg: "Peticion denegada. Por favor, llenar todos los espacios" });
-    }
-
+    } 
     try {
       // Aquí puedes realizar cualquier operación adicional con los datos recibidos, como asignarlos a variables locales
       // Ejemplo:

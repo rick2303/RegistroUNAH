@@ -18,7 +18,7 @@ function CargarArchivo() {
       // realizar una solicitud HTTP al backend para cargar el archivo.
       // utilizando la función fetch:
 
-      fetch("/api/upload", {
+      fetch("http://localhost:5000/ReceiveStudents", {
         method: "POST",
         body: formData,
       })
