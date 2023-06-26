@@ -1,6 +1,11 @@
+@font-face {
+  font-family: "Monserrat";
+  src: url("./fuentes/static/Montserrat-SemiBold.ttf")  /* Formato WOFF2 */
+  /* Agrega más formatos de fuente si es necesario */
+}
+
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -16,32 +21,90 @@
 }
 
 a {
-  font-weight: 500;
-  color: #646cff;
+  color: #0353b4ec;
   text-decoration: inherit;
+  font-size: 15px;
 }
 a:hover {
-  color: #535bf2;
+  color: #3b19f8;
 }
+
+
 
 body {
   margin: 0;
-  display:flex;
-  place-items:center;
+  display: flex;
+  justify-content: flex-end; /* Alinea el contenido a la derecha */
+  align-items: center;
   min-width: 320px;
   min-height: 100vh;
-  place-content:right;
-  
   background-image: url(./img/BackGround.jpeg);
-  background-size: 100%;
-
-
+  background-size: cover;
+  font-family: "Monserrat", Arial, sans-serif;
 }
 
 
+
+/* Estilos para pantallas de hasta 480 píxeles de ancho */
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  body {
+    /* Estilos específicos para pantallas pequeñas */
+    background-size: auto;
+    background-position: center;
+
+  }
+  form{
+    border: 1px solid rgba(214, 213, 224, 0.616);
+    padding: 20px; /* opcional, agrega un espacio alrededor del borde */
+    width: 350px;
+    height: 335px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
+    box-sizing: border-box;
+    background-color:#dbe3eea1;
+    margin-right: 100px;
+    margin-top: 100px;
+    color: #002044;
+  }
+}
+
+/* Estilos para pantallas de entre 481px y 768px de ancho */
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  body {
+    /* Estilos específicos para pantallas medianas */
+    background-size: cover;
+    background-position: right;
+
+  }
+}
+
+/* Estilos para pantallas de más de 768px de ancho */
+@media screen and (min-width: 769px) {
+  body {
+    /* Estilos específicos para pantallas grandes */
+    background-size: 100% 100%;
+    background-position: center;
+  }
+}
+
 h1 {
-  font-size: 3.2em;
+  padding-top: 3rem;
+  font-size: 2rem;
   line-height: 1.1;
+  color: black;
+}
+
+form{
+  border: 1px solid rgba(214, 213, 224, 0.616);
+  padding: 50px; /* opcional, agrega un espacio alrededor del borde */
+  width: 350px;
+  height: 335px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
+  box-sizing: border-box;
+  background-color:#dbe3eea1;
+  margin-top: 100px;
+  color: #002044;
 }
 
 button {
@@ -51,7 +114,7 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #0353b4ec;
   cursor: pointer;
   transition: border-color 0.25s;
 
@@ -63,6 +126,18 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+
+input{
+  padding-top: 2px;
+  padding-bottom: 9px;
+  border-top-width: 0.5px;
+  background-color: #ffffff88;
+  border-radius: 0.4rem;
+  border-color: #0000003d;
+  color: #000000a2;
+}
+
+
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -77,3 +152,4 @@ button:focus-visible {
     background-color: #0003af;
   }
 }
+
