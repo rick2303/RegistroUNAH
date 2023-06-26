@@ -8,7 +8,7 @@ const multer = require('multer');
 // Configuración de multer para guardar los archivos en la carpeta "uploads"
 const upload = multer({ dest: 'uploads/' });
 
-//router.get('/students', getEstudiantes);
+router.get('/students', getEstudiantes);
 
 router.post("/students", createNewStudent);
 

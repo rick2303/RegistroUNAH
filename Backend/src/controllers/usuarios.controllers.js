@@ -19,7 +19,7 @@ export const createNewStudent = async (req, res) => {
     if (NumCuenta == null || DNI == null || Nombre == null || Apellido == null || NumeroTelefono == null || CorreoInstitucional == null || CorreoPersonal == null || Contrasena == null || FechaNacimiento == null || Carrera == null || Direccion == null || CentroRegional == null || PuntajePAA == null) {
         return res.status(400).json({ msg: "Peticion denegada. Por favor, llenar todos los espacios" });
     }
-    
+
     try {
         const pool = await getConnection();
 
@@ -39,7 +39,6 @@ export const createNewStudent = async (req, res) => {
         .input("CentroRegional", sql.VarChar, CentroRegional)
         .input("PuntajePAA", sql.Int, PuntajePAA)
         .query(querys.addNewStudent);
-        console.log("funciona crear usuarios")
 
         res.json({NumCuenta, DNI, Nombre, Apellido,NumeroTelefono, CorreoInstitucional, CorreoPersonal, Contrasena, FechaNacimiento, Carrera, Direccion, CentroRegional, PuntajePAA});
     } catch (error) {
@@ -47,8 +46,8 @@ export const createNewStudent = async (req, res) => {
         res.send(error.message);
     }
 };
-/*
-export const receiveNewStudent = async (req, res) => {
+
+/*export const receiveNewStudent = async (req, res) => {
    const { NumCuenta, DNI, Nombre, Apellido, NumeroTelefono, CorreoInstitucional, CorreoPersonal, Contrasena, FechaNacimiento, Carrera, Direccion, CentroRegional, PuntajePAA } = req.bodyReceive;
     // Validación
     if (NumCuenta == null || DNI == null || Nombre == null || Apellido == null || NumeroTelefono == null || CorreoInstitucional == null || CorreoPersonal == null || Contrasena == null || FechaNacimiento == null || Carrera == null || Direccion == null || CentroRegional == null || PuntajePAA == null) {
@@ -79,4 +78,4 @@ export const receiveNewStudent = async (req, res) => {
     res.status(500);
     res.send(error.message);
     }
-};*/
+}; */

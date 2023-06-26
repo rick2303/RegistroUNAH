@@ -18,7 +18,7 @@ function CargarArchivo() {
       // realizar una solicitud HTTP al backend para cargar el archivo.
       // utilizando la función fetch:
 
-      fetch("/api/upload", {
+      fetch("http://localhost:5000/ReceiveStudents", {
         method: "POST",
         body: formData,
       })
@@ -35,9 +35,9 @@ function CargarArchivo() {
   };
 
   return (
-    <form class=" flex items-center justify-between" onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <input type="file" onChange={handleFileChange} />
-      <button type="submit" className="btn bg-blue-800 hover:bg-blue-500 text-white shadow" >Cargar</button>
+      <button type="submit">Cargar</button> 
     </form>
   );
 }

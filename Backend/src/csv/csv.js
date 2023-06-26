@@ -56,7 +56,7 @@ fs.createReadStream(csvFilePath)
   })
   .on("end", () => {
 
-    //console.log("Datos cargados:", students);
+    // console.log("Datos cargados:", students);
     for (let index = 0; index < students.length; index++) {
       CreacionCCC(students[index].correo,students[index].DNI,students[index].nombre, students[index].apellido,students[index].telefono,students[index].FechaNacimiento,students[index].anioIngreso,students[index].direccion, students[index].centro, students[index].periodoIngreso, students[index].carrera, students[index].puntajePAA)      
       
@@ -66,6 +66,7 @@ fs.createReadStream(csvFilePath)
 
 }
 //export default students;
+
 function CreacionCCC(correopersonal,dni, firstName, lastName,tel,fechaNaci, anioIngresoPAC,direc, centro, periodo, carreraIngreso, puntaje) {
   const existingEmails = new Set();
 
@@ -215,8 +216,8 @@ const numerosCuentaGenerados = [];
 
   const uniqueEmail = generateUniqueEmail(firstNameOnly, lastNameOnly);
   const password = generateRandomPassword(firstNameOnly);
-  //console.log('Correo único generado:', uniqueEmail);
-  //console.log('Contraseña:', password);
+  // console.log('Correo único generado:', uniqueEmail);
+  // console.log('Contraseña:', password);
   //console.log('Número de cuenta:',  Cuenta);
 
   //enviarEmail(correopersonal,firstName,lastName,uniqueEmail, Cuenta,password, carreraIngreso);
@@ -224,7 +225,7 @@ const numerosCuentaGenerados = [];
 
   const express = require('express');
   const app = express();
-
+  
   const req = {
     body: {
       NumCuenta: Cuenta,
@@ -274,7 +275,7 @@ async function enviarEmail(correo,nombre,apellido,correoinst,numeroCuenta,contra
   };
 
   const mensaje = {
-    from : 'dippunah@gmail.com',
+    from : 'gelenamador26@gmail.com',
     to: `${correo}`,
     subject: 'Bienvenido a la UNAH',
     html: `<h1>Felicitaciones ${nombre} ${apellido} por entrar a la Carrera de ${carreraIngre}</h1><p>Te hacemos entrega de tus credenciales:</p><ul><li>Tu correo institucional es: ${correoinst}</li><li>Tu número de cuenta es: ${numeroCuenta}</li><li>Tu clave para acceder a registro es: ${contrasena}</li></ul><p>Por favor, no compartas tu contraseña con nadie.</p><p>Para más información o preguntas, escríbenos a consultas_dipp@unah.edu.hn o llámanos a nuestros teléfonos: (+504) 2216-3002 / 2216-3003 / 2216-3004</p>`
@@ -285,3 +286,6 @@ async function enviarEmail(correo,nombre,apellido,correoinst,numeroCuenta,contra
   const info = await transport.sendMail(mensaje);
   console.log(info);
 }
+
+
+
