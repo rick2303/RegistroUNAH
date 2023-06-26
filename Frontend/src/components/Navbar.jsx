@@ -69,9 +69,9 @@ export default function Navbar() {
           <Typography
             as="a"
             href="#"
-            className="mr-4 cursor-pointer py-1.5 font-medium"
+            className="mr-5 cursor-pointer py-1.5 font-medium"
           >
-            <img className="logo p-2" src="\logounah.png"></img>
+            <img className="ml-3 h-16 w-24" src="\logounah.png"></img>
           </Typography>
           <div className="flex items-center gap-4">
             <div className="mr-4 hidden lg:block">{navList}</div>
