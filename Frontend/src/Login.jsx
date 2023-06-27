@@ -52,6 +52,7 @@ export function Login({ setUser }) {
             <h3>Contraseña</h3>
                 <input
                     type="password"
+                    value={contraseña}
                     onChange={(e) => setContrasena(e.target.value)}
                 />
                 <p></p>
@@ -63,7 +64,7 @@ export function Login({ setUser }) {
             {loading && <span class="loader"></span>}
             
             
-            <a href="/src/html/Administracion.html" id="forgertPwd)">¿Olvidaste tu contraseña?</a>
+            <a href="/src/html/Administracion.html" id="forgetPwd">¿Olvidaste tu contraseña?</a>
             
         </>
         
