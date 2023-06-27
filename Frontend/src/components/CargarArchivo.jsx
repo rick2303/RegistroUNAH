@@ -19,12 +19,11 @@ function CargarArchivo() {
         body: formData,
       })
         .then((response) => {
-          if (response.ok) {
-            return response.json();
-          } else if (response.status == 400) {
-            throw new Error('Error interno del servidor');
-          } else {
-            throw new Error('"Revisar que el archivo sea CSV y que no tenga datos de estudiantes ya ingresados"');
+          console.log(response)
+          if (response.status == 200) {
+            alert('Archivo recibido y procesado correctamente');
+            console.log(response)
+            return response;
           }
         })
         .then((data) => {
@@ -39,8 +38,11 @@ function CargarArchivo() {
             inputFileRef.current.value = ""; // Limpiar el campo de entrada de archivos
           }
         });
-    }
+
+
   };
+}
+
 
   return (
     <form onSubmit={handleSubmit}>
