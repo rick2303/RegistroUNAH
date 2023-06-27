@@ -6,10 +6,13 @@
 }
 
 .error {
-    color: rgb(0, 0, 0);
-    font-size: 1rem;
+    color: rgb(228, 12, 12);
+    font-size: 0.89rem;
     font-weight: 400;
     text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .loader {
@@ -32,4 +35,14 @@
     100% {
         transform: rotate(360deg);
     }
+}
+
+#forgetPwd{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center;
+        align-items: center;
+        align-content: stretch;
+    
 }

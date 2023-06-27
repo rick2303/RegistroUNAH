@@ -1,4 +1,4 @@
-import { useState } from "react"
+import React, { useState, useRef } from "react";
 import axios from "axios";
 import "./Login.css"
 
@@ -26,6 +26,7 @@ export function Login({ setUser }) {
             .then((response) => {
               setLoading(false);
               const responseData = response.data; // Obtener la respuesta del backend
+              
               window.location.href=responseData;
             })
             .catch((error) => {
@@ -62,8 +63,8 @@ export function Login({ setUser }) {
             {loading && <span class="loader"></span>}
             
             
-            <a href="/src/html/Administracion.html" >¿Olvidaste tu contraseña?</a>
-
+            <a href="/src/html/Administracion.html" id="forgertPwd)">¿Olvidaste tu contraseña?</a>
+            
         </>
         
     )
