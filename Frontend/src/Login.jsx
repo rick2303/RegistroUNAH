@@ -38,6 +38,8 @@ export function Login({ setUser }) {
             if (data.error) {
               setError(true);
               setErrorMessage(data.error);
+              setIdId(""); // Restablecer el valor del campo de entrada Id
+              setContrasena(""); // Restablecer el valor del campo de entrada contraseña
             } else {
               setError(true);
               setErrorMessage("Error en la solicitud");
@@ -89,7 +91,7 @@ export function Login({ setUser }) {
 
       {loading && <span className="loader"></span>}
 
-      <a href="/src/html/Administracion.html" id="forgertPwd">
+      <a href="/src/html/Administracion.html" id="forgetPwd">
         ¿Olvidaste tu contraseña?
       </a>
     </>
