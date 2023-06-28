@@ -14,6 +14,7 @@ function CargarArchivo() {
       const formData = new FormData();
       formData.append("file", selectedFile);
 
+
       fetch("http://localhost:5000/ReceiveStudents", {
         method: "POST",
         body: formData,
@@ -26,12 +27,6 @@ function CargarArchivo() {
             return response;
           }
         })
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((error) => {
-          alert(error.message);
-        })
         .finally(() => {
           setSelectedFile(null); // Reiniciar la selección de archivo
           if (inputFileRef.current) {
@@ -43,6 +38,7 @@ function CargarArchivo() {
   };
 }
 
+  
 
   return (
     <form onSubmit={handleSubmit}>

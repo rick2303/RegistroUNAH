@@ -24,15 +24,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage,
-  fileFilter: function (req, file, callback) {
-    // Verificar la extensión y el tipo MIME del archivo
-    if (file.mimetype !== 'text/csv') {
-      const error = new Error('El archivo debe ser de tipo CSV');
-      error.status = 400; // Establecer el código de estado del error
-      return callback(error);
-    }
-    callback(null, true);
-  }
+  
 });
 
 router.post('/ReceiveStudents', upload.single('file'), (req, res) => {
