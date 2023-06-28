@@ -14,24 +14,18 @@ function CargarArchivo() {
       const formData = new FormData();
       formData.append("file", selectedFile);
 
+
       fetch("http://localhost:5000/ReceiveStudents", {
         method: "POST",
         body: formData,
       })
         .then((response) => {
-          if (response.ok) {
-            return response.json();
-          } else if (response.status == 400) {
-            throw new Error('Error interno del servidor');
-          } else {
-            throw new Error('"Revisar que el archivo sea CSV y que no tenga datos de estudiantes ya ingresados"');
+          console.log(response)
+          if (response.status == 200) {
+            alert('Archivo recibido y procesado correctamente');
+            console.log(response)
+            return response;
           }
-        })
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((error) => {
-          alert(error.message);
         })
         .finally(() => {
           setSelectedFile(null); // Reiniciar la selección de archivo
@@ -39,8 +33,12 @@ function CargarArchivo() {
             inputFileRef.current.value = ""; // Limpiar el campo de entrada de archivos
           }
         });
-    }
+
+
   };
+}
+
+  
 
   return (
     <form onSubmit={handleSubmit}>

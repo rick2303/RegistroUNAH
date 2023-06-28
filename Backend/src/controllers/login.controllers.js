@@ -32,10 +32,10 @@ export const loginUsuarios = async (req,res)=>{
             if(rol=='DOCENTE' && subrol=='JEFE DEPARTAMENTO'){
                 res.redirect('/iswJefatura');
             }
-        }else{
-            res.status(500).json({ message: 'contraseña incorrecta'}); 
+        }if(contraseñaBD!=contraseña){
+            res.status(500).json({ error: "Acceso inválido. Por favor, inténtelo otra vez." });
         }
     } catch (error) {
-        res.status(500).json({ message: 'Credenciales invalidas'});
+        res.status(500).json({ error: "Acceso inválido. Por favor, inténtelo otra vez." });
     }
 }

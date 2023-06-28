@@ -24,15 +24,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage,
-  fileFilter: function (req, file, callback) {
-    // Verificar la extensión y el tipo MIME del archivo
-    if (file.mimetype !== 'text/csv') {
-      const error = new Error('El archivo debe ser de tipo CSV');
-      error.status = 400; // Establecer el código de estado del error
-      return callback(error);
-    }
-    callback(null, true);
-  }
+  
 });
 
 router.post('/ReceiveStudents', upload.single('file'), (req, res) => {
@@ -49,22 +41,15 @@ router.post('/ReceiveStudents', upload.single('file'), (req, res) => {
     const filePath = file.path;
 
     // Llamar a la función para procesar el archivo y guardarlo en la base de datos
-    procesarArchivo(filePath);
+    const process= procesarArchivo(filePath);
+    
+
+      res.send('Archivo recibido y procesado correctamente');
 
     // Enviar respuesta exitosa al frontend
-    res.status(200).json({ message: 'Archivo recibido y procesado correctamente' });
+    
   } catch (error) {
-    console.error('Error:', error);
-
-    
-  // Verificar si es un error específico de tipo CSV
-  if (error.message === 'El archivo debe ser de tipo CSV') {
-    res.status(400).json({ error: error.message });
-  } else {
-    // Manejar otros errores
-    res.status(500).json({ error: 'Error interno del servidor', errorCode: 500 });
-  }
-    
+    console.error('Error:', error);    
   }
 });
 

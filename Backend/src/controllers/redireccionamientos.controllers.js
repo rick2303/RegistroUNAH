@@ -1,9 +1,9 @@
 export const paginaCoordinacion= async (req,res)=>{
-    res.send('http://127.0.0.1:5173/src/html/Coordinacion.html');
+    res.send('http://127.0.0.1:5173/src/html/Coordinacion_menu.html');
 }
 
 export const paginaJefatura= async (req,res)=>{
-    res.send('http://127.0.0.1:5173/src/html/Jefatura.html');
+    res.send('http://127.0.0.1:5173/src/html/Jefatura_menu.html');
 }
 export const paginaAdmin= async (req,res)=>{
     
