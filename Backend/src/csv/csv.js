@@ -1,9 +1,6 @@
 import {USEREMAIL,PASS} from "../../.env"
 import {createNewStudent} from '../controllers/usuarios.controllers';
 
-
-
-
 //./src/csv/ListadoEstudiantes.csv
 const csv = require('csv-parser');
 const fs = require('fs');
@@ -14,7 +11,6 @@ export function procesarArchivo(filePath) {
   const csvFilePath = filePath;
 
   const students = [];
-
 
 fs.createReadStream(csvFilePath)
   .pipe(csv())
