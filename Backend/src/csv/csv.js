@@ -7,6 +7,7 @@ import {createNewStudent} from '../controllers/usuarios.controllers';
 //./src/csv/ListadoEstudiantes.csv
 const csv = require('csv-parser');
 const fs = require('fs');
+const existingEmails = new Set();
 
 export function procesarArchivo(filePath) {
   // Ruta del archivo CSV subido desde el frontend
@@ -68,7 +69,6 @@ fs.createReadStream(csvFilePath)
 //export default students;
 
 function CreacionCCC(correopersonal,dni, firstName, lastName,tel,fechaNaci, anioIngresoPAC,direc, centro, periodo, carreraIngreso, puntaje) {
-  const existingEmails = new Set();
 
   const firstSpaceIndex = firstName.indexOf(' ');
   const firstNameOnly = firstSpaceIndex !== -1 ? firstName.substring(0, firstSpaceIndex) : firstName;
