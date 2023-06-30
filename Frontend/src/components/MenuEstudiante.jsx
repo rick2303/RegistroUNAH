@@ -1,4 +1,5 @@
 //import React from "react";
+import React, { useEffect, useState } from "react";
 import { FcUpload } from "react-icons/fc";
 import { FcCalendar } from "react-icons/fc";
 import { FcBusinessman } from "react-icons/fc";
@@ -7,10 +8,21 @@ import "bootstrap/dist/css/bootstrap.min.css"
 
 
 function MenuEstudiante() {
+
+  const [nombreUsuario, setNombreUsuario] = useState("");
+
+  useEffect(() => {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      const userData = JSON.parse(storedData);
+      const nombre = userData.Nombre; // Asegúrate de utilizar la clave correcta para el nombre del usuario
+      setNombreUsuario(nombre);
+    }
+  }, []);
   return (
     <section className="bg-white md:mt-5">
       <h1 className="text-2xl  text-center font-bold pt-2 text-gray-900 sm:text-3xl">
-       Estudiante
+       Bienvenido {nombreUsuario}
       </h1>
       <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-8 lg:px-8">
         <div className=" grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-4 md:gap-8">
