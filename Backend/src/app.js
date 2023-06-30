@@ -4,6 +4,7 @@ import empleadosRoute from './routes/empleados.routes'
 import usuariosRoute from "./routes/usuarios.routes";
 import loginRoute from './routes/login.routes'
 import redireccionamientoRoute from './routes/redireccionamientos.routes'
+import historialAcademico from './routes/estudiantes.historial.routes'
 //import {} from "./csv/csv";
 const app= express();
 const cors = require('cors');
@@ -26,5 +27,6 @@ app.use(express.urlencoded({ extended:false}));
 console.log(config.port);
 
 app.use(empleadosRoute,loginRoute,redireccionamientoRoute);
-app.use(usuariosRoute);
+app.use(usuariosRoute, historialAcademico);
+
 
