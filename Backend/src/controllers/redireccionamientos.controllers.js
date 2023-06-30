@@ -1,3 +1,5 @@
+import { getEstudianteXperfil } from "./estudiantePerfil.controllers";
+
 export const paginaCoordinacion= async (req,res)=>{
     res.send('http://127.0.0.1:5173/src/html/Coordinacion_menu.html');
 }
