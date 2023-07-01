@@ -15,3 +15,4 @@ Dependencias a instalar
 
 * Agregar Cors para las peticiones http
 * npm i cors
+* npm install react-data-table-component styled-components

@@ -25,7 +25,7 @@ export default function Navbar() {
         className="p-1 font-normal"
       >
         <a href="#" className="flex items-center">
-          Pages
+          
         </a>
       </Typography>
       <Typography
@@ -35,7 +35,7 @@ export default function Navbar() {
         className="p-1 font-normal"
       >
         <a href="#" className="flex items-center">
-          Account
+          
         </a>
       </Typography>
       <Typography
@@ -45,7 +45,7 @@ export default function Navbar() {
         className="p-1 font-normal"
       >
         <a href="#" className="flex items-center">
-          Blocks
+          
         </a>
       </Typography>
       <Typography
