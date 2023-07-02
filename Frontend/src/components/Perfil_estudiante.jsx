@@ -10,6 +10,16 @@ import { MdAddAPhoto } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 
 function Perfil_estudiante() {
+  const [descripcion, setDescripcion] = useState("");
+
+  useEffect(() => {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      const userData = JSON.parse(storedData);
+      const descripcion = userData.perfil.Descripcion; 
+      setDescripcion(descripcion);
+    }
+  }, []);
   return (
     <>
       <div class="page-content page-container" id="page-content">
@@ -37,7 +47,7 @@ function Perfil_estudiante() {
                               data-bs-interval="10000"
                             >
                               <img
-                                src="../img/Fotografia.jpeg"
+                                src={userData.perfil.Imagen1}
                                 class=" d-block w-100"
                                 alt="Sin foto de perfil"
                               />
@@ -47,7 +57,7 @@ function Perfil_estudiante() {
                               data-bs-interval="10000"
                             >
                               <img
-                                src="../img/Fotografia.jpeg"
+                                src={userData.perfil.Imagen2}
                                 class=" d-block w-100"
                                 alt="Sin foto de perfil"
                               />
@@ -57,7 +67,7 @@ function Perfil_estudiante() {
                               data-bs-interval="1000"
                             >
                               <img
-                                src="../img/2.png"
+                                src={userData.perfil.Imagen3}
                                 class="d-block w-100"
                                 alt="Sin foto de perfil"
                               />
@@ -91,7 +101,7 @@ function Perfil_estudiante() {
                       </div>
                       <h5 class="f-w-600">Descripción:</h5>
                       <div>
-                        <EditableParagraph />
+                        <EditableParagraph descripcion={descripcion}/>
                       </div>
 
                       <div class="d-flex justify-content-center align-items-center">
@@ -121,25 +131,25 @@ function Perfil_estudiante() {
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">Nombre:</p>
                           <h6 class="text-muted f-w-400">
-                            Lleymi Nohemi Cruz Montoya
+                           {userData.data.Nombre}
                           </h6>
                         </div>
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">Número de cuenta:</p>
-                          <h6 class="text-muted f-w-400">20191030723</h6>
+                          <h6 class="text-muted f-w-400">{userData.data.NumCuenta}</h6>
                         </div>
                       </div>
                       <div class="row mb-4">
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">Correo:</p>
                           <h6 class="text-muted f-w-400">
-                            lleymi.cruz@unah.hn
+                          {userData.data.CorreoInstitucional}
                           </h6>
                         </div>
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">Carrera:</p>
                           <h6 class="text-muted f-w-400">
-                            Ingeniería en Sistemas
+                          {userData.data.Carrera}
                           </h6>
                         </div>
                       </div>
@@ -149,62 +159,16 @@ function Perfil_estudiante() {
                       <div class="row mb-4">
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">índicce Global</p>
-                          <h6 class="text-muted f-w-400">89%</h6>
+                          <h6 class="text-muted f-w-400">{userData.data.IndiceGlobal}</h6>
                         </div>
-                        <div class="col-sm-6">
+                        {/* <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">
                             índide del último periodo:
                           </p>
                           <h6 class="text-muted f-w-400">93%</h6>
-                        </div>
+                        </div> */}
                       </div>
-                      <ul class="social-link list-unstyled m-t-40 m-b-10">
-                        <li>
-                          <a
-                            href="#!"
-                            data-toggle="tooltip"
-                            data-placement="bottom"
-                            title=""
-                            data-original-title="facebook"
-                            data-abc="true"
-                          >
-                            <i
-                              class="mdi mdi-facebook feather icon-facebook facebook"
-                              aria-hidden="true"
-                            ></i>
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            href="#!"
-                            data-toggle="tooltip"
-                            data-placement="bottom"
-                            title=""
-                            data-original-title="twitter"
-                            data-abc="true"
-                          >
-                            <i
-                              class="mdi mdi-twitter feather icon-twitter twitter"
-                              aria-hidden="true"
-                            ></i>
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            href="#!"
-                            data-toggle="tooltip"
-                            data-placement="bottom"
-                            title=""
-                            data-original-title="instagram"
-                            data-abc="true"
-                          >
-                            <i
-                              class="mdi mdi-instagram feather icon-instagram instagram"
-                              aria-hidden="true"
-                            ></i>
-                          </a>
-                        </li>
-                      </ul>
+                      
                     </div>
                   </div>
                 </div>

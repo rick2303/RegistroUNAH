@@ -8,6 +8,16 @@ import {
 } from "@material-tailwind/react";
 import "bootstrap/dist/css/bootstrap.min.css"
 export default function NavbarEstudiante() {
+  const [imagenUsuario, setImagenUsuario] = useState("");
+
+  useEffect(() => {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      const userData = JSON.parse(storedData);
+      const imagenUsuario = userData.perfil.Imagen1; 
+      setImagenUsuario(imagenUsuario);
+    }
+  }, []);
   const [openNav, setOpenNav] = React.useState(false);
 
   React.useEffect(() => {
@@ -38,7 +48,7 @@ export default function NavbarEstudiante() {
         className="p-1 font-normal"
       >
         <a href="../html/Perfil_estudiante.html">
-        <img className="rounded-full h-10 w-10" src="../img/Fotografia.jpeg" alt="user avatar" />
+        <img className="rounded-full h-10 w-10" src={imagenUsuario} alt="Imagen perfil" />
         </a>
      
       </Typography>
