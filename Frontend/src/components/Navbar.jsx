@@ -61,10 +61,9 @@ export default function Navbar() {
             
             
             <button
-              // eslint-disable-next-line react/no-unknown-property
+           
               variant="text"
               className="mx-auto text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
-              // eslint-disable-next-line react/no-unknown-property
               ripple={false}
               onClick={() => setOpenNav(!openNav)}
             >
