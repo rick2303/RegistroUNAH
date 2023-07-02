@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Login.css";
+import ModalDocentes from "./components/ModalDocentes";
 
 export function Login({ setUser }) {
   
@@ -99,8 +100,17 @@ export function Login({ setUser }) {
 
       {loading && <span className="loader"></span>}
 
-      <a href="/src/html/Administracion.html" id="forgetPwd">
+      <a href="/src/html/recuperacionContrasena/Recuperacion.html" >
         ¿Olvidaste tu contraseña?
+      </a> 
+      <a href="/src/html/Perfil_estudiante.html" >
+        Perfil
+      </a>
+      <a href="/src/html/Estudiante.html" >
+        estudiante
+      </a>
+      <a href="/src/html/Administracion.html" >
+        estudiante
       </a>
     </>
   );

@@ -1,5 +1,6 @@
 import React from "react";
 import { FcMenu } from "react-icons/fc";
+import { BsBoxArrowInLeft } from "react-icons/bs";
 import {
   MobileNav,
   Typography,
@@ -21,40 +22,22 @@ export default function Navbar() {
       <Typography
         as="li"
         variant="small"
-        color="blue-gray"
-        className="p-1 font-normal"
+        color="blue"
+        className="p-1 font-normal "
       >
-        <a href="#" className="flex items-center">
-          Pages
+        <a href="../" className="flex items-center">
+          <h1 className="text-3xl"><BsBoxArrowInLeft/></h1>
         </a>
       </Typography>
+      
+        
       <Typography
         as="li"
         variant="small"
         color="blue-gray"
         className="p-1 font-normal"
       >
-        <a href="#" className="flex items-center">
-          Account
-        </a>
-      </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-normal"
-      >
-        <a href="#" className="flex items-center">
-          Blocks
-        </a>
-      </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-normal"
-      >
-        <img className="rounded-full h-8 w-8" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png" alt="user avatar" />
+        <img className="rounded-full h-10 w-10" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png" alt="user avatar" />
       </Typography>
     </ul>
   );
@@ -78,10 +61,9 @@ export default function Navbar() {
             
             
             <button
-              // eslint-disable-next-line react/no-unknown-property
+           
               variant="text"
               className="mx-auto text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
-              // eslint-disable-next-line react/no-unknown-property
               ripple={false}
               onClick={() => setOpenNav(!openNav)}
             >

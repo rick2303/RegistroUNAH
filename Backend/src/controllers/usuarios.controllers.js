@@ -79,3 +79,25 @@ export const createNewStudent = async (req, res) => {
     res.send(error.message);
     }
 }; */
+
+
+export const updatePassword = async (req, res) => {
+    const { newPassword, email } = req.body;
+
+    if (!newPassword || !email) {
+        return res.status(400).json({ error: 'Debes proporcionar una nueva contraseña y un correo electrónico' });
+    }
+
+    try {
+        const pool = await getConnection();
+        const result = await pool.request().query(`UPDATE [dbo].[estudiantes] SET Contrasena = '${newPassword}' WHERE CorreoPersonal = '${email}';`);
+
+        console.log('Contraseña actualizada correctamente en la base de datos.');
+
+        res.status(200).json({ message: 'Contraseña actualizada correctamente' });
+    } catch (error) {
+        console.error('Error al actualizar la contraseña:', error);
+        res.status(500).json({ error: 'Error al actualizar la contraseña' });
+    }
+};
+
