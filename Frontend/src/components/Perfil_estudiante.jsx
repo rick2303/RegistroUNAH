@@ -97,7 +97,7 @@ function Perfil_estudiante() {
                       <div class="d-flex justify-content-center align-items-center">
                         <a data-bs-toggle="modal" data-bs-target="#example">
                           <h2 class="m-2">
-                            <MdAddAPhoto className="text-2xl fas fa-pencil-alt" title="Editar"/>
+                            <MdAddAPhoto className="text-2xl fas fa-pencil-alt" title="Foto de perfil"/>
                             
                           </h2>
                         </a>
@@ -111,7 +111,7 @@ function Perfil_estudiante() {
                         <h5 className="m-b-20 p-b-5 b-b-default f-w-600 row">
                           <p className="col-6">Information General</p>
                           <div class="d-flex justify-content-end col-6">
-                          <a href="../html/Estudiante.html" className="text-end fas fa-pencil-alt" title="Regresar"><TiArrowBackOutline/></a></div>
+                          <a href="../html/Estudiante.html" className="text-end fas fa-pencil-alt" title="Regresar"><TiArrowBackOutline className="text-2xl" /></a></div>
                         </h5>
                         
                         

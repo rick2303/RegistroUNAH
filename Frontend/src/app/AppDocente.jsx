@@ -2,16 +2,17 @@
 //import reactLogo from './assets/react.svg'
 //import viteLogo from '/vite.svg'
 import '../App.css'
-import Navbar from "../components/Navbar.jsx";
+import Navbar from "../components/NavbarDocente";
 import MenuDocente from "../components/MenuDocente";
 import ModalCargar from '../components/ModalCargar';
+import NavbarDocente from '../components/NavbarDocente';
 
 function AppDocente() {
   //const [count, setCount] = useState(0)
 
   return (
     <>
-      <Navbar /> 
+      <NavbarDocente/> 
       <MenuDocente /> 
       <ModalCargar /> 
       

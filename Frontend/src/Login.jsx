@@ -103,15 +103,15 @@ export function Login({ setUser }) {
       <a href="/src/html/recuperacionContrasena/Recuperacion.html" >
         ¿Olvidaste tu contraseña?
       </a> 
-      <a href="/src/html/Perfil_estudiante.html" >
-        Perfil
-      </a>
+      <hr></hr>
       <a href="/src/html/Estudiante.html" >
         estudiante
       </a>
-      <a href="/src/html/Administracion.html" >
-        estudiante
+      <hr></hr>
+      <a href="/src/html/Docente.html" >
+       Docente
       </a>
+     
     </>
   );
 }

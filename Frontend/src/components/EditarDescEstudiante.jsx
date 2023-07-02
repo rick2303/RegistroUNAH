@@ -44,7 +44,7 @@ function EditableParagraph() {
             className="text-black"
             value={paragraphContent}
             onChange={handleInputChange}
-            maxLength={300}
+            maxLength={150}
           />
           <button
             onClick={() => {
