@@ -25,14 +25,7 @@ function ModalCargar() {
       <div className="modal-body h-36 pt-10 ">
         <CargarArchivo />
       </div>
-      {/* <div className="modal-footer backdrop-blur min-w-full
-          bg-gradient-to-r from-blue-900 via-yellow-300 to-yellow-400">
-        
-
-          
-        
-         
-      </div> */}
+      
     </div>
   </div>
 </div>

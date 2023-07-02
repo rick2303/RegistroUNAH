@@ -102,6 +102,12 @@ export function Login({ setUser }) {
       <a href="/src/html/Administracion.html" id="forgetPwd">
         ¿Olvidaste tu contraseña?
       </a>
+      <a href="/src/html/Perfil_estudiante.html" >
+        Perfil
+      </a>
+      <a href="/src/html/Administracion.html" >
+        administracion
+      </a>
     </>
   );
 }

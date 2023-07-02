@@ -1,5 +1,6 @@
 import React from "react";
 import { FcMenu } from "react-icons/fc";
+import { BsBoxArrowInLeft } from "react-icons/bs";
 import {
   MobileNav,
   Typography,
@@ -21,40 +22,22 @@ export default function Navbar() {
       <Typography
         as="li"
         variant="small"
-        color="blue-gray"
-        className="p-1 font-normal"
+        color="blue"
+        className="p-1 font-normal "
       >
-        <a href="#" className="flex items-center">
-          
+        <a href="../" className="flex items-center">
+          <h1 className="text-3xl"><BsBoxArrowInLeft/></h1>
         </a>
       </Typography>
+      
+        
       <Typography
         as="li"
         variant="small"
         color="blue-gray"
         className="p-1 font-normal"
       >
-        <a href="#" className="flex items-center">
-          
-        </a>
-      </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-normal"
-      >
-        <a href="#" className="flex items-center">
-          
-        </a>
-      </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-normal"
-      >
-        <img className="rounded-full h-8 w-8" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png" alt="user avatar" />
+        <img className="rounded-full h-10 w-10" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png" alt="user avatar" />
       </Typography>
     </ul>
   );
