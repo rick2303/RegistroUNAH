@@ -6,6 +6,7 @@ import Navbar from "../components/Navbar.jsx";
 import MenuAdmin from "../components/MenuAdmin";
 import ModalCargar from '../components/ModalCargar';
 
+
 function AppAdministracion() {
   //const [count, setCount] = useState(0)
 
@@ -14,7 +15,7 @@ function AppAdministracion() {
       <Navbar /> 
       <MenuAdmin /> 
       <ModalCargar /> 
-      
+
       {/* <div>
         <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
           <img src={viteLogo} className="logo" alt="Vite logo" />
