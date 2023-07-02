@@ -6,7 +6,11 @@ export const queries={
     getEstudiantes: "SELECT Nombre, NumCuenta,CorreoInstitucional,Carrera, IndiceGlobal from dbo.estudiantes WHERE NumCuenta= @Id",
     getEmpleado: "select Nombre,Apellido,CorreoInstitucional,Carrera,Foto,CentroRegional,Rol from empleados WHERE CAST(NumEmpleado AS varchar) = @Id ",
     getPerfilEmpleado:"select * from perfil_empleados where CAST(idPerfil AS varchar) = @Id ",
-    getPerfilestudiante: "select * from perfil_estudiante where IdPerfil= @Id "
+    getPerfilestudiante: "select * from perfil_estudiante where IdPerfil= @Id ",
+    insertPerfilEstudiante:"Insert into perfil_estudiante values(@Id,@photoPath1,@photoPath2,@photoPath3,@Descripcion)",
+    updatePerfilEstudiante:"UPDATE perfil_estudiante SET Imagen1 = @photoPath1, Imagen2 = @photoPath2, Imagen3 = @photoPath3, Descripcion = @Descripcion WHERE IdPerfil = @Id",
+    insertPerfilEmpleado:"Insert into perfil_empleados values(@Id,@photoPath1,@photoPath2,@videoPath,@Descripcion)",
+    updatePerfilEmpleado:"UPDATE perfil_empleados SET Imagen1 = @photoPath1, Imagen2 = @photoPath2, Video = @videoPath, Descripcion = @Descripcion WHERE IdPerfil = @Id"
 }
 
 export const querys = {
