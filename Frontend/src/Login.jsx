@@ -106,8 +106,11 @@ export function Login({ setUser }) {
       <a href="/src/html/Perfil_estudiante.html" >
         Perfil
       </a>
+      <a href="/src/html/Estudiante.html" >
+        estudiante
+      </a>
       <a href="/src/html/Administracion.html" >
-        administracion
+        estudiante
       </a>
     </>
   );

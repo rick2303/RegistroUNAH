@@ -60,7 +60,7 @@ function EditableParagraph() {
           <p>{paragraphContent}</p>
 
           <button onClick={handleEditToggle}>
-            <FiEdit className="text-2xl" />
+            <FiEdit className="text-2xl fas fa-pencil-alt" title="Editar descripción" />
           </button>
         </div>
       )}

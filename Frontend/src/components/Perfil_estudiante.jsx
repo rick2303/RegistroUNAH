@@ -5,7 +5,7 @@ import Fotos_estudiante from "./Fotos_estudiante";
 import "../Perfil_estudiante.css";
 import ModalCargarFotos from "./ModalCargarFotos";
 import EditableParagraph from "./EditarDescEstudiante";
-
+import { TiArrowBackOutline } from "react-icons/ti";
 import { MdAddAPhoto } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 
@@ -16,11 +16,10 @@ function Perfil_estudiante() {
         <div class="padding">
           <div class=" d-flex justify-content-center">
             <div class=" col-md-12">
-              <div class="card user-card-full">
+              <div class="card user-card-full h-full">
                 <div class="row m-l-0 m-r-0">
-                  <div class="col-sm-12 col-md-4  bg-c-lite-green user-profile">
+                  <div class="col-sm-6 col-md-2  bg-c-lite-green user-profile">
                     <div class="card-block text-center text-white">
-                      
                       <div
                         id="myCarousel"
                         class="carousel slide"
@@ -42,7 +41,6 @@ function Perfil_estudiante() {
                                 class=" d-block w-100"
                                 alt="Sin foto de perfil"
                               />
-                              
                             </div>
                             <div
                               class="carousel-item rounded-photo"
@@ -64,7 +62,6 @@ function Perfil_estudiante() {
                                 alt="Sin foto de perfil"
                               />
                             </div>
-                            
                           </div>
                           <button
                             class="carousel-control-prev"
@@ -100,19 +97,27 @@ function Perfil_estudiante() {
                       <div class="d-flex justify-content-center align-items-center">
                         <a data-bs-toggle="modal" data-bs-target="#example">
                           <h2 class="m-2">
-                            <MdAddAPhoto className="text-2xl" />
+                            <MdAddAPhoto className="text-2xl fas fa-pencil-alt" title="Editar"/>
+                            
                           </h2>
                         </a>
                         <ModalCargarFotos />
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-8">
+                  <div class="col-sm-6 col-md-10">
                     <div class="card-block">
-                      <h5 class="m-b-20 p-b-5 b-b-default f-w-600">
-                        Information General
-                      </h5>
-                      <div class="row">
+                      
+                        <h5 className="m-b-20 p-b-5 b-b-default f-w-600 row">
+                          <p className="col-6">Information General</p>
+                          <div class="d-flex justify-content-end col-6">
+                          <a href="../html/Estudiante.html" className="text-end fas fa-pencil-alt" title="Regresar"><TiArrowBackOutline/></a></div>
+                        </h5>
+                        
+                        
+                      
+
+                      <div class="row mb-4">
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">Nombre:</p>
                           <h6 class="text-muted f-w-400">
@@ -124,7 +129,7 @@ function Perfil_estudiante() {
                           <h6 class="text-muted f-w-400">20191030723</h6>
                         </div>
                       </div>
-                      <div class="row">
+                      <div class="row mb-4">
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">Correo:</p>
                           <h6 class="text-muted f-w-400">
@@ -141,7 +146,7 @@ function Perfil_estudiante() {
                       <h5 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600">
                         Información Académica
                       </h5>
-                      <div class="row">
+                      <div class="row mb-4">
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">índicce Global</p>
                           <h6 class="text-muted f-w-400">89%</h6>
