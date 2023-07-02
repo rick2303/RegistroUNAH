@@ -1,6 +1,6 @@
 import {Router} from 'express';
 
-import {getEstudiantes, createNewStudent} from '../controllers/usuarios.controllers';
+import {getEstudiantes, createNewStudent, updatePassword} from '../controllers/usuarios.controllers';
 import {sendEmail} from '../controllers/recuperacionContra.controllers';
 import {procesarArchivo} from '../csv/csv'
 const router = Router();
