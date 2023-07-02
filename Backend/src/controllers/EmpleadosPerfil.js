@@ -1,5 +1,5 @@
 import { getConnection,sql, queries} from "../Database"
-export const insertPerfilEstudiante = async (req,res)=> {
+export const insertPerfilEmpleado = async (req,res)=> {
     const {Id,descripcion}=req.body;
     const photoPaths = req.files.map(file => file.path);
     const pool = await getConnection();
@@ -7,13 +7,13 @@ export const insertPerfilEstudiante = async (req,res)=> {
         .input("Id",sql.VarChar,Id)
         .input('photoPath1', sql.VarChar, photoPaths[0])
         .input('photoPath2', sql.VarChar, photoPaths[1])
-        .input('photoPath3', sql.VarChar, photoPaths[2])
+        .input('VideoPath', sql.VarChar, photoPaths[2])
         .input("Descripcion",sql.VarChar,descripcion)
-        .query(queries.insertPerfilEstudiante);
+        .query(queries.insertPerfilEmpleado);
         res.status(200).json({ message: 'Operación completada exitosamente' });
 }
 
-export const updatePerfilEstudiante = async (req,res)=> {
+export const updatePerfilEmpleado = async (req,res)=> {
     const {Id,descripcion}=req.body;
     const photoPaths = req.files.map(file => file.path);
     const pool = await getConnection();
@@ -21,8 +21,8 @@ export const updatePerfilEstudiante = async (req,res)=> {
         .input("Id",sql.VarChar,Id)
         .input('photoPath1', sql.VarChar, photoPaths[0])
         .input('photoPath2', sql.VarChar, photoPaths[1])
-        .input('photoPath3', sql.VarChar, photoPaths[2])
+        .input('VideoPath', sql.VarChar, photoPaths[2])
         .input("Descripcion",sql.VarChar,descripcion)
-        .query(queries.updatePerfilEstudiante);
+        .query(queries.updatePerfilEmpleado);
         res.status(200).json({ message: 'Operación completada exitosamente' });
 }

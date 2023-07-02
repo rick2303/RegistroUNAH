@@ -3,8 +3,8 @@ import config from './config';
 import empleadosRoute from './routes/empleados.routes'
 import usuariosRoute from "./routes/usuarios.routes";
 import loginRoute from './routes/login.routes'
-
-import estudiantePerfil from './routes/estudiantePerfil.routes'
+import perfilEstudiante from './routes/EstudiantesPerfil.routes'
+import perfilEmpleado from './routes/EmpleadoPerfil.routes'
 //import {} from "./csv/csv";
 const app= express();
 const cors = require('cors');
@@ -26,6 +26,6 @@ app.use(express.urlencoded({ extended:false}));
 
 console.log(config.port);
 
-app.use(empleadosRoute,loginRoute,estudiantePerfil);
+app.use(empleadosRoute,loginRoute,perfilEstudiante,perfilEmpleado);
 app.use(usuariosRoute);
 
