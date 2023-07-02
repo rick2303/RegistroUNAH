@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Fotos_estudiante from "./Fotos_estudiante";
 import "../Perfil_estudiante.css";
 import ModalCargarFotos from "./ModalCargarFotos";
-
+import EditableParagraph from "./EditarDescEstudiante";
 
 import { MdAddAPhoto } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
@@ -20,6 +20,7 @@ function Perfil_estudiante() {
                 <div class="row m-l-0 m-r-0">
                   <div class="col-sm-12 col-md-4  bg-c-lite-green user-profile">
                     <div class="card-block text-center text-white">
+                      
                       <div
                         id="myCarousel"
                         class="carousel slide"
@@ -41,6 +42,7 @@ function Perfil_estudiante() {
                                 class=" d-block w-100"
                                 alt="Sin foto de perfil"
                               />
+                              
                             </div>
                             <div
                               class="carousel-item rounded-photo"
@@ -62,6 +64,7 @@ function Perfil_estudiante() {
                                 alt="Sin foto de perfil"
                               />
                             </div>
+                            
                           </div>
                           <button
                             class="carousel-control-prev"
@@ -90,23 +93,17 @@ function Perfil_estudiante() {
                         </div>
                       </div>
                       <h5 class="f-w-600">Descripción:</h5>
-                      <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Consectetur unde placeat illum minima dicta tenetur?
-                      </p>
-                      <div class="d-flex justify-content-center align-items-center">
-                        
-                      <a data-bs-toggle="modal" data-bs-target="#example">
-                        <h2 class="m-2">
-                          <MdAddAPhoto className="text-2xl" />
-                        </h2>
-                      </a>
-                     <ModalCargarFotos/>
+                      <div>
+                        <EditableParagraph />
+                      </div>
 
-                        <h2 class="m-2">
-                          <FiEdit className="text-2xl" />
-                        </h2>
-                        
+                      <div class="d-flex justify-content-center align-items-center">
+                        <a data-bs-toggle="modal" data-bs-target="#example">
+                          <h2 class="m-2">
+                            <MdAddAPhoto className="text-2xl" />
+                          </h2>
+                        </a>
+                        <ModalCargarFotos />
                       </div>
                     </div>
                   </div>

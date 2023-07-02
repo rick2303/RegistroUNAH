@@ -2,7 +2,7 @@ import React from 'react'
 import "bootstrap/dist/css/bootstrap.min.css"
 import Fotos_estudiante from './Fotos_estudiante';
 import CargarArchivo from './CargarArchivo';
-import "../App.css"
+import "../tailwind.css"
 
 
 function ModalCargarFotos() {
