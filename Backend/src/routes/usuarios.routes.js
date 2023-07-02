@@ -1,6 +1,7 @@
 import {Router} from 'express';
 
 import {getEstudiantes, createNewStudent} from '../controllers/usuarios.controllers';
+import {sendEmail} from '../controllers/recuperacionContra.controllers';
 import {procesarArchivo} from '../csv/csv'
 const router = Router();
 
@@ -11,6 +12,8 @@ const router = Router();
 router.get('/students', getEstudiantes);
 
 router.post("/students", createNewStudent);
+
+router.post("/updatePassword", updatePassword);
 
 // Ruta para recibir el archivo de estudiantes desde el frontend
 
