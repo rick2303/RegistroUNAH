@@ -100,7 +100,7 @@ export function Login({ setUser }) {
 
       {loading && <span className="loader"></span>}
 
-      <a href="/src/html/Administracion.html" id="forgetPwd">
+      <a href="/src/html/recuperacionContrasena/Recuperacion.html" >
         ¿Olvidaste tu contraseña?
       </a> 
       <a href="/src/html/Perfil_estudiante.html" >
