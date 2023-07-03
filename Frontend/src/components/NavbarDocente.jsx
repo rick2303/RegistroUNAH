@@ -14,23 +14,31 @@ export default function NavbarDocente() {
     const storedData = localStorage.getItem("userData");
     if (storedData) {
       const userData = JSON.parse(storedData);
-      const imagenUsuario = userData.data.Foto; 
-      setImagenUsuario(imagenUsuario);
+      if(!userData.perfil){
+        const alternativaImagen = 'UNAH.png'
+        setImagenUsuario(alternativaImagen);
+        
+      }else{
+        const alternativaImagen = userData.perfil.Imagen1; 
+        setImagenUsuario(alternativaImagen);
+      }
+      
     }
+    
   }, []);
   const [openNav, setOpenNav] = React.useState(false);
 
-  const [foto, setFoto] = useState("");
+  //const [foto, setFoto] = useState("");
 
-  useEffect(() => {
-    const storedData = localStorage.getItem("userData");
-    if (storedData) {
-      const userData = JSON.parse(storedData);
-      const fotoPerfil = userData.perfil.Imagen1
-      console.log(fotoPerfil)
-      setFoto(fotoPerfil);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const storedData = localStorage.getItem("userData");
+  //   if (storedData) {
+  //     const userData = JSON.parse(storedData);
+  //     const fotoPerfil = userData.perfil.Imagen1
+  //     console.log(fotoPerfil)
+  //     setFoto(fotoPerfil);
+  //   }
+  // }, []);
 
   React.useEffect(() => {
     window.addEventListener(
@@ -61,7 +69,7 @@ export default function NavbarDocente() {
       >
       
         <a href="../html/Perfil_docente.html">
-        <img className="rounded-full h-10 w-10" src={imagenUsuario}  alt = "Perfil"/>
+        <img className="rounded-full h-10 w-10" src={`../img/uploads/${imagenUsuario}`}  alt = "Perfil"/>
         </a>
      
       </Typography>

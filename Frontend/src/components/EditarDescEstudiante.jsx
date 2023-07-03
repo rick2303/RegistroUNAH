@@ -7,19 +7,25 @@ import ReactTextareaAutosize from "react-textarea-autosize";
 function EditableParagraph(props) {
  const [descripcion, setDescripcion] = useState("");
   
-
+ const [editing, setEditing] = useState(false);
+ const [paragraphContent, setParagraphContent] = useState(descripcion);
 
   useEffect(() => {
     const storedData = localStorage.getItem("userData");
     if (storedData) {
       const userData = JSON.parse(storedData);
-     
-      const descripcion = userData.perfil.Descripcion; 
-      setDescripcion(descripcion);
+      if(!userData.perfil){
+        const descripcion = 'Sin descripcion hasta el momento.' 
+        setDescripcion(descripcion);
+        setParagraphContent(descripcion);
+      }else{
+        const descripcion = userData.perfil.Descripcion; 
+        setDescripcion(descripcion);
+        setParagraphContent(descripcion);
+      }
     }
   }, []); 
-  const [editing, setEditing] = useState(false);
-  const [paragraphContent, setParagraphContent] = useState(descripcion);
+  
 
  
 

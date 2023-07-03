@@ -15,10 +15,10 @@ function MenuDocente() {
     const storedData = localStorage.getItem("userData");
     if (storedData) {
       const userData = JSON.parse(storedData);
-      const nombre = userData.data.Nombre; 
-      const fotoPerfil = userData.perfil.Imagen1
+      const nombre = userData.data.Nombre + ' ' + userData.data.Apellido; 
+      // const fotoPerfil = userData.perfil.Imagen1
       setNombreUsuario(nombre);
-      setFoto(fotoPerfil);
+      // setFoto(fotoPerfil);
     }
   }, []);
   return (
