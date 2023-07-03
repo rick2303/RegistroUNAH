@@ -10,20 +10,23 @@ import React, { useEffect, useState } from "react";
 function MenuDocente() { 
     
   const [nombreUsuario, setNombreUsuario] = useState("");
-
+  const [foto, setFoto] = useState("");
   useEffect(() => {
     const storedData = localStorage.getItem("userData");
     if (storedData) {
       const userData = JSON.parse(storedData);
       const nombre = userData.data.Nombre; 
+      const fotoPerfil = userData.perfil.Imagen1
       setNombreUsuario(nombre);
+      setFoto(fotoPerfil);
     }
   }, []);
   return (
     <section className="bg-white md:mt-5">
       <h1 className="text-2xl  text-center font-bold pt-2 text-gray-900 sm:text-3xl">
-       Bienvenido {nombreUsuario}
+       Bienvenido {nombreUsuario} 
       </h1>
+      
       <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-8 lg:px-8">
         <div className=" grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-4 md:gap-8">
           <article className="hover:animate-background rounded-xl bg-gradient-to-r from-blue-800 via-yellow-400 to-yellow-500 00 p-0.5 shadow-xl transition hover:bg-[length:500%_400%] hover:shadow-sm hover:[animation-duration:_4s]">

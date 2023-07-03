@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { FcMenu } from "react-icons/fc";
 import { BsBoxArrowInLeft } from "react-icons/bs";
-
+import { useEffect, useState } from "react";
 import {
   MobileNav,
   Typography,
@@ -20,6 +20,18 @@ export default function NavbarDocente() {
     }
   }, []);
   const [openNav, setOpenNav] = React.useState(false);
+
+  const [foto, setFoto] = useState("");
+
+  useEffect(() => {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      const userData = JSON.parse(storedData);
+      const fotoPerfil = userData.perfil.Imagen1
+      console.log(fotoPerfil)
+      setFoto(fotoPerfil);
+    }
+  }, []);
 
   React.useEffect(() => {
     window.addEventListener(
@@ -48,6 +60,7 @@ export default function NavbarDocente() {
         color="blue-gray"
         className="p-1 font-normal"
       >
+      
         <a href="../html/Perfil_docente.html">
         <img className="rounded-full h-10 w-10" src={imagenUsuario}  alt = "Perfil"/>
         </a>
