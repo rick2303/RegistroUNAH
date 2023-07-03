@@ -6,21 +6,9 @@
 {{api}}
 
 ### add a product
-POST http://localhost:5000/students
+POST http://localhost:5000/estudiantesMatriculadosDepto
 Content-Type: application/json
 
 {
-    "NumCuenta": "20212083672",
-    "DNI": "080120016054",
-    "Nombre": "Giancarlo Josue",
-    "Apellido": "Raudales Martinez",
-    "NumeroTelefono": "65987412",
-    "CorreoInstitucional": "gian.raudales@unah.hn",
-    "CorreoPersonal": "raudales99ma@gmail.com",
-    "Contrasena": "contraseña123",
-    "FechaNacimiento": "2000-12-01",
-    "Carrera": "INGENIERIA ELECTRICA",
-    "Direccion": "Col. Sitrabarimasa",
-    "CentroRegional": "TEC-AGUAN",
-    "PuntajePAA": 1800
+    "Carrera": "Ingenieria en Sistemas"
 }

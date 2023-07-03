@@ -159,7 +159,7 @@ const handleSubmit = (event) => {
   
 
     // Realizar la solicitud HTTP utilizando fetch
-    fetch('URL_DEL_BACKEND', {
+    fetch('http://localhost:5000//registrarDocentes', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

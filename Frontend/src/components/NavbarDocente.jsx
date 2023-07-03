@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { FcMenu } from "react-icons/fc";
 import { BsBoxArrowInLeft } from "react-icons/bs";
 import { useEffect, useState } from "react";
@@ -9,6 +9,16 @@ import {
 } from "@material-tailwind/react";
 import "bootstrap/dist/css/bootstrap.min.css"
 export default function NavbarDocente() {
+  const [imagenUsuario, setImagenUsuario] = useState("");
+  
+  useEffect(() => {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      const userData = JSON.parse(storedData);
+      const imagenUsuario = userData.data.Foto; 
+      setImagenUsuario(imagenUsuario);
+    }
+  }, []);
   const [openNav, setOpenNav] = React.useState(false);
 
   const [foto, setFoto] = useState("");
@@ -52,7 +62,7 @@ export default function NavbarDocente() {
       >
       
         <a href="../html/Perfil_docente.html">
-        <img className="rounded-full h-10 w-10" src={`../img/uploads/${foto}`} alt="user avatar" />
+        <img className="rounded-full h-10 w-10" src={imagenUsuario}  alt = "Perfil"/>
         </a>
      
       </Typography>
