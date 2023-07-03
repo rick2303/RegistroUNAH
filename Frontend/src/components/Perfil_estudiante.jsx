@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-//import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import Fotos_estudiante from "./Fotos_estudiante";
 import "../Perfil_estudiante.css";
@@ -11,11 +11,38 @@ import { FiEdit } from "react-icons/fi";
 
 function Perfil_estudiante() {
   const [descripcion, setDescripcion] = useState("");
+  const [imagen1, setImagen1] = useState("");
+  const [imagen2, setImagen2] = useState("");
+  const [imagen3, setImagen3] = useState("");
+  const [nombre, setNombre] = useState("");
+  const [numCuenta, setNumCuenta] = useState("");
+  const [correoInstitucional, setCorreoInstitucional] = useState("");
+  const [carrera, setCarrera] = useState("");
+  const [indiceGlobal, setIndiceGlobal] = useState("");
+
+
+
 
   useEffect(() => {
     const storedData = localStorage.getItem("userData");
     if (storedData) {
       const userData = JSON.parse(storedData);
+      const imagen1 = userData.perfil.Imagen1;
+      setImagen1(imagen1);
+      const imagen2 = userData.perfil.Imagen2;
+      setImagen2(imagen2);
+      const imagen3 = userData.perfil.Imagen3;
+      setImagen3(imagen3);
+      const nombre = userData.data.Nombre;
+      setNombre(nombre);
+      const numCuenta = userData.data.NumCuenta;
+      setNumCuenta(numCuenta);
+      const correoInstitucional = userData.data.CorreoInstitucional;
+      setCorreoInstitucional(correoInstitucional);
+      const carrera = userData.data.Carrera;
+      setCarrera(carrera);
+      const indiceGlobal = userData.data.IndiceGlobal;
+      setIndiceGlobal(indiceGlobal);
       const descripcion = userData.perfil.Descripcion; 
       setDescripcion(descripcion);
     }
@@ -47,7 +74,7 @@ function Perfil_estudiante() {
                               data-bs-interval="10000"
                             >
                               <img
-                                src={userData.perfil.Imagen1}
+                                src={imagen1}
                                 class=" d-block w-100"
                                 alt="Sin foto de perfil"
                               />
@@ -57,7 +84,7 @@ function Perfil_estudiante() {
                               data-bs-interval="10000"
                             >
                               <img
-                                src={userData.perfil.Imagen2}
+                                src={imagen2}
                                 class=" d-block w-100"
                                 alt="Sin foto de perfil"
                               />
@@ -67,7 +94,7 @@ function Perfil_estudiante() {
                               data-bs-interval="1000"
                             >
                               <img
-                                src={userData.perfil.Imagen3}
+                                src={imagen3}
                                 class="d-block w-100"
                                 alt="Sin foto de perfil"
                               />
@@ -131,25 +158,25 @@ function Perfil_estudiante() {
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">Nombre:</p>
                           <h6 class="text-muted f-w-400">
-                           {userData.data.Nombre}
+                           {nombre}
                           </h6>
                         </div>
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">Número de cuenta:</p>
-                          <h6 class="text-muted f-w-400">{userData.data.NumCuenta}</h6>
+                          <h6 class="text-muted f-w-400">{numCuenta}</h6>
                         </div>
                       </div>
                       <div class="row mb-4">
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">Correo:</p>
                           <h6 class="text-muted f-w-400">
-                          {userData.data.CorreoInstitucional}
+                          {correoInstitucional}
                           </h6>
                         </div>
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">Carrera:</p>
                           <h6 class="text-muted f-w-400">
-                          {userData.data.Carrera}
+                          {carrera}
                           </h6>
                         </div>
                       </div>
@@ -159,7 +186,7 @@ function Perfil_estudiante() {
                       <div class="row mb-4">
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">índicce Global</p>
-                          <h6 class="text-muted f-w-400">{userData.data.IndiceGlobal}</h6>
+                          <h6 class="text-muted f-w-400">{indiceGlobal}</h6>
                         </div>
                         {/* <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">

@@ -4,10 +4,10 @@ import { FiEdit } from "react-icons/fi";
 import ReactTextareaAutosize from "react-textarea-autosize";
 
 
-function EditableParagraph(props) {
+function EditableParagraph({descripcion}) {
   const [editing, setEditing] = useState(false);
   const [paragraphContent, setParagraphContent] = useState(
-    "Agrega una breve descripción de ti mismo"
+    {descripcion}
   );
 
   const handleEditToggle = () => {

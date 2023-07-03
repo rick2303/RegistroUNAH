@@ -49,7 +49,7 @@ export default function NavbarEstudiante() {
         className="p-1 font-normal"
       >
         <a href="../html/Perfil_estudiante.html">
-        <img className="rounded-full h-10 w-10" src={imagenUsuario} alt="Imagen perfil" />
+        <img className="rounded-full h-10 w-10" src={imagenUsuario} alt="Perfil" />
         </a>
      
       </Typography>
