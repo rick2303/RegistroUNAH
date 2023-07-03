@@ -5,7 +5,7 @@ import ReactTextareaAutosize from "react-textarea-autosize";
 
 
 function EditableParagraph(props) {
- /*  const [descripcion, setDescripcion] = useState("");
+ const [descripcion, setDescripcion] = useState("");
   
 
 
@@ -17,11 +17,10 @@ function EditableParagraph(props) {
       const descripcion = userData.perfil.Descripcion; 
       setDescripcion(descripcion);
     }
-  }, []); */
+  }, []); 
   const [editing, setEditing] = useState(false);
-  const [paragraphContent, setParagraphContent] = useState(
-    props.descripcion
-  );
+  const [paragraphContent, setParagraphContent] = useState(descripcion);
+
  
 
   const handleEditToggle = () => {
