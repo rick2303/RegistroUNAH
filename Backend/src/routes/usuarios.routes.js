@@ -1,5 +1,5 @@
 import {Router} from 'express';
-
+import { getConnection } from '../Database';
 import {getEstudiantes, createNewStudent, updatePassword, getEstudiantesMatriculados} from '../controllers/usuarios.controllers';
 import {sendEmail} from '../controllers/recuperacionContra.controllers';
 import {procesarArchivo} from '../csv/csv'

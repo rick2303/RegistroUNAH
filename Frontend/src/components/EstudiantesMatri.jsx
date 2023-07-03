@@ -33,19 +33,19 @@ const EstudiantesMatriculadosMain = () => {
       },
       {
         name:'NOMBRE',
-        selector : row => row.Nombre
+        selector : row => row.Nombre.toUpperCase()
       },
       {
         name:'APELLIDO',
-        selector : row => row.Apellido
+        selector : row => row.Apellido.toUpperCase()
       },
       {
         name:'CARRERA',
-        selector : row => row.Carrera
+        selector : row => row.Carrera.toUpperCase()
       },
       {
         name:'CORREO INSTITUCIONAL',
-        selector : row => row.CorreoInstitucional
+        selector : row => row.CorreoInstitucional.toUpperCase()
       },
       {
         name:'ÍNDICE GLOBAL',
