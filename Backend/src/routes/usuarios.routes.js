@@ -1,6 +1,6 @@
 import {Router} from 'express';
 
-import {getEstudiantes, createNewStudent, updatePassword} from '../controllers/usuarios.controllers';
+import {getEstudiantes, createNewStudent, updatePassword, getEstudiantesMatriculados} from '../controllers/usuarios.controllers';
 import {sendEmail} from '../controllers/recuperacionContra.controllers';
 import {procesarArchivo} from '../csv/csv'
 const router = Router();
@@ -10,6 +10,34 @@ const router = Router();
 
 
 router.get('/students', getEstudiantes);
+
+router.get('/estudiantesMatriculados', getEstudiantesMatriculados);
+
+router.post('/estudiantesMatriculadosDepto', async (req, res) => {
+
+    try {
+        const { Carrera} = req.body;
+        const pool = await getConnection();
+        const result = await pool.request().query(`SELECT est.NumCuenta, est.Nombre, est.Apellido, est.CorreoInstitucional, est.Carrera, est.IndicePeriodo, est.IndiceGlobal
+        FROM (
+            SELECT DISTINCT estudiante.NumCuenta, estudiante.Nombre, estudiante.Apellido, estudiante.CorreoInstitucional, estudiante.Carrera, estudiante.IndiceGlobal, estudiante.IndicePeriodo
+            FROM [dbo].[estudiantes] as estudiante
+            INNER JOIN [dbo].[empleados] as empleado
+            ON estudiante.Carrera = empleado.Carrera
+            WHERE empleado.Carrera = '${Carrera}'
+        ) est
+        WHERE est.NumCuenta IN (
+            SELECT NumCuenta
+            FROM [dbo].[estudiantes]
+            WHERE Estado = 'Matriculado'
+        );`);
+        res.json(result.recordset);
+    } catch (error) {
+        res.status(500);
+        res.send(error.message);
+    }  
+  }
+);
 
 router.post("/students", createNewStudent);
 
