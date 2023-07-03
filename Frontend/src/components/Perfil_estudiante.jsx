@@ -146,7 +146,7 @@ function Perfil_estudiante() {
                     <div class="card-block">
                       
                         <h5 className="m-b-20 p-b-5 b-b-default f-w-600 row">
-                          <p className="col-6">Information General</p>
+                          <p className="col-6">Información General</p>
                           <div class="d-flex justify-content-end col-6">
                           <a href="../html/Estudiante.html" className="text-end fas fa-pencil-alt" title="Regresar"><TiArrowBackOutline className="text-2xl" /></a></div>
                         </h5>
@@ -185,7 +185,7 @@ function Perfil_estudiante() {
                       </h5>
                       <div class="row mb-4">
                         <div class="col-sm-6">
-                          <p class="m-b-10 f-w-600">índicce Global</p>
+                          <p class="m-b-10 f-w-600">índice Global</p>
                           <h6 class="text-muted f-w-400">{indiceGlobal}</h6>
                         </div>
                         {/* <div class="col-sm-6">
