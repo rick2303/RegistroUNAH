@@ -3,21 +3,23 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import React,{useState,useEffect} from 'react';
 import DataTable from 'react-data-table-component';
 import 'styled-components'
+import { Input, Button } from 'reactstrap';
 
 const MenuHistorialAdmin = () => {
 
 
     const [users,setUsers] = useState([])
+    const [inputValue, setInputValue] = useState('');
     
 
     //funcion para  mostrar los datos con fetch
-    const URL = 'Frontend\public\listado.json'
+    const URL = 'URL SERVIDOR'
     const showData = async () => {
       const response = await fetch (URL) 
       const data = await response.json()
       console.log(data) 
       setUsers(data)
-
+      setInputValue(data)
     } 
 
     useEffect ( ()=>{
@@ -73,7 +75,22 @@ const MenuHistorialAdmin = () => {
 
      return (
 
+
+
       <div className="App">
+      <div>
+      <Input
+          style={{textAlign:"center", marginTop:"10px",marginLeft:"10px",maxWidth: '300px' }}
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          placeholder="Ingresar Numero de Cuenta"
+        />
+      </div>
+      
+      <div style={{marginLeft:"10px", marginTop: '20px' }}>
+      <Button onClick={MenuHistorialAdmin} color="primary">Mostrar</Button>
+      </div>
       <DataTable
         columns={columnas}
         data={users}
