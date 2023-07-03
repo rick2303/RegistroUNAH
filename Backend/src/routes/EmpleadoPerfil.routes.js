@@ -1,7 +1,7 @@
 import {Router} from 'express';
 const multer = require('multer');
 import path from 'path';
-import {insertPerfilEmpleado,updatePerfilEmpleado} from '../controllers/EmpleadosPerfil';
+import {insertPerfilEmpleado,updatePerfilEmpleado, insertVideoPerfilEmpleado, updateVideoPerfilEmpleado, insertDescripcionPerfilEmpleado, updateDescripcionPerfilEmpleado} from '../controllers/EmpleadosPerfil';
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -16,10 +16,18 @@ const storage = multer.diskStorage({
   });
   const upload = multer({ storage });
 
-const routerEstudiantePerfil = Router();
+const routerEmpleadoPerfil = Router();
 
-routerEstudiantePerfil.post('/perfilEmpleado',upload.array('files', 3), insertPerfilEmpleado);
+routerEmpleadoPerfil.post('/perfilEmpleado',upload.array('files', 2), insertPerfilEmpleado);
 
-routerEstudiantePerfil.post('/perfilEmpleadoUpdate',upload.array('files', 3), updatePerfilEmpleado);
+routerEmpleadoPerfil.post('/perfilEmpleadoUpdate',upload.array('files', 2), updatePerfilEmpleado);
 
-export default routerEstudiantePerfil;
+routerEmpleadoPerfil.post('/perfilEmpleadoDescripcion', insertDescripcionPerfilEmpleado);
+
+routerEmpleadoPerfil.post('/perfilEmpleadoUpdateDescripcion', updateDescripcionPerfilEmpleado);
+
+routerEmpleadoPerfil.post('/perfilEmpleadoVideo',upload.array('files', 1), insertVideoPerfilEmpleado);
+
+routerEmpleadoPerfil.post('/perfilEmpleadoUpdateVideo',upload.array('files', 1), updateVideoPerfilEmpleado);
+
+export default routerEmpleadoPerfil;

@@ -1,10 +1,29 @@
 
-import React, { useState, useRef } from "react";
+import React, {useEffect, useState, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 function Fotos_estudiante() {
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [id1, setId1] = useState(false);
+  const [id2, setId2] = useState(false);
+  const [rol, setRol] = useState(false);
   const inputFileRef = useRef(null);
-
+  useEffect(() => {
+    const storedData = localStorage.getItem("userData");
+    
+   if (storedData) {
+      const userData = JSON.parse(storedData);
+      const rol = userData.data.Rol;
+      setRol(rol);
+      if (!rol) {
+        const id1 = userData.data.NumCuenta;
+        setId1(id1);
+      } else {
+        const id2 = userData.data.NumEmpleado;
+        setId2(id2);
+      }
+      
+    }
+  }, []); 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files).slice(0, 3); // Limitar a tres archivos
     setSelectedFiles(files);
@@ -13,28 +32,56 @@ function Fotos_estudiante() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (selectedFiles.length > 0) {
-      const formData = new FormData();
-      selectedFiles.forEach((file, index) => {
-        formData.append(`file${index + 1}`, file);
-      });
-
-      fetch("http://localhost:5000/...", {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => {
-          if (response.status === 200) {
-            alert('Archivos recibidos y procesados correctamente');
-            return response;
-          }
-        })
-        .finally(() => {
-          setSelectedFiles([]); // Reiniciar la selección de archivos
-          if (inputFileRef.current) {
-            inputFileRef.current.value = ""; // Limpiar el campo de entrada de archivos
-          }
+    if(!rol){
+      if (selectedFiles.length > 0) {
+        const formData = new FormData();
+        formData.append('Id', id1);
+        selectedFiles.forEach((file) => {
+          formData.append('files', file);
         });
+  
+        fetch("http://localhost:5000/perfilEstudianteUpdate", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => {
+            if (response.status === 200) {
+              alert('Archivos recibidos y procesados correctamente');
+              return response;
+            }
+          })
+          .finally(() => {
+            setSelectedFiles([]); // Reiniciar la selección de archivos
+            if (inputFileRef.current) {
+              inputFileRef.current.value = ""; // Limpiar el campo de entrada de archivos
+            }
+          });
+      }
+    }if(rol){
+      if (selectedFiles.length > 0) {
+        const formData = new FormData();
+        formData.append('Id', id2);
+        selectedFiles.forEach((file) => {
+          formData.append('files', file);
+        });
+  
+        fetch("http://localhost:5000/perfilEmpleadoUpdate", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => {
+            if (response.status === 200) {
+              alert('Archivos recibidos y procesados correctamente');
+              return response;
+            }
+          })
+          .finally(() => {
+            setSelectedFiles([]); // Reiniciar la selección de archivos
+            if (inputFileRef.current) {
+              inputFileRef.current.value = ""; // Limpiar el campo de entrada de archivos
+            }
+          });
+      }
     }
   };
 

@@ -3,31 +3,40 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { FiEdit } from "react-icons/fi";
 import ReactTextareaAutosize from "react-textarea-autosize";
 
-
 function EditableParagraph(props) {
- const [descripcion, setDescripcion] = useState("");
-  
- const [editing, setEditing] = useState(false);
- const [paragraphContent, setParagraphContent] = useState(descripcion);
+  const [descripcion, setDescripcion] = useState("");
 
+  const [editing, setEditing] = useState(false);
+  const [paragraphContent, setParagraphContent] = useState(descripcion);
+  const [id1, setId1] = useState(false);
+  const [id2, setId2] = useState(false);
+  const [rol, setRol] = useState(false);
   useEffect(() => {
     const storedData = localStorage.getItem("userData");
+
     if (storedData) {
       const userData = JSON.parse(storedData);
-      if(!userData.perfil){
-        const descripcion = 'Sin descripcion hasta el momento.' 
+      const rol = userData.data.Rol;
+      setRol(rol);
+      if (!rol) {
+        const id1 = userData.data.NumCuenta;
+        setId1(id1);
+      } else {
+        const id2 = userData.data.NumEmpleado;
+        setId2(id2);
+      }
+      
+      if (!userData.perfil) {
+        const descripcion = "Sin descripcion hasta el momento.";
         setDescripcion(descripcion);
         setParagraphContent(descripcion);
-      }else{
-        const descripcion = userData.perfil.Descripcion; 
+      } else {
+        const descripcion = userData.perfil.Descripcion;
         setDescripcion(descripcion);
         setParagraphContent(descripcion);
       }
     }
-  }, []); 
-  
-
- 
+  }, []);
 
   const handleEditToggle = () => {
     setEditing(!editing);
@@ -39,22 +48,45 @@ function EditableParagraph(props) {
 
   const handleSubmit = () => {
     // Enviar la información al backend utilizando fetch o una librería como Axios
-    fetch("/api/paragraph", {
-      method: "POST",
-      body: JSON.stringify({ content: paragraphContent }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // Manejar la respuesta del backend si es necesario
-        console.log(data);
+
+    if (!rol) {
+      
+      fetch("http://localhost:5000/perfilEstudianteUpdateDescripcion", {
+        method: "POST",
+        body: JSON.stringify({ id: id1, descripcion: paragraphContent }),
+        headers: {
+          "Content-Type": "application/json",
+        }, 
       })
-      .catch((error) => {
-        // Manejar errores si la solicitud falla
-        console.error(error);
-      });
+        
+        .then((response) => response.json())
+        .then((data) => {
+          // Manejar la respuesta del backend si es necesario
+          console.log(data);
+        })
+        .catch((error) => {
+          // Manejar errores si la solicitud falla
+          console.error(error);
+        });
+    }if(rol){
+      
+      fetch("http://localhost:5000/perfilEmpleadoUpdateDescripcion", {
+        method: "POST",
+        body: JSON.stringify({id: id2, descripcion: paragraphContent }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // Manejar la respuesta del backend si es necesario
+          console.log(data);
+        })
+        .catch((error) => {
+          // Manejar errores si la solicitud falla
+          console.error(error);
+        });
+    }
   };
   return (
     <div>
@@ -80,7 +112,10 @@ function EditableParagraph(props) {
           <p>{paragraphContent}</p>
 
           <button onClick={handleEditToggle}>
-            <FiEdit className="text-2xl fas fa-pencil-alt" title="Editar descripción" />
+            <FiEdit
+              className="text-2xl fas fa-pencil-alt"
+              title="Editar descripción"
+            />
           </button>
         </div>
       )}
