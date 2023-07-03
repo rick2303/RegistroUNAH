@@ -22,7 +22,7 @@ function Perfil_docente() {
       const userData = JSON.parse(storedData);
       const imagen = userData.data.Foto;
       setImagen(imagen);
-      const nombre = userData.data.Nombre + userData.data.Apellido;
+      const nombre = userData.data.Nombre + ' ' + userData.data.Apellido;
       setNombre(nombre);
       const centroRegional = userData.data.CentroRegional;
       setCentroRegional(centroRegional);

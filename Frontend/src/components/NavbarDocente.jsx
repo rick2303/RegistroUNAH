@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { FcMenu } from "react-icons/fc";
 import { BsBoxArrowInLeft } from "react-icons/bs";
-import { useEffect, useState } from "react";
 import {
   MobileNav,
   Typography,
