@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../Perfil_estudiante.css";
 import ModalCargarFotos from "./ModalCargarFotos";
@@ -9,6 +9,33 @@ import {AiOutlineVideoCameraAdd} from "react-icons/ai";
 import ModalCargarVideo from "./ModalCargarvideo";
 
 function Perfil_docente() {
+  const [nombre, setNombre] = useState("");
+  const [centroRegional, setCentroRegional] = useState("");
+  const [correoInstitucional, setCorreoInstitucional] = useState("");
+  const [carrera, setCarrera] = useState("");
+  const [imagen, setImagen] = useState("");
+  const [descripcion, setDescripcion] = useState("");
+  const [video, setVideo] = useState("");
+  useEffect(() => {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      const userData = JSON.parse(storedData);
+      const imagen = userData.data.Foto;
+      setImagen(imagen);
+      const nombre = userData.data.NumCuenta + userData.data.Apellido;
+      setNombre(nombre);
+      const centroRegional = userData.data.CentroRegional;
+      setCentroRegional(centroRegional);
+      const correoInstitucional = userData.data.CorreoInstitucional;
+      setCorreoInstitucional(correoInstitucional);
+      const carrera = userData.data.Carrera;
+      setCarrera(carrera);
+      const descripcion = userData.perfil.Descripcion; 
+      setDescripcion(descripcion);
+      const video = userData.perfil.Video;
+      setVideo(video);
+    }
+  }, []);
   return (
     <>
       <div class="page-content page-container" id="page-content">
@@ -36,7 +63,7 @@ function Perfil_docente() {
                               data-bs-interval="10000"
                             >
                               <img
-                                src="../img/2.png"
+                                src={imagen}
                                 class=" d-block w-100"
                                 alt="Sin foto de perfil"
                               />
@@ -70,7 +97,7 @@ function Perfil_docente() {
                       </div>
                       <h5 class="f-w-600">Descripción:</h5>
                       <div>
-                        <EditableParagraph />
+                        <EditableParagraph descripcion={descripcion}/>
                       </div>
 
                       <div class="d-flex justify-content-center align-items-center">
@@ -105,25 +132,25 @@ function Perfil_docente() {
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">Nombre:</p>
                           <h6 class="text-muted f-w-400">
-                            Nestor Adrian Luque
+                            {nombre}
                           </h6>
                         </div>
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">Correo:</p>
-                          <h6 class="text-muted f-w-400">luque.rodriguez.unah.edu.hn</h6>
+                          <h6 class="text-muted f-w-400">{correoInstitucional}</h6>
                         </div>
                       </div>
                       <div class="row mb-4">
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">Centro regional:</p>
                           <h6 class="text-muted f-w-400">
-                            Ciudad univerditaria
+                            {centroRegional}
                           </h6>
                         </div>
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">Carrera:</p>
                           <h6 class="text-muted f-w-400">
-                            Ingeniería en Sistemas
+                            {carrera}
                           </h6>
                         </div>
                       </div>
@@ -143,7 +170,7 @@ function Perfil_docente() {
                       
                       <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
   <video
-    src="../img/Video docente.mp4"
+    src={video}
     controls
     width="500"
     height="400"

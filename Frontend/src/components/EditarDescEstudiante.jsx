@@ -1,14 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FiEdit } from "react-icons/fi";
 import ReactTextareaAutosize from "react-textarea-autosize";
 
 
-function EditableParagraph({descripcion}) {
+function EditableParagraph(props) {
+ /*  const [descripcion, setDescripcion] = useState("");
+  
+
+
+  useEffect(() => {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      const userData = JSON.parse(storedData);
+     
+      const descripcion = userData.perfil.Descripcion; 
+      setDescripcion(descripcion);
+    }
+  }, []); */
   const [editing, setEditing] = useState(false);
   const [paragraphContent, setParagraphContent] = useState(
-    {descripcion}
+    props.descripcion
   );
+ 
 
   const handleEditToggle = () => {
     setEditing(!editing);
