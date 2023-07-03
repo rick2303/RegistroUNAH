@@ -1,7 +1,7 @@
 import { getConnection,sql, queries} from "../Database"
 export const insertPerfilEstudiante = async (req,res)=> {
     const {Id,descripcion}=req.body;
-    const photoPaths = req.files.map(file => file.path);
+    const photoPaths = req.files.map(file => file.filename);
     const pool = await getConnection();
     const result= await pool.request()
         .input("Id",sql.VarChar,Id)
@@ -15,7 +15,7 @@ export const insertPerfilEstudiante = async (req,res)=> {
 
 export const updatePerfilEstudiante = async (req,res)=> {
     const {Id,descripcion}=req.body;
-    const photoPaths = req.files.map(file => file.path);
+    const photoPaths = req.files.map(file => file.filename);
     const pool = await getConnection();
     const result= await pool.request()
         .input("Id",sql.VarChar,Id)
