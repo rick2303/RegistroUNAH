@@ -1,5 +1,6 @@
 //import React from "react";
-import { FcBusinesswoman, FcCheckmark, FcDiploma1, FcDiploma2, FcElectricity, FcEndCall, FcFolder, FcUpload } from "react-icons/fc";
+import React, { useEffect, useState } from "react";
+import { FcBusinesswoman, FcCheckmark, FcDiploma1,FcUpload } from "react-icons/fc";
 import { FcCalendar } from "react-icons/fc";
 import { FcBusinessman } from "react-icons/fc";
 import { FcConferenceCall } from "react-icons/fc";

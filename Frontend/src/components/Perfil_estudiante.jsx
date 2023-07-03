@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import "bootstrap/dist/css/bootstrap.min.css";
 import Fotos_estudiante from "./Fotos_estudiante";
 import "../Perfil_estudiante.css";
@@ -20,20 +19,12 @@ function Perfil_estudiante() {
   const [carrera, setCarrera] = useState("");
   const [indiceGlobal, setIndiceGlobal] = useState("");
 
-
-
-
   useEffect(() => {
     const storedData = localStorage.getItem("userData");
     if (storedData) {
       const userData = JSON.parse(storedData);
-      const imagen1 = userData.perfil.Imagen1;
-      setImagen1(imagen1);
-      const imagen2 = userData.perfil.Imagen2;
-      setImagen2(imagen2);
-      const imagen3 = userData.perfil.Imagen3;
-      setImagen3(imagen3);
-      const nombre = userData.data.Nombre;
+      
+      const nombre = userData.data.Nombre + " " + userData.data.apellido;
       setNombre(nombre);
       const numCuenta = userData.data.NumCuenta;
       setNumCuenta(numCuenta);
@@ -43,8 +34,24 @@ function Perfil_estudiante() {
       setCarrera(carrera);
       const indiceGlobal = userData.data.IndiceGlobal;
       setIndiceGlobal(indiceGlobal);
-      const descripcion = userData.perfil.Descripcion; 
-      setDescripcion(descripcion);
+      
+      if(!userData.perfil){
+        const imagen = '1688356529392-947749500-Sin tÃ­tulo.png';
+        setImagen1(imagen);
+        const imagen2 = '1688356529392-947749500-Sin tÃ­tulo.png';
+        setImagen2(imagen2);
+        const imagen3 = '1688356529392-947749500-Sin tÃ­tulo.png';
+        setImagen3(imagen3);
+      }else{
+        const imagen = userData.perfil.Imagen1;
+        setImagen1(imagen);
+        const imagen2 = userData.perfil.Imagen2;
+        setImagen2(imagen2);
+        const imagen3 = userData.perfil.Imagen3;
+        setImagen3(imagen3);
+        const descripcion = userData.perfil.Descripcion;
+        setDescripcion(descripcion);
+      }
     }
   }, []);
   return (
@@ -74,7 +81,7 @@ function Perfil_estudiante() {
                               data-bs-interval="10000"
                             >
                               <img
-                                src={imagen1}
+                                src={`../img/uploads/${imagen1}`}
                                 class=" d-block w-100"
                                 alt="Sin foto de perfil"
                               />
@@ -84,7 +91,7 @@ function Perfil_estudiante() {
                               data-bs-interval="10000"
                             >
                               <img
-                                src={imagen2}
+                                src={`../img/uploads/${imagen2}`}
                                 class=" d-block w-100"
                                 alt="Sin foto de perfil"
                               />
@@ -94,7 +101,7 @@ function Perfil_estudiante() {
                               data-bs-interval="1000"
                             >
                               <img
-                                src={imagen3}
+                                src={`../img/uploads/${imagen3}`}
                                 class="d-block w-100"
                                 alt="Sin foto de perfil"
                               />
@@ -128,14 +135,16 @@ function Perfil_estudiante() {
                       </div>
                       <h5 class="f-w-600">Descripción:</h5>
                       <div>
-                        <EditableParagraph descripcion={descripcion}/>
+                        <EditableParagraph descripcion={descripcion} />
                       </div>
 
                       <div class="d-flex justify-content-center align-items-center">
                         <a data-bs-toggle="modal" data-bs-target="#example">
                           <h2 class="m-2">
-                            <MdAddAPhoto className="text-2xl fas fa-pencil-alt" title="Foto de perfil"/>
-                            
+                            <MdAddAPhoto
+                              className="text-2xl fas fa-pencil-alt"
+                              title="Foto de perfil"
+                            />
                           </h2>
                         </a>
                         <ModalCargarFotos />
@@ -144,22 +153,23 @@ function Perfil_estudiante() {
                   </div>
                   <div class="col-sm-6 col-md-10">
                     <div class="card-block">
-                      
-                        <h5 className="m-b-20 p-b-5 b-b-default f-w-600 row">
-                          <p className="col-6">Información General</p>
-                          <div class="d-flex justify-content-end col-6">
-                          <a href="../html/Estudiante.html" className="text-end fas fa-pencil-alt" title="Regresar"><TiArrowBackOutline className="text-2xl" /></a></div>
-                        </h5>
-                        
-                        
-                      
+                      <h5 className="m-b-20 p-b-5 b-b-default f-w-600 row">
+                        <p className="col-6">Información General</p>
+                        <div class="d-flex justify-content-end col-6">
+                          <a
+                            href="../html/Estudiante.html"
+                            className="text-end fas fa-pencil-alt"
+                            title="Regresar"
+                          >
+                            <TiArrowBackOutline className="text-2xl" />
+                          </a>
+                        </div>
+                      </h5>
 
                       <div class="row mb-4">
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">Nombre:</p>
-                          <h6 class="text-muted f-w-400">
-                           {nombre}
-                          </h6>
+                          <h6 class="text-muted f-w-400">{nombre}</h6>
                         </div>
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">Número de cuenta:</p>
@@ -170,14 +180,12 @@ function Perfil_estudiante() {
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">Correo:</p>
                           <h6 class="text-muted f-w-400">
-                          {correoInstitucional}
+                            {correoInstitucional}
                           </h6>
                         </div>
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">Carrera:</p>
-                          <h6 class="text-muted f-w-400">
-                          {carrera}
-                          </h6>
+                          <h6 class="text-muted f-w-400">{carrera}</h6>
                         </div>
                       </div>
                       <h5 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600">
@@ -195,7 +203,6 @@ function Perfil_estudiante() {
                           <h6 class="text-muted f-w-400">93%</h6>
                         </div> */}
                       </div>
-                      
                     </div>
                   </div>
                 </div>

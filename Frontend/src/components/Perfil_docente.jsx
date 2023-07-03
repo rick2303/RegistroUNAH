@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../Perfil_estudiante.css";
 import ModalCargarFotos from "./ModalCargarFotos";
 import EditableParagraph from "./EditarDescEstudiante";
 import { TiArrowBackOutline } from "react-icons/ti";
 import { MdAddAPhoto } from "react-icons/md";
-import {AiOutlineVideoCameraAdd} from "react-icons/ai";
+import { AiOutlineVideoCameraAdd } from "react-icons/ai";
 import ModalCargarVideo from "./ModalCargarvideo";
 
 function Perfil_docente() {
@@ -20,9 +20,8 @@ function Perfil_docente() {
     const storedData = localStorage.getItem("userData");
     if (storedData) {
       const userData = JSON.parse(storedData);
-      const imagen = userData.data.Foto;
-      setImagen(imagen);
-      const nombre = userData.data.Nombre + ' ' + userData.data.Apellido;
+      
+      const nombre = userData.data.Nombre + " " + userData.data.Apellido;
       setNombre(nombre);
       const centroRegional = userData.data.CentroRegional;
       setCentroRegional(centroRegional);
@@ -30,10 +29,19 @@ function Perfil_docente() {
       setCorreoInstitucional(correoInstitucional);
       const carrera = userData.data.Carrera;
       setCarrera(carrera);
-      const descripcion = userData.perfil.Descripcion; 
-      setDescripcion(descripcion);
-      const video = userData.perfil.Video;
-      setVideo(video);
+     
+      
+      if(!userData.perfil){
+        const imagen = '1688356529392-947749500-Sin tÃ­tulo.png';
+        setImagen(imagen);
+        const video = 'notfound.png';
+        setVideo(video);
+      }else{
+        const imagen = userData.perfil.Imagen1;
+        setImagen(imagen);
+        const video = userData.perfil.Video;
+        setVideo(video);
+      }
     }
   }, []);
   return (
@@ -63,7 +71,7 @@ function Perfil_docente() {
                               data-bs-interval="10000"
                             >
                               <img
-                                src={imagen}
+                                src={`../img/uploads/${imagen}`}
                                 class=" d-block w-100"
                                 alt="Sin foto de perfil"
                               />
@@ -97,7 +105,7 @@ function Perfil_docente() {
                       </div>
                       <h5 class="f-w-600">Descripción:</h5>
                       <div>
-                        <EditableParagraph descripcion={descripcion}/>
+                        <EditableParagraph descripcion={descripcion} />
                       </div>
 
                       <div class="d-flex justify-content-center align-items-center">
@@ -116,14 +124,16 @@ function Perfil_docente() {
                   <div class="col-sm-6 col-md-10">
                     <div class="card-block">
                       <h5 className="m-b-20 p-b-5 b-b-default f-w-600 row">
-                        <p className="col-6">Información general - Pefil docente</p>
+                        <p className="col-6">
+                          Información general - Pefil docente
+                        </p>
                         <div class="d-flex justify-content-end col-6">
                           <a
                             href="../html/Docente.html"
                             className="text-end fas fa-pencil-alt"
                             title="Regresar"
                           >
-                            <TiArrowBackOutline className="text-2xl"/>
+                            <TiArrowBackOutline className="text-2xl" />
                           </a>
                         </div>
                       </h5>
@@ -131,34 +141,31 @@ function Perfil_docente() {
                       <div class="row mb-4">
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">Nombre:</p>
-                          <h6 class="text-muted f-w-400">
-                            {nombre}
-                          </h6>
+                          <h6 class="text-muted f-w-400">{nombre}</h6>
                         </div>
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">Correo:</p>
-                          <h6 class="text-muted f-w-400">{correoInstitucional}</h6>
+                          <h6 class="text-muted f-w-400">
+                            {correoInstitucional}
+                          </h6>
                         </div>
                       </div>
                       <div class="row mb-4">
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">Centro regional:</p>
-                          <h6 class="text-muted f-w-400">
-                            {centroRegional}
-                          </h6>
+                          <h6 class="text-muted f-w-400">{centroRegional}</h6>
                         </div>
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">Carrera:</p>
-                          <h6 class="text-muted f-w-400">
-                            {carrera}
-                          </h6>
+                          <h6 class="text-muted f-w-400">{carrera}</h6>
                         </div>
                       </div>
                       <h5 className="m-b-20 p-b-5 b-b-default f-w-600 row">
                         <p className="col-6">Video descriptivo</p>
                         <div class="d-flex justify-content-end col-6">
                           <a
-                            data-bs-toggle="modal" data-bs-target="#docente"
+                            data-bs-toggle="modal"
+                            data-bs-target="#docente"
                             className="text-end fas fa-pencil-alt"
                             title="Regresar"
                           >
@@ -167,17 +174,16 @@ function Perfil_docente() {
                           <ModalCargarVideo />
                         </div>
                       </h5>
-                      
-                      <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-  <video
-    src={video}
-    controls
-    width="500"
-    height="400"
-  />
-</div>
 
-                      
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <video src={`../img/uploads/${video}`} controls width="500" height="400" />
+                      </div>
                     </div>
                   </div>
                 </div>

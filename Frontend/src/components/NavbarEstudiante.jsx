@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import { FcMenu } from "react-icons/fc";
 import { BsBoxArrowInLeft } from "react-icons/bs";
 import {
@@ -15,8 +14,15 @@ export default function NavbarEstudiante() {
     const storedData = localStorage.getItem("userData");
     if (storedData) {
       const userData = JSON.parse(storedData);
-      const imagenUsuario = userData.perfil.Imagen1; 
-      setImagenUsuario(imagenUsuario);
+      if(!userData.perfil){
+        const alternativaImagen = 'UNAH.png'
+        setImagenUsuario(alternativaImagen);
+        
+      }else{
+        const alternativaImagen = userData.perfil.Imagen1; 
+        setImagenUsuario(alternativaImagen);
+      }
+      
     }
   }, []);
   const [openNav, setOpenNav] = React.useState(false);
@@ -49,7 +55,7 @@ export default function NavbarEstudiante() {
         className="p-1 font-normal"
       >
         <a href="../html/Perfil_estudiante.html">
-        <img className="rounded-full h-10 w-10" src={imagenUsuario} alt="Perfil" />
+        <img className="rounded-full h-10 w-10" src={`../img/uploads/${imagenUsuario}`} alt = "Perfil"/>
         </a>
      
       </Typography>
