@@ -47,6 +47,14 @@ function Fotos_estudiante() {
           .then((response) => {
             if (response.status === 200) {
               alert('Archivos recibidos y procesados correctamente');
+              const storedData = localStorage.getItem("userData");
+              response.json().then((responseData) => {
+                const url = responseData.url;
+                const data = responseData;
+                console.log(data);
+                localStorage.setItem("userData", JSON.stringify(data)); // Almacenar datos en localStorage
+                window.location.reload();
+              });
               return response;
             }
           })
@@ -72,6 +80,14 @@ function Fotos_estudiante() {
           .then((response) => {
             if (response.status === 200) {
               alert('Archivos recibidos y procesados correctamente');
+              const storedData = localStorage.getItem("userData");
+              response.json().then((responseData) => {
+                const url = responseData.url;
+                const data = responseData;
+                console.log(data);
+                localStorage.setItem("userData", JSON.stringify(data)); // Almacenar datos en localStorage
+                window.location.reload();
+              });
               return response;
             }
           })
