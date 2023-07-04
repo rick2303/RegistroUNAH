@@ -139,15 +139,22 @@ p {
 }
 
 .rounded-photo {
-    border-radius : 49%;
+    border-radius: 49%;
     overflow: hidden;
     position: relative;
 }
 
 /*Fotos en los carousel*/
-.d-block{
-    height: 10rem !important;
-    max-width: max-content !important;
+.d-block-estudiante{
+    height: 15rem !important;
+    max-width: 100% !important;
+    object-fit: cover
+
+}
+
+.d-block-docente{
+    height: 15rem !important;
+    max-width: 100% !important;
     object-fit: cover
 
 }
