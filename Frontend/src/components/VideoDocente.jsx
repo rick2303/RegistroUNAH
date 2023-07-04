@@ -1,11 +1,23 @@
 
-import React, { useState, useRef } from "react";
+import React, { useEffect,useState, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function VideoDocente() {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [id1, setId1] = useState(false);
   const inputFileRef = useRef(null);
+  
+  useEffect(() => {
+    const storedData = localStorage.getItem("userData");
 
+    if (storedData) {
+      const userData = JSON.parse(storedData);
+      const id1 = userData.data.NumEmpleado;
+      setId1(id1);
+    }
+  }, []);
+
+  
   const handleFileChange = (event) => {
     const file = event.target.files[0]; // Obtener el primer archivo seleccionado
     setSelectedFile(file);
@@ -16,9 +28,10 @@ function VideoDocente() {
 
     if (selectedFile) {
       const formData = new FormData();
-      formData.append("file", selectedFile);
+      formData.append('Id', id1);
+      formData.append("files", selectedFile);
 
-      fetch("http://localhost:5000/...", {
+      fetch("http://localhost:5000/perfilEmpleadoUpdateVideo", {
         method: "POST",
         body: formData,
       })
