@@ -1,89 +1,86 @@
-
-import "bootstrap/dist/css/bootstrap.min.css"
-import React,{useState,useEffect} from 'react';
+import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
-import 'styled-components'
+import 'styled-components';
 
 const MenuHistorial = () => {
+  const [NumCuenta, setNumCuenta] = useState("");
+  const [historialData, setHistorialData] = useState([]);
 
+  useEffect(() => {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      const userData = JSON.parse(storedData);
+      const numCuenta = userData.data.NumCuenta;
+      setNumCuenta(numCuenta);
+    }
+  }, []);
 
-    const [users,setUsers] = useState([])
-    
+  useEffect(() => {
+    if (NumCuenta) {
+      showData(NumCuenta);
+    }
+  }, [NumCuenta]);
 
-    //funcion para  mostrar los datos con fetch
-    const URL = 'Frontend\public\listado.json'
-    const showData = async () => {
-      const response = await fetch (URL) 
-      const data = await response.json()
-      console.log(data) 
-      setUsers(data)
-
-    } 
-
-    useEffect ( ()=>{
-      showData()
-    }, [] )
-
-    //configuramos las columnas para DataTable
-
-    const columnas = [
-      {
-        name:'ID',
-        selector : row => row.id
+  const showData = async (cuenta) => {
+    const URL = "http://localhost:5000/historial";
+    const response = await fetch(URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-      {
-        name:'CODIGO',
-        selector : row => row.asignatura
-      },
-      {
-        name:'ASIGNATURA',
-        selector : row => row.asignatura
-      },
-      {
-        name:'UV',
-        selector : row => row.uv
-      },
-      {
-        name:'SECCION',
-        selector : row => row.seccion
-      },
-      {
-        name:'Año',
-        selector : row => row.año
-      },
-      {
-        name:'PERIODO',
-        selector :row => row.periodo
-      },
-      {
-        name:'CALIFICACION',
-        selector :row => row.calificacion
-      },
-      {
-        name:'OBS',
-        selector : row => row.obs
-      },
-      {
-        name:'IdDocente',
-        selector : row => row.IdDocente
-      },
-     ]
-      
-    //Mostramos la data en DataTable
+      body: JSON.stringify({ NumCuenta: cuenta }),
+    });
+    const data = await response.json();
+    console.log(data);
+    setHistorialData(data);
+  };
 
-     return (
+  // Configuramos las columnas para DataTable
+  const columnas = [
+    {
+      name: "CODIGO",
+      selector: (row) => row.CODIGO,
+    },
+    {
+      name: "ASIGNATURA",
+      selector: (row) => row.ASIGNATURA,
+    },
+    {
+      name: "UV",
+      selector: (row) => row.UV,
+    },
+    {
+      name: "SECCION",
+      selector: (row) => row.SECCION,
+    },
+    {
+      name: "AÑO",
+      selector: (row) => row.Año,
+    },
+    {
+      name: "PERIODO",
+      selector: (row) => row.PERIODO,
+    },
+    {
+      name: "CALIFICACION",
+      selector: (row) => row.CALIFIACION,
+    },
+    {
+      name: "OBS",
+      selector: (row) => row.OBS,
+    },
+  ];
 
-      <div className="App">
-      <DataTable
-        columns={columnas}
-        data={users}
-        pagination
-        ></DataTable>
-      </div>   )
-      
-
-    
-  }
-
+  // Mostramos la data en DataTable
+  return (
+    <div className="App">
+            <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
+                Historial Académico
+            </h1>
+      <DataTable columns={columnas} data={historialData} pagination />
+    </div>
+  );
+};
 
 export default MenuHistorial;
