@@ -1,13 +1,16 @@
 import axios from "axios";
+import { useRef } from "react";
 import React from "react";
 import { useContext } from "react";
 import { RecoveryContext } from "../App";
 
 export default function Login() {
-  const { setEmail, setPage, email, setOTP } = useContext(RecoveryContext);
+  const emailRef = useRef(null);
+  const { setPage, setOTP } = useContext(RecoveryContext);
 
 
   function nagigateToOtp() {
+    const email = emailRef.current.value;
     if (email) {
       const OTP = Math.floor(Math.random() * 9000 + 1000);
       console.log(OTP);
@@ -47,7 +50,7 @@ export default function Login() {
 
                 <div className="mb-6">
                   <input
-                    onChange={(e) => setEmail(e.target.value)}
+                    ref={emailRef}
                     type="text"
                     className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                     id="exampleEmailFormControlInput"
@@ -73,4 +76,3 @@ export default function Login() {
     </div>
   );
 }
-

@@ -1,15 +1,13 @@
-import React from "react";
-import { useState } from "react";
-import { useContext } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import { RecoveryContext } from "../App";
 import axios from 'axios';
 
-
-export default function () {
+export default function VerifyOTP() {
   const { email, otp, setPage } = useContext(RecoveryContext);
-  const [timerCount, setTimer] = React.useState(60);
-  const [OTPinput, setOTPinput] = useState([0, 0, 0, 0]);
+  const [timerCount, setTimer] = useState(60);
+  const [OTPinput, setOTPinput] = useState(["", "", "", ""]);
   const [disable, setDisable] = useState(true);
+  const otpInputsRefs = useRef([]);
 
   function resendOTP() {
     if (disable) return;
@@ -35,7 +33,7 @@ export default function () {
     return;
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     let interval = setInterval(() => {
       setTimer((lastTimerCount) => {
         lastTimerCount <= 1 && clearInterval(interval);
@@ -47,6 +45,19 @@ export default function () {
     //cleanup the interval on complete
     return () => clearInterval(interval);
   }, [disable]);
+
+  function handleOtpChange(index, e) {
+    const value = e.target.value;
+    setOTPinput((prevOTPInput) => {
+      const newOTPInput = [...prevOTPInput];
+      newOTPInput[index] = value;
+      return newOTPInput;
+    });
+
+    if (value.length >= 1 && otpInputsRefs.current[index + 1]) {
+      otpInputsRefs.current[index + 1].focus();
+    }
+  }
 
   return (
     <div className="flex justify-center items-center w-screen h-screen bg-gray-50">
@@ -65,80 +76,26 @@ export default function () {
             <form>
               <div className="flex flex-col space-y-16">
                 <div className="flex flex-row items-center justify-between mx-auto w-full max-w-xs">
-                  <div className="w-16 h-16 ">
-                    <input
-                      maxLength="1"
-                      className="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700"
-                      type="text"
-                      name=""
-                      id=""
-                      onChange={(e) =>
-                        setOTPinput([
-                          e.target.value,
-                          OTPinput[1],
-                          OTPinput[2],
-                          OTPinput[3],
-                        ])
-                      }
-                    ></input>
-                  </div>
-                  <div className="w-16 h-16 ">
-                    <input
-                      maxLength="1"
-                      className="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700"
-                      type="text"
-                      name=""
-                      id=""
-                      onChange={(e) =>
-                        setOTPinput([
-                          OTPinput[0],
-                          e.target.value,
-                          OTPinput[2],
-                          OTPinput[3],
-                        ])
-                      }
-                    ></input>
-                  </div>
-                  <div className="w-16 h-16 ">
-                    <input
-                      maxLength="1"
-                      className="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700"
-                      type="text"
-                      name=""
-                      id=""
-                      onChange={(e) =>
-                        setOTPinput([
-                          OTPinput[0],
-                          OTPinput[1],
-                          e.target.value,
-                          OTPinput[3],
-                        ])
-                      }
-                    ></input>
-                  </div>
-                  <div className="w-16 h-16 ">
-                    <input
-                      maxLength="1"
-                      className="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700"
-                      type="text"
-                      name=""
-                      id=""
-                      onChange={(e) =>
-                        setOTPinput([
-                          OTPinput[0],
-                          OTPinput[1],
-                          OTPinput[2],
-                          e.target.value,
-                        ])
-                      }
-                    ></input>
-                  </div>
+                  {OTPinput.map((value, index) => (
+                    <div key={index} className="w-16 h-16 ">
+                      <input
+                        maxLength="1"
+                        className="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700"
+                        type="text"
+                        name=""
+                        id=""
+                        value={value}
+                        ref={(ref) => (otpInputsRefs.current[index] = ref)}
+                        onChange={(e) => handleOtpChange(index, e)}
+                      />
+                    </div>
+                  ))}
                 </div>
 
                 <div className="flex flex-col space-y-5">
                   <div>
                     <a
-                      onClick={() => verfiyOTP()}
+                      onClick={verfiyOTP}
                       className="flex flex-row cursor-pointer items-center justify-center text-center w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm"
                     >
                       Verificar cuenta
@@ -154,7 +111,7 @@ export default function () {
                         cursor: disable ? "none" : "pointer",
                         textDecorationLine: disable ? "none" : "underline",
                       }}
-                      onClick={() => resendOTP()}
+                      onClick={resendOTP}
                     >
                       {disable ? `Reenviar código OTP en ${timerCount}s` : "Reenviar código OTP"}
                     </a>

@@ -134,14 +134,24 @@ p {
     transition: all 0.3s ease-in-out;
 }
 .foto{
-    height: 260px;
-    width: 260px;
+    height: 260px !important;
+    width: 260px !important;
 }
 
 .rounded-photo {
-    border-radius: 50%;
+    border-radius : 49%;
     overflow: hidden;
     position: relative;
-    
-  }
+}
 
+/*Fotos en los carousel*/
+.d-block{
+    height: 10rem !important;
+    max-width: max-content !important;
+    object-fit: cover
+
+}
+
+.carousel-item{
+    width: 99% !important;
+}
