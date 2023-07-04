@@ -48,7 +48,19 @@ function EditableParagraph(props) {
 
   const handleSubmit = () => {
     // Enviar la información al backend utilizando fetch o una librería como Axios
+    
 
+    // Actualizar el localStorage
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      const userData = JSON.parse(storedData);
+      userData.perfil = {
+        ...userData.perfil,
+        Descripcion: paragraphContent,
+      };
+      localStorage.setItem("userData", JSON.stringify(userData));
+    }
+      
     if (!rol) {
       
       fetch("http://localhost:5000/perfilEstudianteUpdateDescripcion", {

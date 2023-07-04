@@ -38,6 +38,14 @@ function VideoDocente() {
         .then((response) => {
           if (response.status === 200) {
             alert("Archivo recibido y procesado correctamente");
+              const storedData = localStorage.getItem("userData");
+              response.json().then((responseData) => {
+              const url = responseData.url;
+              const data = responseData;
+              console.log(data);
+              localStorage.setItem("userData", JSON.stringify(data)); // Almacenar datos en localStorage
+              window.location.reload();
+            });
             return response;
           }
         })

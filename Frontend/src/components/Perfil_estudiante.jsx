@@ -14,6 +14,7 @@ function Perfil_estudiante() {
   const [imagen2, setImagen2] = useState("");
   const [imagen3, setImagen3] = useState("");
   const [nombre, setNombre] = useState("");
+  const [apellido, setApellido] = useState("");
   const [numCuenta, setNumCuenta] = useState("");
   const [correoInstitucional, setCorreoInstitucional] = useState("");
   const [carrera, setCarrera] = useState("");
@@ -24,8 +25,10 @@ function Perfil_estudiante() {
     if (storedData) {
       const userData = JSON.parse(storedData);
       
-      const nombre = userData.data.Nombre + " " + userData.data.apellido;
+      const nombre = userData.data.Nombre
       setNombre(nombre);
+      const apellido = userData.data.apellido
+      setApellido(apellido);
       const numCuenta = userData.data.NumCuenta;
       setNumCuenta(numCuenta);
       const correoInstitucional = userData.data.CorreoInstitucional;
@@ -54,6 +57,9 @@ function Perfil_estudiante() {
       }
     }
   }, []);
+
+
+
   return (
     <>
       <div class="page-content page-container" id="page-content">
@@ -169,7 +175,7 @@ function Perfil_estudiante() {
                       <div class="row mb-4">
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">Nombre:</p>
-                          <h6 class="text-muted f-w-400">{nombre}</h6>
+                          <h6 class="text-muted f-w-400">{nombre} {apellido}</h6>
                         </div>
                         <div class="col-sm-6">
                           <p class="m-b-10 f-w-600">Número de cuenta:</p>

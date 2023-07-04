@@ -23,7 +23,12 @@ export const updatePerfilEstudiante = async (req,res)=> {
             .input('photoPath2', sql.VarChar, photoPaths[1])
             .input('photoPath3', sql.VarChar, photoPaths[2])
             .query(queries.updatePerfilEstudiante);
-        res.status(200).json({ message: 'Operación completada exitosamente' });
+            const estudiante = await pool.request()
+                .input("Id", sql.VarChar, Id)
+                .query(queries.getEstudiantes);
+                console.log(estudiante);
+                const perfilEstudiante = await pool.request().input("Id", sql.VarChar, Id).query(queries.getPerfilestudiante);
+                res.json({url:'http://127.0.0.1:5173/src/html/Estudiante.html', data: estudiante.recordset[0], perfil: perfilEstudiante.recordset[0]});                
     }catch(error){
         res.status(500).json({ message: 'error al momento de actualizar foto' })
     }
