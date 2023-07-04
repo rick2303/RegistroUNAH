@@ -6,13 +6,16 @@ import 'styled-components';
 const EstudiantesFiltradosMatriculados = () => {
     const [users, setUsers] = useState([]);
     const [carreraUsuario, setCarreraUsuario] = useState("");
+    const [CentroRegional, setCentroRegional] = useState("");
 
     useEffect(() => {
         const storedData = localStorage.getItem("userData");
         if (storedData) {
             const userData = JSON.parse(storedData);
             const Carrera = userData.data.Carrera;
+            const CentroRegional = userData.data.CentroRegional;
             setCarreraUsuario(Carrera);
+            setCentroRegional(CentroRegional);
         }
     }, []);
 
@@ -23,7 +26,8 @@ const EstudiantesFiltradosMatriculados = () => {
     const showData = async () => {
         let URL = 'http://localhost:5000/estudiantesMatriculadosDepto';
         let dataEnviada = {
-            "Carrera": carreraUsuario
+            "Carrera": carreraUsuario,
+            "CentroRegional": CentroRegional
         };
         let options = {
             method: 'POST',

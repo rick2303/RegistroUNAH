@@ -16,21 +16,10 @@ router.get('/estudiantesMatriculados', getEstudiantesMatriculados);
 router.post('/estudiantesMatriculadosDepto', async (req, res) => {
 
     try {
-        const { Carrera} = req.body;
+        const { Carrera, CentroRegional} = req.body;
         const pool = await getConnection();
-        const result = await pool.request().query(`SELECT est.NumCuenta, est.Nombre, est.Apellido, est.CorreoInstitucional, est.Carrera, est.IndicePeriodo, est.IndiceGlobal
-        FROM (
-            SELECT DISTINCT estudiante.NumCuenta, estudiante.Nombre, estudiante.Apellido, estudiante.CorreoInstitucional, estudiante.Carrera, estudiante.IndiceGlobal, estudiante.IndicePeriodo
-            FROM [dbo].[estudiantes] as estudiante
-            INNER JOIN [dbo].[empleados] as empleado
-            ON estudiante.Carrera = empleado.Carrera
-            WHERE empleado.Carrera = '${Carrera}'
-        ) est
-        WHERE est.NumCuenta IN (
-            SELECT NumCuenta
-            FROM [dbo].[estudiantes]
-            WHERE Estado = 'Matriculado'
-        );`);
+        const result = await pool.request().query(`SELECT DISTINCT NumCuenta, Nombre, Apellido, CorreoInstitucional, Carrera, IndiceGlobal, IndicePeriodo FROM [dbo].[estudiantes] e inner join registro_estudiante_clases re on re.IdEstudiante = numCuenta inner join secciones s on re.idSeccion = s.idseccion where YEAR(re.fecha) = year(getdate()) and month(RE.Fecha) > '05' and carrera = '${Carrera}' and CentroRegional = '${CentroRegional}'
+`);
         res.json(result.recordset);
     } catch (error) {
         res.status(500);

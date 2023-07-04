@@ -18,7 +18,7 @@ const MenuHistorialAdmin = () => {
       body: JSON.stringify({ NumCuenta }),
     });
     const data = await response.json();
-    console.log(data);
+   // console.log(data);
     setUsers(data);
   };
 
@@ -83,7 +83,7 @@ const MenuHistorialAdmin = () => {
           type="text"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
-          placeholder="Ingresar Numero de Cuenta"
+          placeholder="Ingresar número de cuenta"
         />
       </div>
 
