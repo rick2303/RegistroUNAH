@@ -73,6 +73,9 @@ function CreacionCCC(correopersonal,dni, firstName, lastName,tel,fechaNaci, anio
   const firstLastNameSpaceIndex = lastName.indexOf(' ');
   const lastNameOnly = firstLastNameSpaceIndex !== -1 ? lastName.substring(0, firstLastNameSpaceIndex) : lastName;
 
+  // Agregar la línea para eliminar guiones
+  let stringWithoutDashes = dni.replace(/-/g, "");
+
 
 function generateUniqueEmail(firstNameOnly, lastNameOnly) {
     const baseEmail = `${firstNameOnly.toLowerCase()}.${lastNameOnly.toLowerCase()}`;
@@ -225,7 +228,7 @@ const numerosCuentaGenerados = [];
   const req = {
     body: {
       NumCuenta: Cuenta,
-      DNI: dni,
+      DNI: stringWithoutDashes,
       Nombre: firstName,
       Apellido: lastName,
       NumeroTelefono: tel,
