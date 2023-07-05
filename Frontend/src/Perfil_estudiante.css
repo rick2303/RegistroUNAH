@@ -134,14 +134,31 @@ p {
     transition: all 0.3s ease-in-out;
 }
 .foto{
-    height: 260px;
-    width: 260px;
+    height: 260px !important;
+    width: 260px !important;
 }
 
 .rounded-photo {
-    border-radius: 50%;
+    border-radius: 49%;
     overflow: hidden;
     position: relative;
-    
-  }
+}
 
+/*Fotos en los carousel*/
+.d-block-estudiante{
+    height: 15rem !important;
+    max-width: 100% !important;
+    object-fit: cover
+
+}
+
+.d-block-docente{
+    height: 15rem !important;
+    max-width: 100% !important;
+    object-fit: cover
+
+}
+
+.carousel-item{
+    width: 99% !important;
+}

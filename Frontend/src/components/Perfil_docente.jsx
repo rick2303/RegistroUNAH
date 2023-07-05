@@ -72,7 +72,7 @@ function Perfil_docente() {
                             >
                               <img
                                 src={`../img/uploads/${imagen}`}
-                                class=" d-block w-100"
+                                class=" d-block-docente w-100"
                                 alt="Sin foto de perfil"
                               />
                             </div>
@@ -182,7 +182,7 @@ function Perfil_docente() {
                           alignItems: "center",
                         }}
                       >
-                        <video src={`../img/uploads/${video}`} controls width="500" height="400" />
+                        <video src={`../img/uploads/${video}`} controls width="47%" />
                       </div>
                     </div>
                   </div>

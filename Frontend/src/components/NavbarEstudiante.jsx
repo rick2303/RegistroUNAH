@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { FcMenu } from "react-icons/fc";
 import { BsBoxArrowInLeft } from "react-icons/bs";
-import {
-  MobileNav,
-  Typography,
-  
-} from "@material-tailwind/react";
-import "bootstrap/dist/css/bootstrap.min.css"
+import { MobileNav, Typography } from "@material-tailwind/react";
+import "bootstrap/dist/css/bootstrap.min.css";
 export default function NavbarEstudiante() {
   const [imagenUsuario, setImagenUsuario] = useState("");
 
@@ -14,15 +10,13 @@ export default function NavbarEstudiante() {
     const storedData = localStorage.getItem("userData");
     if (storedData) {
       const userData = JSON.parse(storedData);
-      if(!userData.perfil){
-        const alternativaImagen = 'UNAH.png'
+      if (!userData.perfil) {
+        const alternativaImagen = "UNAH.png";
         setImagenUsuario(alternativaImagen);
-        
-      }else{
-        const alternativaImagen = userData.perfil.Imagen1; 
+      } else {
+        const alternativaImagen = userData.perfil.Imagen1;
         setImagenUsuario(alternativaImagen);
       }
-      
     }
   }, []);
   const [openNav, setOpenNav] = React.useState(false);
@@ -32,7 +26,17 @@ export default function NavbarEstudiante() {
       "resize",
       () => window.innerWidth >= 960 && setOpenNav(false)
     );
-  }, []); 
+  }, []);
+
+  const currentPath = window.location.pathname; // Obtener la ruta actual
+
+  let redirectTo;
+
+  if (currentPath === "/src/html/Estudiante.html") {
+    redirectTo = "../";
+  } else {
+    redirectTo = "../html/Estudiante.html";
+  }
 
   const currentPath = window.location.pathname; // Obtener la ruta actual
 
@@ -55,10 +59,10 @@ export default function NavbarEstudiante() {
       >
         <a href={redirectTo} className="flex items-center">
           <h1 className="text-3xl"><BsBoxArrowInLeft/></h1>
+
         </a>
       </Typography>
-      
-        
+
       <Typography
         as="li"
         variant="small"
@@ -66,9 +70,12 @@ export default function NavbarEstudiante() {
         className="p-1 font-normal"
       >
         <a href="../html/Perfil_estudiante.html">
-        <img className="rounded-full h-10 w-10" src={`../img/uploads/${imagenUsuario}`} alt = "Perfil"/>
+          <img
+            className="rounded-full h-20 w-20"
+            src={`../img/uploads/${imagenUsuario}`}
+            alt="Perfil"
+          />
         </a>
-     
       </Typography>
     </ul>
   );
@@ -85,14 +92,12 @@ export default function NavbarEstudiante() {
             href="#"
             className="mr-5 cursor-pointer py-1.5 font-medium"
           >
-            <img className="ml-3 h-16 w-24" src="\logounah.png"></img>
+            <img className="ml-3 h-30 w-40" src="\logounah.png"></img>
           </Typography>
           <div className="flex items-center gap-4">
             <div className="mr-4 hidden lg:block">{navList}</div>
-            
-            
+
             <button
-           
               variant="text"
               className="mx-auto text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
               ripple={false}
@@ -114,21 +119,16 @@ export default function NavbarEstudiante() {
                   />
                 </svg>
               ) : (
-                
-                <h2><FcMenu/></h2>
-              
+                <h2>
+                  <FcMenu />
+                </h2>
               )}
             </button>
           </div>
         </div>
-        
-        
-        <MobileNav open={openNav}>
-          {navList}
-          
-        </MobileNav>
+
+        <MobileNav open={openNav}>{navList}</MobileNav>
       </header>
-      
     </>
   );
 }

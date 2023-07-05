@@ -55,6 +55,7 @@ export default function NavbarDocente() {
   } else {
     redirectTo = "../html/Docente.html";
   }
+
   const storedData = localStorage.getItem("userData");
   const userData = JSON.parse(storedData);
   const subrol = userData.data.Subrol;
@@ -71,6 +72,7 @@ export default function NavbarDocente() {
       >
         <a href={redirectTo}className="flex items-center">
           <h1 className="text-3xl"><BsBoxArrowInLeft/></h1>
+
         </a>
       </Typography>
       
@@ -83,7 +85,7 @@ export default function NavbarDocente() {
       >
       
         <a href="../html/Perfil_docente.html">
-        <img className="rounded-full h-10 w-10" src={`../img/uploads/${imagenUsuario}`}  alt = "Perfil"/>
+        <img className="rounded-full h-20 w-20" src={`../img/uploads/${imagenUsuario}`}  alt = "Perfil"/>
         </a>
      
       </Typography>
@@ -99,17 +101,16 @@ export default function NavbarDocente() {
         <div className="flex items-center justify-between text-blue-gray-900">
           <Typography
             as="a"
-            href="#"
+            href="http://127.0.0.1:5173/src/html/Docente.html"
             className="mr-5 cursor-pointer py-1.5 font-medium"
           >
-            <img className="ml-3 h-16 w-24" src="\logounah.png"></img>
+            <img className="ml-4 h-30 w-40" src="\logounah.png"></img>
           </Typography>
           <div className="flex items-center gap-4">
             <div className="mr-4 hidden lg:block">{navList}</div>
             
             
             <button
-           
               variant="text"
               className="mx-auto text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
               ripple={false}

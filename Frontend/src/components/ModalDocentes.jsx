@@ -26,14 +26,14 @@ const ModalDocentes = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    console.log('Nombre:', nombre);
-    console.log('Apellido:', apellido);
-    console.log('DNI:', DNI);
-    console.log('Email:', email);
-    console.log('numCelular:', numCelular);
-    console.log('fechaNacimiento:', fechaNacimiento);
-    console.log('direccion:', direccion);
-    console.log('centroRegional:', centroRegional);
+    // console.log('Nombre:', nombre);
+    // console.log('Apellido:', apellido);
+    // console.log('DNI:', DNI);
+    // console.log('Email:', email);
+    // console.log('numCelular:', numCelular);
+    // console.log('fechaNacimiento:', fechaNacimiento);
+    // console.log('direccion:', direccion);
+    // console.log('centroRegional:', centroRegional);
  
  
 
@@ -159,7 +159,7 @@ const handleSubmit = (event) => {
   
 
     // Realizar la solicitud HTTP utilizando fetch
-    fetch('http://localhost:5000//registrarDocentes', {
+    fetch('http://localhost:5000/registrarDocentes', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

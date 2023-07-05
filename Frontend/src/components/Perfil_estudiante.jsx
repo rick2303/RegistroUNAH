@@ -88,7 +88,7 @@ function Perfil_estudiante() {
                             >
                               <img
                                 src={`../img/uploads/${imagen1}`}
-                                class=" d-block w-100"
+                                class=" d-block-estudiante w-100"
                                 alt="Sin foto de perfil"
                               />
                             </div>
@@ -98,7 +98,7 @@ function Perfil_estudiante() {
                             >
                               <img
                                 src={`../img/uploads/${imagen2}`}
-                                class=" d-block w-100"
+                                class=" d-block-estudiante w-100"
                                 alt="Sin foto de perfil"
                               />
                             </div>
@@ -108,7 +108,7 @@ function Perfil_estudiante() {
                             >
                               <img
                                 src={`../img/uploads/${imagen3}`}
-                                class="d-block w-100"
+                                class="d-block-estudiante w-100"
                                 alt="Sin foto de perfil"
                               />
                             </div>

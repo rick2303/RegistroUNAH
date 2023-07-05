@@ -1,4 +1,5 @@
 import { getConnection,sql, queries} from "../Database"
+import { generateUniqueEmail, generateRandomPassword, enviarEmail } from "./creacioncorreo.controllers";
 
 
 export const getDocentes = async (req,res)=> {
@@ -13,50 +14,51 @@ export const getDocentes = async (req,res)=> {
     }
 }
 
+
+
 export const registrarDocente= async (req,res)=>{
+    const Rol = 'DOCENTE';
+    const SubRol = 'DOCENTE';
+    const hoy = new Date();
     const { 
         DNI,
         Nombre,
         Apellido,
         NumeroTelefono,
-        CorreoInstitucional,
         CorreoPersonal,
-        Contrasena,
         FechaNacimiento,
-        FechaContratacion,
         Carrera,
         Direccion,
-        Foto,
-        CentroRegional,
-        Rol,
-        SubRol
+        CentroRegional
         } = req.body;
-    try {
         // Establece la conexión a la base de datos
         const pool = await getConnection();
+        const photoPaths = req.files.map(file => file.filename);
         // Inserta el nombre de usuario y la Contrasena en la tabla de usuarios
         await pool.request()
         .input("DNI",sql.VarChar,DNI)
         .input("Nombre",sql.VarChar,Nombre)
         .input("Apellido",sql.VarChar,Apellido)
         .input("NumeroTelefono",sql.VarChar,NumeroTelefono)
-        .input("CorreoInstitucional",sql.VarChar,CorreoInstitucional)
+        .input("CorreoInstitucional",sql.VarChar, generateUniqueEmail(Nombre, Apellido))
         .input("CorreoPersonal",sql.VarChar,CorreoPersonal)
-        .input("Contrasena",sql.VarChar,Contrasena)
+        .input("Contrasena",sql.VarChar,generateRandomPassword(Nombre, Apellido))
         .input("FechaNacimiento",sql.Date,FechaNacimiento)
-        .input("FechaContratacion",sql.Date,FechaContratacion)
+        .input("FechaContratacion",sql.Date, hoy)
         .input("Carrera",sql.VarChar, Carrera.toUpperCase())
         .input("Direccion",sql.VarChar,Direccion)
-        .input("Foto",sql.VarChar,Foto)
+        .input("Foto",sql.VarChar,photoPaths[0])
         .input("CentroRegional",sql.VarChar,CentroRegional.toUpperCase())
-        .input("Rol",sql.VarChar,Rol.toUpperCase())
-        .input("SubRol", sql.VarChar,SubRol.toUpperCase())
+        .input("Rol",sql.VarChar, Rol)
+        .input("SubRol", sql.VarChar,SubRol)
         .query(queries.insert_Docentes);
         res.status(200).json({ message: 'Docente registrado correctamente.' });  
-    } catch (error) {
-        res.status(500).json({ message: 'No se pudo registrar el Docente' })
-    } 
 }
+
+function enviarCorreoDocente(){
+
+}
+
 
 export const actualizarDocente = async (req, res) => {
     const {NumeroTelefono,CorreoPersonal,Direccion,SubRol}=req.body;
