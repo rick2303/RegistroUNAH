@@ -19,17 +19,28 @@ export default function Navbar() {
   const currentPath = window.location.pathname; // Obtener la ruta actual
 
   let redirectTo;
+  const storedData = localStorage.getItem("userData");
+  const userData = JSON.parse(storedData);
+  const subrol = userData.data.Subrol;
   
   if (currentPath === "/src/html/Jefatura.html" ) {
     redirectTo = "../html/Jefatura_menu.html";
-  } else {
-    redirectTo = "../html/Jefatura.html";
   }
  
   if (currentPath === "/src/html/Coordinacion.html" ){
     redirectTo="../html/Coordinacion_menu.html"
-  }else{
+  }
+
+  if(currentPath === "/src/html/EstuFiltradosMatriculados.html"){
+    redirectTo="../html/EstudiantesMatriculados.html"
+  }
+
+  if((currentPath === "/src/html/EstudiantesMatriculados.html" && subrol==="COORDINADOR")||(currentPath==="/src/html/HistorialAdmin.html" && subrol==="COORDINADOR")){
     redirectTo="../html/Coordinacion.html"
+  }
+
+  if((currentPath === "/src/html/EstudiantesMatriculados.html" && subrol==="JEFE DEPARTAMENTO")||(currentPath==="/src/html/HistorialAdmin.html" && subrol==="JEFE DEPARTAMENTO")){
+    redirectTo="../html/Jefatura.html"
   }
 
 
@@ -55,6 +66,7 @@ export default function Navbar() {
         className="p-1 font-normal"
       >
         <img className="rounded-full h-20 w-20" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png" alt="user avatar" />
+
       </Typography>
     </ul>
   );

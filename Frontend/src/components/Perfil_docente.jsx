@@ -31,10 +31,10 @@ function Perfil_docente() {
       setCarrera(carrera);
      
       
-      if(!userData.perfil){
-        const imagen = '1688356529392-947749500-Sin tÃ­tulo.png';
+      if(!userData.perfil ){
+        const imagen = '../1688323336413-804346209-64572.png';
         setImagen(imagen);
-        const video = 'notfound.png';
+        const video = '../Video docente.mp4';
         setVideo(video);
       }else{
         const imagen = userData.perfil.Imagen1;
@@ -77,30 +77,6 @@ function Perfil_docente() {
                               />
                             </div>
                           </div>
-                          <button
-                            class="carousel-control-prev"
-                            type="button"
-                            data-bs-target="#carouselExampleInterval"
-                            data-bs-slide="prev"
-                          >
-                            <span
-                              class="carousel-control-prev-icon"
-                              aria-hidden="true"
-                            ></span>
-                            <span class="visually-hidden">Previous</span>
-                          </button>
-                          <button
-                            class="carousel-control-next"
-                            type="button"
-                            data-bs-target="#carouselExampleInterval"
-                            data-bs-slide="next"
-                          >
-                            <span
-                              class="carousel-control-next-icon"
-                              aria-hidden="true"
-                            ></span>
-                            <span class="visually-hidden">Next</span>
-                          </button>
                         </div>
                       </div>
                       <h5 class="f-w-600">Descripción:</h5>

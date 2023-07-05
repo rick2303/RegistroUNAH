@@ -9,13 +9,16 @@ import {
 import "bootstrap/dist/css/bootstrap.min.css"
 export default function NavbarDocente() {
   const [imagenUsuario, setImagenUsuario] = useState("");
-  
+  const storedData = localStorage.getItem("userData");
+  const userData = JSON.parse(storedData);
+  const subrol = userData.data.Subrol;
+
   useEffect(() => {
-    const storedData = localStorage.getItem("userData");
+
     if (storedData) {
       const userData = JSON.parse(storedData);
       if(!userData.perfil){
-        const alternativaImagen = 'UNAH.png'
+        const alternativaImagen = '1688323336413-804346209-64572.png'
         setImagenUsuario(alternativaImagen);
         
       }else{
@@ -56,11 +59,13 @@ export default function NavbarDocente() {
     redirectTo = "../html/Docente.html";
   }
 
-  const storedData = localStorage.getItem("userData");
-  const userData = JSON.parse(storedData);
-  const subrol = userData.data.Subrol;
+
   if(currentPath === "/src/html/Docente.html" && subrol=="COORDINADOR"){
     redirectTo="../html/Coordinacion_menu.html"
+  }
+
+  if(currentPath === "/src/html/Docente.html" && subrol=="JEFE DEPARTAMENTO"){
+    redirectTo="../html/Jefatura_menu.html"
   }
   const navList = (
     <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
