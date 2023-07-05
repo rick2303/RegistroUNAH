@@ -17,7 +17,7 @@ export default function NavbarDocente() {
 
     if (storedData) {
       const userData = JSON.parse(storedData);
-      if(!userData.perfil){
+      if(!userData.perfil || !userData.perfil.Imagen1){
         const alternativaImagen = '1688323336413-804346209-64572.png'
         setImagenUsuario(alternativaImagen);
         

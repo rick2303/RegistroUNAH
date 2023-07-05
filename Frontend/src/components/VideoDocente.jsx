@@ -25,13 +25,15 @@ function VideoDocente() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    const storedData = localStorage.getItem("userData");
+    const userData = JSON.parse(storedData)
     if (selectedFile) {
       const formData = new FormData();
       formData.append('Id', id1);
       formData.append("files", selectedFile);
 
-      fetch("http://localhost:5000/perfilEmpleadoUpdateVideo", {
+      if(userData.perfil){
+        fetch("http://localhost:5000/perfilEmpleadoUpdateVideo", {
         method: "POST",
         body: formData,
       })
@@ -55,6 +57,32 @@ function VideoDocente() {
             inputFileRef.current.value = ""; // Limpiar el campo de entrada de archivos
           }
         });
+      }else{
+        fetch("http://localhost:5000/perfilEmpleadoVideo", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => {
+          if (response.status === 200) {
+            alert("Archivo recibido y procesado correctamente");
+              const storedData = localStorage.getItem("userData");
+              response.json().then((responseData) => {
+              const url = responseData.url;
+              const data = responseData;
+              console.log(data);
+              localStorage.setItem("userData", JSON.stringify(data)); // Almacenar datos en localStorage
+              window.location.reload();
+            });
+            return response;
+          }
+        })
+        .finally(() => {
+          setSelectedFile(null); // Reiniciar la selección de archivo
+          if (inputFileRef.current) {
+            inputFileRef.current.value = ""; // Limpiar el campo de entrada de archivos
+          }
+        });
+      }
     }
   };
 

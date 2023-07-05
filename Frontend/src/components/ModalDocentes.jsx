@@ -4,17 +4,19 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, La
 
 
 const ModalDocentes = () => {
+
   const [modalOpen, setModalOpen] = useState(false);
-  const [nombre, setNombre] = useState('');
-  const [apellido, setApellido] = useState('');
+  const [Nombre, setNombre] = useState('');
+  const [Apellido, setApellido] = useState('');
+  const [Carrera, setCarrera] = useState('');
   const [DNI, setDNI] = useState("");
-  const [email, setEmail] = useState('');
-  const [numCelular, setnumCelular] = useState("");
-  const [fechaNacimiento, setFechaNacimiento] = useState('');
-  const [direccion, setDireccion] = useState('');
-  const [centroRegional, setCentroRegional] = useState('');
-
-
+  const [CorreoPersonal, setCorreoPersonal] = useState('');
+  const [NumeroTelefono, setNumeroTelefono] = useState("");
+  const [FechaNacimiento, setFechaNacimiento] = useState('');
+  const [Direccion, setDireccion] = useState('');
+  const [CentroRegional, setCentroRegional] = useState('');
+  const [Foto, setFoto] = useState('');
+  
   const toggleModal = () => {
     setModalOpen(!modalOpen);
   };
@@ -26,16 +28,16 @@ const ModalDocentes = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // console.log('Nombre:', nombre);
-    // console.log('Apellido:', apellido);
-    // console.log('DNI:', DNI);
-    // console.log('Email:', email);
-    // console.log('numCelular:', numCelular);
-    // console.log('fechaNacimiento:', fechaNacimiento);
-    // console.log('direccion:', direccion);
-    // console.log('centroRegional:', centroRegional);
- 
- 
+    console.log('Nombre:', Nombre);
+    console.log('Apellido:', Apellido);
+    console.log('Carrera:', Carrera);
+    console.log('DNI:', DNI);
+    console.log('CorreoPersonal:', CorreoPersonal);
+    console.log('NumeroTelefono:', NumeroTelefono);
+    console.log('FechaNacimiento:', FechaNacimiento);
+    console.log('Direccion:', Direccion);
+    console.log('CentroRegional:', CentroRegional);
+    console.log('Foto:', Foto);
 
     toggleModal();
   };
@@ -53,7 +55,7 @@ const ModalDocentes = () => {
               <Input
                 type="text"
                 id="nombre"
-                value={nombre}
+                value={Nombre}
                 onChange={(e) => setNombre(e.target.value)}
               />
             </FormGroup>
@@ -62,8 +64,17 @@ const ModalDocentes = () => {
               <Input
                 type="text"
                 id="apellido"
-                value={apellido}
+                value={Apellido}
                 onChange={(e) => setApellido(e.target.value)}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label for="carrera">Carrera</Label>
+              <Input
+                type="text"
+                id="carrera"
+                value={Carrera}
+                onChange={(e) => setCarrera(e.target.value)}
               />
             </FormGroup>
             <FormGroup>
@@ -76,12 +87,12 @@ const ModalDocentes = () => {
               />
             </FormGroup>
             <FormGroup>
-              <Label for="email">Email</Label>
+              <Label for="email">Correo Personal</Label>
               <Input
                 type="email"
                 id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={CorreoPersonal}
+                onChange={(e) => setCorreoPersonal(e.target.value)}
               />
             </FormGroup>
             <FormGroup>
@@ -89,8 +100,8 @@ const ModalDocentes = () => {
               <Input
                 type="number"
                 id="numCelular"
-                value={numCelular}
-                onChange={(e) => setnumCelular(e.target.value)}
+                value={NumeroTelefono}
+                onChange={(e) => setNumeroTelefono(e.target.value)}
               />
             </FormGroup>
             <FormGroup>
@@ -98,7 +109,7 @@ const ModalDocentes = () => {
               <Input
                 type="date"
                 id="fechaNacimiento"
-                value={fechaNacimiento}
+                value={FechaNacimiento}
                 onChange={(e) => setFechaNacimiento(e.target.value)}
               />
             </FormGroup>
@@ -107,13 +118,14 @@ const ModalDocentes = () => {
               <Input
                 type="textarea"
                 id="direccion"
-                value={direccion}
+                value={Direccion}
                 onChange={(e) => setDireccion(e.target.value)}
               />
             </FormGroup>
             <FormGroup>
+
             <Label for="centroRegional">Centro Regional:</Label>
-                <Input type="select" id="centroRegional" value={centroRegional} onChange={handleOpcionChange}>
+                <Input type="select" id="centroRegional" value={CentroRegional} onChange={handleOpcionChange}>
                 <option value="">Seleccione un Centro Regional</option>
                 <option value="Ciudad Universitaria">Ciudad Universitaria</option>
                 <option value="Valle de Sula">Valle de Sula</option>
@@ -125,59 +137,81 @@ const ModalDocentes = () => {
                 <option value="TEC-AGUAN">TEC-AGUAN</option>
                 </Input>
             </FormGroup>
+            <FormGroup>
+              <Label for="foto">Foto</Label>
+              <Input
+                type="file"
+                id="foto"
+                value={Foto}
+                onChange={(e) => setFoto(e.target.value)}
+                accept='.jpg,.pgn,.png'
+              />
+            </FormGroup>
     
-         
+
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={handleSubmit}>Registrar</Button>{' '}
+          <Button color="primary" onClick={AgregarDocente}>Registrar</Button>{' '}
           <Button color="secondary" onClick={toggleModal}>Cancelar</Button>
         </ModalFooter>
       </Modal>
     </div>
+
+    
   );
 };
 
 //fetch al backend
 
-
-const handleSubmit = (event) => {
+const AgregarDocente = (event) => {
     event.preventDefault();
   
 
     const formData = {
-      nombre: nombre,
-      apellido: apellido,
+      Nombre : Nombre,
+      Apellido: Apellido,
+      Carrera:Carrera,
       DNI: DNI,
-      email: email,
-      numCelular: numCelular,
-      fechaNacimiento: fechaNacimiento,
-      direccion: direccion,
-      centroRegional: centroRegional
-
+      CorreoPersonal: CorreoPersonal,
+      NumeroTeleforno: NumeroTelefono,
+      FechaNacimiento: FechaNacimiento,
+      Direccion: Direccion,
+      CentroRegional: CentroRegional,
+      Foto: Foto
     };
-  
+    
+    const form = new formData();
+
+      form.append(Nombre,Nombre)
+      form.append(Apellido,Apellido)
+      form.append(Carrera,Carrera)
+      form.append(DNI,DNI)
+      form.append(CorreoPersonal,CorreoPersonal)
+      form.append(NumeroTelefono,NumeroTelefono)
+      form.append(FechaNacimiento,FechaNacimiento)
+      form.append(Direccion,Direccion)
+      form.append(CentroRegional,CentroRegional)
+      form.append(Foto,Foto)
+    
+      toggleModal();
 
     // Realizar la solicitud HTTP utilizando fetch
-    fetch('http://localhost:5000/registrarDocentes', {
+    fetch('http://localhost:5000/...', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
+      body: form,
     })
-      .then(response => response.json())
-      .then(data => {
 
-        console.log('Respuesta del backend:', data);
-  
-        toggleModal();
+      .then((response)=> {
+        if (response.status===200){
+          alert("Docente agregado correctamente");
+          return response;
+        }
       })
-      .catch(error => {
+      .finally(error => {
         console.error('Error en la solicitud:', error);
       });
   };
 
 export default ModalDocentes;
-
 
