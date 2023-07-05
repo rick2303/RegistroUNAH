@@ -38,16 +38,6 @@ export default function NavbarEstudiante() {
     redirectTo = "../html/Estudiante.html";
   }
 
-  const currentPath = window.location.pathname; // Obtener la ruta actual
-
-  let redirectTo;
-  
-  if (currentPath === "/src/html/Estudiante.html") {
-    redirectTo = "../";
-  } else {
-    redirectTo = "../html/Estudiante.html";
-  }
-  
   console.log(currentPath);
   const navList = (
     <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">

@@ -19,17 +19,28 @@ export default function Navbar() {
   const currentPath = window.location.pathname; // Obtener la ruta actual
 
   let redirectTo;
+  const storedData = localStorage.getItem("userData");
+  const userData = JSON.parse(storedData);
+  const subrol = userData.data.Subrol;
   
   if (currentPath === "/src/html/Jefatura.html" ) {
     redirectTo = "../html/Jefatura_menu.html";
-  } else {
-    redirectTo = "../html/Jefatura.html";
   }
  
   if (currentPath === "/src/html/Coordinacion.html" ){
     redirectTo="../html/Coordinacion_menu.html"
-  }else{
+  }
+
+  if(currentPath === "/src/html/EstuFiltradosMatriculados.html"){
+    redirectTo="../html/EstudiantesMatriculados.html"
+  }
+
+  if((currentPath === "/src/html/EstudiantesMatriculados.html" && subrol==="COORDINADOR")||(currentPath==="/src/html/HistorialAdmin.html" && subrol==="COORDINADOR")){
     redirectTo="../html/Coordinacion.html"
+  }
+
+  if((currentPath === "/src/html/EstudiantesMatriculados.html" && subrol==="JEFE DEPARTAMENTO")||(currentPath==="/src/html/HistorialAdmin.html" && subrol==="JEFE DEPARTAMENTO")){
+    redirectTo="../html/Jefatura.html"
   }
 
 
@@ -43,7 +54,7 @@ export default function Navbar() {
         className="p-1 font-normal "
       >
         <a href={redirectTo} className="flex items-center">
-          <h1 className="text-3xl"><BsBoxArrowInLeft/></h1>
+          <h1 className="text-4xl"><BsBoxArrowInLeft/></h1>
         </a>
       </Typography>
       
@@ -54,7 +65,7 @@ export default function Navbar() {
         color="blue-gray"
         className="p-1 font-normal"
       >
-        <img className="rounded-full h-10 w-10" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png" alt="user avatar" />
+ 
       </Typography>
     </ul>
   );
@@ -71,7 +82,7 @@ export default function Navbar() {
             href="#"
             className="mr-5 cursor-pointer py-1.5 font-medium"
           >
-            <img className="ml-3 h-16 w-24" src="\logounah.png"></img>
+            <img className="ml-3 h-30 w-40" src="\logounah.png"></img>
           </Typography>
           <div className="flex items-center gap-4">
             <div className="mr-4 hidden lg:block">{navList}</div>
