@@ -46,7 +46,21 @@ export default function NavbarDocente() {
       () => window.innerWidth >= 960 && setOpenNav(false)
     );
   }, []); 
+  const currentPath = window.location.pathname; // Obtener la ruta actual
 
+  let redirectTo;
+  
+  if (currentPath === "/src/html/Docente.html") {
+    redirectTo = "../";
+  } else {
+    redirectTo = "../html/Docente.html";
+  }
+  const storedData = localStorage.getItem("userData");
+  const userData = JSON.parse(storedData);
+  const subrol = userData.data.Subrol;
+  if(currentPath === "/src/html/Docente.html" && subrol=="COORDINADOR"){
+    redirectTo="../html/Coordinacion_menu.html"
+  }
   const navList = (
     <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
       <Typography
@@ -55,7 +69,7 @@ export default function NavbarDocente() {
         color="blue"
         className="p-1 font-normal "
       >
-        <a href="../" className="flex items-center">
+        <a href={redirectTo}className="flex items-center">
           <h1 className="text-3xl"><BsBoxArrowInLeft/></h1>
         </a>
       </Typography>

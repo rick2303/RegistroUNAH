@@ -22,7 +22,9 @@ export default function Recovered() {
                 </div>
 
                 <div class="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5">
-                  <h2>Regrese a la pagina principal para iniciar Sesión </h2>
+                  <h2>Regrese a la pagina principal para iniciar Sesión aqui: </h2>
+                  <hr></hr>
+                  <a  href="http://127.0.0.1:5173" > Página principal</a> 
                 </div>
               </form>
             </div>

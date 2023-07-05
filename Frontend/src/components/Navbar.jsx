@@ -16,7 +16,24 @@ export default function Navbar() {
       () => window.innerWidth >= 960 && setOpenNav(false)
     );
   }, []); 
+  const currentPath = window.location.pathname; // Obtener la ruta actual
 
+  let redirectTo;
+  
+  if (currentPath === "/src/html/Jefatura.html" ) {
+    redirectTo = "../html/Jefatura_menu.html";
+  } else {
+    redirectTo = "../html/Jefatura.html";
+  }
+ 
+  if (currentPath === "/src/html/Coordinacion.html" ){
+    redirectTo="../html/Coordinacion_menu.html"
+  }else{
+    redirectTo="../html/Coordinacion.html"
+  }
+
+
+  console.log(currentPath)
   const navList = (
     <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
       <Typography
@@ -25,7 +42,7 @@ export default function Navbar() {
         color="blue"
         className="p-1 font-normal "
       >
-        <a href="../" className="flex items-center">
+        <a href={redirectTo} className="flex items-center">
           <h1 className="text-3xl"><BsBoxArrowInLeft/></h1>
         </a>
       </Typography>
