@@ -37,16 +37,6 @@ export default function NavbarEstudiante() {
   } else {
     redirectTo = "../html/Estudiante.html";
   }
-
-  const currentPath = window.location.pathname; // Obtener la ruta actual
-
-  let redirectTo;
-  
-  if (currentPath === "/src/html/Estudiante.html") {
-    redirectTo = "../";
-  } else {
-    redirectTo = "../html/Estudiante.html";
-  }
   
   console.log(currentPath);
   const navList = (
@@ -58,7 +48,7 @@ export default function NavbarEstudiante() {
         className="p-1 font-normal "
       >
         <a href={redirectTo} className="flex items-center">
-          <h1 className="text-3xl"><BsBoxArrowInLeft/></h1>
+          <h1 className="text-5xl"><BsBoxArrowInLeft/></h1>
 
         </a>
       </Typography>
