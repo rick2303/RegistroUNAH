@@ -15,7 +15,6 @@ export const getDocentes = async (req,res)=> {
 }
 
 
-
 export const registrarDocente= async (req,res)=>{
     const Rol = 'DOCENTE';
     const SubRol = 'DOCENTE';
@@ -32,6 +31,8 @@ export const registrarDocente= async (req,res)=>{
         CentroRegional
         } = req.body;
         // Establece la conexión a la base de datos
+        const correoInstitucional = generateUniqueEmail(Nombre, Apellido)
+        const contrasena = generateRandomPassword(Nombre, Apellido)
         const pool = await getConnection();
         const photoPaths = req.files.map(file => file.filename);
         // Inserta el nombre de usuario y la Contrasena en la tabla de usuarios
@@ -40,9 +41,9 @@ export const registrarDocente= async (req,res)=>{
         .input("Nombre",sql.VarChar,Nombre)
         .input("Apellido",sql.VarChar,Apellido)
         .input("NumeroTelefono",sql.VarChar,NumeroTelefono)
-        .input("CorreoInstitucional",sql.VarChar, generateUniqueEmail(Nombre, Apellido))
+        .input("CorreoInstitucional",sql.VarChar, correoInstitucional )
         .input("CorreoPersonal",sql.VarChar,CorreoPersonal)
-        .input("Contrasena",sql.VarChar,generateRandomPassword(Nombre, Apellido))
+        .input("Contrasena",sql.VarChar, contrasena)
         .input("FechaNacimiento",sql.Date,FechaNacimiento)
         .input("FechaContratacion",sql.Date, hoy)
         .input("Carrera",sql.VarChar, Carrera.toUpperCase())
@@ -53,11 +54,10 @@ export const registrarDocente= async (req,res)=>{
         .input("SubRol", sql.VarChar,SubRol)
         .query(queries.insert_Docentes);
         res.status(200).json({ message: 'Docente registrado correctamente.' });  
+        const numEmpleado = await pool.request().input('DNI', sql.VarChar, DNI).query(queries.getNumEmpleado)
+        enviarEmail(CorreoPersonal,Nombre,Apellido,correoInstitucional,numEmpleado.recordset[0].numEmpleado,contrasena,Carrera)
 }
 
-function enviarCorreoDocente(){
-
-}
 
 
 export const actualizarDocente = async (req, res) => {

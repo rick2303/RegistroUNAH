@@ -54,7 +54,7 @@ export default function Navbar() {
         className="p-1 font-normal "
       >
         <a href={redirectTo} className="flex items-center">
-          <h1 className="text-4xl"><BsBoxArrowInLeft/></h1>
+          <h1 className="text-5xl"><BsBoxArrowInLeft/></h1>
         </a>
       </Typography>
       
@@ -65,7 +65,8 @@ export default function Navbar() {
         color="blue-gray"
         className="p-1 font-normal"
       >
- 
+        <img className="rounded-full h-20 w-20" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png" alt="user avatar" />
+
       </Typography>
     </ul>
   );

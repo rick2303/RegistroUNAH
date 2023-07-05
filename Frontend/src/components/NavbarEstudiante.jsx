@@ -48,7 +48,7 @@ export default function NavbarEstudiante() {
         className="p-1 font-normal "
       >
         <a href={redirectTo} className="flex items-center">
-          <h1 className="text-3xl"><BsBoxArrowInLeft/></h1>
+          <h1 className="text-5xl"><BsBoxArrowInLeft/></h1>
 
         </a>
       </Typography>
