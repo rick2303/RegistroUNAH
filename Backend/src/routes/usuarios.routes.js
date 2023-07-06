@@ -1,9 +1,25 @@
 import {Router} from 'express';
 import { getConnection } from '../Database';
+import {crearNuevaPlanificacion, renderizarPlanificacion, crearNuevaMatricula, renderizarMatricula, crearNuevoProcesoCancelacion, renderizarCancelaciones} from '../controllers/admin.controllers';
 import {getEstudiantes, createNewStudent, updatePassword, getEstudiantesMatriculados} from '../controllers/usuarios.controllers';
 import {sendEmail} from '../controllers/recuperacionContra.controllers';
 import {procesarArchivo} from '../csv/csv'
 const router = Router();
+
+
+// RUTAS PARA ADMINISTRAR LA PLANIFICACIÓN DE CLASES
+
+router.post('/enviarPlanificacion', crearNuevaPlanificacion);
+
+router.get('/renderizarPlanificacion', renderizarPlanificacion);
+
+router.post('/enviarMatricula', crearNuevaMatricula);
+
+router.get('/renderizarMatricula', renderizarMatricula);
+
+router.post('/enviarCancelaciones', crearNuevoProcesoCancelacion);
+
+router.get('/renderizarCancelaciones', renderizarCancelaciones);
 
 
 // Configuración de multer para guardar los archivos en la carpeta "uploads"
