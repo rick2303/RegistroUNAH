@@ -114,6 +114,19 @@ export function Login({ setUser }) {
   Docente
 </a>
 */}
+<hr></hr>
+<a href="/src/html/FechaMatricula.html" >
+  fechasMatricula
+</a>
+<hr></hr>
+<a href="/src/html/FechaPeriodo.html" >
+  fechasPeriodo
+</a>
+<hr></hr>
+<a href="/src/html/FechaCancelaciones.html" >
+  fechasCancelacion
+</a>
+
 
      
     </>
