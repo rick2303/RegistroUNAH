@@ -8,7 +8,11 @@ export const insertPerfilEmpleado = async (req, res) => {
         .input('photoPath1', sql.VarChar, photoPaths[0])
         .input('photoPath2', sql.VarChar, photoPaths[1])
         .query(queries.insertPerfilEmpleado);
-    res.status(200).json({ message: 'Operación completada exitosamente' });
+        const docente=await pool.request()
+        .input("Id",sql.VarChar,Id)
+        .query(queries.getEmpleado)
+        const perfilEmpleado = await pool.request().input("Id",sql.VarChar,Id).query(queries.getPerfilEmpleado)
+        res.json({url:'http://127.0.0.1:5173/src/html/Docente.html', data:docente.recordset[0], perfil:perfilEmpleado.recordset[0]});
 }
 export const updatePerfilEmpleado = async (req, res) => {
     const { Id } = req.body;
@@ -54,7 +58,11 @@ export const insertVideoPerfilEmpleado = async (req, res) => {
             .input("Id", sql.VarChar, Id)
             .input("Video", sql.VarChar, video[0])
             .query(queries.insertVideoEmpleado);
-        res.status(200).json({ message: 'Operación completada exitosamente' });
+            const docente=await pool.request()
+            .input("Id",sql.VarChar,Id)
+            .query(queries.getEmpleado)
+            const perfilEmpleado = await pool.request().input("Id",sql.VarChar,Id).query(queries.getPerfilEmpleado)
+            res.json({url:'http://127.0.0.1:5173/src/html/Docente.html', data:docente.recordset[0], perfil:perfilEmpleado.recordset[0]});
     } catch (error) {
         res.status(500).json({ message: 'Aprendan a programar' })
     }

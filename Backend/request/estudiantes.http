@@ -5,10 +5,48 @@
 ### get product
 {{api}}
 
-### add a product
-POST http://localhost:5000/estudiantesMatriculadosDepto
+### get planificacion
+
+GET http://localhost:5000/renderizarPlanificacion
+
+### add nueva planificacion
+POST http://localhost:5000/enviarPlanificacion
 Content-Type: application/json
 
 {
-    "Carrera": "Ingenieria en Sistemas"
+    "FechaInicio": "2021-05-05",
+    "FechaFinal": "2021-06-27",
+    "PeriodoAcademico": "2PAC"
 }
+
+### add nueva matricula
+POST http://localhost:5000/enviarMatricula
+Content-Type: application/json
+
+{
+    "FechaInicio": "2021-05-05",
+    "FechaFinal": "2021-06-27",
+    "HoraInicio": "09:00:00",
+    "HoraFinal": "11:59:59",
+    "PeriodoAcademico": "2PAC"
+}
+
+### get matricula
+
+GET http://localhost:5000/renderizarMatricula
+
+### add nueva cancelacion
+POST http://localhost:5000/enviarCancelaciones
+Content-Type: application/json
+
+{
+    "FechaInicio": "2021-05-05",
+    "FechaFinal": "2021-06-27",
+    "HoraInicio": "09:00:00",
+    "HoraFinal": "11:59:59",
+    "PeriodoAcademico": "3PAC"
+}
+
+### get cancelaciones
+
+GET http://localhost:5000/renderizarCancelaciones

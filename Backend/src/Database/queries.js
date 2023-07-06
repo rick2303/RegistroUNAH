@@ -8,22 +8,35 @@ export const queries={
     getEmpleado: "select CAST(NumEmpleado AS varchar) 'NumEmpleado', Nombre,Apellido,CorreoInstitucional,Carrera,Foto,CentroRegional,Rol,Subrol from empleados WHERE CAST(NumEmpleado AS varchar) = @Id ",
     getPerfilEmpleado:"select * from perfil_empleados where CAST(idPerfil AS varchar) = @Id ",
     getPerfilestudiante: "select * from perfil_estudiante where IdPerfil= @Id ",
-    insertPerfilEstudiante:"Insert into perfil_estudiante values(@Id,@photoPath1,@photoPath2,@photoPath3)",
-    insertDescripcionPerfilEstudiante:"Insert into perfil_estudiante(IdPerfil, descripcion) values(@Id, @descripcion)",
+
+    insertPerfilEstudiante:"insert into perfil_estudiante (IdPerfil, imagen1, imagen2, imagen3 )values(@Id,case when @photoPath1 is null then null else @photoPath1 end, case when @photoPath2 is null then null else @photoPath2 end, case when @photoPath3 is null then null else @photoPath3 end) ",
+
+    insertDescripcionPerfilEstudiante:"Insert into perfil_estudiante(IdPerfil, descripcion) values (@Id, @descripcion)",
+
     updatePerfilEstudiante:"update perfil_estudiante set imagen1 = case WHEN @photoPath1 is NULL then imagen1 ELSE @photoPath1 END,  imagen2 = case WHEN @photoPath2 is NULL then imagen2 ELSE @photoPath2 END, imagen3 = case WHEN @photoPath3 is NULL then imagen3 ELSE @photoPath3 END where IdPerfil = @Id",
-    insertDescripcionPerfilEmpleado:"Insert into perfil_empleados(IdPerfil, descripcion) values(@Id, @descripcion)",
+
+    insertDescripcionPerfilEmpleado:"Insert into perfil_empleados(IdPerfil, descripcion) values (@Id, @descripcion)",
+
     updateDescripcionPerfilEstudiantep: 'update perfil_estudiante set descripcion = @descripcion where IdPerfil = @id',
     updateDescripcionPerfilEmpleado: 'update perfil_empleados set descripcion = @descripcion where IdPerfil = @id',
+    
     insertVideoEmpleado:"Insert into perfil_empleados(IdPerfil, Video) values (@Id, @Video)",
     updateVideoEmpleado:"update perfil_empleados set Video = @Video where CAST(idPerfil AS varchar) = @Id",
-    insertPerfilEmpleado:"Insert into perfil_empleados values(@Id,@photoPath1,@photoPath2)",
-    updatePerfilEmpleado:"UPDATE perfil_empleados SET Imagen1 = @photoPath1, Imagen2 = @photoPath2 WHERE CAST(IdPerfil AS varchar) = @id"
+    
+    insertPerfilEmpleado:"Insert into perfil_empleados(IdPerfil, imagen1) values(@Id, case when @photoPath1 is null then null else @photoPath1 end)",
+    updatePerfilEmpleado:"UPDATE perfil_empleados SET Imagen1 = case when @photoPath1 is null then null else @photoPath1 end WHERE CAST(IdPerfil AS varchar) = @id"
 }
 
 export const querys = {
     getAllStudents: "SELECT * from [dbo].[estudiantes]",
     addNewStudent:"INSERT INTO [dbo].[estudiantes] (NumCuenta, DNI, Nombre, Apellido,NumeroTelefono, CorreoInstitucional, CorreoPersonal, Contrasena, FechaNacimiento, Carrera, Direccion, CentroRegional, PuntajePAA) VALUES (@NumCuenta, @DNI, @Nombre, @Apellido,@NumeroTelefono, @CorreoInstitucional, @CorreoPersonal, @Contrasena, @FechaNacimiento, @Carrera, @Direccion, @CentroRegional, @PuntajePAA);",
-    getEstudiantesMatriculados: "SELECT Distinct NumCuenta, Nombre, Apellido, CorreoInstitucional, Carrera, IndiceGlobal, IndicePeriodo FROM [dbo].[estudiantes] e inner join registro_estudiante_clases re on re.IdEstudiante = numCuenta inner join secciones s on re.idSeccion = s.idseccion where YEAR(re.fecha) = year(getdate()) and month(RE.Fecha) > '05'"
+    getEstudiantesMatriculados: "SELECT Distinct NumCuenta, Nombre, Apellido, CorreoInstitucional, Carrera, IndiceGlobal, IndicePeriodo FROM [dbo].[estudiantes] e inner join registro_estudiante_clases re on re.IdEstudiante = numCuenta inner join secciones s on re.idSeccion = s.idseccion where YEAR(re.fecha) = year(getdate()) and month(RE.Fecha) > '05'",
+    insertNuevaPlanificacion: "INSERT INTO [dbo].[planificacion_academica] (FechaInicio, FechaFinal, PeriodoAcademico) VALUES (@FechaInicio, @FechaFinal, @PeriodoAcademico)",
+    getPlanificacionAcademica: "SELECT * FROM [dbo].[planificacion_academica]",
+    insertNuevaMatricula: "INSERT INTO [dbo].[planificacion_matricula] (FechaInicio, FechaFinal, HoraInicio, HoraFinal, PeriodoAcademico) VALUES (@FechaInicio, @FechaFinal,@HoraInicio, @HoraFinal, @PeriodoAcademico)",
+    getMatricula: "select * from [dbo].[planificacion_matricula]",
+    insertProcesoCancelacion: "INSERT INTO [dbo].[planificacion_cancelacionesexcepcionales] (FechaInicio, FechaFinal, HoraInicio, HoraFinal, PeriodoAcademico) VALUES (@FechaInicio, @FechaFinal,@HoraInicio, @HoraFinal, @PeriodoAcademico)",
+    getCancelacion: "select * from [dbo].[planificacion_cancelacionesexcepcionales]",
 };
 
 export const queryStudentHistory = {
