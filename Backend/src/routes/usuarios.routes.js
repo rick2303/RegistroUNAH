@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import { getConnection } from '../Database';
-import {crearNuevaPlanificacion, renderizarPlanificacion, crearNuevaMatricula, renderizarMatricula, crearNuevoProcesoCancelacion, renderizarCancelaciones} from '../controllers/admin.controllers';
+import {crearNuevaPlanificacion, renderizarPlanificacion, crearNuevaMatricula, renderizarMatricula, crearNuevoProcesoCancelacion, renderizarCancelaciones, enviarIPAC, enviarIIPAC, enviarIIIPAC} from '../controllers/admin.controllers';
 import {getEstudiantes, createNewStudent, updatePassword, getEstudiantesMatriculados} from '../controllers/usuarios.controllers';
 import {sendEmail} from '../controllers/recuperacionContra.controllers';
 import {procesarArchivo} from '../csv/csv'
@@ -12,6 +12,12 @@ const router = Router();
 router.post('/enviarPlanificacion', crearNuevaPlanificacion);
 
 router.get('/renderizarPlanificacion', renderizarPlanificacion);
+
+router.get('/enviarPlanificacionIPAC', enviarIPAC);
+
+router.get('/enviarPlanificacionIIPAC', enviarIIPAC);
+
+router.get('/enviarPlanificacionIIIPAC', enviarIIIPAC);
 
 router.post('/enviarMatricula', crearNuevaMatricula);
 
