@@ -42,18 +42,16 @@ function MenuAdmin() {
             </div>
           </article>
           <article className="hover:animate-background rounded-xl bg-gradient-to-r from-blue-800 via-yellow-400 to-yellow-500 00 p-0.5 shadow-xl transition hover:bg-[length:500%_400%] hover:shadow-sm hover:[animation-duration:_4s]">
-            <div className=" rounded-[10px] bg-white p-4 !pb-14 !pt-15 sm:p-6 row">
+            <div className="rounded-[10px] bg-white p-4 !pb-14 !pt-15 sm:p-6 row">
               <p className="featured-block-text text-center">
-                <strong className="text-xl ">Registrar Docentes</strong>
+                <strong className="text-xl text-center">Registrar Docentes</strong>
               </p>
               <div className="mx-auto  row"> 
                 <h1><FcBusinessman className="mx-auto m-2"/></h1>
               </div>
-              <p>
-                <ModalDocentes></ModalDocentes>
-              </p>
-              </div>
-            
+              <ModalDocentes></ModalDocentes>
+
+            </div>
           </article>
           <article className="hover:animate-background rounded-xl bg-gradient-to-r from-blue-800 via-yellow-400 to-yellow-500 00 p-0.5 shadow-xl transition hover:bg-[length:500%_400%] hover:shadow-sm hover:[animation-duration:_4s]">
             <div className="rounded-[10px] bg-white p-4 !pb-14 !pt-15 sm:p-6 row">
@@ -83,7 +81,7 @@ function MenuAdmin() {
            <article className="hover:animate-background rounded-xl bg-gradient-to-r from-blue-800 via-yellow-400 to-yellow-500 00 p-0.5 shadow-xl transition hover:bg-[length:500%_400%] hover:shadow-sm hover:[animation-duration:_4s]">
             <div className="rounded-[10px] bg-white p-4 !pb-14 !pt-15 sm:p-6 row">
               <p className="featured-block-text text-center">
-                <strong className="text-xl text-center">   Planificación   </strong>
+                <strong className="text-xl text-center">   Planificación Academica   </strong>
               </p>
               <div className="mx-auto row"> 
                 <h1><FcCalendar className="mx-auto m-2"/></h1>
