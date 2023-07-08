@@ -8,10 +8,9 @@ const ModalDocentes = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [Nombre, setNombre] = useState('');
   const [Apellido, setApellido] = useState('');
-  const [Carrera, setCarrera] = useState('');
-  const [DNI, setDNI] = useState("");
+  const [DNI, setDNI] = useState('');
   const [CorreoPersonal, setCorreoPersonal] = useState('');
-  const [NumeroTelefono, setNumeroTelefono] = useState("");
+  const [NumeroTelefono, setNumeroTelefono] = useState('');
   const [FechaNacimiento, setFechaNacimiento] = useState('');
   const [Direccion, setDireccion] = useState('');
   const [CentroRegional, setCentroRegional] = useState('');
@@ -25,12 +24,24 @@ const ModalDocentes = () => {
     setCentroRegional(event.target.value);
   };
 
+  const borrarCampos = () => {
+    setNombre('');
+    setApellido('');
+    setDNI('');
+    setCorreoPersonal('');
+    setNumeroTelefono('');
+    setFechaNacimiento('');
+    setDireccion('');
+    setCentroRegional('');
+    setFoto('');
+
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
     console.log('Nombre:', Nombre);
     console.log('Apellido:', Apellido);
-    console.log('Carrera:', Carrera);
     console.log('DNI:', DNI);
     console.log('CorreoPersonal:', CorreoPersonal);
     console.log('NumeroTelefono:', NumeroTelefono);
@@ -78,15 +89,6 @@ const ModalDocentes = () => {
                 id="apellido"
                 value={Apellido}
                 onChange={(e) => setApellido(e.target.value)}
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label for="carrera">Carrera</Label>
-              <Input
-                type="text"
-                id="carrera"
-                value={Carrera}
-                onChange={(e) => setCarrera(e.target.value)}
               />
             </FormGroup>
             <FormGroup>
@@ -164,11 +166,14 @@ const ModalDocentes = () => {
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={AgregarDocente}>Registrar</Button>{' '}
+          <Button color="primary" onClick={AgregarDocente}>Registrar</Button>
           <Button color="secondary" onClick={toggleModal}>Cancelar</Button>
+          <Button color="secondary" onClick={borrarCampos}>Limpiar</Button>
         </ModalFooter>
       </Modal>
     </div>
+
+    
 
     
   );
@@ -183,7 +188,6 @@ const AgregarDocente = (event) => {
     const formData = {
       Nombre : Nombre,
       Apellido: Apellido,
-      Carrera:Carrera,
       DNI: DNI,
       CorreoPersonal: CorreoPersonal,
       NumeroTeleforno: NumeroTelefono,
@@ -197,7 +201,6 @@ const AgregarDocente = (event) => {
 
       form.append(Nombre,Nombre)
       form.append(Apellido,Apellido)
-      form.append(Carrera,Carrera)
       form.append(DNI,DNI)
       form.append(CorreoPersonal,CorreoPersonal)
       form.append(NumeroTelefono,NumeroTelefono)
@@ -207,6 +210,7 @@ const AgregarDocente = (event) => {
       form.append(Foto,Foto)
     
       toggleModal();
+      borrarCampos();
 
     // Realizar la solicitud HTTP utilizando fetch
     fetch('http://localhost:5000/...', {
