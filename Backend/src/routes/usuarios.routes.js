@@ -1,14 +1,14 @@
 import {Router} from 'express';
 import { getConnection } from '../Database';
-import {crearNuevaPlanificacion, renderizarPlanificacion, crearNuevaMatricula, renderizarMatricula, crearNuevoProcesoCancelacion, renderizarCancelaciones} from '../controllers/admin.controllers';
+import {crearNuevaPlanificacion, renderizarPlanificacion, crearNuevaMatricula, renderizarMatricula, crearNuevoProcesoCancelacion, renderizarCancelaciones, enviarMatriculaIPAC, enviarMatriculaIIPAC, enviarMatriculaIIIPAC, enviarIPAC, enviarIIPAC, enviarIIIPAC} from '../controllers/admin.controllers';
 import {getEstudiantes, createNewStudent, updatePassword, getEstudiantesMatriculados} from '../controllers/usuarios.controllers';
+import {enviarClasesCursando,enviarInfoEstuForma03} from '../controllers/cancelacionesExcepcionales.controllers';
 import {sendEmail} from '../controllers/recuperacionContra.controllers';
 import {procesarArchivo} from '../csv/csv'
 const router = Router();
 
 
 // RUTAS PARA ADMINISTRAR LA PLANIFICACIÓN DE CLASES
-
 router.post('/enviarPlanificacion', crearNuevaPlanificacion);
 
 router.get('/renderizarPlanificacion', renderizarPlanificacion);
@@ -21,6 +21,25 @@ router.post('/enviarCancelaciones', crearNuevoProcesoCancelacion);
 
 router.get('/renderizarCancelaciones', renderizarCancelaciones);
 
+router.get('/enviarPlanificacionIPAC', enviarIPAC);
+
+router.get('/enviarPlanificacionIIPAC', enviarIIPAC);
+
+router.get('/enviarPlanificacionIIIPAC', enviarIIIPAC);
+
+router.get('/enviarMatriculaIPAC', enviarMatriculaIPAC);
+
+router.get('/enviarMatriculaIIPAC', enviarMatriculaIIPAC);
+
+router.get('/enviarMatriculaIIIPAC', enviarMatriculaIIIPAC);
+
+// RUTAS PARA ADMINISTRAR LAS CANCELACIONES EXCEPCIONALES
+
+router.post('/enviarClasesQueEstaCursando', enviarClasesCursando);
+
+// RUTA PARA MOSTRAR LA FORMA DEL ESTUDIANTE EN JEFATURA Y COORDINACIÓN
+
+router.post('/enviarInformacionEstudiante', enviarInfoEstuForma03);
 
 // Configuración de multer para guardar los archivos en la carpeta "uploads"
 

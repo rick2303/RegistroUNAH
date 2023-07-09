@@ -7,14 +7,14 @@ import { Navbar } from "reactstrap";
 const AppFechaPeriodo = () => {
   const [fechaInicioSeleccionada, setFechaInicioSeleccionada] = useState(new Date());
   const [fechaFinalSeleccionada, setFechaFinalSeleccionada] = useState(new Date());
-  const [pacSeleccionado, setPacSeleccionado] = useState("1PAC");
+  const [pacSeleccionado, setPacSeleccionado] = useState('');
   
 
   const convertirFechaAJSON = (fechaInicio, fechaFinal) => {
     const fechaJSON = {
-      fechaInicio: fechaInicio.toISOString().split("T")[0],
-      fechaFinal: fechaFinal.toISOString().split("T")[0],
-      pac: pacSeleccionado,
+      FechaInicio: fechaInicio.toISOString().split("T")[0],
+      FechaFinal: fechaFinal.toISOString().split("T")[0],
+      PeriodoAcademico: pacSeleccionado,
     };
     return fechaJSON;
   };
@@ -56,13 +56,13 @@ const AppFechaPeriodo = () => {
     <>
     {/* <Navbar/> */}
     <h1 className="text-2xl  mb-4 text-center font-bold pt-2 text-gray-900 sm:text-3xl">
-       Planificaión de Periodos
+      Planificación de Períodos
       </h1>
       <div className="contenedor">
         <div className="container m-4">
           <div className="row m-4">
             <div className="col-md-4">
-              <label htmlFor="fechaInicio">Inicio de Periodo</label>
+              <label htmlFor="fechaInicio">Inicio de Período</label>
               <DatePicker
                 className="form-control"
                 value={fechaInicioSeleccionada}
@@ -73,7 +73,7 @@ const AppFechaPeriodo = () => {
               />
             </div>
             <div className="col-md-4">
-              <label htmlFor="fechaFinal">Finalización de Periodo</label>
+              <label htmlFor="fechaFinal">Finalización de Período</label>
               <DatePicker
                 className="form-control"
                 value={fechaFinalSeleccionada}

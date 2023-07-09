@@ -115,3 +115,71 @@ export const renderizarCancelaciones = async (req, res) => {
         }  
 
 }
+
+export const enviarIPAC = async (req, res) => {
+    try {
+        const pool = await getConnection();
+        const result = await pool.request().query(querys.getIPACPlanificacion);
+        res.json(result.recordset);
+        } catch (error) {
+        res.status(500);
+        res.send(error.message);
+        }  
+
+}
+
+export const enviarIIPAC = async (req, res) => {
+    try {
+        const pool = await getConnection();
+        const result = await pool.request().query(querys.getIIPACPlanificacion);
+        res.json(result.recordset);
+        } catch (error) {
+        res.status(500);
+        res.send(error.message);
+        }  
+}
+
+export const enviarIIIPAC = async (req, res) => {
+    try {
+        const pool = await getConnection();
+        const result = await pool.request().query(querys.getIIIPACPlanificacion);
+        res.json(result.recordset);
+        } catch (error) {
+        res.status(500);
+        res.send(error.message);
+        }  
+}
+export const enviarMatriculaIPAC = async (req, res) => {
+    try {
+        const pool = await getConnection();
+        const result = await pool.request().query(querys.getIPACMatricula);
+        res.json(result.recordset);
+        } catch (error) {
+        res.status(500);
+        res.send(error.message);
+        }  
+
+}
+
+export const enviarMatriculaIIPAC   = async (req, res) => {
+    try {
+        const pool = await getConnection();
+        const result = await pool.request().query(querys.getIIPACMatricula);
+        res.json(result.recordset);
+        } catch (error) {
+        res.status(500);
+        res.send(error.message);
+        }  
+}
+
+export const enviarMatriculaIIIPAC = async (req, res) => {
+    try {
+        const pool = await getConnection();
+        const result = await pool.request().query(querys.getIIIPACMatricula);
+        res.json(result.recordset);
+        } catch (error) {
+        res.status(500);
+        res.send(error.message);
+        }  
+}
+

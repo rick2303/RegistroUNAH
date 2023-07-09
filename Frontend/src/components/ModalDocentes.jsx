@@ -44,8 +44,20 @@ const ModalDocentes = () => {
 
   return (
     <div>
-      <Button color='primary' size='lg' className='w-100'  onClick ={toggleModal}>IR</Button>
+   
+      <div onClick ={toggleModal} className="grid grid-cols-1">
+                <a>
+                  <a
+                    className="rounded grid grid-cols-1 group relative focus:outline-none focus:ring"
+                  >
+                    <span className=" rounded grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 bg-yellow-500 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"></span>
 
+                    <span className=" rounded relative text-center inline-block border-2 border-current px-8 py-3 text-sm font-bold uppercase tracking-widest text-black group-active:text-opacity-75">
+                     IR
+                    </span>
+                  </a>
+                </a>
+      </div>
       <Modal isOpen={modalOpen} toggle={toggleModal}>
         <ModalHeader>REGISTRAR DOCENTES</ModalHeader>
         <ModalBody>
