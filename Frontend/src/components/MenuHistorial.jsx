@@ -2,6 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import 'styled-components';
+import { Button } from "reactstrap";
 
 const MenuHistorial = () => {
   const [NumCuenta, setNumCuenta] = useState("");
@@ -35,7 +36,35 @@ const MenuHistorial = () => {
     console.log(data);
     setHistorialData(data);
   };
-
+  
+  const descargarHistorial = async () => {
+    const URL = "http://localhost:5000/historialPDF";
+    const response = await fetch(URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ NumCuenta: NumCuenta }), // Reemplaza NumCuenta con el valor correcto
+    });
+  
+    const buffer = await response.arrayBuffer();
+    const blob = new Blob([buffer], { type: "application/pdf" });
+  
+    const url = window.URL.createObjectURL(blob);
+  
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `Historial-${NumCuenta}.pdf` // Nombre del archivo PDF que se descargará
+    a.click();
+  
+    // Limpia la URL y elimina el objeto Blob
+    window.URL.revokeObjectURL(url);
+  };
+  
+  
+  const handleButtonClick = () => {
+    descargarHistorial();
+  };
   // Configuramos las columnas para DataTable
   const columnas = [
     {
@@ -74,10 +103,16 @@ const MenuHistorial = () => {
 
   // Mostramos la data en DataTable
   return (
+    
     <div className="App">
-            <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
-                Historial Académico
-            </h1>
+      <div style={{ marginLeft: "30px", marginTop: "20px" }}>
+        <Button onClick={handleButtonClick} color="primary">
+          Descargar Historial
+        </Button>
+      </div>
+      <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
+          Historial Académico
+      </h1>
       <DataTable columns={columnas} data={historialData} pagination />
     </div>
   );

@@ -8,6 +8,7 @@
   "dependencies": {
     "@azure/cosmos": "^3.17.3",
     "bcrypt": "^5.1.0",
+    "bwip-js": "^3.4.3",
     "cors": "^2.8.5",
     "csv-parser": "^3.0.0",
     "dotenv": "^16.3.1",
@@ -16,7 +17,9 @@
     "morgan": "^1.10.0",
     "mssql": "^9.1.1",
     "multer": "^1.4.5-lts.1",
-    "nodemailer": "^6.9.3"
+    "nodemailer": "^6.9.3",
+    "pdfkit": "^0.13.0",
+    "pdfmake": "^0.2.7"
   },
   "devDependencies": {
     "@babel/cli": "^7.22.5",
