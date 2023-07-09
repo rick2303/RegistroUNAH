@@ -6,6 +6,7 @@ import loginRoute from './routes/login.routes'
 import perfilEstudiante from './routes/EstudiantesPerfil.routes'
 import perfilEmpleado from './routes/EmpleadoPerfil.routes'
 import historialAcademico from './routes/estudiantes.historial.routes'
+import routerCancelacionesExep from './routes/CancelacionesExepPFD.routes'
 //import {} from "./csv/csv";
 const app= express();
 const cors = require('cors');
@@ -27,4 +28,6 @@ app.use(express.urlencoded({ extended:false}));
 console.log(config.port);
 
 app.use(empleadosRoute,loginRoute,perfilEstudiante,perfilEmpleado);
-app.use(usuariosRoute, historialAcademico);
+app.use(usuariosRoute, historialAcademico, routerCancelacionesExep);
+
+
