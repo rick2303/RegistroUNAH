@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from 'reactstrap';
 
 const ModalDocentes = () => {
-
   const [modalOpen, setModalOpen] = useState(false);
   const [Nombre, setNombre] = useState('');
   const [Apellido, setApellido] = useState('');
@@ -13,7 +12,7 @@ const ModalDocentes = () => {
   const [Direccion, setDireccion] = useState('');
   const [CentroRegional, setCentroRegional] = useState('');
   const [Foto, setFoto] = useState('');
-  
+
   const toggleModal = () => {
     setModalOpen(!modalOpen);
   };
@@ -32,7 +31,6 @@ const ModalDocentes = () => {
     setDireccion('');
     setCentroRegional('');
     setFoto('');
-
   };
 
   const handleSubmit = (event) => {
@@ -51,26 +49,58 @@ const ModalDocentes = () => {
     toggleModal();
   };
 
+  const AgregarDocente = (event) => {
+    event.preventDefault();
+
+    const formData = new FormData();
+    formData.append('nombre', Nombre);
+    formData.append('apellido', Apellido);
+    formData.append('dni', DNI);
+    formData.append('correoPersonal', CorreoPersonal);
+    formData.append('numeroTelefono', NumeroTelefono);
+    formData.append('fechaNacimiento', FechaNacimiento);
+    formData.append('direccion', Direccion);
+    formData.append('centroRegional', CentroRegional);
+    formData.append('foto', Foto);
+
+    toggleModal();
+    borrarCampos();
+
+    // Realizar la solicitud HTTP utilizando fetch
+    fetch('http://localhost:5000/registrarDocentes', {
+      method: 'POST',
+      body: formData,
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          alert('Docente agregado correctamente');
+          return response;
+        }
+      })
+      .catch((error) => {
+        console.error('Error en la solicitud:', error);
+      });
+  };
+
   return (
     <div>
-   
-      <div onClick ={toggleModal} className="grid grid-cols-1">
-                <a>
-                  <a
-                    className="rounded grid grid-cols-1 group relative focus:outline-none focus:ring"
-                  >
-                    <span className=" rounded grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 bg-yellow-500 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"></span>
-
-                    <span className=" rounded relative text-center inline-block border-2 border-current px-8 py-3 text-sm font-bold uppercase tracking-widest text-black group-active:text-opacity-75">
-                     IR
-                    </span>
-                  </a>
-                </a>
+      <div onClick={toggleModal} className="grid grid-cols-1">
+        <a>
+          <a
+            className="rounded grid grid-cols-1 group relative focus:outline-none focus:ring"
+          >
+            <span className="rounded grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 bg-yellow-500 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"></span>
+            <span className="rounded relative text-center inline-block border-2 border-current px-8 py-3 text-sm font-bold uppercase tracking-widest text-black group-active:text-opacity-75">
+              IR
+            </span>
+          </a>
+        </a>
       </div>
       <Modal isOpen={modalOpen} toggle={toggleModal}>
         <ModalHeader>REGISTRAR DOCENTES</ModalHeader>
         <ModalBody>
           <Form onSubmit={handleSubmit}>
+            {/* Resto del código del formulario */}
             <FormGroup>
               <Label for="nombre">Nombre</Label>
               <Input
@@ -160,72 +190,19 @@ const ModalDocentes = () => {
               />
             </FormGroup>
     
-
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={AgregarDocente}>Registrar</Button>
-          <Button color="secondary" onClick={toggleModal}>Cancelar</Button>
-          <Button color="secondary" onClick={borrarCampos}>Limpiar</Button>
+          <Button color="primary" onClick={AgregarDocente}>
+            Registrar
+          </Button>
+          <Button color="secondary" onClick={toggleModal}>
+            Cancelar
+          </Button>
         </ModalFooter>
       </Modal>
     </div>
-
-    
-
-    
   );
 };
 
-//fetch al backend
-
-const AgregarDocente = (event) => {
-    event.preventDefault();
-  
-
-    const formData = {
-      nombre : Nombre,
-      apellido: Apellido,
-      dni: DNI,
-      correoPersonal: CorreoPersonal,
-      numeroTeleforno: NumeroTelefono,
-      fechaNacimiento: FechaNacimiento,
-      direccion: Direccion,
-      centroRegional: CentroRegional,
-      foto: Foto
-    };
-    
-    const form = new formData();
-
-      form.append(nombre,Nombre)
-      form.append(apellido,Apellido)
-      form.append(dni,DNI)
-      form.append(correoPersonal,CorreoPersonal)
-      form.append(numeroTelefono,NumeroTelefono)
-      form.append(fechaNacimiento,FechaNacimiento)
-      form.append(direccion,Direccion)
-      form.append(centroRegional,CentroRegional)
-      form.append(foto,Foto)
-    
-      toggleModal();
-      borrarCampos();
-
-    // Realizar la solicitud HTTP utilizando fetch
-    fetch('http://localhost:5000/...', {
-      method: 'POST',
-      body: form,
-    })
-
-      .then((response)=> {
-        if (response.status===200){
-          alert("Docente agregado correctamente");
-          return response;
-        }
-      })
-      .finally(error => {
-        console.error('Error en la solicitud:', error);
-      });
-  };
-
 export default ModalDocentes;
-

@@ -3,48 +3,38 @@ import React, { useState } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from 'reactstrap';
 
 const ModalSecciones = () => {
-
   const [modalOpen, setModalOpen] = useState(false);
   const [IdClase, setIdClase] = useState('');
   const [Edificio, setEdificio] = useState('');
   const [Aula, setAula] = useState('');
-  const [CantidadAlumnos, setCantidadAlumnos] = useState("");
+  const [CantidadAlumnos, setCantidadAlumnos] = useState('');
   const [HI, setHI] = useState('');
-  const [Seccion, setSeccion] = useState("");
+  const [Seccion, setSeccion] = useState('');
   const [HF, setHF] = useState('');
   const [Periodo, setPeriodo] = useState('');
   const [Fecha, setFecha] = useState('');
   const [IdDocente, setIdDocente] = useState('');
   const [OBS, setOBS] = useState('');
-  
+
   const toggleModal = () => {
     setModalOpen(!modalOpen);
   };
 
   const handleOpcionEdificio = (event) => {
-
     setEdificio(event.target.value);
-    
   };
+
   const handleOpcionHI = (event) => {
-
     setHI(event.target.value);
-    
-  };  const handleOpcionHF = (event) => {
-
-    setHF(event.target.value);
-    
-  };  const handleOpcionPeriodo = (event) => {
-
-    setPeriodo(event.target.value);
-    
   };
-  function Registrar() {
-   
-    AgregarSeccion();
 
-   
-  }
+  const handleOpcionHF = (event) => {
+    setHF(event.target.value);
+  };
+
+  const handleOpcionPeriodo = (event) => {
+    setPeriodo(event.target.value);
+  };
 
   const borrarCampos = () => {
     setIdClase('');
@@ -58,7 +48,6 @@ const ModalSecciones = () => {
     setFecha('');
     setIdDocente('');
     setOBS('');
-
   };
 
   const handleSubmit = (event) => {
@@ -74,26 +63,63 @@ const ModalSecciones = () => {
     console.log('Periodo:', Periodo);
     console.log('Fecha:', Fecha);
     console.log('IdDocente:', IdDocente);
-    console.log('OBS:',OBS);
+    console.log('OBS:', OBS);
 
     toggleModal();
   };
 
+  const AgregarSeccion = () => {
+    const formData = new FormData();
+    formData.append('idClase', IdClase);
+    formData.append('edificio', Edificio);
+    formData.append('aula', Aula);
+    formData.append('cantidadAlumnos', CantidadAlumnos);
+    formData.append('hI', HI);
+    formData.append('seccion', Seccion);
+    formData.append('hF', HF);
+    formData.append('periodo', Periodo);
+    formData.append('fecha', Fecha);
+    formData.append('idDocente', IdDocente);
+    formData.append('obs', OBS);
+
+    toggleModal();
+    borrarCampos();
+
+    // Validación de la hora de inicio y hora final
+    if (parseInt(HI) >= parseInt(HF)) {
+      alert('La hora de inicio debe ser menor que la hora final');
+      return;
+    }
+
+    // Realizar la solicitud HTTP utilizando fetch
+    fetch('http://localhost:5000/registrarSecciones', {
+      method: 'POST',
+      body: formData,
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          alert('Sección agregada correctamente');
+          return response;
+        }
+      })
+      .catch((error) => {
+        console.error('Error en la solicitud:', error);
+      });
+  };
+
   return (
     <div>
-   
-      <div onClick ={toggleModal} className="grid grid-cols-1">
-                <a>
-                  <a
-                    className="rounded grid grid-cols-1 group relative focus:outline-none focus:ring"
-                  >
-                    <span className=" rounded grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 bg-yellow-500 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"></span>
-
-                    <span className=" rounded relative text-center inline-block border-2 border-current px-8 py-3 text-sm font-bold uppercase tracking-widest text-black group-active:text-opacity-75">
-                     IR
-                    </span>
-                  </a>
-                </a>
+      <div onClick={toggleModal} className="grid grid-cols-1">
+        <a>
+          <a
+            className="rounded grid grid-cols-1 group relative focus:outline-none focus:ring"
+          >
+            <span className="rounded grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 bg-yellow-500 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"></span>
+            <span className="rounded relative text-center inline-block border-2 border-current px-8 py-3 text-sm font-bold uppercase tracking-widest text-black group-active:text-opacity-75">
+              IR
+            </span>
+          </a>
+        </a>
       </div>
       <Modal isOpen={modalOpen} toggle={toggleModal}>
         <ModalHeader>CREAR UNA NUEVA SECCION</ModalHeader>
@@ -199,9 +225,9 @@ const ModalSecciones = () => {
               <Label for="periodo">Periodo</Label>
               <Input type="select" id="periodo" value={Periodo} onChange={handleOpcionPeriodo}>
                 <option value="">Seleccione un Periodo</option>
-                <option value="8000">1 PAC</option>
-                <option value="9000">2 PAC</option>
-                <option value="1000">3 PAC</option>
+                <option value="1">1 PAC</option>
+                <option value="2">2 PAC</option>
+                <option value="3">3 PAC</option>
 
                 </Input>
     
@@ -236,80 +262,20 @@ const ModalSecciones = () => {
               />
             </FormGroup>
 
+     
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary"  onClick={Registrar}>Registrar</Button>
-          <Button color="secondary" onClick={toggleModal}>Cancelar</Button>
-          <Button color="primary" onClick={borrarCampos}>Limpiar</Button>
-
+          <Button color="primary" onClick={AgregarSeccion}>
+            Registrar
+          </Button>
+          <Button color="secondary" onClick={toggleModal}>
+            Cancelar
+          </Button>
         </ModalFooter>
       </Modal>
     </div>
-
   );
 };
 
-//fetch al backend
-
-const AgregarSeccion = (event) => {
-    event.preventDefault();
-  
-    const formData = {
-      idClase : IdClase ,
-      edificio : Edificio ,
-      aula:Aula,
-      cantidadAlumnos: CantidadAlumnos ,
-      hI: HI ,
-      seccion : Seccion,
-      hF : HF,
-      periodo: Periodo,
-      fecha : Fecha,
-      idDocente : IdDocente,
-      obs , OBS
-    };
-    
-    const form = new formData();
-
-      form.append(idClase,IdClase)
-      form.append(edificio,Edificio)
-      form.append(aula,Aula)
-      form.append(cantidadAlumnos,CantidadAlumnos)
-      form.append(hi, HI)
-      form.append(seccion,Seccion)
-      form.append(hf,HF)
-      form.append(periodo,Periodo)
-      form.append(fechaCreacion,FechaCreacion)
-      form.append(idDocente,IdDocente)
-      form.append(obs,OBS)
-    
-      toggleModal();
-      borrarCampos();
-      Registrar();
-
-
-          // Validación de la hora de inicio y hora final
-      function Registrar() {
-        if (parseInt(HI) >= parseInt(HF)) {
-          alert('La hora de inicio debe ser menor que la hora final');
-          return; 
-        }
-    
-    // Realizar la solicitud HTTP utilizando fetch
-    fetch('http://localhost:5000/...', {
-      method:'POST',
-      body: form,
-    })
-
-      .then((response)=> {
-        if (response.status===200){
-          alert("Docente agregado correctamente");
-          return response;
-        }
-      })
-      .finally(error => {
-        console.error('Error en la solicitud:', error);
-      });
-  };
-}
 export default ModalSecciones;
