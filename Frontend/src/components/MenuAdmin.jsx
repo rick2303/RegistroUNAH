@@ -63,10 +63,10 @@ function MenuAdmin() {
               </div>
   
               <div className="grid grid-cols-1">
-                <a href="../html/FechaMatricula.html">
+                <a href="#">
                   <a
                     className="rounded grid grid-cols-1 group relative focus:outline-none focus:ring"
-                    href="/download"
+                    href="/src/html/FechaMatricula.html"
                   >
                     <span className=" rounded grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 bg-yellow-500 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"></span>
 
@@ -91,7 +91,7 @@ function MenuAdmin() {
                 <a href="../html/FechaPeriodo.html">
                   <a
                     className=" rounded grid grid-cols-1 group relative focus:outline-none focus:ring"
-                    href="/download"
+                    href="/src/html/FechaPeriodo.html"
                   >
                     <span className=" rounded grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 bg-yellow-500 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"></span>
 
@@ -113,10 +113,10 @@ function MenuAdmin() {
               </div>
   
               <div className="grid grid-cols-1">
-                <a href="../html/FechaCancelaciones.html">
+                <a href="#">
                   <a
                     className=" rounded grid grid-cols-1 group relative focus:outline-none focus:ring"
-                    href="/download"
+                    href="/src/html/FechaCancelaciones.html"
                   >
                     <span className=" rounded grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 bg-yellow-500 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"></span>
 

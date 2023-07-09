@@ -10,7 +10,7 @@ const AppFechaMatricula = () => {
   const [fechaFinalSeleccionada, setFechaFinalSeleccionada] = useState(
     new Date()
   );
-  const [pacSeleccionado, setPacSeleccionado] = useState("1PAC");
+  const [pacSeleccionado, setPacSeleccionado] = useState('');
   const [fechaMinima, setFechaMinima] = useState(null);
   const [fechaMaxima, setFechaMaxima] = useState(null);
  
@@ -19,33 +19,69 @@ const AppFechaMatricula = () => {
     obtenerFechasMinMax();
   }, []);
 
-  const obtenerFechasMinMax = () => {
-    fetch("http://localhost:5000/renderizarPlanificacion")
-      .then((response) => response.json())
-      .then((data) => {
-        setFechaMinima(new Date(data.FechaInicio));
-        setFechaMaxima(new Date(data.FechaFinal));
-      })
-      .catch((error) => {
-        console.error("Error al obtener las fechas mínima y máxima:", error);
-      });
+  const obtenerFechasMinMax = (pacSeleccionado) => {
+
+    if (pacSeleccionado == "1PAC"){
+      
+    fetch("http://localhost:5000/enviarPlanificacionIPAC")
+    .then((response) => response.json())
+    .then((data) => {
+      setFechaMinima(new Date(data[0].FechaInicio));
+      setFechaMaxima(new Date(data[0].FechaFinal));
+      console.log(data[0]);
+    })
+    .catch((error) => {
+      console.error("Error al obtener las fechas mínima y máxima:", error);
+    });
+  }
+
+  
+  if (pacSeleccionado == "2PAC"){
+      
+    fetch("http://localhost:5000/enviarPlanificacionIIPAC")
+    .then((response) => response.json())
+    .then((data) => {
+      setFechaMinima(new Date(data[0].FechaInicio));
+      setFechaMaxima(new Date(data[0].FechaFinal));
+      console.log(data[0]);
+    })
+    .catch((error) => {
+      console.error("Error al obtener las fechas mínima y máxima:", error);
+    });
+  }
+
+  
+  if (pacSeleccionado == "3PAC"){
+      
+    fetch("http://localhost:5000/enviarPlanificacionIIIPAC")
+    .then((response) => response.json())
+    .then((data) => {
+      setFechaMinima(new Date(data[0].FechaInicio));
+      setFechaMaxima(new Date(data[0].FechaFinal));
+      console.log(data[0]);
+    })
+    .catch((error) => {
+      console.error("Error al obtener las fechas mínima y máxima:", error);
+    });
+  }
+    
   };
 
   const convertirFechaAJSON = (fechaInicio, fechaFinal) => {
     const fechaJSON = {
-      fechaInicio: fechaInicio.toISOString().split("T")[0],
-      horaInicio: fechaInicio.toLocaleTimeString([], {
+      FechaInicio: fechaInicio.toISOString().split("T")[0],
+      HoraInicio: fechaInicio.toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
         second: "2-digit",
       }),
-      fechaFinal: fechaFinal.toISOString().split("T")[0],
-      horaFinal: fechaFinal.toLocaleTimeString([], {
+      FechaFinal: fechaFinal.toISOString().split("T")[0],
+      HoraFinal: fechaFinal.toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
         second: "2-digit",
       }),
-      pac: pacSeleccionado,
+      PeriodoAcademico: pacSeleccionado,
     };
     return fechaJSON;
   };
@@ -56,11 +92,15 @@ const AppFechaMatricula = () => {
 
   const handleFechaFinalChange = (fecha) => {
     setFechaFinalSeleccionada(fecha);
+    
   };
 
   const handlePacChange = (event) => {
-    setPacSeleccionado(event.target.value);
+    const selectedValue = event.target.value;
+    setPacSeleccionado(selectedValue);
+    obtenerFechasMinMax(selectedValue);
   };
+  
 
   const guardarFechas = () => {
     const fechaJSON = convertirFechaAJSON(
@@ -127,6 +167,7 @@ const AppFechaMatricula = () => {
                 className="form-control"
                 value={pacSeleccionado}
                 onChange={handlePacChange}
+                // id="SelectorPac"
               >
                 <option className=" text-xs" value="1PAC">
                   1PAC

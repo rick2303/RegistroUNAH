@@ -37,6 +37,9 @@ export const querys = {
     getMatricula: "select * from [dbo].[planificacion_matricula]",
     insertProcesoCancelacion: "INSERT INTO [dbo].[planificacion_cancelacionesexcepcionales] (FechaInicio, FechaFinal, HoraInicio, HoraFinal, PeriodoAcademico) VALUES (@FechaInicio, @FechaFinal,@HoraInicio, @HoraFinal, @PeriodoAcademico)",
     getCancelacion: "select * from [dbo].[planificacion_cancelacionesexcepcionales]",
+    getIPACPlanificacion: "select * from [dbo].[planificacion_academica] where PeriodoAcademico = '1PAC'",
+    getIIPACPlanificacion: "select * from [dbo].[planificacion_academica] where PeriodoAcademico = '2PAC'",
+    getIIIPACPlanificacion: "select * from [dbo].[planificacion_academica] where PeriodoAcademico = '3PAC'",
 };
 
 export const queryStudentHistory = {
