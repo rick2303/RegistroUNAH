@@ -36,6 +36,7 @@ const MenuHistorial = () => {
     console.log(data);
     setHistorialData(data);
   };
+  
   const descargarHistorial = async () => {
     const URL = "http://localhost:5000/historialPDF";
     const response = await fetch(URL, {
