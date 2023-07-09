@@ -1,6 +1,6 @@
 import React from "react";
 import { FcMenu } from "react-icons/fc";
-import { BsBoxArrowInLeft } from "react-icons/bs";
+import { BsArrowReturnLeft } from "react-icons/bs";
 import {
   MobileNav,
   Typography,
@@ -54,7 +54,7 @@ export default function Navbar() {
         className="p-1 font-normal "
       >
         <a href={redirectTo} className="flex items-center">
-          <h1 className="text-5xl"><BsBoxArrowInLeft/></h1>
+          <h1 className="text-5xl"><BsArrowReturnLeft/></h1>
         </a>
       </Typography>
       

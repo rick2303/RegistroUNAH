@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from 'reactstrap';
 
-
-
 const ModalDocentes = () => {
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -186,28 +184,28 @@ const AgregarDocente = (event) => {
   
 
     const formData = {
-      Nombre : Nombre,
-      Apellido: Apellido,
-      DNI: DNI,
-      CorreoPersonal: CorreoPersonal,
-      NumeroTeleforno: NumeroTelefono,
-      FechaNacimiento: FechaNacimiento,
-      Direccion: Direccion,
-      CentroRegional: CentroRegional,
-      Foto: Foto
+      nombre : Nombre,
+      apellido: Apellido,
+      dni: DNI,
+      correoPersonal: CorreoPersonal,
+      numeroTeleforno: NumeroTelefono,
+      fechaNacimiento: FechaNacimiento,
+      direccion: Direccion,
+      centroRegional: CentroRegional,
+      foto: Foto
     };
     
     const form = new formData();
 
-      form.append(Nombre,Nombre)
-      form.append(Apellido,Apellido)
-      form.append(DNI,DNI)
-      form.append(CorreoPersonal,CorreoPersonal)
-      form.append(NumeroTelefono,NumeroTelefono)
-      form.append(FechaNacimiento,FechaNacimiento)
-      form.append(Direccion,Direccion)
-      form.append(CentroRegional,CentroRegional)
-      form.append(Foto,Foto)
+      form.append(nombre,Nombre)
+      form.append(apellido,Apellido)
+      form.append(dni,DNI)
+      form.append(correoPersonal,CorreoPersonal)
+      form.append(numeroTelefono,NumeroTelefono)
+      form.append(fechaNacimiento,FechaNacimiento)
+      form.append(direccion,Direccion)
+      form.append(centroRegional,CentroRegional)
+      form.append(foto,Foto)
     
       toggleModal();
       borrarCampos();

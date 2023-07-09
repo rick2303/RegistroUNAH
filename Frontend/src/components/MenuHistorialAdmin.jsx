@@ -4,6 +4,17 @@ import DataTable from "react-data-table-component";
 import "styled-components";
 import { Input } from "reactstrap";
 
+const opcionesPaginacion = {
+  pagination: {
+    previous: "Anterior",
+    next: "Siguiente",
+    rowsPerPage: "Filas por página:",
+    displayRows: "de",
+    paginationLabel: "{start}-{end} de {rows} páginas",
+  },
+};
+
+
 const MenuHistorialAdmin = () => {
   const [users, setUsers] = useState([]);
   const [inputValue, setInputValue] = useState("");
@@ -84,7 +95,7 @@ const MenuHistorialAdmin = () => {
       </div>
 
   
-      <DataTable columns={columnas} data={users} pagination></DataTable>
+      <DataTable columns={columnas} data={users} pagination options={opcionesPaginacion}></DataTable>
     </div>
   );
 };

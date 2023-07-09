@@ -2,8 +2,6 @@
 import React, { useState } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from 'reactstrap';
 
-
-
 const ModalSecciones = () => {
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -258,36 +256,45 @@ const AgregarSeccion = (event) => {
     event.preventDefault();
   
     const formData = {
-      IdClase : IdClase ,
-      Edificio : Edificio ,
-      Aula:Aula,
-      CantidadAlumnos: CantidadAlumnos ,
-      HI: HI ,
-      Seccion : Seccion,
-      HF : HF,
-      Periodo: Periodo,
-      FechaCreacion : FechaCreacion,
-      IdDocente : IdDocente,
-      OBS , OBS
+      idClase : IdClase ,
+      edificio : Edificio ,
+      aula:Aula,
+      cantidadAlumnos: CantidadAlumnos ,
+      hI: HI ,
+      seccion : Seccion,
+      hF : HF,
+      periodo: Periodo,
+      fecha : Fecha,
+      idDocente : IdDocente,
+      obs , OBS
     };
     
     const form = new formData();
 
-      form.append(IdClase,IdClase)
-      form.append(Edificio,Edificio)
-      form.append(Aula,Aula)
-      form.append(CantidadAlumnos,CantidadAlumnos)
-      form.append(HI, HI)
-      form.append(Seccion,Seccion)
-      form.append(HF,HF)
-      form.append(Periodo,Periodo)
-      form.append(FechaCreacion,FechaCreacion)
-      form.append(IdDocente,IdDocente)
-      form.append(OBS,OBS)
+      form.append(idClase,IdClase)
+      form.append(edificio,Edificio)
+      form.append(aula,Aula)
+      form.append(cantidadAlumnos,CantidadAlumnos)
+      form.append(hi, HI)
+      form.append(seccion,Seccion)
+      form.append(hf,HF)
+      form.append(periodo,Periodo)
+      form.append(fechaCreacion,FechaCreacion)
+      form.append(idDocente,IdDocente)
+      form.append(obs,OBS)
     
       toggleModal();
       borrarCampos();
+      Registrar();
 
+
+          // Validación de la hora de inicio y hora final
+      function Registrar() {
+        if (parseInt(HI) >= parseInt(HF)) {
+          alert('La hora de inicio debe ser menor que la hora final');
+          return; 
+        }
+    
     // Realizar la solicitud HTTP utilizando fetch
     fetch('http://localhost:5000/...', {
       method:'POST',
@@ -304,5 +311,5 @@ const AgregarSeccion = (event) => {
         console.error('Error en la solicitud:', error);
       });
   };
-
+}
 export default ModalSecciones;

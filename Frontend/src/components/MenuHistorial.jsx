@@ -3,6 +3,17 @@ import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import 'styled-components';
 
+
+const opcionesPaginacion = {
+  pagination: {
+    previous: "Anterior",
+    next: "Siguiente",
+    rowsPerPage: "Filas por página:",
+    displayRows: "de",
+    paginationLabel: "{start}-{end} de {rows} páginas",
+  },
+};
+
 const MenuHistorial = () => {
   const [NumCuenta, setNumCuenta] = useState("");
   const [historialData, setHistorialData] = useState([]);
@@ -78,7 +89,7 @@ const MenuHistorial = () => {
             <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
                 Historial Académico
             </h1>
-      <DataTable columns={columnas} data={historialData} pagination />
+      <DataTable columns={columnas} data={historialData} pagination options={opcionesPaginacion} />
     </div>
   );
 };
