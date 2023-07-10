@@ -7,10 +7,11 @@ import perfilEstudiante from './routes/EstudiantesPerfil.routes'
 import perfilEmpleado from './routes/EmpleadoPerfil.routes'
 import historialAcademico from './routes/estudiantes.historial.routes'
 import routerCancelacionesExep from './routes/CancelacionesExepPFD.routes'
+import { Console } from "console";
 //import {} from "./csv/csv";
 const app= express();
 const cors = require('cors');
-
+const path = require('path');
 
 // Configurar los encabezados CORS
 app.use(cors({
@@ -24,6 +25,16 @@ export default app
 app.set('port',config.port);
 app.use(express.json());
 app.use(express.urlencoded({ extended:false}));
+
+// Configurar la ruta para servir archivos estáticos
+app.use(express.static(path.join(__dirname, 'UploadsPDF')));
+
+// Ruta para descargar un archivo PDF
+app.get('/download-PDF', (req, res) => {
+  const { documento } = req.query;
+  const filePath = path.join(__dirname, 'UploadsPDF', documento);
+  res.download(filePath);
+});
 
 console.log(config.port);
 
