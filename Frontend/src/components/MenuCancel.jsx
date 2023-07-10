@@ -291,7 +291,6 @@ const MenuCancelaciones = () => {
             <textarea
               className="form-control form-control-sm border border-2 p-4 rounded"
               id="exampleFormControlTextarea1"
-              maxLength="1500"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
             />
