@@ -1,4 +1,5 @@
 import { getConnection, sql, queries, querys } from "../Database"
+
 export const insertPerfilEstudiante = async (req, res) => {
     const { Id } = req.body;
     const photoPaths = req.files.map(file => file.filename);
@@ -102,3 +103,20 @@ export const enviarSoliCancelion = async (req, res) => {
         .query(querys.getCancelaciones);
     res.json(result.recordset);
 };
+
+
+export const enviarSoliCancelCoordi = async (req, res) => {
+    const pool = await getConnection();
+    const result = await pool.request()
+        .query(querys.geSoliCancelacionesCoordinador);
+    res.json(result.recordset);
+};
+
+export const downloadPdfCancelacion = async (req, res) => {
+    const { NumCuenta } = req.body;
+    const pool = await getConnection();
+    const result = await pool.request()
+    .input("NumCuenta", sql.VarChar, NumCuenta)
+    .query(querys.getPdfSolicitud);
+    res.json(result.recordset);
+}

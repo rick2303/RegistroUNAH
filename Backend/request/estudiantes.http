@@ -7,6 +7,8 @@
 
 ### get planificacion
 GET http://localhost:5000/renderizarPlanificacion
+
+
 POST http://localhost:5000/enviarPlanificacion
 Content-Type: application/json
 {
@@ -60,6 +62,18 @@ Content-Type: application/json
 
 ### ver clases que esta cursando un estudiante
 post http://localhost:5000/enviarInformacionEstudiante
+Content-Type: application/json
+
+{
+    "NumCuenta": "20182001940"
+}
+
+
+### get planificacion
+GET http://localhost:5000/enviarSolicitudesRealizadasCoordinador
+
+### ver clases que esta cursando un estudiante
+post http://localhost:5000/download-pdf
 Content-Type: application/json
 
 {

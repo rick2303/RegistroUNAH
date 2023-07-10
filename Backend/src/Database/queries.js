@@ -49,6 +49,10 @@ export const querys = {
     insertSoliCancel: "Insert into [dbo].[registro_cancelaciones_excepcionales] (IdClase, Asignatura, UV, Seccion, Año, Periodo, Estado, Descripcion, NumCuenta) values(@idClase, @asignatura, @uv,  @seccion,@año, @periodo, @estado, @descripcion, @Id)",
     getCancelaciones: "select IdClase AS CODIGO,Asignatura AS ASIGNATURA,UV AS UV,Seccion AS SECCION,Periodo AS PERIODO,Estado AS ESTADO from [dbo].[registro_cancelaciones_excepcionales] WHERE NumCuenta =  @NumCuenta And Periodo = @Periodo",
     getPerfilEstudianteFormaAdmin: "select e.Nombre,e.Apellido,pe.Imagen1,e.IndiceGlobal,e.IndicePeriodo from [dbo].[perfil_estudiante] as pe INNER JOIN [dbo].[estudiantes] e on e.NumCuenta = pe.IdPerfil where e.NumCuenta = @NumCuenta",
+
+    geSoliCancelacionesCoordinador: "select rce.IdClase, rce.Asignatura, rce.UV, rce.Seccion, rce.Periodo, rce.Descripcion, rce.Documento, rce.Estado, rce.NumCuenta, e.Nombre, e.Apellido, e.IndiceGlobal, e.IndicePeriodo, pe.Imagen1 from [dbo].[registro_cancelaciones_excepcionales] as rce inner join [dbo].[estudiantes] e on e.NumCuenta = rce.NumCuenta INNER JOIN [dbo].[perfil_estudiante] pe on pe.IdPerfil = e.NumCuenta",
+
+    getPdfSolicitud: "select DISTINCT Documento from [dbo].[registro_cancelaciones_excepcionales] where NumCuenta = @NumCuenta",
 };
 
 export const queryStudentHistory = {

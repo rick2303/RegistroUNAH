@@ -1,12 +1,13 @@
 import { Router } from 'express';
 import multer from 'multer';
 import path from 'path';
-import { insertPdfEstudiante, insertSolicitudCancel, enviarSoliCancelion } from '../controllers/estudiantePerfil.controllers';
+import { insertPdfEstudiante, insertSolicitudCancel, enviarSoliCancelion, enviarSoliCancelCoordi, downloadPdfCancelacion } from '../controllers/estudiantePerfil.controllers';
 import router from './usuarios.routes';
+import { ro } from 'date-fns/locale';
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const destinationPath = path.join(__dirname, '../../../Frontend/src/UploadsPDF');
+        const destinationPath = path.join(__dirname, '../UploadsPDF');
         cb(null, destinationPath);
     },
     filename: (req, file, cb) => {
@@ -25,5 +26,11 @@ routerCancelacionesExep.post('/subirPDF', upload.single('file'), insertPdfEstudi
 routerCancelacionesExep.post('/subirSolicitudCancelacion', insertSolicitudCancel);
 
 routerCancelacionesExep.post('/enviarSolicitudesRealizadas', enviarSoliCancelion);
+
+//Ruta para lo que ve el coordinador
+
+routerCancelacionesExep.get('/enviarSolicitudesRealizadasCoordinador', enviarSoliCancelCoordi);
+
+routerCancelacionesExep.post('/download-pdf', downloadPdfCancelacion);
 
 export default routerCancelacionesExep;
