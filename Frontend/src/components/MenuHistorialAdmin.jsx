@@ -2,7 +2,18 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import "styled-components";
-import { Input, Button } from "reactstrap";
+import { Input } from "reactstrap";
+
+const opcionesPaginacion = {
+  pagination: {
+    previous: "Anterior",
+    next: "Siguiente",
+    rowsPerPage: "Filas por página:",
+    displayRows: "de",
+    paginationLabel: "{start}-{end} de {rows} páginas",
+  },
+};
+
 
 const MenuHistorialAdmin = () => {
   const [users, setUsers] = useState([]);
@@ -25,10 +36,6 @@ const MenuHistorialAdmin = () => {
   useEffect(() => {
     showData(inputValue);
   }, [inputValue]); // Ejecutar el efecto cada vez que inputValue cambie
-
-  const handleButtonClick = () => {
-    showData(inputValue);
-  };
 
   //configuramos las columnas para DataTable
 
@@ -87,12 +94,8 @@ const MenuHistorialAdmin = () => {
         />
       </div>
 
-      <div style={{ marginLeft: "30px", marginTop: "20px" }}>
-        <Button onClick={handleButtonClick} color="primary">
-          Mostrar
-        </Button>
-      </div>
-      <DataTable columns={columnas} data={users} pagination></DataTable>
+  
+      <DataTable columns={columnas} data={users} pagination options={opcionesPaginacion}></DataTable>
     </div>
   );
 };

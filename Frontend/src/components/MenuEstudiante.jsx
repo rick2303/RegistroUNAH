@@ -1,6 +1,6 @@
 //import React from "react";
 import React, { useEffect, useState } from "react";
-import { FcOk, FcUpload } from "react-icons/fc";
+import { FcOk, FcUpload} from "react-icons/fc";
 import { FcCalendar } from "react-icons/fc";
 import { FcBusinessman } from "react-icons/fc";
 import {
@@ -196,6 +196,7 @@ function MenuEstudiante() {
               </div>
             </div>
           </article>
+
           <article className="hover:animate-background rounded-xl bg-gradient-to-r from-blue-800 via-yellow-400 to-yellow-500 00 p-0.5 shadow-xl transition hover:bg-[length:500%_400%] hover:shadow-sm hover:[animation-duration:_4s]">
             <div className="rounded-[10px] bg-white p-4 !pb-14 !pt-15 sm:p-6 row">
               <p className="featured-block-text text-center">
@@ -213,7 +214,7 @@ function MenuEstudiante() {
                 <a href="#">
                   <a
                     className=" grid grid-cols-1 group relative focus:outline-none focus:ring"
-                    href="/download"
+                    href="/src/html/Modificar_Secciones.html"
                   >
                     <span className=" grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 bg-yellow-500 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"></span>
 
