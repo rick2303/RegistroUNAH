@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import ModalSeccioness from "./Modal_Secciones";
 import {
   FcBusinesswoman,
+  FcSearch,
   FcCheckmark,
   FcAddColumn,
   FcDiploma1,
@@ -67,11 +68,9 @@ function MenuJefatura() {
               <p className="featured-block-text text-center">
                 <strong className="text-xl ">Agregar Secciones</strong>
               </p>
-              <div className="row"> 
-                <h1><FcAddColumn className="mx-auto m-2"/></h1>
               <div className="row">
                 <h1>
-                  <FcBusinessman className="mx-auto m-2" />
+                  <FcAddColumn className="mx-auto m-2" />
                 </h1>
               </div>
 
@@ -82,17 +81,37 @@ function MenuJefatura() {
                     href="/src/html/estudiantesMatriculados.html"
                   >
                     <span className=" grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 bg-yellow-500 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"></span>
+                  </a>
+                </a>
+              </div>
+              <ModalSeccioness></ModalSeccioness>
+            </div>
+          </article>
+          <article className="hover:animate-background rounded-xl bg-gradient-to-r from-blue-800 via-yellow-400 to-yellow-500 00 p-0.5 shadow-xl transition hover:bg-[length:500%_400%] hover:shadow-sm hover:[animation-duration:_4s]">
+            <div className="rounded-[10px] bg-white p-4 !pb-14 !pt-15 sm:p-6 row">
+              <p className="featured-block-text text-center">
+                <strong className="text-xl text-center">Modificar Secciones</strong>
+              </p>
+              <div className="row"> 
+                <h1><FcSearch className="mx-auto m-2"/></h1>
+              </div>
+
+              <div className="grid grid-cols-1">
+                <a href="#">
+                  <a
+                    className=" grid grid-cols-1 group relative focus:outline-none focus:ring"
+                    href="/src/html/Forma03.html"
+                  >
+                    <span className=" grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 bg-yellow-500 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"></span>
 
                     <span className="relative text-center inline-block border-2 border-current px-8 py-3 text-sm font-bold uppercase tracking-widest text-black group-active:text-opacity-75">
-                      Ir
+                      IR 
                     </span>
                   </a>
                 </a>
               </div>
-                <ModalSeccioness></ModalSeccioness>
             </div>
           </article>
-
           <article className="hover:animate-background rounded-xl bg-gradient-to-r from-blue-800 via-yellow-400 to-yellow-500 00 p-0.5 shadow-xl transition hover:bg-[length:500%_400%] hover:shadow-sm hover:[animation-duration:_4s]">
             <div className="rounded-[10px] bg-white p-4 !pb-14 !pt-15 sm:p-6 row">
               <p className="featured-block-text text-center">
