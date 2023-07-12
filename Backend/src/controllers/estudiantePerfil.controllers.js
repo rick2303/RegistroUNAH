@@ -1,4 +1,5 @@
-import { getConnection, sql, queries } from "../Database"
+import { getConnection, sql, queries, querys } from "../Database"
+
 export const insertPerfilEstudiante = async (req, res) => {
     const { Id } = req.body;
     const photoPaths = req.files.map(file => file.filename);
@@ -16,7 +17,41 @@ export const insertPerfilEstudiante = async (req, res) => {
     const perfilEstudiante = await pool.request().input("Id", sql.VarChar, Id).query(queries.getPerfilestudiante);
     res.json({ url: 'http://127.0.0.1:5173/src/html/Estudiante.html', data: estudiante.recordset[0], perfil: perfilEstudiante.recordset[0] });
 }
+export const insertPdfEstudiante = async (req, res) => {
+    const { Id } = req.body;
+    const pdfPath = req.file.filename;
+    const pool = await getConnection();
+    const result = await pool
+    .request()
+    .input("Id", sql.VarChar, Id)
+    .input("pdfPath", sql.VarChar, pdfPath)
+    .query(querys.insertPDF);
+    res.status(200).json({ message: "Operación completada exitosamente" });
+};
 
+export const insertSolicitudCancel = async (req, res) => {
+    const cancelaciones = req.body; // Obtener el arreglo de cancelaciones enviado desde el frontend
+    const pool = await getConnection();
+
+    // Iterar sobre el arreglo de cancelaciones y ejecutar la consulta para cada objeto
+    for (const cancelacion of cancelaciones) {
+        const { idClase, asignatura, uv, seccion, año, periodo, estado, descripcion,Id } = cancelacion;
+
+        await pool.request()
+            .input("Id", sql.VarChar, Id)
+            .input("idClase", sql.VarChar, idClase) // Utilizar "idClase" en lugar de "IdClase"
+            .input("Asignatura", sql.VarChar, asignatura)
+            .input("UV", sql.Int, uv)
+            .input("Seccion", sql.Int, seccion)
+            .input("Año", sql.Date, año) // Utilizar "Año" en lugar de "año"
+            .input("Periodo", sql.VarChar, periodo) // Utilizar "Periodo" en lugar de "periodo"
+            .input("Estado", sql.VarChar, estado)
+            .input("Descripcion", sql.VarChar, descripcion)
+            .query(querys.insertSoliCancel);
+    }
+
+    res.status(200).json({ message: 'Operación completada exitosamente' });
+}
 export const updatePerfilEstudiante = async (req, res) => {
     try {
         const { Id } = req.body;
@@ -58,4 +93,30 @@ export const insertDescripcionPerfilEstudiante = async (req, res) => {
         .query(queries.insertDescripcionPerfilEstudiante);
     res.status(200).json({ message: 'Operación completada exitosamente' });
 }
+export const enviarSoliCancelion = async (req, res) => {
+    const { NumCuenta, Periodo } = req.body;
+    const pool = await getConnection();
+    const result = await pool.request()
+        .input("NumCuenta", sql.VarChar, NumCuenta)
+        .input("Periodo", sql.VarChar, Periodo)
+        // .input("año", sql.Int, año)
+        .query(querys.getCancelaciones);
+    res.json(result.recordset);
+};
 
+
+export const enviarSoliCancelCoordi = async (req, res) => {
+    const pool = await getConnection();
+    const result = await pool.request()
+        .query(querys.geSoliCancelacionesCoordinador);
+    res.json(result.recordset);
+};
+
+export const downloadPdfCancelacion = async (req, res) => {
+    const { NumCuenta } = req.body;
+    const pool = await getConnection();
+    const result = await pool.request()
+    .input("NumCuenta", sql.VarChar, NumCuenta)
+    .query(querys.getPdfSolicitud);
+    res.json(result.recordset);
+}

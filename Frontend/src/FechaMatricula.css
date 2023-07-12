@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
+
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+body {
+	background: #ffffff;
+	font-family: 'Roboto', sans-serif;
+	min-height: 100vh;
+	margin-left: 30px;
+	margin-right: 30px;
+	margin: auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	
+	
+  }
+  
+.contenedor {
+	text-align: center;
+	background: #fff;
+	box-shadow: 0px 0px 20px 0px rgba(177, 176, 176, 0.5);
+	border-radius: 5px;
+	display: flex;
+	gap: 40px;
+	
+}
+
+label {
+	width: 100%;
+	font-size: 16px;
+	color:#1100ff;
+}
+
+.grupo {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+.MuiInputBase-input.MuiInput-input {
+	text-align: center;
+	padding: 20px;
+	font-size: 14px;
+	text-transform: capitalize;
+}
+/*** ESTILOS BOTÓN GROW ELLIPSE ***/
+#boton-bonito {
+	background: #fff; /* color de fondo */
+	color: #1100ff; /* color de fuente */
+	border: 2px solid #1100ff; /* tamaño y color de borde */
+	padding: 6px 45px;
+	border-radius: 30px; /* redondear bordes */
+	position: relative;
+	z-index: 1;
+	overflow: hidden;
+	display: inline-block;
+  }
+  #boton-bonito:hover {
+	color: #fff;/* color de fuente hover */
+  }
+  #boton-bonito::after {
+	content: "";
+	background: #1100ff; /* color de fondo hover */
+	position: absolute;
+	z-index: -1;
+	padding: 16px 16px;
+	display: block;
+	border-radius: 100%;
+	left: -50%;
+	right: -50%;
+	top: -150%;
+	bottom: -150%;
+	transform: scale(0, 0);
+	transition: all 0.4s ease;
+  }
+  #boton-bonito:hover::after {
+	transition: all 0.6s ease-out;
+	transform: scale(1, 1);
+  }
+  
+  

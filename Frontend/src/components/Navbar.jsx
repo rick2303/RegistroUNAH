@@ -32,7 +32,7 @@ export default function Navbar() {
   }
 
   if(currentPath === "/src/html/EstuFiltradosMatriculados.html"){
-    redirectTo="../html/EstudiantesMatriculados.html"
+    redirectTo="../html/Jefatura.html"
   }
 
   if((currentPath === "/src/html/EstudiantesMatriculados.html" && subrol==="COORDINADOR")||(currentPath==="/src/html/HistorialAdmin.html" && subrol==="COORDINADOR")){

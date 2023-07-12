@@ -39,7 +39,13 @@ h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
-
+.botonesTabla {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1em;
+  background-color: #fbd122;
+}
 button {
   border-radius: 8px;
   border: 1px solid transparent;
