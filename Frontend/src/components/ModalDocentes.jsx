@@ -1,22 +1,18 @@
 import React, { useState } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from 'reactstrap';
 
-
-
 const ModalDocentes = () => {
-
   const [modalOpen, setModalOpen] = useState(false);
   const [Nombre, setNombre] = useState('');
   const [Apellido, setApellido] = useState('');
-  const [Carrera, setCarrera] = useState('');
-  const [DNI, setDNI] = useState("");
+  const [DNI, setDNI] = useState('');
   const [CorreoPersonal, setCorreoPersonal] = useState('');
-  const [NumeroTelefono, setNumeroTelefono] = useState("");
+  const [NumeroTelefono, setNumeroTelefono] = useState('');
   const [FechaNacimiento, setFechaNacimiento] = useState('');
   const [Direccion, setDireccion] = useState('');
   const [CentroRegional, setCentroRegional] = useState('');
   const [Foto, setFoto] = useState('');
-  
+
   const toggleModal = () => {
     setModalOpen(!modalOpen);
   };
@@ -25,12 +21,23 @@ const ModalDocentes = () => {
     setCentroRegional(event.target.value);
   };
 
+  const borrarCampos = () => {
+    setNombre('');
+    setApellido('');
+    setDNI('');
+    setCorreoPersonal('');
+    setNumeroTelefono('');
+    setFechaNacimiento('');
+    setDireccion('');
+    setCentroRegional('');
+    setFoto('');
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
     console.log('Nombre:', Nombre);
     console.log('Apellido:', Apellido);
-    console.log('Carrera:', Carrera);
     console.log('DNI:', DNI);
     console.log('CorreoPersonal:', CorreoPersonal);
     console.log('NumeroTelefono:', NumeroTelefono);
@@ -42,26 +49,58 @@ const ModalDocentes = () => {
     toggleModal();
   };
 
+  const AgregarDocente = (event) => {
+    event.preventDefault();
+
+    const formData = new FormData();
+    formData.append('nombre', Nombre);
+    formData.append('apellido', Apellido);
+    formData.append('dni', DNI);
+    formData.append('correoPersonal', CorreoPersonal);
+    formData.append('numeroTelefono', NumeroTelefono);
+    formData.append('fechaNacimiento', FechaNacimiento);
+    formData.append('direccion', Direccion);
+    formData.append('centroRegional', CentroRegional);
+    formData.append('foto', Foto);
+
+    toggleModal();
+    borrarCampos();
+
+    // Realizar la solicitud HTTP utilizando fetch
+    fetch('http://localhost:5000/registrarDocentes', {
+      method: 'POST',
+      body: formData,
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          alert('Docente agregado correctamente');
+          return response;
+        }
+      })
+      .catch((error) => {
+        console.error('Error en la solicitud:', error);
+      });
+  };
+
   return (
     <div>
-   
-      <div onClick ={toggleModal} className="grid grid-cols-1">
-                <a>
-                  <a
-                    className="rounded grid grid-cols-1 group relative focus:outline-none focus:ring"
-                  >
-                    <span className=" rounded grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 bg-yellow-500 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"></span>
-
-                    <span className=" rounded relative text-center inline-block border-2 border-current px-8 py-3 text-sm font-bold uppercase tracking-widest text-black group-active:text-opacity-75">
-                     IR
-                    </span>
-                  </a>
-                </a>
+      <div onClick={toggleModal} className="grid grid-cols-1">
+        <a>
+          <a
+            className="rounded grid grid-cols-1 group relative focus:outline-none focus:ring"
+          >
+            <span className="rounded grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 bg-yellow-500 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"></span>
+            <span className="rounded relative text-center inline-block border-2 border-current px-8 py-3 text-sm font-bold uppercase tracking-widest text-black group-active:text-opacity-75">
+              IR
+            </span>
+          </a>
+        </a>
       </div>
       <Modal isOpen={modalOpen} toggle={toggleModal}>
         <ModalHeader>REGISTRAR DOCENTES</ModalHeader>
         <ModalBody>
           <Form onSubmit={handleSubmit}>
+            {/* Resto del código del formulario */}
             <FormGroup>
               <Label for="nombre">Nombre</Label>
               <Input
@@ -78,15 +117,6 @@ const ModalDocentes = () => {
                 id="apellido"
                 value={Apellido}
                 onChange={(e) => setApellido(e.target.value)}
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label for="carrera">Carrera</Label>
-              <Input
-                type="text"
-                id="carrera"
-                value={Carrera}
-                onChange={(e) => setCarrera(e.target.value)}
               />
             </FormGroup>
             <FormGroup>
@@ -160,70 +190,19 @@ const ModalDocentes = () => {
               />
             </FormGroup>
     
-
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={AgregarDocente}>Registrar</Button>{' '}
-          <Button color="secondary" onClick={toggleModal}>Cancelar</Button>
+          <Button color="primary" onClick={AgregarDocente}>
+            Registrar
+          </Button>
+          <Button color="secondary" onClick={toggleModal}>
+            Cancelar
+          </Button>
         </ModalFooter>
       </Modal>
     </div>
-
-    
   );
 };
 
-//fetch al backend
-
-const AgregarDocente = (event) => {
-    event.preventDefault();
-  
-
-    const formData = {
-      Nombre : Nombre,
-      Apellido: Apellido,
-      Carrera:Carrera,
-      DNI: DNI,
-      CorreoPersonal: CorreoPersonal,
-      NumeroTeleforno: NumeroTelefono,
-      FechaNacimiento: FechaNacimiento,
-      Direccion: Direccion,
-      CentroRegional: CentroRegional,
-      Foto: Foto
-    };
-    
-    const form = new formData();
-
-      form.append(Nombre,Nombre)
-      form.append(Apellido,Apellido)
-      form.append(Carrera,Carrera)
-      form.append(DNI,DNI)
-      form.append(CorreoPersonal,CorreoPersonal)
-      form.append(NumeroTelefono,NumeroTelefono)
-      form.append(FechaNacimiento,FechaNacimiento)
-      form.append(Direccion,Direccion)
-      form.append(CentroRegional,CentroRegional)
-      form.append(Foto,Foto)
-    
-      toggleModal();
-
-    // Realizar la solicitud HTTP utilizando fetch
-    fetch('http://localhost:5000/...', {
-      method: 'POST',
-      body: form,
-    })
-
-      .then((response)=> {
-        if (response.status===200){
-          alert("Docente agregado correctamente");
-          return response;
-        }
-      })
-      .finally(error => {
-        console.error('Error en la solicitud:', error);
-      });
-  };
-
 export default ModalDocentes;
-

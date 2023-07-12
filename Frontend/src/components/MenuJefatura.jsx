@@ -1,8 +1,10 @@
 //import React from "react";
 import React, { useEffect, useState } from "react";
+import ModalSeccioness from "./Modal_Secciones";
 import {
   FcBusinesswoman,
   FcCheckmark,
+  FcAddColumn,
   FcDiploma1,
   FcOk,
   FcUpload,
@@ -63,8 +65,10 @@ function MenuJefatura() {
           <article className="hover:animate-background rounded-xl bg-gradient-to-r from-blue-800 via-yellow-400 to-yellow-500 00 p-0.5 shadow-xl transition hover:bg-[length:500%_400%] hover:shadow-sm hover:[animation-duration:_4s]">
             <div className=" rounded-[10px] bg-white p-4 !pb-14 !pt-15 sm:p-6 row">
               <p className="featured-block-text text-center">
-                <strong className="text-xl ">Jefatura</strong>
+                <strong className="text-xl ">Agregar Secciones</strong>
               </p>
+              <div className="row"> 
+                <h1><FcAddColumn className="mx-auto m-2"/></h1>
               <div className="row">
                 <h1>
                   <FcBusinessman className="mx-auto m-2" />
@@ -85,6 +89,7 @@ function MenuJefatura() {
                   </a>
                 </a>
               </div>
+                <ModalSeccioness></ModalSeccioness>
             </div>
           </article>
 
