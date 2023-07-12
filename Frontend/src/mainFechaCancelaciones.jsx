@@ -8,7 +8,7 @@ import esLocale from "date-fns/locale/es";
 
 ReactDOM.render(
 	<React.StrictMode>
-	
+    		
 	<MuiPickersUtilsProvider utils={DateFnUtils} locale={esLocale}>
 	
 	<AppFechaCancelaciones />

@@ -3,7 +3,8 @@ import { DateTimePicker } from "@material-ui/pickers";
 import DataTable from "react-data-table-component";
 import { format } from "date-fns";
 import "../FechaMatricula.css";
-
+import { TiArrowBackOutline } from "react-icons/ti";
+import {FcDeleteRow} from "react-icons/fc"
 const AppFechaMatricula = () => {
   const [fechaInicioSeleccionada, setFechaInicioSeleccionada] = useState(new Date());
   const [fechaFinalSeleccionada, setFechaFinalSeleccionada] = useState(new Date());
@@ -206,11 +207,11 @@ const AppFechaMatricula = () => {
       center: true,
     },
     {
-      name: "",
+      name: "Eliminar",
       cell: (row) => (
-        <button id="boton-bonito" onClick={() => eliminarFila(row)}>
-          Eliminar
-        </button>
+        <h1 onClick={() => eliminarFila(row)}>
+        <FcDeleteRow />
+       </h1>
       ),
       sortable: true,
       center: true,
@@ -222,9 +223,21 @@ const AppFechaMatricula = () => {
   
   return (
     <>
-      <h1 className="text-2xl mb-4 text-center font-bold pt-2 text-gray-900 sm:text-3xl">
-        Matrícula
-      </h1>
+      <div className="d-flex mt-5">
+  <h1 className="text-2xl mb-4 text-center font-bold pt-2 text-gray-900 sm:text-3xl col-11">
+    Planificación de Matrícula
+  </h1>
+  <div className="col-1 d-flex justify-content-end">
+    <a
+      href="../html/Administracion.html"
+      className="text-end fas fa-pencil-alt"
+      title="Regresar"
+    >
+      <label><h1><TiArrowBackOutline className="text-2xl " /></h1></label>
+      
+    </a>
+  </div>
+</div>
       <div className="contenedor">
         <div className="container m-4">
           <div className="row m-4">

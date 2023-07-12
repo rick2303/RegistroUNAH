@@ -1,6 +1,7 @@
 import React from "react";
 import { FcMenu } from "react-icons/fc";
-import { BsArrowReturnLeft } from "react-icons/bs";
+import { TiArrowBackOutline  } from "react-icons/ti";
+import {BiLogOut} from "react-icons/bi";
 import {
   MobileNav,
   Typography,
@@ -54,20 +55,21 @@ export default function Navbar() {
         className="p-1 font-normal "
       >
         <a href={redirectTo} className="flex items-center">
-          <h1 className="text-5xl"><BsArrowReturnLeft/></h1>
+          <h1 className="text-5xl"><TiArrowBackOutline /></h1>
         </a>
       </Typography>
-      
-        
       <Typography
         as="li"
         variant="small"
-        color="blue-gray"
-        className="p-1 font-normal"
+        color="blue"
+        className="p-1 font-normal "
       >
-        <img className="rounded-full h-20 w-20" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png" alt="user avatar" />
-
+        <a href="../../index.html" className="flex items-center">
+          <h1 className="text-5xl"><BiLogOut/></h1>
+        </a>
       </Typography>
+      
+       
     </ul>
   );
 
