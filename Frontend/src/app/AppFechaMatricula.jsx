@@ -1,70 +1,92 @@
 import React, { useEffect, useState } from "react";
 import { DateTimePicker } from "@material-ui/pickers";
+import DataTable from "react-data-table-component";
 import { format } from "date-fns";
 import "../FechaMatricula.css";
-//import { Navbar } from "../components/Navbar";
+
 const AppFechaMatricula = () => {
-  const [fechaInicioSeleccionada, setFechaInicioSeleccionada] = useState(
-    new Date()
-  );
-  const [fechaFinalSeleccionada, setFechaFinalSeleccionada] = useState(
-    new Date()
-  );
-  const [pacSeleccionado, setPacSeleccionado] = useState('');
+  const [fechaInicioSeleccionada, setFechaInicioSeleccionada] = useState(new Date());
+  const [fechaFinalSeleccionada, setFechaFinalSeleccionada] = useState(new Date());
+  const [pacSeleccionado, setPacSeleccionado] = useState("1PAC");
   const [fechaMinima, setFechaMinima] = useState(null);
   const [fechaMaxima, setFechaMaxima] = useState(null);
- 
-  
+  const [historialData2, setHistorialData2] = useState([]);
+  const [clickCount, setClickCount] = useState(0);
+  const [isPac1Disabled, setIsPac1Disabled] = useState(false);
+  const [isPac2Disabled, setIsPac2Disabled] = useState(false);
+  const [isPac3Disabled, setIsPac3Disabled] = useState(false);
+  const [isGuardarDisabled, setIsGuardarDisabled] = useState(false);
+
   useEffect(() => {
-    obtenerFechasMinMax();
-  }, []);
+    obtenerFechasMinMax("1PAC"); // Obtener las fechas mínimas y máximas del 1PAC al inicio
+    obtenerHistorialData();
+    fetch("http://localhost:5000/renderizarMatricula")
+      .then((response) => response.json())
+      .then((data) => {
+        setHistorialData2(data);
+        console.log(data);
 
-  const obtenerFechasMinMax = (pacSeleccionado) => {
+        // Verificar si hay registros con los valores "1PAC", "2PAC" y "3PAC" en PeriodoAcademico
+        const hasPac1 = data.some((row) => row.PeriodoAcademico === "1PAC");
+        const hasPac2 = data.some((row) => row.PeriodoAcademico === "2PAC");
+        const hasPac3 = data.some((row) => row.PeriodoAcademico === "3PAC");
+        setIsPac1Disabled(hasPac1);
+        setIsPac2Disabled(hasPac2);
+        setIsPac3Disabled(hasPac3);
+        setIsGuardarDisabled(hasPac1 && hasPac2 && hasPac3);
+      })
+      .catch((error) => {
+        console.error("Error al obtener las fechas mínima y máxima:", error);
+      });
+  }, [clickCount]);
 
-    if (pacSeleccionado == "1PAC"){
-      
-    fetch("http://localhost:5000/enviarPlanificacionIPAC")
-    .then((response) => response.json())
-    .then((data) => {
-      setFechaMinima(new Date(data[0].FechaInicio));
-      setFechaMaxima(new Date(data[0].FechaFinal));
-      console.log(data[0]);
-    })
-    .catch((error) => {
-      console.error("Error al obtener las fechas mínima y máxima:", error);
-    });
-  }
+  const obtenerFechasMinMax = (selectedValue) => {
+    if (selectedValue === "1PAC") {
+      fetch("http://localhost:5000/enviarPlanificacionIPAC")
+        .then((response) => response.json())
+        .then((data) => {
+          setFechaMinima(new Date(data[0].FechaInicio));
+          setFechaMaxima(new Date(data[0].FechaFinal));
+          console.log(data[0]);
+        })
+        .catch((error) => {
+          console.error("Error al obtener las fechas mínima y máxima:", error);
+        });
+    } else if (selectedValue === "2PAC") {
+      fetch("http://localhost:5000/enviarPlanificacionIIPAC")
+        .then((response) => response.json())
+        .then((data) => {
+          setFechaMinima(new Date(data[0].FechaInicio));
+          setFechaMaxima(new Date(data[0].FechaFinal));
+          console.log(data[0]);
+        })
+        .catch((error) => {
+          console.error("Error al obtener las fechas mínima y máxima:", error);
+        });
+    } else if (selectedValue === "3PAC") {
+      fetch("http://localhost:5000/enviarPlanificacionIIIPAC")
+        .then((response) => response.json())
+        .then((data) => {
+          setFechaMinima(new Date(data[0].FechaInicio));
+          setFechaMaxima(new Date(data[0].FechaFinal));
+          console.log(data[0]);
+        })
+        .catch((error) => {
+          console.error("Error al obtener las fechas mínima y máxima:", error);
+        });
+    }
+  };
 
-  
-  if (pacSeleccionado == "2PAC"){
-      
-    fetch("http://localhost:5000/enviarPlanificacionIIPAC")
-    .then((response) => response.json())
-    .then((data) => {
-      setFechaMinima(new Date(data[0].FechaInicio));
-      setFechaMaxima(new Date(data[0].FechaFinal));
-      console.log(data[0]);
-    })
-    .catch((error) => {
-      console.error("Error al obtener las fechas mínima y máxima:", error);
-    });
-  }
-
-  
-  if (pacSeleccionado == "3PAC"){
-      
-    fetch("http://localhost:5000/enviarPlanificacionIIIPAC")
-    .then((response) => response.json())
-    .then((data) => {
-      setFechaMinima(new Date(data[0].FechaInicio));
-      setFechaMaxima(new Date(data[0].FechaFinal));
-      console.log(data[0]);
-    })
-    .catch((error) => {
-      console.error("Error al obtener las fechas mínima y máxima:", error);
-    });
-  }
-    
+  const obtenerHistorialData = () => {
+    fetch("http://localhost:5000/renderizarMatricula")
+      .then((response) => response.json())
+      .then((data) => {
+        setHistorialData2(data);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error al obtener el historial de matrícula:", error);
+      });
   };
 
   const convertirFechaAJSON = (fechaInicio, fechaFinal) => {
@@ -83,7 +105,9 @@ const AppFechaMatricula = () => {
       }),
       PeriodoAcademico: pacSeleccionado,
     };
+    console.log(fechaJSON);
     return fechaJSON;
+    
   };
 
   const handleFechaInicioChange = (fecha) => {
@@ -92,7 +116,6 @@ const AppFechaMatricula = () => {
 
   const handleFechaFinalChange = (fecha) => {
     setFechaFinalSeleccionada(fecha);
-    
   };
 
   const handlePacChange = (event) => {
@@ -100,7 +123,6 @@ const AppFechaMatricula = () => {
     setPacSeleccionado(selectedValue);
     obtenerFechasMinMax(selectedValue);
   };
-  
 
   const guardarFechas = () => {
     const fechaJSON = convertirFechaAJSON(
@@ -108,7 +130,6 @@ const AppFechaMatricula = () => {
       fechaFinalSeleccionada
     );
     console.log(fechaJSON);
-    // Realizar la solicitud al backend para enviar el JSON
     fetch("http://localhost:5000/enviarMatricula", {
       method: "POST",
       headers: {
@@ -118,19 +139,91 @@ const AppFechaMatricula = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        // Mostrar el mensaje de alerta si el guardado fue exitoso
         alert("Se han guardado las fechas exitosamente");
+        setClickCount(clickCount + 1);
       })
       .catch((error) => {
         console.error("Error al guardar las fechas:", error);
       });
   };
 
+  const eliminarFila = (row) => {
+    console.log(row.idPlanificacion);
+    fetch("http://localhost:5000/eliminarMatricula", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(row),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        alert("Se ha eliminado la fila exitosamente");
+        setClickCount(clickCount + 1);
+      })
+      .catch((error) => {
+        console.error("Error al eliminar la fila:", error);
+      });
+  };
+
+  const columnas = [
+    {
+      name: "Fecha Inicial",
+      selector: (row) => new Date(row.FechaInicio).toLocaleDateString(),
+      sortable: true,
+    },
+    {
+      name: "Fecha Final",
+      selector: (row) => new Date(row.FechaFinal).toLocaleDateString(),
+      sortable: true,
+    },
+    {
+      name: "Hora Inicial",
+      selector: (row) => {
+        const fechaHoraInicio = new Date(row.FechaInicio);
+        fechaHoraInicio.setHours(row.HoraInicio.split(":")[0]);
+        fechaHoraInicio.setMinutes(row.HoraInicio.split(":")[1]);
+        fechaHoraInicio.setSeconds(row.HoraInicio.split(":")[2]);
+        return format(fechaHoraInicio, "h:mm a");
+      },
+      sortable: true,
+    },
+    {
+      name: "Hora Final",
+      selector: (row) => {
+        const fechaHoraFinal = new Date(row.FechaFinal);
+        fechaHoraFinal.setHours(row.HoraFinal.split(":")[0]);
+        fechaHoraFinal.setMinutes(row.HoraFinal.split(":")[1]);
+        fechaHoraFinal.setSeconds(row.HoraFinal.split(":")[2]);
+        return format(fechaHoraFinal, "h:mm a");
+      },
+      sortable: true,
+    },
+    {
+      name: "Periodo Académico",
+      selector: (row) => row.PeriodoAcademico,
+      sortable: true,
+      center: true,
+    },
+    {
+      name: "",
+      cell: (row) => (
+        <button id="boton-bonito" onClick={() => eliminarFila(row)}>
+          Eliminar
+        </button>
+      ),
+      sortable: true,
+      center: true,
+    },
+  ];
+  const NoDataComponent = () => {
+    return <div>No hay registros para mostrar</div>;
+  };
+  
   return (
     <>
-     {/* <Navbar/> */}
-    <h1 className="text-2xl  mb-4 text-center font-bold pt-2 text-gray-900 sm:text-3xl">
-       Matrícula
+      <h1 className="text-2xl mb-4 text-center font-bold pt-2 text-gray-900 sm:text-3xl">
+        Matrícula
       </h1>
       <div className="contenedor">
         <div className="container m-4">
@@ -143,7 +236,9 @@ const AppFechaMatricula = () => {
                 onChange={handleFechaInicioChange}
                 format="dd MMM yyyy h:mm a"
                 minDate={fechaMinima}
-    			maxDate={fechaMaxima}
+                maxDate={fechaMaxima}
+                maxDateMessage="La fecha no debe ser posterior a la fecha máxima"
+                minDateMessage="La fecha no debe ser anterior a la fecha mínima"
                 renderInput={(props) => <input {...props} readOnly />}
               />
             </div>
@@ -154,8 +249,10 @@ const AppFechaMatricula = () => {
                 value={fechaFinalSeleccionada}
                 onChange={handleFechaFinalChange}
                 format="dd MMM yyyy h:mm a"
-				minDate={fechaMinima}
-    			maxDate={fechaMaxima}
+                minDate={fechaMinima}
+                maxDate={fechaMaxima}
+                maxDateMessage="La fecha no debe ser posterior a la fecha máxima"
+                minDateMessage="La fecha no debe ser anterior a la fecha mínima"
                 renderInput={(props) => <input {...props} readOnly />}
               />
             </div>
@@ -167,13 +264,16 @@ const AppFechaMatricula = () => {
                 className="form-control"
                 value={pacSeleccionado}
                 onChange={handlePacChange}
-                // id="SelectorPac"
               >
-                <option className=" text-xs" value="1PAC">
+                <option value="1PAC" disabled={isPac1Disabled}>
                   1PAC
                 </option>
-                <option value="2PAC">2PAC</option>
-                <option value="3PAC">3PAC</option>
+                <option value="2PAC" disabled={isPac2Disabled}>
+                  2PAC
+                </option>
+                <option value="3PAC" disabled={isPac3Disabled}>
+                  3PAC
+                </option>
               </select>
             </div>
           </div>
@@ -184,6 +284,7 @@ const AppFechaMatricula = () => {
                 id="boton-bonito"
                 className="w-100"
                 onClick={guardarFechas}
+                disabled={isGuardarDisabled}
               >
                 Guardar
               </button>
@@ -191,6 +292,15 @@ const AppFechaMatricula = () => {
             <div className="col-md-4"></div>
           </div>
         </div>
+      </div>
+      <div className="my-5">
+        <DataTable
+          className="mi-tabla"
+          columns={columnas}
+          data={historialData2}
+          noHeader
+          noDataComponent={<NoDataComponent />}
+        />
       </div>
     </>
   );
