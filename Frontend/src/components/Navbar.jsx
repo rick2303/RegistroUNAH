@@ -53,6 +53,7 @@ export default function Navbar() {
         variant="small"
         color="blue"
         className="p-1 font-normal "
+        title="Regresar"
       >
         <a href={redirectTo} className="flex items-center">
           <h1 className="text-5xl"><TiArrowBackOutline /></h1>
@@ -63,6 +64,7 @@ export default function Navbar() {
         variant="small"
         color="blue"
         className="p-1 font-normal "
+        title="Salir"
       >
         <a href="../../index.html" className="flex items-center">
           <h1 className="text-5xl"><BiLogOut/></h1>

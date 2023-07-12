@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { FcMenu } from "react-icons/fc";
-import { BsBoxArrowInLeft } from "react-icons/bs";
+import { TiArrowBackOutline  } from "react-icons/ti";
+import {BiLogOut} from "react-icons/bi";
 import {
   MobileNav,
   Typography,
@@ -74,13 +75,23 @@ export default function NavbarDocente() {
         variant="small"
         color="blue"
         className="p-1 font-normal "
+        title="Regresar"
       >
-        <a href={redirectTo}className="flex items-center">
-          <h1 className="text-3xl"><BsBoxArrowInLeft/></h1>
-
+        <a href={redirectTo} className="flex items-center">
+          <h1 className="text-5xl"><TiArrowBackOutline /></h1>
         </a>
       </Typography>
-      
+      <Typography
+        as="li"
+        variant="small"
+        color="blue"
+        className="p-1 font-normal "
+        title="Salir"
+      >
+        <a href="../../index.html" className="flex items-center">
+          <h1 className="text-5xl"><BiLogOut/></h1>
+        </a>
+      </Typography>
         
       <Typography
         as="li"
