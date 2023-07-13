@@ -1,18 +1,7 @@
-
 import "bootstrap/dist/css/bootstrap.min.css"
 import React,{useState,useEffect} from 'react';
 import DataTable from 'react-data-table-component';
 import 'styled-components'
-
-const opcionesPaginacion = {
-  pagination: {
-    previous: "Anterior",
-    next: "Siguiente",
-    rowsPerPage: "Filas por página:",
-    displayRows: "de",
-    paginationLabel: "{start}-{end} de {rows} páginas",
-  },
-};
 
 const EstudiantesMatriculadosMain = () => {
 
@@ -21,7 +10,7 @@ const EstudiantesMatriculadosMain = () => {
     
 
     //funcion para  mostrar los datos con fetch
-    const URL = 'http://localhost:5000/estudiantesmatriculados'
+    const URL = 'http://localhost:5000/estudiantesMatriculados'
     const showData = async () => {
       const response = await fetch (URL) 
       const data = await response.json()
@@ -76,7 +65,7 @@ const EstudiantesMatriculadosMain = () => {
       <DataTable
         columns={columnas}
         data={users}
-        pagination options={opcionesPaginacion}
+        pagination
         ></DataTable>
       </div>   )
       
