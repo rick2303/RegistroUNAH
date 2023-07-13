@@ -79,3 +79,48 @@ Content-Type: application/json
 {
     "NumCuenta": "20182001940"
 }
+
+### get planificacion
+GET http://localhost:5000/enviarSolicitudesRealizadasCoordinador
+
+### get planificacion
+GET http://localhost:5000/enviarSolicitudesContadas
+
+### ver clases que esta cursando un estudiante
+post http://localhost:5000/dictamenSolicitud
+Content-Type: application/json
+{
+    "NumCuenta": "20191009775",
+    "IdClase":"IS-501",
+    "Estado": "Aprobado",
+}
+
+### ver clases que esta cursando un estudiante
+put http://localhost:5000/dictamenSolicitudEnviar
+Content-Type: application/json
+
+{
+    "numCuenta": "20191009775",
+    "estado": "Pendiente",
+    "idClase":"IS-501"
+}
+
+### get planificacion
+GET http://localhost:5000/secciones
+
+### ver clases que esta cursando un estudiante
+post http://localhost:5000/TraerDocentes
+Content-Type: application/json
+
+{
+    "Carrera": "INGENIERIA EN SISTEMAS",
+    "CentroRegional": "CU"
+}
+
+### ver clases que esta cursando un estudiante
+post http://localhost:5000/TraerClases
+Content-Type: application/json
+
+{
+    "Departamento": "Ingenieria en sistemas"
+}
