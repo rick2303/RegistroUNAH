@@ -51,36 +51,21 @@ body {
     border-radius: 5px;
 }
 
-.font-normal {
-    font-size: xx-large;
-}
+
  
 h6 {
-    font-size: 15px;
-    font-weight: 200;
+    font-size: 14px;
 }
 
-hatch {
-    font-size: 20px;
-    color: #1e3a8a;
-}
 .card .card-block p {
     line-height: 25px;
 }
-@media only screen and (min-width: 1200px) {
-    label {
-      font-size: 30px;
-      color: #1e3a8a;
-    }
-  }
-  
-  @media only screen and (max-width: 1199px) {
-    label {
-      font-size: 20px;
-      color: #1e3a8a;
-    }
-  }
-  
+
+@media only screen and (min-width: 1400px){
+p {
+    font-size: 14px;
+}
+}
 
 .card-block {
     padding: 1.25rem;
@@ -91,7 +76,7 @@ hatch {
 }
 
 .m-b-20 {
-    margin-bottom: 30px!important;
+    margin-bottom: 20px;
 }
 
 .p-b-5 {
@@ -107,7 +92,7 @@ hatch {
 }
 
 .text-muted {
-    color: #000000 !important;
+    color: #919aa3 !important;
 }
 
 .b-b-default {
@@ -115,15 +100,15 @@ hatch {
 }
 
 .f-w-600 {
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .m-b-20 {
-    margin-bottom: 30px!important;
+    margin-bottom: 20px;
 }
 
 .m-t-40 {
-    margin-top: 80px!important;
+    margin-top: 20px;
 }
 
 .p-b-5 {
