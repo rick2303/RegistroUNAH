@@ -19,15 +19,16 @@ function Perfil_estudiante() {
   const [correoInstitucional, setCorreoInstitucional] = useState("");
   const [carrera, setCarrera] = useState("");
   const [indiceGlobal, setIndiceGlobal] = useState("");
+  const [correoPersonal, setCorreoPersonal] = useState("");
 
   useEffect(() => {
     const storedData = localStorage.getItem("userData");
     if (storedData) {
       const userData = JSON.parse(storedData);
-      
-      const nombre = userData.data.Nombre
+
+      const nombre = userData.data.Nombre;
       setNombre(nombre);
-      const apellido = userData.data.apellido
+      const apellido = userData.data.apellido;
       setApellido(apellido);
       const numCuenta = userData.data.NumCuenta;
       setNumCuenta(numCuenta);
@@ -37,15 +38,17 @@ function Perfil_estudiante() {
       setCarrera(carrera);
       const indiceGlobal = userData.data.IndiceGlobal;
       setIndiceGlobal(indiceGlobal);
-      
-      if(!userData.perfil){
-        const imagen = '1688356529392-947749500-Sin tÃ­tulo.png';
+      const correoPersonal = userData.data.CorreoPersonal;
+      setCorreoPersonal(correoPersonal);
+
+      if (!userData.perfil) {
+        const imagen = "1688356529392-947749500-Sin tÃ­tulo.png";
         setImagen1(imagen);
-        const imagen2 = '1688356529392-947749500-Sin tÃ­tulo.png';
+        const imagen2 = "1688356529392-947749500-Sin tÃ­tulo.png";
         setImagen2(imagen2);
-        const imagen3 = '1688356529392-947749500-Sin tÃ­tulo.png';
+        const imagen3 = "1688356529392-947749500-Sin tÃ­tulo.png";
         setImagen3(imagen3);
-      }else{
+      } else {
         const imagen = userData.perfil.Imagen1;
         setImagen1(imagen);
         const imagen2 = userData.perfil.Imagen2;
@@ -57,8 +60,6 @@ function Perfil_estudiante() {
       }
     }
   }, []);
-
-
 
   return (
     <>
@@ -139,7 +140,7 @@ function Perfil_estudiante() {
                           </button>
                         </div>
                       </div>
-                      <h5 class="f-w-600">Descripción:</h5>
+                      <h3 class="f-w-600 text-xl">Descripción:</h3>
                       <div>
                         <EditableParagraph descripcion={descripcion} />
                       </div>
@@ -148,7 +149,7 @@ function Perfil_estudiante() {
                         <a data-bs-toggle="modal" data-bs-target="#example">
                           <h2 class="m-2">
                             <MdAddAPhoto
-                              className="text-2xl fas fa-pencil-alt"
+                              className="text-2xl fas fa-pencil-alt cursor-pointer"
                               title="Foto de perfil"
                             />
                           </h2>
@@ -160,46 +161,57 @@ function Perfil_estudiante() {
                   <div class="col-sm-6 col-md-10">
                     <div class="card-block">
                       <h5 className="m-b-20 p-b-5 b-b-default f-w-600 row">
-                        <p className="col-6">Información General</p>
+                        <label className="col-6">Información general</label>
                         <div class="d-flex justify-content-end col-6">
                           <a
                             href="../html/Estudiante.html"
                             className="text-end fas fa-pencil-alt"
                             title="Regresar"
                           >
-                            <TiArrowBackOutline className="text-2xl" />
+                            <label><TiArrowBackOutline className="cursor-pointer"/></label>
                           </a>
                         </div>
                       </h5>
 
-                      <div class="row mb-4">
+                      <div class="row mb-5">
                         <div class="col-sm-6">
-                          <p class="m-b-10 f-w-600">Nombre:</p>
-                          <h6 class="text-muted f-w-400">{nombre} {apellido}</h6>
+                          <hatch class="m-b-10 f-w-600">Nombre:</hatch>
+                          <h6 class="text-muted f-w-00">
+                            {nombre} {apellido}
+                          </h6>
                         </div>
                         <div class="col-sm-6">
-                          <p class="m-b-10 f-w-600">Número de cuenta:</p>
+                          <hatch class="m-b-10 f-w-600">Número de cuenta:</hatch>
                           <h6 class="text-muted f-w-400">{numCuenta}</h6>
                         </div>
                       </div>
-                      <div class="row mb-4">
+                      <div class="row mb-5">
                         <div class="col-sm-6">
-                          <p class="m-b-10 f-w-600">Correo:</p>
+                          <hatch class="m-b-10 f-w-600">Correo:</hatch>
                           <h6 class="text-muted f-w-400">
                             {correoInstitucional}
                           </h6>
                         </div>
                         <div class="col-sm-6">
-                          <p class="m-b-10 f-w-600">Carrera:</p>
+                          <hatch class="m-b-10 f-w-600">Carrera:</hatch>
                           <h6 class="text-muted f-w-400">{carrera}</h6>
                         </div>
                       </div>
-                      <h5 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600">
-                        Información Académica
-                      </h5>
-                      <div class="row mb-4">
+                      <div class="row mb-5">
                         <div class="col-sm-6">
-                          <p class="m-b-10 f-w-600">índice Global</p>
+                          <hatch class="m-b-10 f-w-600">Correo personal:</hatch>
+                          <h6 class="text-muted f-w-400">
+                            {correoPersonal}
+                          </h6>
+                        </div>
+                      
+                      </div>
+                      <h5 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600">
+                        <label>Información académica</label>
+                      </h5>
+                      <div class="row mb-5">
+                        <div class="col-sm-6">
+                          <hatch class="m-b-10 f-w-600">índice Global</hatch>
                           <h6 class="text-muted f-w-400">{indiceGlobal}</h6>
                         </div>
                         {/* <div class="col-sm-6">

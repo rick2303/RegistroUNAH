@@ -79,7 +79,7 @@ function Perfil_docente() {
                           </div>
                         </div>
                       </div>
-                      <h5 class="f-w-600">Descripción:</h5>
+                      <h4 class="f-w-600 text-xl">Descripción:</h4>
                       <div>
                         <EditableParagraph descripcion={descripcion} />
                       </div>
@@ -88,7 +88,7 @@ function Perfil_docente() {
                         <a data-bs-toggle="modal" data-bs-target="#example">
                           <h2 class="m-2">
                             <MdAddAPhoto
-                              className="text-2xl fas fa-pencil-alt"
+                              className="text-2xl fas fa-pencil-alt cursor-pointer"
                               title="foto de perfil"
                             />
                           </h2>
@@ -100,52 +100,51 @@ function Perfil_docente() {
                   <div class="col-sm-6 col-md-10">
                     <div class="card-block">
                       <h5 className="m-b-20 p-b-5 b-b-default f-w-600 row">
-                        <p className="col-6">
-                          Información general - Pefil docente
-                        </p>
+                      <label className="col-6">Información general</label>
                         <div class="d-flex justify-content-end col-6">
                           <a
                             href="../html/Docente.html"
                             className="text-end fas fa-pencil-alt"
                             title="Regresar"
-                          >
-                            <TiArrowBackOutline className="text-2xl" />
+                          ><label>
+                            <TiArrowBackOutline className="cursor-pointer" />
+                            </label>
                           </a>
                         </div>
                       </h5>
 
-                      <div class="row mb-4">
+                      <div class="row mb-5">
                         <div class="col-sm-6">
-                          <p class="m-b-10 f-w-600">Nombre:</p>
+                          <hatch class="m-b-10 f-w-600">Nombre:</hatch>
                           <h6 class="text-muted f-w-400">{nombre}</h6>
                         </div>
                         <div class="col-sm-6">
-                          <p class="m-b-10 f-w-600">Correo:</p>
+                          <hatch class="m-b-10 f-w-600">Correo:</hatch>
                           <h6 class="text-muted f-w-400">
                             {correoInstitucional}
                           </h6>
                         </div>
                       </div>
-                      <div class="row mb-4">
+                      <div class="row mb-5">
                         <div class="col-sm-6">
-                          <p class="m-b-10 f-w-600">Centro regional:</p>
+                          <hatch class="m-b-10 f-w-600">Centro regional:</hatch>
                           <h6 class="text-muted f-w-400">{centroRegional}</h6>
                         </div>
                         <div class="col-sm-6">
-                          <p class="m-b-10 f-w-600">Carrera:</p>
+                          <hatch class="m-b-10 f-w-600">Carrera:</hatch>
                           <h6 class="text-muted f-w-400">{carrera}</h6>
                         </div>
                       </div>
-                      <h5 className="m-b-20 p-b-5 b-b-default f-w-600 row">
-                        <p className="col-6">Video descriptivo</p>
+                      <h5 className="m-b-20 m-t-40 p-b-5 b-b-default f-w-600 row">
+                        <label className="col-6">Video descriptivo</label>
                         <div class="d-flex justify-content-end col-6">
                           <a
                             data-bs-toggle="modal"
                             data-bs-target="#docente"
                             className="text-end fas fa-pencil-alt"
-                            title="Regresar"
+                            title="Cargar video"
                           >
-                            <AiOutlineVideoCameraAdd className="text-2xl" />
+                            <label><AiOutlineVideoCameraAdd className="cursor-pointer" /></label>
                           </a>
                           <ModalCargarVideo />
                         </div>
