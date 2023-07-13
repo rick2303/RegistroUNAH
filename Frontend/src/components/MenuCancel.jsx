@@ -12,6 +12,7 @@ const MenuCancelaciones = () => {
   const [periodoAcademicoActual, setPeriodoAcademicoActualPAC] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [vcodigo, setcodigo] = useState([]);
+  const [puedeEnviarPDF, setPuedeEnviarPDF] = useState(true);
   const [vasignatura, setasignatura] = useState([]);
   const [vseccion, setseccion] = useState([]);
   const [vuv, setuv] = useState([]);
@@ -125,6 +126,7 @@ const MenuCancelaciones = () => {
     } catch (error) {
       console.error("Error al obtener los datos:", error);
     }
+    setPuedeEnviarPDF(historialData2.length === 0);
   };
   // Configuramos las columnas para DataTable
   const columnas1 = [
@@ -253,6 +255,10 @@ const MenuCancelaciones = () => {
       .then((data) => {
         alert("Solicitud procesada exitosamente, ahora suba el archivo PDF");
       });
+      // Después de enviar la solicitud, establecer puedeEnviarSolicitud en false
+      setPuedeEnviarSolicitud(false);
+      setPuedeEnviarPDF(false);
+      setHistorialData2([...historialData2, ...datosCancelaciones]);
   };
 
   return (
@@ -312,18 +318,22 @@ const MenuCancelaciones = () => {
 
         <div className="d-flex justify-content-end">
           <a
-            class="btn btn-success"
+            className="btn btn-success"
             data-bs-toggle="modal"
             data-bs-target="#ModalCANCEL"
           >
             Subir archivo PDF
           </a>
-          <ModalCargarPDFCancelaciones />
+          <ModalCargarPDFCancelaciones setPuedeEnviarPDF={setPuedeEnviarPDF}/>
+          
         </div>
 
-        <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
+        <h1 className="text-2xl text-center font-bold pt-1 pb-2 text-gray-900 sm:text-3xl">
           Solitudes de cancelaciones enviadas
         </h1>
+        <p className="text-xl font-normal pt-4 text-gray-900 sm:text-1xl text-left">
+        Asegúrese de haber subido el archivo PDF para poder visualizar su solicitud
+        </p>
         <DataTable columns={columnas} data={historialData2} />
       </div>
     </div>

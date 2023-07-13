@@ -1,4 +1,4 @@
-import { getConnection, querys, sql} from "../Database"
+import { getConnection, querys, querysADMIN, sql} from "../Database"
 const bodyParser = require('body-parser');
 
 export const crearNuevaPlanificacion = async (req, res) => {
@@ -182,4 +182,33 @@ export const enviarMatriculaIIIPAC = async (req, res) => {
         res.send(error.message);
         }  
 }
+
+export const EliminarPlanificacion = async (req, res) => {
+    const {idPlanificacion} = req.body;
+        const pool = await getConnection();
+        const result = await pool.request()
+        .input("idPlanificacion", sql.Int, idPlanificacion)
+        .query(querysADMIN.DeletePlanificacion)
+        res.json(result.recordset);
+}
+
+export const EliminarMatricula = async (req, res) => {
+    const {idPlanificacion} = req.body;
+        const pool = await getConnection();
+        const result = await pool.request()
+        .input("idPlanificacion", sql.Int, idPlanificacion)
+        .query(querysADMIN.DeleteMatricula)
+        res.json(result.recordset);
+}
+
+export const EliminarCancelacionesExcepcionales = async (req, res) => {
+    const {idPlanificacion} = req.body;
+        const pool = await getConnection();
+        const result = await pool.request()
+        .input("idPlanificacion", sql.Int, idPlanificacion)
+        .query(querysADMIN.DeleteCancelacionesExcepcionales)
+        res.json(result.recordset);
+}
+
+
 
