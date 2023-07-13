@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { FcMenu } from "react-icons/fc";
 import { BsBoxArrowInLeft } from "react-icons/bs";
 import { MobileNav, Typography } from "@material-tailwind/react";
-import { TiArrowBackOutline  } from "react-icons/ti";
-import {BiLogOut} from "react-icons/bi";
 import "bootstrap/dist/css/bootstrap.min.css";
 export default function NavbarEstudiante() {
   const [imagenUsuario, setImagenUsuario] = useState("");
@@ -48,21 +46,10 @@ export default function NavbarEstudiante() {
         variant="small"
         color="blue"
         className="p-1 font-normal "
-        title="Regresar"
       >
         <a href={redirectTo} className="flex items-center">
-          <h1 className="text-5xl"><TiArrowBackOutline /></h1>
-        </a>
-      </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue"
-        className="p-1 font-normal "
-        title="Salir"
-      >
-        <a href="../../index.html" className="flex items-center">
-          <h1 className="text-5xl"><BiLogOut/></h1>
+          <h1 className="text-5xl"><BsBoxArrowInLeft/></h1>
+
         </a>
       </Typography>
 

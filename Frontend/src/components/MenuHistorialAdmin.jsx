@@ -95,7 +95,10 @@ const MenuHistorialAdmin = () => {
       </div>
 
   
-      <DataTable columns={columnas} data={users} pagination options={opcionesPaginacion}></DataTable>
+      <DataTable 
+      columns={columnas} 
+      data={users} 
+      pagination options={opcionesPaginacion}></DataTable>
     </div>
   );
 };

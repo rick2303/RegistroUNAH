@@ -93,7 +93,10 @@ const EstudiantesFiltradosMatriculados = () => {
             <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
                 Listado de estudiantes Matriculados en {carreraUsuario}
             </h1>
-            <DataTable columns={columnas} data={users} pagination options={opcionesPaginacion} />
+            <DataTable 
+            columns={columnas} 
+            data={users} 
+            pagination options={opcionesPaginacion} />
         </div>
     );
     
