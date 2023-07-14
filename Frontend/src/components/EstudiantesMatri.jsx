@@ -11,7 +11,7 @@ const EstudiantesMatriculadosMain = () => {
     
 
     //funcion para  mostrar los datos con fetch
-    const URL = 'http://localhost:5000/estudiantesmatriculados'
+    const URL = 'http://localhost:5000/estudiantesMatriculados'
     const showData = async () => {
       const response = await fetch (URL) 
       const data = await response.json()

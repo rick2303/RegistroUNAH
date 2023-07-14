@@ -4,6 +4,6 @@ import { historialAcademico,historialPDF} from "../controllers/estudiantes.histo
 const routerhistorial = Router();
 
 routerhistorial.post('/historial', historialAcademico);
-routerhistorial.post('/historialPDF', historialPDF);
+routerhistorial.post('/historialPDF/:id', historialPDF);
 //routerhistorial.get('/historiales', historialAcademicoPrueba)
 export default routerhistorial;
