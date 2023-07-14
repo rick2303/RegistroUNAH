@@ -1,18 +1,14 @@
-import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import "styled-components";
 import { format, parseISO, set } from "date-fns";
-
 const MenuCancelaciones = () => {
 const [NumCuenta, setNumCuenta] = useState("");
 const [historialData, setHistorialData] = useState([]);
 const [periodoAcademicoActual, setPeriodoAcademicoActualPAC] = useState("");
 const [users, setUsers] = useState([]);
-
 const fechaActual = new Date();
 const año = fechaActual.getFullYear();
-
 const handleDownloadPDF = ({ NumCuentaEnviada }) => {
 fetch("http://localhost:5000/download-pdf", {
     method: "POST",
@@ -44,80 +40,29 @@ fetch("http://localhost:5000/download-pdf", {
     });
 };
 
-const obtenerFechasMinMaxIPAC = async () => {
-try {
-    const response = await fetch(
-    "http://localhost:5000/enviarPlanificacionIPAC"
-    );
-    const data = await response.json();
-    const fechamin = parseISO(data[0].FechaInicio);
-    const fechamax = parseISO(data[0].FechaFinal);
-
-    if (fechaActual >= fechamin && fechaActual <= fechamax) {
-    setPeriodoAcademicoActualPAC("1PAC");
-    }
-} catch (error) {
-    console.error("Error al obtener las fechas mínima y máxima:", error);
-}
-};
-
-const obtenerFechasMinMaxIIPAC = async () => {
-try {
-    const response = await fetch(
-    "http://localhost:5000/enviarPlanificacionIIPAC"
-    );
-    const data = await response.json();
-    const fechamin = parseISO(data[0].FechaInicio);
-    const fechamax = parseISO(data[0].FechaFinal);
-
-    if (fechaActual >= fechamin && fechaActual <= fechamax) {
-    setPeriodoAcademicoActualPAC("2PAC");
-    }
-} catch (error) {
-    console.error("Error al obtener las fechas mínima y máxima:", error);
-}
-};
-
-const obtenerFechasMinMaxIIIPAC = async () => {
-try {
-    const response = await fetch(
-    "http://localhost:5000/enviarPlanificacionIIIPAC"
-    );
-    const data = await response.json();
-    const fechamin = parseISO(data[0].FechaInicio);
-    const fechamax = parseISO(data[0].FechaFinal);
-
-    if (fechaActual >= fechamin && fechaActual <= fechamax) {
-    setPeriodoAcademicoActualPAC("3PAC");
-    }
-} catch (error) {
-    console.error("Error al obtener las fechas mínima y máxima:", error);
-}
-};
-
-obtenerFechasMinMaxIPAC();
-obtenerFechasMinMaxIIPAC();
-obtenerFechasMinMaxIIIPAC();
 
 useEffect(() => {
     showData();
-
 console.log(periodoAcademicoActual);
 }, [periodoAcademicoActual, año]);
 
 const showData = async () => {
+    //OBTENER LOS PERIFLES DE LOS ESTUDIANTES
 try {
     const URL = "http://localhost:5000/enviarSolicitudesRealizadasCoordinador";
     const response = await fetch(URL, {
     method: "GET",
     });
     const data = await response.json();
-    setHistorialData(data);
+
     setUsers(data);
     console.log(data);
 } catch (error) {
     console.error("Error al obtener los datos:", error);
 }
+
+
+
 
 };
 // Configuramos las columnas para DataTable
@@ -142,169 +87,268 @@ const columnas1 = [
     name: "PERIODO",
     selector: (row) => row.Periodo,
 },
+{
+    name: "ESTADO",
+    selector: (row) => row.Estado,
+},
 
 ];
 
 const [filasSeleccionadas, setFilasSeleccionadas] = useState([]);
 
 const handleSelectedRowsChange = (selectedRows) => {
-if (selectedRows.selectedCount > 0) {
-    const filas = selectedRows.selectedRows;
-    setFilasSeleccionadas(filas);
-} else {
-    setFilasSeleccionadas([]);
-}
+    if (selectedRows.selectedCount > 0) {
+        const filas = selectedRows.selectedRows;
+        console.log(filas);
+        setFilasSeleccionadas(filas);
+    } else {
+        setFilasSeleccionadas([]);
+    }
 };
 
-const enviarCancelaciones = async () => {
-const razones = document.getElementById(
-    "exampleFormControlTextarea1"
-).value;
-console.log(razones);
-console.log(periodoAcademicoActual);
 
-// Crear un arreglo para almacenar los datos de las filas seleccionadas
-const datosCancelaciones = [];
 
-// Iterar sobre las filas seleccionadas y agregar los datos al arreglo
-filasSeleccionadas.forEach((fila) => {
-    const idClase = fila.CODIGO;
-    const asignatura = fila.ASIGNATURA;
-    const uv = fila.UV;
-    const seccion = fila.SECCION;
-    const estado = "Pendiente";
+const TablaCancelaciones = ({ data, columnas}) => {
+    // console.log("Las filas seleccionadas son: ", filasSeleccionadas);
 
-    // Agregar los datos al arreglo
-    datosCancelaciones.push({
-    idClase,
-    asignatura,
-    uv,
-    seccion,
-    año,
-    periodo: periodoAcademicoActual,
-    estado,
-    descripcion: razones,
-    Id: NumCuenta,
+    const handleSubmit = (event) => {
+        event.preventDefault(); // Evitar la recarga de la página al enviar el formulario
+    };
+
+    return (
+        <div className="table-container" style={{ maxWidth: "1100px", margin: "auto", position: "relative", zIndex: 1 }}>
+        <p className="text-xl font-normal pt-4 pb-3 text-gray-900 sm:text-1xl text-left">
+        Darle check a las clases que permite que se le cancelen
+        </p>
+        <form onSubmit={handleSubmit}>
+        <DataTable
+        columns={columnas}
+        data={data}
+        />
+        </form>
+    </div>
+    );
+};
+
+function CarruselUsuarios({ users }) {
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [currentNumCuenta, setCurrentNumCuenta] = useState("");
+    const [historialData, setHistorialData] = useState([]);
+
+    const enviarCancelacionesCoordiACEPTADA = async (cuentaSend) => {
+
+        console.log("El historial es: ", historialData); 
+
+        const promises = historialData.map((item) => {
+        const NumCuenta = cuentaSend.toString();
+        console.log("El numero de cuenta es: ", NumCuenta);
+        const Estado = "Aprobada";
+        const IdClase = item.IdClase;
+        console.log("el id de la clase es: ", IdClase);
+
+        return fetch("http://localhost:5000/dictamenSolicitudEnviar", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ numCuenta: NumCuenta, estado: Estado, idClase: IdClase }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.message === "Error al procesar la solicitud") {
+            console.error("Error al enviar las cancelaciones:", data.message);
+            } else {
+            console.log(data);
+            alert("Respuesta enviada al estudiante de la clase: " + IdClase + " con éxito");
+            window.location.reload();
+            }
+        })
+        .catch((error) => {
+            console.error("Error al enviar las cancelaciones:", error);
+        });
     });
-});
+
+    try {
+        const responses = await Promise.all(promises);
+        console.log(responses);
+    } catch (error) {
+        console.error("Error al enviar las cancelaciones:", error);
+    }
+    };
+
+    const enviarCancelacionesCoordiRECHAZADA = async (cuentaSend) => {
+
+        console.log("El historial es: ", historialData); 
+
+        const promises = historialData.map((item) => {
+        const NumCuenta = cuentaSend.toString();
+        console.log("El numero de cuenta es: ", NumCuenta);
+        const Estado = "Rechazada";
+        const IdClase = item.IdClase;
+        console.log("el id de la clase es: ", IdClase);
+
+        return fetch("http://localhost:5000/dictamenSolicitudEnviar", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ numCuenta: NumCuenta, estado: Estado, idClase: IdClase }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.message === "Error al procesar la solicitud") {
+            console.error("Error al enviar las cancelaciones:", data.message);
+            } else {
+            console.log(data);
+            alert("Respuesta enviada al estudiante de la clase: " + IdClase + " con éxito");
+            window.location.reload();
+            }
+        })
+        .catch((error) => {
+            console.error("Error al enviar las cancelaciones:", error);
+        });
+    });
+
+    try {
+        const responses = await Promise.all(promises);
+        console.log(responses);
+    } catch (error) {
+        console.error("Error al enviar las cancelaciones:", error);
+    }
+    };
 
 
-   
+useEffect(() => {
+    if (users.length > 0) {
+    setCurrentNumCuenta(users[activeIndex].NumCuenta);
+    }
+}, [users, activeIndex]);
 
-// Enviar el arreglo de cancelaciones al backend
-fetch("http://localhost:5000/subirSolicitudCancelacion", {
+useEffect(() => {
+    if (currentNumCuenta) {
+    handleInputChangeNum(currentNumCuenta);
+    }
+}, [currentNumCuenta, users, activeIndex]); // Agrega users y activeIndex como dependencias
+
+const handleInputChangeNum = (numeroCuenta) => {
+    fetch("http://localhost:5000/enviarClasesdeSolicitudes", {
     method: "POST",
-    body: JSON.stringify(datosCancelaciones), // Enviar el arreglo completo
     headers: {
-    "Content-Type": "application/json",
+        "Content-Type": "application/json",
     },
-})
+    body: JSON.stringify({ NumCuenta: numeroCuenta }),
+    })
     .then((res) => res.json())
     .then((data) => {
-    alert("Solicitud procesada exitosamente, ahora suba el archivo PDF");
+        console.log(data);
+        setHistorialData(data);
+    })
+    .catch((error) => {
+        console.error("Error al obtener los datos:", error);
     });
-};
+    };
+
+    const handleNext = () => {
+        setActiveIndex((prevIndex) => (prevIndex + 1) % users.length);
+    };
+
+    const handlePrev = () => {
+        setActiveIndex((prevIndex) => (prevIndex - 1 + users.length) % users.length);
+    };
+
 
 return (
-    <div className="App">
-    <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
-        Solicitudes de cancelación excepcional
-    </h1>
 
-    <div className="container">
-        {users.length > 0 && (
-        <div id="carouselExample" className="carousel slide" data-bs-interval="false">
-            <div className="carousel-inner">
+    <div id="carrusel" className="carousel">
+    {users.map((user, index) => (
+        <div
+        key={index}
+        className={index === activeIndex ? "carousel-item active" : "carousel-item"}
+        >
+        <img
+            src={"../img/uploads/" + user.Imagen1}
+            alt="No tiene imagen de perfil"
+            style={{
+            width: "100px",
+            height: "100px",
+            borderRadius: "20%",
+            objectFit: "cover",
+            margin: "auto",
+            }}
+        />
+        <ul>
+            <li>
+            <p className="text-xl font-normal p-3 sm:text-1xl text-center">
+                {user.Nombre} {user.Apellido}
+            </p>
+            </li>
+            <li>
+            <p className="pb-1 text-center">
+                Indice Global: {user.IndiceGlobal}
+            </p>
+            </li>
+        </ul>
 
-            <div className="carousel-item active">
-                <img
-                src={"../img/uploads/" + users[0].Imagen1}
-                alt="No tiene imagen de perfil"
+
+        <br></br>
+        <div className="table-container" style={{ maxWidth: "1100px", margin: "auto" , position: "relative", zIndex: 1 }}>
+            <TablaCancelaciones
+            data={historialData}
+            columnas={columnas1}
+            onSelectedRowsChange={handleSelectedRowsChange}
+            filasSeleccionadas={filasSeleccionadas}
+        />
+        </div>
+
+        <br></br>
+
+        <div className="container" style={{ position: "relative", zIndex: 1 }}>
+            <div className="card mx-auto">
+            <div className="card-body p-1">
+                <h2 className="card-title">Razones por la que el estudiante solicita la cancelación:</h2>
+                <p className="card-text">{user.Descripcion}</p>
+            </div>
+            </div>
+        </div>
+
+        <br></br>
+        <div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <a 
+                onClick={() => handleDownloadPDF({ NumCuentaEnviada: user.NumCuenta})}
                 style={{
-                    width: "100px",
-                    height: "100px",
-                    borderRadius: "20%",
-                    objectFit: "cover",
-                    margin: "auto",
+                marginRight: "10px",
+                backgroundColor: "#ffba42",
+                borderRadius: "10%",
+                fontSize: "1em",
+                padding: "8px 16px",
+                color: "white",
+                cursor: "pointer",
+                border: "1px solid white",
+                boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)"
                 }}
-                />
-                <ul>
-                <li>
-                    <p className="text-xl font-normal p-3 sm:text-1xl text-center">
-                    {users[0].Nombre} {users[0].Apellido}
-                    </p>
-                </li>
-                <li>
-                    <p className="pb-1 text-center">Indice Global: {users[0].IndiceGlobal}</p>
-                </li>
-                </ul>
-
-
-                <br></br>
-                <div className="table-container" style={{ maxWidth: "1100px", margin: "auto" }}>
-                <p className="text-xl font-normal pt-4 pb-3 text-gray-900 sm:text-1xl text-left">
-                Darle check a las clases que permite que se le cancelen
-                </p>
-                <DataTable
-                    columns={columnas1}
-                    data={historialData}
-                    selectableRows
-                    onSelectedRowsChange={handleSelectedRowsChange}
-                    conditionalRowStyles={[
-                    {
-                        when: (row) => row.CODIGO === "TU_CODIGO_DE_CONDICION",
-                        style: {
-                        backgroundColor: "green",
-                        color: "white",
-                        },
-                    },
-                    ]}
-                />
-
-                <br></br>
-
-                <div className="container">
-                <div className="card mx-auto">
-                    <div className="card-body p-1">
-                    <h2 className="card-title">Razones por la que el estudiante solicita la cancelación:</h2>
-                    <p className="card-text">{users[0].Descripcion}</p>
-                    </div>
-                </div>
-                </div>
-
-                <br></br>
-                <div>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <a 
-                onClick={() => handleDownloadPDF({ NumCuentaEnviada: users[0].NumCuenta})}
-                style={{
-                    marginRight: "10px",
-                    backgroundColor: "#ffba42",
-                    borderRadius: "10%",
-                    fontSize: "1em",
-                    padding: "8px 16px",
-                    color: "white",
-                    cursor: "pointer",
-                    border: "1px solid white",
-                    boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)"
-                }}
-                >
+            >
                 Descargar pdf 
-                </a>
+            </a>
 
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                <a style={{ 
-                    backgroundColor: "#eb5656",
-                    borderRadius: "10%",
-                    fontSize: "1em",
-                    padding: "8px 16px",
-                    color: "white",
-                    cursor: "pointer",
-                    border: "1px solid white",
-                    boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)"
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+                <a 
+                onClick={() => enviarCancelacionesCoordiRECHAZADA(user.NumCuenta)}
+                style={{ 
+                backgroundColor: "#eb5656",
+                borderRadius: "10%",
+                fontSize: "1em",
+                padding: "8px 16px",
+                color: "white",
+                cursor: "pointer",
+                border: "1px solid white",
+                boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)"
                 }}>Negar solicitud</a>
-                
-                <a style={{ 
+
+            <a 
+                onClick={() => enviarCancelacionesCoordiACEPTADA(user.NumCuenta)}
+                type="button"
+                style={{ 
                     marginLeft: "10px",
                     backgroundColor: "#69c825",
                     borderRadius: "10%",
@@ -314,122 +358,49 @@ return (
                     cursor: "pointer",
                     border: "1px solid white",
                     boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)"
-                }}>Aceptar solicitud</a>
-                </div>
-
-                </div>
-                </div>
-                </div>
-                <br></br>      
-            </div>
-
-            <div className="carousel-item">
-            <img
-                src={"../img/uploads/" + users[0].Imagen1}
-                alt="No tiene imagen de perfil"
-                style={{
-                    width: "100px",
-                    height: "100px",
-                    borderRadius: "20%",
-                    objectFit: "cover",
-                    margin: "auto",
                 }}
-                />
-                <ul>
-                <li>
-                    <p className="text-xl font-normal p-3 sm:text-1xl text-center">
-                    {users[0].Nombre} {users[0].Apellido}
-                    </p>
-                </li>
-                <li>
-                    <p className="pb-1 text-center">Indice Global: {users[0].IndiceGlobal}</p>
-                </li>
-                </ul>
+            >
+                Aceptar solicitud
+            </a>
 
-
-                <br></br>
-                <div className="table-container" style={{ maxWidth: "1100px", margin: "auto" }}>
-                <p className="text-xl font-normal pt-4 pb-3 text-gray-900 sm:text-1xl text-left">
-                Darle check a las clases que permite que se le cancelen
-                </p>
-                <DataTable
-                    columns={columnas1}
-                    data={historialData}
-                    selectableRows
-                    onSelectedRowsChange={handleSelectedRowsChange}
-                    conditionalRowStyles={[
-                    {
-                        when: (row) => row.CODIGO === "TU_CODIGO_DE_CONDICION",
-                        style: {
-                        backgroundColor: "green",
-                        color: "white",
-                        },
-                    },
-                    ]}
-                />
-
-                <br></br>
-
-                <div className="container">
-                <div className="card mx-auto">
-                    <div className="card-body p-1">
-                    <h2 className="card-title">Razones por la que el estudiante solicita la cancelación:</h2>
-                    <p className="card-text">{users[0].Descripcion}</p>
-                    </div>
-                </div>
-                </div>
-
-                <br></br>
-                <div>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <a 
-                style={{
-                    marginRight: "10px",
-                    backgroundColor: "#ffba42",
-                    borderRadius: "10%",
-                    fontSize: "1em",
-                    padding: "8px 16px",
-                    color: "white",
-                    cursor: "pointer",
-                    border: "1px solid white",
-                    boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)"
-                }}
-                >
-                Descargar pdf
-                </a>
-
-
-                </div>
-
-                </div>
-
-                </div>
-
-                <br></br>
-
-            
-            </div>
 
             </div>
+            </div>
 
-            <button className="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev" style={{ width: '50px' }}>
+        </div>
+        <br></br>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <button onClick={handlePrev} className="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev" 
+        style={{ width: '200px', marginRight: '5px', position: 'relative', zIndex: 2, boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",border: "1px solid white"}}>
             <span className="carousel-control-prev-icon" aria-hidden="true"></span>
             <span className="visually-hidden">Previous</span>
-            </button>
-            <button className="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next" style={{ width: '50px' }}>
+            Anterior
+        </button>
+        <button onClick={handleNext} className="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next" style={{ width: '200px', marginLeft: '5px', position: 'relative', zIndex: 2 , boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",border: "1px solid white"}}>
+            Siguiente
             <span className="carousel-control-next-icon" aria-hidden="true"></span>
             <span className="visually-hidden">Next</span>
-            </button>
+        </button>
         </div>
-        )}
 
-        <br></br>
-        <br></br>
+        </div>
+    ))}
+    </div>
+);
+}
+
+
+return (
+    <div className="App">
+    <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
+        Cancelación excepcional  - {users.length} solicitudes
+    </h1>
+
+    <div className="container">
+        {users.length > 0 && <CarruselUsuarios users={users} />}
     </div>
 
     </div>
 );
-
 };
-
 export default MenuCancelaciones;

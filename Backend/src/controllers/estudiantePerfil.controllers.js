@@ -52,6 +52,29 @@ export const insertSolicitudCancel = async (req, res) => {
 
     res.status(200).json({ message: 'Operación completada exitosamente' });
 }
+
+export const DictamenSolicitud = async (req, res) => {
+    try {
+    const { numCuenta, estado, idClase } = req.body; 
+
+    const pool = await getConnection();
+    console.log("NumCuenta:", numCuenta);
+    console.log("Estado:", estado);
+    console.log("IdClase:", idClase);
+
+    await pool.request()
+        .input("NumCuenta", sql.VarChar, numCuenta)
+        .input("Estado", sql.VarChar, estado)
+        .input("IdClase", sql.VarChar, idClase)
+        .query(querys.UpdateEstadoCancel.replace("@estado", estado).replace("@numCuenta", numCuenta).replace("@idClase", idClase));
+
+    res.json({ message: "Operación completada exitosamente" });
+    } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al procesar la solicitud" });
+    }
+};
+
 export const updatePerfilEstudiante = async (req, res) => {
     try {
         const { Id } = req.body;
@@ -118,5 +141,21 @@ export const downloadPdfCancelacion = async (req, res) => {
     const result = await pool.request()
     .input("NumCuenta", sql.VarChar, NumCuenta)
     .query(querys.getPdfSolicitud);
+    res.json(result.recordset);
+};
+
+export const enviarSoliCancelCount = async (req, res) => {
+    const pool = await getConnection();
+    const result = await pool.request()
+        .query(querys.getSoliCancelacionesCount);
+    res.json(result.recordset);
+};
+
+export const enviarClasesdeSolicitudes = async (req, res) => {
+    const { NumCuenta } = req.body;
+    const pool = await getConnection();
+    const result = await pool.request()
+    .input("NumCuenta", sql.VarChar, NumCuenta)
+    .query(querys.getClasesSolicitud);
     res.json(result.recordset);
 }

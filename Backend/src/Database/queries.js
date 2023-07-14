@@ -4,8 +4,8 @@ export const queries = {
     insert_Docentes: "INSERT INTO dbo.empleados (DNI, Nombre, Apellido, NumeroTelefono, CorreoInstitucional, CorreoPersonal, Contrasena,FechaNacimiento ,FechaContratacion, Carrera, Direccion, Foto, CentroRegional, Rol,SubRol) VALUES ( @DNI, @Nombre, @Apellido, @NumeroTelefono,@CorreoInstitucional, @CorreoPersonal, @Contrasena, @FechaNacimiento, @FechaContratacion, @Carrera, @Direccion, @Foto, @CentroRegional, @Rol , @SubRol )",
     accessLogin: "SELECT Contrasena, CAST(NumEmpleado AS varchar) AS Codigo, Rol, SubRol FROM dbo.empleados WHERE CAST(NumEmpleado AS varchar) = @Id UNION ALL SELECT Contrasena, CAST(NumCuenta AS varchar) AS NumCuenta, NULL AS rol, NULL AS subrol FROM dbo.estudiantes WHERE NumCuenta = @Id  ",
     updateEmpleado: "UPDATE dbo.empleados SET NumeroTelefono= @NumeroTelefono, CorreoPersonal=@CorreoPersonal, Direccion=@Direccion, SubRol=@SubRol WHERE NumEmpleado=@Id",
-    getEstudiantes: "SELECT Nombre, apellido, NumCuenta,CorreoInstitucional,Carrera, IndiceGlobal from dbo.estudiantes WHERE NumCuenta= @Id",
-    getEmpleado: "select CAST(NumEmpleado AS varchar) 'NumEmpleado', Nombre,Apellido,CorreoInstitucional,Carrera,Foto,CentroRegional,Rol,Subrol from empleados WHERE CAST(NumEmpleado AS varchar) = @Id ",
+    getEstudiantes: "SELECT Nombre, apellido, NumCuenta,CorreoInstitucional,CorreoPersonal,Carrera, IndiceGlobal from dbo.estudiantes WHERE NumCuenta= @Id",
+    getEmpleado: "select CAST(NumEmpleado AS varchar) 'NumEmpleado', Nombre,Apellido,CorreoInstitucional,CorreoPersonal,Carrera,Foto,CentroRegional,Rol,Subrol from empleados WHERE CAST(NumEmpleado AS varchar) = @Id ",
     getPerfilEmpleado: "select * from perfil_empleados where CAST(idPerfil AS varchar) = @Id ",
     getPerfilestudiante: "select * from perfil_estudiante where IdPerfil= @Id ",
 
@@ -49,10 +49,18 @@ export const querys = {
     insertSoliCancel: "Insert into [dbo].[registro_cancelaciones_excepcionales] (IdClase, Asignatura, UV, Seccion, Año, Periodo, Estado, Descripcion, NumCuenta) values(@idClase, @asignatura, @uv,  @seccion,@año, @periodo, @estado, @descripcion, @Id)",
     getCancelaciones: "select IdClase AS CODIGO,Asignatura AS ASIGNATURA,UV AS UV,Seccion AS SECCION,Periodo AS PERIODO,Estado AS ESTADO from [dbo].[registro_cancelaciones_excepcionales] WHERE NumCuenta =  @NumCuenta And Periodo = @Periodo",
     getPerfilEstudianteFormaAdmin: "select e.Nombre,e.Apellido,pe.Imagen1,e.IndiceGlobal,e.IndicePeriodo from [dbo].[perfil_estudiante] as pe INNER JOIN [dbo].[estudiantes] e on e.NumCuenta = pe.IdPerfil where e.NumCuenta = @NumCuenta",
-
-    geSoliCancelacionesCoordinador: "select rce.IdClase, rce.Asignatura, rce.UV, rce.Seccion, rce.Periodo, rce.Descripcion, rce.Documento, rce.Estado, rce.NumCuenta, e.Nombre, e.Apellido, e.IndiceGlobal, e.IndicePeriodo, pe.Imagen1 from [dbo].[registro_cancelaciones_excepcionales] as rce inner join [dbo].[estudiantes] e on e.NumCuenta = rce.NumCuenta INNER JOIN [dbo].[perfil_estudiante] pe on pe.IdPerfil = e.NumCuenta",
+    
+    geSoliCancelacionesCoordinador: "SELECT DISTINCT rce.NumCuenta, rce.Descripcion, rce.Estado, e.Nombre, e.Apellido, e.IndiceGlobal, e.IndicePeriodo, pe.Imagen1 FROM [dbo].[registro_cancelaciones_excepcionales] AS rce INNER JOIN [dbo].[estudiantes] e ON e.NumCuenta = rce.NumCuenta INNER JOIN [dbo].[perfil_estudiante] pe ON pe.IdPerfil = e.NumCuenta WHERE rce.Estado = 'Pendiente'",
 
     getPdfSolicitud: "select DISTINCT Documento from [dbo].[registro_cancelaciones_excepcionales] where NumCuenta = @NumCuenta",
+
+    getSoliCancelacionesCount: "SELECT COUNT(DISTINCT NumCuenta) AS total_filas FROM registro_cancelaciones_excepcionales;",
+    getClasesSolicitud:"select rce.IdClase, rce.Asignatura, rce.UV, rce.Seccion, rce.Periodo,rce.Estado, rce.NumCuenta,pe.Imagen1 from [dbo].[registro_cancelaciones_excepcionales] as rce inner join [dbo].[estudiantes] e on e.NumCuenta = rce.NumCuenta INNER JOIN [dbo].[perfil_estudiante] pe on pe.IdPerfil = e.NumCuenta where rce.Estado = 'Pendiente' And rce.NumCuenta = @NumCuenta",
+
+
+    UpdateEstadoCancel: "UPDATE [dbo].[registro_cancelaciones_excepcionales] SET Estado = '@estado' WHERE NumCuenta = @numCuenta AND IdClase = '@idClase'",
+
+    
 };
 
 export const queryStudentHistory = {
@@ -62,5 +70,8 @@ export const queryStudentHistory = {
 }
 
 export const querysADMIN = {
+    DeletePlanificacion: 'delete planificacion_academica where idPlanificacion = @idPlanificacion',
+    DeleteMatricula: 'delete planificacion_matricula where idPlanificacion = @idPlanificacion',
+    DeleteCancelacionesExcepcionales: 'delete planificacion_cancelacionesexcepcionales where idPlanificacion = @idPlanificacion'
 
 }
