@@ -61,19 +61,32 @@ export const registrarDocente= async (req,res)=>{
 
 
 export const actualizarDocente = async (req, res) => {
-    const {NumeroTelefono,CorreoPersonal,Direccion,SubRol}=req.body;
+    //const NumEmpleado = req.params.id;
+    const {NumEmpleado, DNI, Nombre, Apellido, NumeroTelefono, CorreoInstitucional, CorreoPersonal, Contrasena, FechaNacimiento, FechaContratacion, Carrera, Direccion, Foto, CentroRegional, Rol, SubRol, Estado}=req.body;
     const {id}=req.params;
-    if(NumeroTelefono==null || CorreoPersonal==null || Direccion==null || SubRol==null){
+    if(NumeroTelefono==null || CorreoPersonal==null || Direccion==null || DNI==null || Carrera ==null, Nombre == null || Apellido ==null){
         return res.status(400).json({message: "Not Found"})
     }
     const pool= await getConnection();
     try {
         const result =await pool.request()
+        .input("NumEmpleado", sql.Int, NumEmpleado)
+        .input("DNI", sql.VarChar, DNI)
+        .input("Nombre", sql.VarChar, Nombre)
+        .input("Apellido", sql.VarChar, Apellido)
         .input("NumeroTelefono",sql.VarChar,NumeroTelefono)
-        .input("CorreoPersonal",sql.VarChar,CorreoPersonal)
+        .input("CorreoInstitucional", sql.VarChar, CorreoInstitucional)
+        .input("CorreoPersonal", sql.VarChar, CorreoPersonal)
+        .input("Contrasena", sql.VarChar, Contrasena)
+        .input("FechaNacimiento", sql.Date, FechaNacimiento)
+        .input("FechaContratacion", sql.Date, FechaContratacion)
+        .input("Carrera", sql.VarChar, Carrera)
         .input("Direccion",sql.VarChar,Direccion)
+        .input("Foto", sql.VarChar, Foto)
+        .input("CentroRegional", sql.VarChar, CentroRegional)
+        .input("Rol", sql.VarChar, Rol)
         .input("SubRol",sql.VarChar,SubRol)
-        .input("id",sql.Int,id)
+        .input("Estado", sql.VarChar, Estado)
         .query(queries.updateEmpleado);
         res.status(200).json({ message: 'Docente actualizado correctamente.' }); 
     } catch (error) {

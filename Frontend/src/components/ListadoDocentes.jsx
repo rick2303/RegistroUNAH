@@ -107,7 +107,7 @@ const ListadoDocentes = () => {
     console.log("Datos actualizados:", JSON.stringify(editedData));
     console.log("Datos actualizados:", editedData);
     // Realizar la solicitud fetch al backend para enviar los datos actualizados
-    fetch(`http://localhost:5000/actualizarDocente/${selectedRow.id}`, {
+    fetch(`http://localhost:5000/actualizarDocente/${selectedRow.NumEmpleado}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -127,7 +127,7 @@ const ListadoDocentes = () => {
     
     toggleEditarModal();
   };
-
+          //Para poner las filas no encontradas en español
   const filteredData = historialData.filter((row) => row.DNI.includes(inputValue));
   const NoDataComponent = () => {
     return <div>No hay registros para mostrar</div>;
@@ -163,6 +163,7 @@ const ListadoDocentes = () => {
           pagination
           paginationComponentOptions={opcionesPaginacion}
           noHeader
+          //Para poner las filas no encontradas en español
           noDataComponent={<NoDataComponent />}
           conditionalRowStyles={[
             {

@@ -46,7 +46,9 @@ console.log(a);
 
     fetch("http://localhost:5000/EliminarPlanificacion", {
       method: "POST",
-      
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ idPlanificacion: `${row.idPlanificacion}` }),
     })
       
