@@ -44,7 +44,7 @@ const EstudiantesMatriculadosMain = () => {
       },
       {
         name:'CORREO INSTITUCIONAL',
-        selector : row => row.CorreoInstitucional.toUpperCase()
+        selector : row => row.CorreoInstitucional.toLowerCase()
       },
       {
         name:'ÍNDICE GLOBAL',

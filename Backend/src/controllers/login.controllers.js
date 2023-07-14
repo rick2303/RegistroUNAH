@@ -15,8 +15,9 @@ export const loginUsuarios = async (req,res)=>{
         const contraseñaBD= result.recordset[0].Contrasena
         const subrol=result.recordset[0].SubRol
         const rol=result.recordset[0].Rol 
+        const estado = result.recordset[0].estado
         //si las claves son iguales accede.
-        if(contraseñaBD==contraseña){
+        if((contraseñaBD==contraseña && estado == 'ACTIVO') || (contraseñaBD==contraseña && estado == null)){
             if( rol=='ADMIN' && subrol==null){
                 const admin=await pool.request()
                 .input("Id",sql.VarChar,Id)
@@ -52,7 +53,7 @@ export const loginUsuarios = async (req,res)=>{
                 const perfilEmpleado = await pool.request().input("Id",sql.VarChar,Id).query(queries.getPerfilEmpleado)
                 res.json({url:'http://127.0.0.1:5173/src/html/Jefatura_menu.html', data:jefe.recordset[0],perfil:perfilEmpleado.recordset[0]});
             }
-        }if(contraseñaBD!=contraseña){
+        }if(contraseñaBD!=contraseña || estado == 'INACTIVO'){
             res.status(500).json({ error: "Acceso inválido. Por favor, inténtelo otra vez." });
         }
     } catch (error) {

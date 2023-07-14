@@ -12,6 +12,7 @@ function Perfil_docente() {
   const [nombre, setNombre] = useState("");
   const [centroRegional, setCentroRegional] = useState("");
   const [correoInstitucional, setCorreoInstitucional] = useState("");
+  const [correoPersonal, setCorreoPersonal] = useState("");
   const [carrera, setCarrera] = useState("");
   const [imagen, setImagen] = useState("");
   const [descripcion, setDescripcion] = useState("");
@@ -27,6 +28,8 @@ function Perfil_docente() {
       setCentroRegional(centroRegional);
       const correoInstitucional = userData.data.CorreoInstitucional;
       setCorreoInstitucional(correoInstitucional);
+      const correoPersonal = userData.data.CorreoPersonal;
+      setCorreoPersonal(correoPersonal);
       const carrera = userData.data.Carrera;
       setCarrera(carrera);
      
@@ -119,7 +122,7 @@ function Perfil_docente() {
                           <h6 class="text-muted f-w-400">{nombre}</h6>
                         </div>
                         <div class="col-sm-6">
-                          <hatch class="m-b-10 f-w-600">Correo:</hatch>
+                          <hatch class="m-b-10 f-w-600">Correo Institucional:</hatch>
                           <h6 class="text-muted f-w-400">
                             {correoInstitucional}
                           </h6>
@@ -133,6 +136,14 @@ function Perfil_docente() {
                         <div class="col-sm-6">
                           <hatch class="m-b-10 f-w-600">Carrera:</hatch>
                           <h6 class="text-muted f-w-400">{carrera}</h6>
+                        </div>
+                      </div>
+                      <div class="row mb-5">
+                      <div class="col-sm-6">
+                          <hatch class="m-b-10 f-w-600">Correo Personal:</hatch>
+                          <h6 class="text-muted f-w-400">
+                            {correoPersonal}
+                          </h6>
                         </div>
                       </div>
                       <h5 className="m-b-20 m-t-40 p-b-5 b-b-default f-w-600 row">

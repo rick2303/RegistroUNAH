@@ -124,7 +124,7 @@ function Perfil_estudiante() {
                               class="carousel-control-prev-icon"
                               aria-hidden="true"
                             ></span>
-                            <span class="visually-hidden">Previous</span>
+                            <span class="visually-hidden">Anterior</span>
                           </button>
                           <button
                             class="carousel-control-next"
@@ -136,7 +136,7 @@ function Perfil_estudiante() {
                               class="carousel-control-next-icon"
                               aria-hidden="true"
                             ></span>
-                            <span class="visually-hidden">Next</span>
+                            <span class="visually-hidden">Siguiente</span>
                           </button>
                         </div>
                       </div>
@@ -204,6 +204,7 @@ function Perfil_estudiante() {
                             {correoPersonal}
                           </h6>
                         </div>
+                        
                       
                       </div>
                       <h5 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600">

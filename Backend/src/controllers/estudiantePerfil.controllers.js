@@ -106,6 +106,15 @@ export const updateDescripcionPerfilEstudiante = async (req, res) => {
         .query(queries.updateDescripcionPerfilEstudiantep);
     res.status(200).json({ message: 'Operación completada exitosamente' });
 }
+export const updateCorreoPersonalEstudiante = async (req, res) => {
+    const { id, CorreoPersonal } = req.body;
+    const pool = await getConnection();
+    const result = await pool.request()
+        .input("id", sql.VarChar, id)
+        .input("CorreoPersonal", sql.VarChar, CorreoPersonal)
+        .query(queries.updateCorreoPersonalEstudiante);
+    res.status(200).json({ message: 'Operación completada exitosamente' });
+}
 
 export const insertDescripcionPerfilEstudiante = async (req, res) => {
     const { Id, descripcion } = req.body;
