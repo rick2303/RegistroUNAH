@@ -49,13 +49,15 @@ const MenuHistorial = () => {
   };
   
   const descargarHistorial = async () => {
-    const URL = `http://localhost:5000/historialPDF/${NumCuenta}`;
+    const URL = "http://localhost:5000/historialPDF";
     const response = await fetch(URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({ NumCuenta: NumCuenta }), // Reemplaza NumCuenta con el valor correcto
     });
+  
     const buffer = await response.arrayBuffer();
     const blob = new Blob([buffer], { type: "application/pdf" });
   
