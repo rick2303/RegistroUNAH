@@ -16,3 +16,48 @@
 .read-the-docs {
   color: #888;
 }
+.boton_cierre {
+  background: #1e40af!important;
+  position: absolute!important;
+  top: 0.6rem;
+  right: 0.5rem;
+  font-size: 1rem;
+}
+.boton_guardar{
+  background: #1e40af!important;
+  font-size: 1rem;
+}
+.mi-tabla {
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	overflow: hidden;
+  }
+  
+  .mi-tabla table {
+	width: 100%;
+	border-collapse: collapse;
+  }
+  
+  .mi-tabla th,
+  .mi-tabla td {
+	border: 1px solid #ccc;
+	padding: 8px;
+  }
+  
+  .mi-tabla th {
+	background-color: #007bff;
+	color: #fff;
+  }
+  
+  .mi-tabla td {
+	background-color: #f8f9fa;
+  }
+  
+  .mi-tabla tbody tr:nth-child(even) td {
+	background-color: #e9ecef;
+  }
+  
+  .mi-tabla tbody tr:hover td {
+	background-color: #d1eaff;
+  }
+  

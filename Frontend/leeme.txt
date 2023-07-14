@@ -12,3 +12,4 @@ text area: npm install react-textarea-autosize
 Pickers: npm i @material-ui/pickers --force
 FNS: npm i @date-io/date-fns@1.x date-fns --force
 Core: npm i @material-ui/core --force
+components: npm install react-data-table-component@latest --force

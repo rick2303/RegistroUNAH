@@ -136,7 +136,9 @@ const AppFechaPeriodo = () => {
       center: true,
     },
   ];
-
+  const NoDataComponent = () => {
+    return <div>No hay registros para mostrar</div>;
+  };
   return (
     <>
       <div className="d-flex mt-5">
@@ -215,6 +217,7 @@ const AppFechaPeriodo = () => {
           columns={columnas}
           data={historialData2}
           noHeader
+          noDataComponent={<NoDataComponent />}
         />
       </div>
     </>
