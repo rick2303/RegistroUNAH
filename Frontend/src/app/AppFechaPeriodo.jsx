@@ -41,15 +41,15 @@ const AppFechaPeriodo = () => {
 
   const eliminarFila = (row) => {
     // Realizar la solicitud al backend para eliminar la fila con la información de "row"
-    console.log(row.idPlanificacion);
-    fetch("http://localhost:5000/eliminarFila", {
+    const a = JSON.stringify({ idPlanificacion: `${row.idPlanificacion}` });
+console.log(a);
+
+    fetch("http://localhost:5000/EliminarPlanificacion", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(row.idPlanificacion),
+      
+      body: JSON.stringify({ idPlanificacion: `${row.idPlanificacion}` }),
     })
-      .then((response) => response.json())
+      
       .then((data) => {
         // Mostrar el mensaje de alerta si la eliminación fue exitosa
         alert("Se ha eliminado la fila exitosamente");

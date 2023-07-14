@@ -150,15 +150,17 @@ const AppFechaCancelaciones = () => {
   };
 
   const eliminarFila = (row) => {
-    console.log(row.idPlanificacion);
-    fetch("http://localhost:5000/eliminarCancelaciones", {
+    const a = JSON.stringify({ idPlanificacion: `${row.idPlanificacion}` });
+console.log(a);
+
+    fetch("http://localhost:5000/EliminarCancelacionesExcepcionales", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(row),
+      body: JSON.stringify({ idPlanificacion: `${row.idPlanificacion}` }),
     })
-      .then((response) => response.json())
+      
       .then((data) => {
         alert("Se ha eliminado la fila exitosamente");
         setClickCount(clickCount + 1);
