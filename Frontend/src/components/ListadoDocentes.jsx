@@ -4,7 +4,7 @@ import DataTable from "react-data-table-component";
 import { FcFinePrint } from "react-icons/fc";
 import { FaUserEdit } from "react-icons/fa";
 import { Input, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-import { format, parseISO, set } from "date-fns";
+import { format, parseISO } from "date-fns";
 import "../App.css";
 
 const opcionesPaginacion = {
@@ -25,22 +25,18 @@ const ListadoDocentes = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalEditarOpen, setModalEditarOpen] = useState(false);
   const [editedData, setEditedData] = useState({});
-  const [count, setCount] = useState(0);
-  const fechaActual = new Date();
-  const año = fechaActual.getFullYear();
 
   useEffect(() => {
     fetch("http://localhost:5000/docentes")
       .then((response) => response.json())
       .then((data) => {
         setHistorialData(data);
-        
         console.log(data);
       })
       .catch((error) => {
         console.error("Error al obtener los datos:", error);
       });
-  }, [count]);
+  }, []);
 
   // Configuramos las columnas para DataTable
   const columnas1 = [
@@ -65,7 +61,6 @@ const ListadoDocentes = () => {
       name: "Estado",
       selector: (row) => row.Estado.toUpperCase(),
     },
-    
     {
       name: "Ver",
       cell: (row) => (
@@ -107,6 +102,7 @@ const ListadoDocentes = () => {
     // Aquí puedes realizar la lógica para enviar los datos actualizados al backend
     console.log("Datos actualizados:", JSON.stringify(editedData));
     console.log("Datos actualizados:", editedData);
+
     // Realizar la solicitud fetch al backend para enviar los datos actualizados
     fetch(`http://localhost:5000/actualizarDocente/${selectedRow.NumEmpleado}`, {
       method: "PUT",
@@ -118,29 +114,33 @@ const ListadoDocentes = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log("Respuesta del servidor:", data);
-        setCount(count + 1);
+
+        // Actualizar los datos de la tabla
+        setHistorialData((prevData) => {
+          const updatedData = prevData.map((row) =>
+            row.NumEmpleado === selectedRow.NumEmpleado ? editedData : row
+          );
+          return updatedData;
+        });
+
+        // Cerrar el modal de edición
+        toggleEditarModal();
+
         // Realizar cualquier acción adicional después de guardar los cambios
-        // Por ejemplo, mostrar una notificación de éxito, recargar la lista, etc.
+        // Por ejemplo, mostrar una notificación de éxito, etc.
       })
       .catch((error) => {
         console.error("Error al guardar los cambios:", error);
         // Realizar cualquier acción adicional en caso de error
       });
-    
-    toggleEditarModal();
   };
-          //Para poner las filas no encontradas en español
+
+  // Para poner las filas no encontradas en español
   const filteredData = historialData.filter((row) => row.DNI.includes(inputValue));
   const NoDataComponent = () => {
     return <div>No hay registros para mostrar</div>;
   };
-  const handleClick = () => {
-    // Lógica adicional
-    console.log("Haciendo clic en el botón");
-  
-    // Actualizar el estado para que el useEffect se ejecute nuevamente
-    setCount(count + 1);
-  };
+
   return (
     <div className="App">
       <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
@@ -171,7 +171,7 @@ const ListadoDocentes = () => {
           pagination
           paginationComponentOptions={opcionesPaginacion}
           noHeader
-          //Para poner las filas no encontradas en español
+          // Para poner las filas no encontradas en español
           noDataComponent={<NoDataComponent />}
           conditionalRowStyles={[
             {
@@ -249,195 +249,192 @@ const ListadoDocentes = () => {
             </button>
           </ModalHeader>
           <ModalBody className="container">
-  {/* Aquí puedes agregar los campos de edición necesarios */}
-  <div className="row my-2">
-    <label className="col-6">
-      <strong>Nombres de Empleado:</strong>
-    </label>
-    <div className="col-6">
-      <Input
-        style={{
-          textAlign: "center",
-          
-        }}
-        type="text"
-        value={editedData.Nombre}
-        onChange={(e) =>
-          setEditedData({ ...editedData, Nombre: e.target.value })
-        }
-      />
-    </div>
-  </div>
-  <div className="row my-2">
-    <label className="col-6">
-      <strong>Apellidos de Empleado:</strong>
-    </label>
-    <div className="col-6">
-      <Input
-        style={{
-          textAlign: "center",
-          
-        }}
-        type="text"
-        value={editedData.Apellido}
-        onChange={(e) =>
-          setEditedData({ ...editedData, Apellido: e.target.value })
-        }
-      />
-    </div>
-  </div>
-  <div className="row my-2">
-    <label className="col-6">
-      <strong>DNI:</strong>
-    </label>
-    <div className="col-6">
-      <Input
-      style={{
-        textAlign: "center",
-        
-      }}
-        type="text"
-        value={editedData.DNI}
-        onChange={(e) => setEditedData({ ...editedData, DNI: e.target.value })}
-      />
-    </div>
-  </div>
-  <div className="row my-2">
-  <label className="col-6">
-    <strong>Rol:</strong>
-  </label>
-  <div className="col-6">
-    <select className="form-control"
-      style={{
-        textAlign: "center",
-      }}
-      value={editedData.SubRol}
-      onChange={(e) => setEditedData({ ...editedData, SubRol: e.target.value })}
-    >
-      <option value="JEFE DEPARTAMENTO">Jefe Departamento</option>
-      <option value="COORDINADOR">Coordinador</option>
-      <option value="DOCENTE">Docente</option>
-    </select>
-  </div>
-</div>
-<div className="row my-2">
-  <label className="col-6">
-    <strong>Estado:</strong>
-  </label>
-  <div className="col-6">
-    <select className="form-control"
-      style={{
-        textAlign: "center",
-      }}
-      value={editedData.Estado}
-      onChange={(e) => setEditedData({ ...editedData, Estado: e.target.value })}
-    >
-      <option value="ACTIVO">Activo</option>
-      <option value="INACTIVO">Inactivo</option>
-      
-    </select>
-  </div>
-</div>
-<div className="row my-2">
-    <label className="col-6">
-      <strong>Carrera:</strong>
-    </label>
-    <div className="col-6">
-      <Input
-      style={{
-        textAlign: "center",
-        
-      }}
-        type="text"
-        value={editedData.Carrera}
-        onChange={(e) => setEditedData({ ...editedData, Carrera: e.target.value })}
-      />
-    </div>
-  </div>
-  <div className="row my-2">
-  <label className="col-6">
-    <strong>Centro Regional:</strong>
-  </label>
-  <div className="col-6">
-    <select className="form-control"
-      style={{
-        textAlign: "center",
-      }}
-      value={editedData.CentroRegional}
-      onChange={(e) => setEditedData({ ...editedData, CentroRegional: e.target.value })}
-    >
-      
-      <option value="CU">CU</option>
-      <option value="Valle de Sula">Valle de Sula</option>
-      <option value="CURC">CURC</option>
-      <option value="CURNO">CURNO</option>
-      <option value="CURLA">CURLA</option>
-      <option value="CURLP">CURLP</option>
-      <option value="TEC-DANLI">TEC-DANLI</option>
-      <option value="TEC-AGUAN">TEC-AGUAN</option>
-    </select>
-  </div>
-</div>
-<div className="row my-2">
-    <label className="col-6">
-      <strong>Correo Personal:</strong>
-    </label>
-    <div className="col-6">
-      <Input
-      style={{
-        textAlign: "center",
-        
-      }}
-        type="text"
-        value={editedData.CorreoPersonal}
-        onChange={(e) => setEditedData({ ...editedData, CorreoPersonal: e.target.value })}
-      />
-    </div>
-  </div>
-  <div className="row my-2">
-    <label className="col-6">
-      <strong>Número de Teléfono:</strong>
-    </label>
-    <div className="col-6">
-      <Input
-      style={{
-        textAlign: "center",
-        
-      }}
-        type="text"
-        value={editedData.NumeroTelefono}
-        onChange={(e) => setEditedData({ ...editedData, NumeroTelefono: e.target.value })}
-      />
-    </div>
-  </div>
-  <div className="row my-2">
-    <label className="col-6">
-      <strong>Dirección:</strong>
-    </label>
-    <div className="col-6">
-      <Input
-      style={{
-        textAlign: "center",
-        
-      }}
-        type="text"
-        value={editedData.Direccion}
-        onChange={(e) => setEditedData({ ...editedData, Direccion: e.target.value })}
-      />
-    </div>
-  </div>
-
-</ModalBody>
-
-
-<ModalFooter>
-  <button className="boton_guardar" onClick={() => {
-      handleClick();
-      guardarCambios();
-      // Aquí puedes llamar a la segunda función adicional
-      // ...
-    }}>Guardar cambios</button></ModalFooter>
-
+            {/* Aquí puedes agregar los campos de edición necesarios */}
+            <div className="row my-2">
+              <label className="col-6">
+                <strong>Nombres de Empleado:</strong>
+              </label>
+              <div className="col-6">
+                <Input
+                  style={{
+                    textAlign: "center",
+                  }}
+                  type="text"
+                  value={editedData.Nombre}
+                  onChange={(e) => setEditedData({ ...editedData, Nombre: e.target.value })}
+                />
+              </div>
+            </div>
+            <div className="row my-2">
+              <label className="col-6">
+                <strong>Apellidos de Empleado:</strong>
+              </label>
+              <div className="col-6">
+                <Input
+                  style={{
+                    textAlign: "center",
+                  }}
+                  type="text"
+                  value={editedData.Apellido}
+                  onChange={(e) => setEditedData({ ...editedData, Apellido: e.target.value })}
+                />
+              </div>
+            </div>
+            <div className="row my-2">
+              <label className="col-6">
+                <strong>DNI:</strong>
+              </label>
+              <div className="col-6">
+                <Input
+                  style={{
+                    textAlign: "center",
+                  }}
+                  type="text"
+                  value={editedData.DNI}
+                  onChange={(e) => setEditedData({ ...editedData, DNI: e.target.value })}
+                />
+              </div>
+            </div>
+            <div className="row my-2">
+              <label className="col-6">
+                <strong>Rol:</strong>
+              </label>
+              <div className="col-6">
+                <select
+                  className="form-control"
+                  style={{
+                    textAlign: "center",
+                  }}
+                  value={editedData.SubRol}
+                  onChange={(e) => setEditedData({ ...editedData, SubRol: e.target.value })}
+                >
+                  <option value="JEFE DEPARTAMENTO">Jefe Departamento</option>
+                  <option value="COORDINADOR">Coordinador</option>
+                  <option value="DOCENTE">Docente</option>
+                </select>
+              </div>
+            </div>
+            <div className="row my-2">
+              <label className="col-6">
+                <strong>Estado:</strong>
+              </label>
+              <div className="col-6">
+                <select
+                  className="form-control"
+                  style={{
+                    textAlign: "center",
+                  }}
+                  value={editedData.Estado}
+                  onChange={(e) => setEditedData({ ...editedData, Estado: e.target.value })}
+                >
+                  <option value="ACTIVO">Activo</option>
+                  <option value="INACTIVO">Inactivo</option>
+                </select>
+              </div>
+            </div>
+            <div className="row my-2">
+              <label className="col-6">
+                <strong>Carrera:</strong>
+              </label>
+              <div className="col-6">
+                <Input
+                  style={{
+                    textAlign: "center",
+                  }}
+                  type="text"
+                  value={editedData.Carrera}
+                  onChange={(e) => setEditedData({ ...editedData, Carrera: e.target.value })}
+                />
+              </div>
+            </div>
+            <div className="row my-2">
+              <label className="col-6">
+                <strong>Centro Regional:</strong>
+              </label>
+              <div className="col-6">
+                <select
+                  className="form-control"
+                  style={{
+                    textAlign: "center",
+                  }}
+                  value={editedData.CentroRegional}
+                  onChange={(e) =>
+                    setEditedData({ ...editedData, CentroRegional: e.target.value })
+                  }
+                >
+                  <option value="CU">CU</option>
+                  <option value="VS">VS</option>
+                  <option value="CURC">CURC</option>
+                  <option value="CURNO">CURNO</option>
+                  <option value="CURLA">CURLA</option>
+                  <option value="CURLP">CURLP</option>
+                  <option value="TEC-DANLI">TEC-DANLI</option>
+                  <option value="TEC-AGUAN">TEC-AGUAN</option>
+                </select>
+              </div>
+            </div>
+            <div className="row my-2">
+              <label className="col-6">
+                <strong>Correo Personal:</strong>
+              </label>
+              <div className="col-6">
+                <Input
+                  style={{
+                    textAlign: "center",
+                  }}
+                  type="text"
+                  value={editedData.CorreoPersonal}
+                  onChange={(e) =>
+                    setEditedData({ ...editedData, CorreoPersonal: e.target.value })
+                  }
+                />
+              </div>
+            </div>
+            <div className="row my-2">
+              <label className="col-6">
+                <strong>Número de Teléfono:</strong>
+              </label>
+              <div className="col-6">
+                <Input
+                  style={{
+                    textAlign: "center",
+                  }}
+                  type="text"
+                  value={editedData.NumeroTelefono}
+                  onChange={(e) =>
+                    setEditedData({ ...editedData, NumeroTelefono: e.target.value })
+                  }
+                />
+              </div>
+            </div>
+            <div className="row my-2">
+              <label className="col-6">
+                <strong>Dirección:</strong>
+              </label>
+              <div className="col-6">
+                <Input
+                  style={{
+                    textAlign: "center",
+                  }}
+                  type="text"
+                  value={editedData.Direccion}
+                  onChange={(e) =>
+                    setEditedData({ ...editedData, Direccion: e.target.value })
+                  }
+                />
+              </div>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <button
+              className="boton_guardar"
+              onClick={() => {
+                guardarCambios();
+              }}
+            >
+              Guardar cambios
+            </button>
+          </ModalFooter>
         </Modal>
       )}
     </div>
