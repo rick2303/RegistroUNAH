@@ -25,7 +25,18 @@ export const queries = {
     updateVideoEmpleado: "update perfil_empleados set Video = @Video where CAST(idPerfil AS varchar) = @Id",
 
     insertPerfilEmpleado: "Insert into perfil_empleados(IdPerfil, imagen1) values(@Id, case when @photoPath1 is null then null else @photoPath1 end)",
-    updatePerfilEmpleado: "UPDATE perfil_empleados SET Imagen1 = case when @photoPath1 is null then null else @photoPath1 end WHERE CAST(IdPerfil AS varchar) = @id"
+    updatePerfilEmpleado: "UPDATE perfil_empleados SET Imagen1 = case when @photoPath1 is null then null else @photoPath1 end WHERE CAST(IdPerfil AS varchar) = @id",
+
+    insertSeccion: "insert into secciones(IdClase,Edificio,Aula,HI,Seccion,HF,Periodo,Fecha,Obs,IdDocente,Dias,Cupos,CentroRegional,ClaseServicio) values(@IdClase, @Edificio, @Aula, @HI,@Seccion,@HF,@Periodo,@FechaActual,@Obs,@IdDocente,@Dias,@Cupos,@CentroRegional,@ClaseServicio)",
+
+    getAulas: "select au.Nombre from aulas au inner join edificios as ed on au.IdEdificio=ed.IdEdificio where ed.IdEdificio=@IdEdificio",
+
+    validarDocenteSeccion: `SELECT * FROM Secciones WHERE IdDocente = @IdDocente AND Dias = @Dias AND ((HI <= @HI AND HF >= @HI) OR (HI <= @HF AND HF >= @HF) OR (HI >= @HI AND HF <= @HF)) AND Periodo = @Periodo`,
+
+
+    validarSeccionExistente : `SELECT * FROM Secciones WHERE IdClase = @IdClase AND Seccion = @Seccion AND Periodo = @Periodo AND YEAR(Fecha) = YEAR(@FechaActual)`,
+
+    validarSeccionAulaQuery :`SELECT * FROM Secciones WHERE Edificio = @Edificio  AND Aula = @Aula  AND Periodo = @Periodo  AND ((HI <= @HI AND HF >= @HI) OR (HI>= @HI AND HF <= @HI))`
 }
 
 export const querys = {
