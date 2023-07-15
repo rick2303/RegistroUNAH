@@ -25,6 +25,8 @@ const SeccionesMain = () => {
     const [sections,setSections] = useState([])
     const [esClaseServicio, setEsClaseServicio] = useState("");
     const [seccion, setSeccion] = useState("");
+    const [showModal, setShowModal] = useState(false);
+    const [backendResponse, setBackendResponse] = useState("");
 
 
 useEffect(() => {
@@ -204,7 +206,7 @@ const handleCrearSeccion = async () => {
       alert(data.message);
      
     } catch (error) {
-        alert("Error al crear sección");
+      alert("Error al crear la seccion");
     }
   };
 
