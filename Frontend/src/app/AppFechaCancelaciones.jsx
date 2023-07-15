@@ -229,23 +229,14 @@ console.log(a);
     <>
     
     <div className="d-flex mt-5">
-  <h1 className="text-2xl mb-4 text-center font-bold pt-2 text-gray-900 sm:text-3xl col-11">
+  <h1 className="text-2xl mb-4 text-center font-bold pt-2 text-gray-900 sm:text-3xl col-12">
     Cancelaciones excepcionales
   </h1>
-  <div className="col-1 d-flex justify-content-end">
-    <a
-      href="../html/Administracion.html"
-      className="text-end fas fa-pencil-alt cursor-pointer"
-      title="Regresar"
-    >
-      <label><h1><TiArrowBackOutline className="text-2xl cursor-pointer" /></h1></label>
-      
-    </a>
-  </div>
+  
 </div>
 
       
-      <div className="contenedor">
+      <div className="contenedor mx-24">
         <div className="container m-4">
           <div className="row m-4">
             <div className="col-md-4">
@@ -306,14 +297,14 @@ console.log(a);
                 onClick={guardarFechas}
                 disabled={isGuardarDisabled}
               >
-                Guardar
+                <strong>Guardar</strong>
               </button>
             </div>
             <div className="col-md-4"></div>
           </div>
         </div>
       </div>
-      <div className="my-5">
+      <div className="my-5 mx-24">
         <DataTable
           className="mi-tabla"
           columns={columnas}

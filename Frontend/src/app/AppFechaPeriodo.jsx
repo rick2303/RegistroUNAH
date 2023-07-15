@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { DatePicker } from "@material-ui/pickers";
-import "../FechaMatricula.css";
 import DataTable from "react-data-table-component";
-import { Navbar } from "reactstrap";
 import { format } from "date-fns";
-import { TiArrowBackOutline } from "react-icons/ti";
 import {FcDeleteRow} from "react-icons/fc"
+import "../FechaMatricula.css";
+
+
 
 const AppFechaPeriodo = () => {
   const [fechaInicioSeleccionada, setFechaInicioSeleccionada] = useState(new Date());
@@ -143,24 +143,14 @@ console.log(a);
     return <div>No hay registros para mostrar</div>;
   };
   return (
-    <>
+    < >
       <div className="d-flex mt-5">
-  <h1 className="text-2xl mb-4 text-center font-bold pt-2 text-gray-900 sm:text-3xl col-11">
+  <h1 className="text-2xl mb-4 text-center font-bold pt-2 text-gray-900 sm:text-3xl col-12">
     Planificación de períodos
   </h1>
-  <div className="col-1 d-flex justify-content-end cursor-pointer">
-    <a
-      href="../html/Administracion.html"
-      className="text-end fas fa-pencil-alt cursor-pointer"
-      title="Regresar"
-
-    >
-      <label><h1><TiArrowBackOutline className="text-2xl cursor-pointer" /></h1></label>
-      
-    </a>
-  </div>
-</div>
-      <div className="contenedor">
+  
+</div >
+      <div className="contenedor mx-24">
         <div className="container m-4">
           <div className="row m-4">
             <div className="col-md-4">
@@ -208,14 +198,14 @@ console.log(a);
             <div className="col-md-4 col-sm-6"></div>
             <div className="col-md-4 col-sm-6 d-flex justify-content-center align-items-end">
               <button id="boton-bonito" className="w-100" onClick={guardarFechas} disabled={isGuardarDisabled}>
-                Guardar
+              <strong>Guardar</strong>
               </button>
             </div>
             <div className="col-md-4"></div>
           </div>
         </div>
       </div>
-      <div className="my-5">
+      <div className="my-5 mx-24">
         <DataTable
           className="mi-tabla"
           columns={columnas}
