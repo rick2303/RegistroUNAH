@@ -12,6 +12,8 @@ const ModalDocentes = () => {
   const [Direccion, setDireccion] = useState('');
   const [CentroRegional, setCentroRegional] = useState('');
   const [Foto, setFoto] = useState('');
+  const [Carrera, setCarrera] = useState('');
+
 
   const toggleModal = () => {
     setModalOpen(!modalOpen);
@@ -31,6 +33,7 @@ const ModalDocentes = () => {
     setDireccion('');
     setCentroRegional('');
     setFoto('');
+    setCarrera('');
   };
 
   const handleSubmit = (event) => {
@@ -53,15 +56,16 @@ const ModalDocentes = () => {
     event.preventDefault();
 
     const formData = new FormData();
-    formData.append('nombre', Nombre);
-    formData.append('apellido', Apellido);
-    formData.append('dni', DNI);
-    formData.append('correoPersonal', CorreoPersonal);
-    formData.append('numeroTelefono', NumeroTelefono);
-    formData.append('fechaNacimiento', FechaNacimiento);
-    formData.append('direccion', Direccion);
-    formData.append('centroRegional', CentroRegional);
-    formData.append('foto', Foto);
+    formData.append('DNI', DNI);
+    formData.append('Nombre', Nombre);
+    formData.append('Apellido', Apellido);
+    formData.append('NumeroTelefono', NumeroTelefono);
+    formData.append('CorreoPersonal', CorreoPersonal);
+    formData.append('FechaNacimiento', FechaNacimiento);
+    formData.append('Carrera', Carrera);
+    formData.append('Direccion', Direccion);
+    formData.append('files', Foto);
+    formData.append('CentroRegional', CentroRegional);
 
     toggleModal();
     borrarCampos();
@@ -156,6 +160,15 @@ const ModalDocentes = () => {
               />
             </FormGroup>
             <FormGroup>
+              <Label for="carrera">Carrera</Label>
+              <Input
+                type="text"
+                id="carrera"
+                value={Carrera}
+                onChange={(e) => setCarrera(e.target.value)}
+              />
+            </FormGroup>
+            <FormGroup>
               <Label for="direccion">Direccion</Label>
               <Input
                 type="textarea"
@@ -169,8 +182,8 @@ const ModalDocentes = () => {
             <Label for="centroRegional">Centro Regional:</Label>
                 <Input type="select" id="centroRegional" value={CentroRegional} onChange={handleOpcionChange}>
                 <option value="">Seleccione un Centro Regional</option>
-                <option value="Ciudad Universitaria">Ciudad Universitaria</option>
-                <option value="Valle de Sula">Valle de Sula</option>
+                <option value="CU">Ciudad Universitaria</option>
+                <option value="VS">Valle de Sula</option>
                 <option value="CURC">CURC</option>
                 <option value="CURNO">CURNO</option>
                 <option value="CURLA">CURLA</option>

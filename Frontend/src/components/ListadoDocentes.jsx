@@ -62,7 +62,7 @@ const ListadoDocentes = () => {
     },
     {
       name: "Estado",
-      selector: (row) => row.Estado,
+      selector: (row) => row.Estado.toUpperCase(),
     },
     
     {
