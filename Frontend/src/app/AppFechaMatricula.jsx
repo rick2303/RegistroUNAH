@@ -211,7 +211,9 @@ console.log(a);
     {
       name: "Eliminar",
       cell: (row) => (
-        <h1 onClick={() => eliminarFila(row)}>
+        <h1 
+        className="cursor-pointer"
+        onClick={() => eliminarFila(row)}>
         <FcDeleteRow />
        </h1>
       ),
@@ -232,10 +234,12 @@ console.log(a);
   <div className="col-1 d-flex justify-content-end">
     <a
       href="../html/Administracion.html"
-      className="text-end fas fa-pencil-alt"
+      className="text-end fas fa-pencil-alt cursor-pointer {
+        cursor: pointer;
+      }"
       title="Regresar"
     >
-      <label><h1><TiArrowBackOutline className="text-2xl " /></h1></label>
+      <label><h1><TiArrowBackOutline className="text-2xl cursor-pointer" /></h1></label>
       
     </a>
   </div>

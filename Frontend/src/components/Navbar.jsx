@@ -27,7 +27,18 @@ export default function Navbar() {
   if (currentPath === "/src/html/Jefatura.html" ) {
     redirectTo = "../html/Jefatura_menu.html";
   }
- 
+  if (currentPath === "/src/html/FechaPeriodo.html" ) {
+    redirectTo = "../html/Administracion.html";
+  }
+  if (currentPath === "/src/html/FechaCancelaciones.html" ) {
+    redirectTo = "../html/Administracion.html";
+  }
+  if (currentPath === "/src/html/FechaMatricula.html" ) {
+    redirectTo = "../html/Administracion.html";
+  }
+  if (currentPath === "/src/html/Administracion.html" ) {
+    redirectTo = "../../index.html";
+  }
   if (currentPath === "/src/html/Coordinacion.html" ){
     redirectTo="../html/Coordinacion_menu.html"
   }
@@ -56,7 +67,7 @@ export default function Navbar() {
         title="Regresar"
       >
         <a href={redirectTo} className="flex items-center">
-          <h1 className="text-5xl"><TiArrowBackOutline /></h1>
+          <h1 className="text-5xl cursor-pointer"><TiArrowBackOutline /></h1>
         </a>
       </Typography>
       <Typography

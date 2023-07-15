@@ -111,13 +111,13 @@ console.log(a);
   const columnas = [
     {
       name: "Fecha Inicial",
-      selector: (row) => format(new Date(row.FechaInicio), 'dd MMM yyyy'),
+      selector: (row) => new Date(row.FechaInicio).toLocaleDateString(),
       sortable: true,
       center: true,
     },
     {
       name: "Fecha Final",
-      selector: (row) => format(new Date(row.FechaFinal), 'dd MMM yyyy'),
+      selector: (row) => new Date(row.FechaFinal).toLocaleDateString(),
       sortable: true,
       center: true,
     },
@@ -130,8 +130,9 @@ console.log(a);
     {
       name: "Eliminar",
       cell: (row) => (
-        <h1 onClick={() => eliminarFila(row)}>
-        <FcDeleteRow />
+        <h1 onClick={() => eliminarFila(row)}
+        className="cursor-pointer">
+        <FcDeleteRow className="cursor-pointer"/>
        </h1>
       ),
       sortable: true,
@@ -147,13 +148,14 @@ console.log(a);
   <h1 className="text-2xl mb-4 text-center font-bold pt-2 text-gray-900 sm:text-3xl col-11">
     Planificación de períodos
   </h1>
-  <div className="col-1 d-flex justify-content-end">
+  <div className="col-1 d-flex justify-content-end cursor-pointer">
     <a
       href="../html/Administracion.html"
-      className="text-end fas fa-pencil-alt"
+      className="text-end fas fa-pencil-alt cursor-pointer"
       title="Regresar"
+
     >
-      <label><h1><TiArrowBackOutline className="text-2xl " /></h1></label>
+      <label><h1><TiArrowBackOutline className="text-2xl cursor-pointer" /></h1></label>
       
     </a>
   </div>

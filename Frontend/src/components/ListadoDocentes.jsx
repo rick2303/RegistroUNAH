@@ -25,7 +25,7 @@ const ListadoDocentes = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalEditarOpen, setModalEditarOpen] = useState(false);
   const [editedData, setEditedData] = useState({});
-
+  const [count, setCount] = useState(0);
   const fechaActual = new Date();
   const año = fechaActual.getFullYear();
 
@@ -34,12 +34,13 @@ const ListadoDocentes = () => {
       .then((response) => response.json())
       .then((data) => {
         setHistorialData(data);
+        
         console.log(data);
       })
       .catch((error) => {
         console.error("Error al obtener los datos:", error);
       });
-  }, []);
+  }, [count]);
 
   // Configuramos las columnas para DataTable
   const columnas1 = [
@@ -117,6 +118,7 @@ const ListadoDocentes = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log("Respuesta del servidor:", data);
+        setCount(count + 1);
         // Realizar cualquier acción adicional después de guardar los cambios
         // Por ejemplo, mostrar una notificación de éxito, recargar la lista, etc.
       })
@@ -132,7 +134,13 @@ const ListadoDocentes = () => {
   const NoDataComponent = () => {
     return <div>No hay registros para mostrar</div>;
   };
-
+  const handleClick = () => {
+    // Lógica adicional
+    console.log("Haciendo clic en el botón");
+  
+    // Actualizar el estado para que el useEffect se ejecute nuevamente
+    setCount(count + 1);
+  };
   return (
     <div className="App">
       <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
@@ -423,7 +431,12 @@ const ListadoDocentes = () => {
 
 
 <ModalFooter>
-  <button className="boton_guardar" onClick={guardarCambios}>Guardar cambios</button></ModalFooter>
+  <button className="boton_guardar" onClick={() => {
+      handleClick();
+      guardarCambios();
+      // Aquí puedes llamar a la segunda función adicional
+      // ...
+    }}>Guardar cambios</button></ModalFooter>
 
         </Modal>
       )}

@@ -115,4 +115,6 @@ label {
   .mi-tabla tbody tr:hover td {
 	background-color: #d1eaff;
   }
-  
+  .cursor-pointer {
+	cursor: pointer;
+  }

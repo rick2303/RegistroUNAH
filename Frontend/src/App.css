@@ -7,7 +7,9 @@
   padding-left:65%;
 
 }
-
+.cursor-pointer {
+  cursor: pointer;
+}
 
 .card {
   padding: 2em;
