@@ -7,6 +7,8 @@ import 'styled-components'
 
 
 const SeccionesMain = () => {
+    const [showModal, setShowModal] = useState(false);
+    const [backendResponse, setBackendResponse] = useState("");
     const [Departamento, setDepartamento] = useState("");
     const [CentroRegional, setNumCentroRegional] = useState("");
     const [clases, setClases] = useState([]);
