@@ -4,6 +4,7 @@ import path from "path";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { createWriteStream } from 'fs';
+import { columns } from "mssql";
 const bwipjs = require('bwip-js');
 
 
@@ -22,6 +23,16 @@ export const historialAcademico = async (req, res) => {
 };
 //
 export const historialPDF = async (req, res) => {
+  let fecha = new Date();
+
+  function formatoFecha(fecha, formato) {
+  	//
+  }
+
+  
+
+  
+   fecha = fecha.toLocaleDateString()
   const NumCuenta = req.params.id;
   const pool = await getConnection();
   const result = await pool
@@ -38,9 +49,15 @@ export const historialPDF = async (req, res) => {
   const Nombre = student.recordset[0].Nombre;
   const Apellido = student.recordset[0].Apellido;
   const Carrera = student.recordset[0].Carrera;
-  const CentroRegional = student.recordset[0].CentroRegional;
+  let CentroRegional = student.recordset[0].CentroRegional;
   const IndiceGlobal = student.recordset[0].IndiceGlobal;
+  if(CentroRegional == 'VS'){
+    CentroRegional = 'Valle de Sula'
+  }else if(CentroRegional == 'CU'){
+    CentroRegional = 'Ciudad Universitaria'
+  }
   console.log(student.recordset[0]);
+  
 
   // Obtener los años únicos presentes en el recordset
   const years = [...new Set(result.recordset.map((registro) => registro.Año))];
@@ -63,12 +80,14 @@ export const historialPDF = async (req, res) => {
         columns: [
           {
             text:"2673469/nperez",
-            widh:"15%"
+            width:"20%",
+            alignment: 'center',
+            margin: [10, 0],
           },
           {
             text: `"La Educación es la Primera Necesidad de la Republica"`,
             alignment: 'center',
-            width:"70%"
+            width:"60%",
           },
           {
             text: 'Página ' +currentPage.toString() + ' de ' + pageCount+"  ",
@@ -83,13 +102,26 @@ export const historialPDF = async (req, res) => {
         return null; // No mostrar header en la primera página
       } else if(currentPage>=2) {
         return  [
-            {
-              text: `${Numcuenta} ${Nombre.toUpperCase()} ${Apellido.toUpperCase()}`,
-              style: "subheader",
-              alignment: "left",
-              margin: [40, 10]
-            }
-            
+          {
+            //Editar para que se pueda poner el apellido completo
+            columns: [
+              {
+                text: `${Numcuenta} ${Nombre.toUpperCase()} ${Apellido.toUpperCase()}`,
+                style: "subheader",
+                alignment: "left",
+                margin: [30, 10, 0, 10],
+                fontSize: 12 
+              },
+              {
+                text: `${fecha}`,
+                style: "subheader",
+                margin: [10, 10, 30, 10],
+                alignment: 'right',
+                fontSize: 12 
+
+              }
+            ]
+          }
           ]
         };
     },
@@ -98,8 +130,8 @@ export const historialPDF = async (req, res) => {
       columns: [
         {
           image: `data:image/png;base64,${base64Image}`,
-          width: 40, 
-          height: 50, 
+          width: 45, 
+          height: 65, 
           alignment: "left"
         },
         {
@@ -115,26 +147,26 @@ export const historialPDF = async (req, res) => {
       "\n",
       {
         alignment: "left",
-        layout: { defaultBorder: false },
+        layout: { defaultBorderRadius: '10%', defaultBorder: false },
         table: {
           widths: ["50%", "0.000001%", "50%"], // Divide the table width equally into three columns
           body: [
             [
-              { text: "Cuenta: " + Numcuenta, fillColor: "#CCCCCC", margin:[0,5,0,0] },
+              { text: "Cuenta:   " + Numcuenta, fillColor: "#CCCCCC", margin:[0,5,0,0] } ,
               { text: "", fillColor: "#FFFFFF" } ,
-              { text: "Carrera Actual: " + Carrera, fillColor: "#CCCCCC",margin:[0,5,0,0]}
+              { text: "Carrera Actual: " + Carrera.toUpperCase(), fillColor: "#CCCCCC",margin:[0,5,0,0]}
               
             ],
             [
-              { text: "Nombre: " + Nombre, fillColor: "#CCCCCC" },
+              { text: "Nombre: " + Nombre.toUpperCase(), fillColor: "#CCCCCC" },
               { text: "", fillColor: "#FFFFFF" },
-              { text: "Centro: " + CentroRegional, fillColor: "#CCCCCC" }
+              { text: "Centro:               " + CentroRegional.toUpperCase(), fillColor: "#CCCCCC" }
                
             ],
             [
-              { text: "Apellido: " + Apellido, fillColor: "#CCCCCC", margin:[0,0,0,5] },
+              { text: "Apellido: " + Apellido.toUpperCase(), fillColor: "#CCCCCC", margin:[0,0,0,5] },
               { text: "", fillColor: "#FFFFFF" },
-              { text: "Indice: " + IndiceGlobal + "%", fillColor: "#CCCCCC", margin:[0,0,0,5] }
+              { text: "Indice:                " + IndiceGlobal + "%", fillColor: "#CCCCCC", margin:[0,0,0,5] }
             ],
           ],
         },
@@ -151,7 +183,7 @@ export const historialPDF = async (req, res) => {
                 style: "header",
                 alignment: "center",
                 fillColor: "#CCCCCC",// Establecer el color de fondo deseado
-                with:"100%",
+                width:"90%",
                 
               }
             ]
@@ -213,8 +245,8 @@ export const historialPDF = async (req, res) => {
 
         tableData.push([
           clase.CODIGO,
-          clase.ASIGNATURA,
-          uv,
+          clase.ASIGNATURA.toUpperCase(),
+          uv ,
           clase.PERIODO.replace(/[^\d]/g, ''),
           clase.CALIFIACION,
           clase.OBS,
@@ -246,15 +278,15 @@ export const historialPDF = async (req, res) => {
       body: [[
         { text: 'CODIGO', style: 'subtitle' },
         { text: 'NOMBRE', style: 'subtitle' },
-        { text: 'UV', style: 'subtitle' },
+        { text: 'UV', style: 'subtitle',},
         { text: 'PERIODO', style: 'subtitle' },
         { text: 'NOTA', style: 'subtitle' },
         { text: 'OBS', style: 'subtitle' },
       ], ...tableData].map((clase) => [
         clase[0],
         { text: clase[1], fitWidth: true, bold: false },
-        { text: clase[2], alignment: 'center' },
-        { text: clase[3], alignment: 'center' },
+        { text: clase[2], alignment: 'right' },
+        { text: clase[3], alignment: 'center'},
         { text: clase[4], alignment: 'center' },
         { text: clase[5], alignment: 'center' },
       ]),
@@ -273,7 +305,7 @@ export const historialPDF = async (req, res) => {
     docDefinition.content.push({ layout: { defaultBorder: false }, table });
 
     // Agregar la cantidad de clases con OBS "APR" al final de la tabla
-    docDefinition.content.push({ text: `Total Aprobadas:      ${countAPR}`, style: "leftAligned", bold: true},
+    docDefinition.content.push({ text: `Total Aprobadas:      ${countAPR}`, style: "leftAligned", bold: true, fontSize: 14},
       "\n"
     );
     docDefinition.content.push({ layout: { defaultBorder: false }, table });
@@ -301,12 +333,12 @@ export const historialPDF = async (req, res) => {
 
   // Agregar la suma de UV * Nota y la suma de UV al final del PDF
   docDefinition.content.push(
-    { text: `******************************Ultima linea******************************`, style: "subtitle", alignment: "center", width: "100%" },
+    { text: `******************************************Ultima Linea******************************************`, style: "subtitle", alignment: "center", width: "90%", fontSize: 12 },
     "\n",
     { text: 'Cálculo del índice académico:', style: "subtitle", alignment: "left" },
-    { text: `Suma UV x Nota:       ${sumUVxNotaTotal}`, style: "leftAligned" },
-    { text: `Suma de UV:                  ${sumUVTotal}`, style: "leftAligned"},
-    { text: `Indice académico:    ${sumUVxNotaTotal}/${sumUVTotal} = ${parseInt(sumUVxNotaTotal/sumUVTotal)}%`, style: "leftAligned" },
+    { text: `Suma UV x Nota:                         ${sumUVxNotaTotal}`, style: "leftAligned",  margin:[14,5,0,0]},
+    { text: `Suma de UV:                                     ${sumUVTotal}`, style: "leftAligned",  margin:[14,5,0,0]},
+    { text: `Indice académico:          ${sumUVxNotaTotal} / ${sumUVTotal} = ${parseInt(sumUVxNotaTotal/sumUVTotal)}%`, style: "leftAligned" ,  margin:[14,5,0,0]},
     "\n",
     { image: `data:image/png;base64,${barcode}`, width: 150, alignment: "left" }
 
