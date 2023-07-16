@@ -459,10 +459,10 @@ const columnas = [
             value={hiSeleccionado}
             onChange={handleHiChange}>
             <option selected>HI</option>
-            <option value="7000">6000</option>
-            <option value="7000">7000</option>
-            <option value="8000">8000</option>
-            <option value="9000">9000</option>
+            <option value="700">600</option>
+            <option value="700">700</option>
+            <option value="800">800</option>
+            <option value="900">900</option>
             <option value="1000">1000</option>
             <option value="1100">1100</option>
             <option value="1200">1200</option>
@@ -485,9 +485,9 @@ const columnas = [
             onChange={handleHfChange}
             >
             <option selected>HF</option>
-            <option value="7000">7000</option>
-            <option value="8000">8000</option>
-            <option value="9000">9000</option>
+            <option value="700">700</option>
+            <option value="800">800</option>
+            <option value="900">900</option>
             <option value="1000">1000</option>
             <option value="1100">1100</option>
             <option value="1200">1200</option>
