@@ -79,10 +79,13 @@ const ModalDocentes = () => {
         if (response.status === 200) {
           alert('Docente agregado correctamente');
           return response;
+        }else{
+          alert('Datos incompletos')
         }
       })
       .catch((error) => {
         console.error('Error en la solicitud:', error);
+        alert('Datos incompletos')
       });
   };
 

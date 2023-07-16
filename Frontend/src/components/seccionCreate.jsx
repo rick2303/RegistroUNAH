@@ -300,8 +300,8 @@ useEffect(() => {
 
 const columnas = [
     {
-    name:'CODIGO',
-    selector : row => row.IdClase
+    name:'ASIGNATURA',
+    selector : row => row.Asignatura
     },
     {
     name:'EDIFICIO',
@@ -311,10 +311,10 @@ const columnas = [
     name:'AULA',
     selector : row => row.Aula
     },
-    {
-    name:'MATRICULADOS',
-    selector : row => row.CantidadAlumnos
-    },
+    // {
+    // name:'MATRICULADOS',
+    // selector : row => row.CantidadAlumnos
+    // },
     {
     name:'DIAS',
     selector : row => row.Dias
@@ -428,7 +428,7 @@ const columnas = [
             <option>Docente</option>
             {docentes.map((docente) => (
               <option key={docente.NumEmpleado} value={docente.NumEmpleado}>
-                {docente.Nombre} {docente.Apellido}
+                {docente.Nombre}  {docente.Apellido}
               </option>
             ))}
           </select>
@@ -450,19 +450,7 @@ const columnas = [
         </select>
       </div>
 
-        <div className="col-md-6 mb-4">
-        <select
-            className="form-select border-3"
-            aria-label="Default select example"
-            value={periodoSeleccionado}
-            onChange={handlePeriodoChange}
-          >
-            <option>Periodo</option>
-            <option value="1PAC">I PAC</option>
-            <option value="2PAC">II PAC</option>
-            <option value="3PAC">III PAC</option>
-          </select>
-        </div>
+        
 
         <div className="col-md-6 mb-4">
             <select 
@@ -514,7 +502,19 @@ const columnas = [
             <option value="2100">2100</option>
             </select>
         </div>
-        
+        <div className="col-md-6 mb-4">
+        <select
+            className="form-select border-3"
+            aria-label="Default select example"
+            value={periodoSeleccionado}
+            onChange={handlePeriodoChange}
+          >
+            <option>Periodo</option>
+            <option value="1PAC">I PAC</option>
+            <option value="2PAC">II PAC</option>
+            <option value="3PAC">III PAC</option>
+          </select>
+        </div>
 
         <div className="col-md-6 mb-4">
         <input
@@ -546,8 +546,7 @@ className="form-control"
         </div>
 
 
-
-        <div className="col-md-6 mb-4">
+        <div className="mb-4">
             <p className="pt-4 pb-3 text-gray-900 sm:text-1xl text-left">
             Dias
             </p>

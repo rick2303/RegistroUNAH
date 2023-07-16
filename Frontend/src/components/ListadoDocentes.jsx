@@ -128,6 +128,8 @@ const ListadoDocentes = () => {
 
         // Realizar cualquier acción adicional después de guardar los cambios
         // Por ejemplo, mostrar una notificación de éxito, etc.
+      }).then(() => {
+        alert('Datos actualizados correctamente');
       })
       .catch((error) => {
         console.error("Error al guardar los cambios:", error);

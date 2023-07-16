@@ -27,7 +27,7 @@ export const queries = {
     insertPerfilEmpleado: "Insert into perfil_empleados(IdPerfil, imagen1) values(@Id, case when @photoPath1 is null then null else @photoPath1 end)",
     updatePerfilEmpleado: "UPDATE perfil_empleados SET Imagen1 = case when @photoPath1 is null then null else @photoPath1 end WHERE CAST(IdPerfil AS varchar) = @id",
 
-    insertSeccion: "insert into secciones(IdClase,Edificio,Aula,HI,Seccion,HF,Periodo,Fecha,Obs,IdDocente,Dias,Cupos,CentroRegional,ClaseServicio) values(@IdClase, @Edificio, @Aula, @HI,@Seccion,@HF,@Periodo,@FechaActual,@Obs,@IdDocente,@Dias,@Cupos,@CentroRegional,@ClaseServicio)",
+    insertSeccion: "INSERT INTO secciones (IdClase, Edificio, Aula, HI, Seccion, HF, Periodo, Fecha, Obs, IdDocente, Dias, Cupos, CentroRegional, ClaseServicio) VALUES (@IdClase, @Edificio, @Aula, @HI, @Seccion, @HF, @Periodo, @FechaActual, @Obs, @IdDocente, @Dias, CASE WHEN @Cupos IS NULL THEN 0 ELSE @Cupos END, @CentroRegional, @ClaseServicio);",
 
     getAulas: "select au.Nombre from aulas au inner join edificios as ed on au.IdEdificio=ed.IdEdificio where ed.IdEdificio=@IdEdificio",
 
@@ -37,11 +37,11 @@ export const queries = {
 
     validarSeccionExistente : `SELECT * FROM Secciones WHERE IdClase = @IdClase AND Seccion = @Seccion AND Periodo = @Periodo AND YEAR(Fecha) = YEAR(@FechaActual)`,
 
-    validarSeccionAulaQuery :`SELECT * FROM Secciones WHERE Edificio = @Edificio  AND Aula = @Aula  AND Periodo = @Periodo  AND ((HI <= @HI AND HF >= @HI) OR (HI>= @HI AND HF <= @HI))`,
+    validarSeccionAulaQuery :`SELECT * FROM Secciones WHERE Edificio = @Edificio  AND Aula = @Aula  AND Periodo = @Periodo  AND ((HI <= @HI AND HF >= @HI) OR (HI>= @HI AND HF <= @HI)) AND dias = @Dias`,
 
     deleteSeccion: "EXEC SP_EliminarSeccion @IdSeccion = @idseccion, @Justificacion = @justificado, @Asignatura = @clase, @UV = @uvs;",
 
-    agregarCupos:"UPDATE Secciones SET Cupos = Cupos + @Cupos WHERE IdSeccion = @idseccion; "
+    agregarCupos:"UPDATE Secciones SET Cupos = CASE WHEN Cupos IS NULL THEN 0 ELSE Cupos + @Cupos END   WHERE IdSeccion = @idseccion;"
 }
 
 export const querys = {

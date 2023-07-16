@@ -9,7 +9,7 @@ export const secciones =  async (req, res) => {
         .input('departamento', sql.VarChar, Departamento)
         .input('centroRegional', sql.VarChar, CentroRegional)
         .query(`
-            select s.IdSeccion, s.IdClase, s.Edificio, s.Aula, s.CantidadAlumnos, s.HI, s.HF, s.Seccion, s.Periodo, s.Obs, s.Dias, s.Cupos, c.Departamento, s.CentroRegional, (e.Nombre + e.Apellido) as Nombre, c.Nombre AS Clase, c.UV
+            select s.IdSeccion, c.Nombre as 'Asignatura', s.Edificio, s.Aula, s.CantidadAlumnos, s.HI, s.HF, s.Seccion, s.Periodo, s.Obs, s.Dias, s.Cupos, c.Departamento, s.CentroRegional, (e.Nombre + ' ' + e.Apellido) as Nombre, c.Nombre AS Clase, c.UV
             from [dbo].[secciones] s
             INNER join [dbo].[empleados] e on e.NumEmpleado = s.IdDocente
             INNER JOIN [dbo].[clases] c on s.IdClase = c.IdClase

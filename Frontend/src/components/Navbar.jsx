@@ -39,9 +39,13 @@ export default function Navbar() {
   if (currentPath === "/src/html/Administracion.html" ) {
     redirectTo = "../../index.html";
   }
+  if (currentPath === "/src/html/ListadoDocentes.html" ) {
+    redirectTo = "../html/Administracion.html";
+  }
   if (currentPath === "/src/html/Coordinacion.html" ){
     redirectTo="../html/Coordinacion_menu.html"
   }
+ 
 
   if(currentPath === "/src/html/EstuFiltradosMatriculados.html"){
     redirectTo="../html/Jefatura.html"
@@ -50,8 +54,15 @@ export default function Navbar() {
   if((currentPath === "/src/html/EstudiantesMatriculados.html" && subrol==="COORDINADOR")||(currentPath==="/src/html/HistorialAdmin.html" && subrol==="COORDINADOR")){
     redirectTo="../html/Coordinacion.html"
   }
+  if((currentPath === "/src/html/Forma03Admin.html" && subrol==="COORDINADOR")||(currentPath==="/src/html/HistorialAdmin.html" && subrol==="COORDINADOR")){
+    redirectTo="../html/Coordinacion.html"
+  }
 
   if((currentPath === "/src/html/EstudiantesMatriculados.html" && subrol==="JEFE DEPARTAMENTO")||(currentPath==="/src/html/HistorialAdmin.html" && subrol==="JEFE DEPARTAMENTO")){
+    redirectTo="../html/Jefatura.html"
+  }
+
+  if((currentPath === "/src/html/Forma03Admin.html" && subrol==="JEFE DEPARTAMENTO")||(currentPath==="/src/html/HistorialAdmin.html" && subrol==="JEFE DEPARTAMENTO") ||(currentPath==="/src/html/Secciones.html" && subrol==="JEFE DEPARTAMENTO")){
     redirectTo="../html/Jefatura.html"
   }
 
