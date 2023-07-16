@@ -9,7 +9,7 @@ export const secciones =  async (req, res) => {
         .input('departamento', sql.VarChar, Departamento)
         .input('centroRegional', sql.VarChar, CentroRegional)
         .query(`
-            select s.IdClase, s.Edificio, s.Aula, s.CantidadAlumnos, s.HI, s.HF, s.Seccion, s.Periodo, s.Obs, s.Dias, s.Cupos, c.Departamento, s.CentroRegional, (e.Nombre + e.Apellido) as Nombre, c.Nombre AS Clase
+            select s.IdSeccion, s.IdClase, s.Edificio, s.Aula, s.CantidadAlumnos, s.HI, s.HF, s.Seccion, s.Periodo, s.Obs, s.Dias, s.Cupos, c.Departamento, s.CentroRegional, (e.Nombre + e.Apellido) as Nombre, c.Nombre AS Clase, c.UV
             from [dbo].[secciones] s
             INNER join [dbo].[empleados] e on e.NumEmpleado = s.IdDocente
             INNER JOIN [dbo].[clases] c on s.IdClase = c.IdClase
@@ -44,7 +44,7 @@ export const traerDocentes= async (req, res) => {
 
 export const crearSeccion = async (req, res) => {
     try {
-      const { IdClase, Edificio, Aula, HI, Seccion, HF, Periodo, Obs, IdDocente, Dias, Cupos, CentroRegional, ClaseServicio } = req.body;
+      const { IdClase, Edificio, Aula, HI, HF, Periodo, Obs, IdDocente, Dias, Cupos, CentroRegional, ClaseServicio } = req.body;
       const fechaActual = new Date();  // Obtiene la fecha actual del sistema
       const pool = await getConnection();
   
@@ -82,18 +82,28 @@ export const crearSeccion = async (req, res) => {
         return;
       }
   
-      // Validar si la sección ya existe para la clase, periodo y año seleccionados
-      const seccionExistenteQuery = await pool.request()
+        let Seccion=HI
+   // Validar si la sección ya existe para la clase, periodo y año seleccionados
+        const seccionExistenteQuery = await pool.request()
         .input("IdClase", sql.VarChar, IdClase)
         .input("Seccion", sql.Int, Seccion)
         .input("Periodo", sql.VarChar, Periodo)
         .input("FechaActual", sql.DateTime, fechaActual)
         .query(queries.validarSeccionExistente);
-  
-      if (seccionExistenteQuery.recordset.length > 0) {
-        res.status(400).json({ message: 'La sección ya existe para la clase, periodo y año seleccionados.' });
-        return;
-      }
+
+        if (seccionExistenteQuery.recordset.length > 0) {
+            // La sección ya existe para la clase, periodo y año seleccionados
+            // Obtener la sección máxima de la clase
+            const seccionMaximaQuery = await pool.request()
+              .input("IdClase", sql.VarChar, IdClase)
+              .input("HI", sql.VarChar, HI)
+              .input("Periodo", sql.VarChar, Periodo)
+              .query(queries.obtenerSeccionMaxima);
+          
+            const seccionMaxima = seccionMaximaQuery.recordset[0].MaxSeccion;
+            // Incrementar el valor de Seccion en 1
+            Seccion = parseInt(seccionMaxima) + 1;
+          }
   
       const result = await pool.request()
         .input("IdClase", sql.VarChar, IdClase)
@@ -131,3 +141,48 @@ export const getAulas = async (req, res) => {
 
     res.json(aulas);
 };
+
+
+export const deleteSeccion = async (req, res) => {
+    try {
+      const idseccion = req.params.id;
+
+  
+      const { justificado, clase, uvs } = req.body;
+  
+
+      if(justificado === ""){
+        return res.status(404).json({ message: "Se necesita justificación para cancelarla" });
+    }
+      const pool = await getConnection();
+  
+      const result = await pool
+        .request()
+        .input("idseccion", sql.Int, idseccion)
+        .input("justificado", sql.VarChar, justificado)
+        .input("clase", sql.VarChar, clase)
+        .input("uvs", sql.Int, uvs)
+        .query(queries.deleteSeccion);
+        
+
+
+      res.status(200).json({ message: "Sección eliminada correctamente", status:200 });
+    } catch (error) {
+      console.error("Error al eliminar la sección:", error);
+      res.status(500).json({ message: "Error al eliminar la sección", status:500 });
+    }
+  };
+
+  export const agregarCupos = async (req,res)=>{
+    const idseccion = req.params.id;
+    const {Cupos} = req.body;
+    const pool = await getConnection();
+
+    const result= await pool.request()
+    .input("idseccion", sql.Int, idseccion)
+    .input("Cupos", sql.Int,Cupos)
+    .query(queries.agregarCupos)
+
+    res.json({ message: "Cupos agregados: "+ Cupos, status:200});
+  }
+  

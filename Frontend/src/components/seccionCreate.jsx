@@ -3,8 +3,8 @@ import { set } from "date-fns";
 import React,{useState,useEffect} from 'react';
 import DataTable from 'react-data-table-component';
 import 'styled-components'
-
-
+import { FaPlusCircle } from "react-icons/fa";
+import {FcDeleteRow} from "react-icons/fc"
 
 const SeccionesMain = () => {
     const [Departamento, setDepartamento] = useState("");
@@ -104,6 +104,33 @@ const fetchAulas = async (edificio) => {
   };
 
   const diasConcatenados = diasSeleccionados.join("");
+  const handleCuposClick = (row) => {
+    const cantidad = prompt("Ingrese la cantidad de cupos a agregar:");
+  
+    if (cantidad) {
+      fetch(`http://localhost:5000/agregarCupos/${row.IdSeccion}`, {
+        method: "PUT",
+        body: JSON.stringify({
+          Cupos: parseInt(cantidad),
+          // Otros datos necesarios para la solicitud
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+            alert(data.message);
+            if(data.status ===200){
+                window.location.reload();
+            }
+        })
+        .catch((error) => {
+          // Manejar el error
+        });
+    }
+  };
+  
 
   const handleEdificioChange = (event) => {
     setEdificio(event.target.value);
@@ -204,13 +231,55 @@ const handleCrearSeccion = async () => {
       setBackendResponse(data);
 
       alert(data.message);
-     
+      if (response.status===200) {
+        window.location.reload();
+         console.log(data);
+    }
+
     } catch (error) {
       alert("Error al crear la seccion");
     }
   };
 
- 
+  const eliminarFila = (row) => {
+    // Solicitar al usuario que ingrese una justificación
+    const justificacion = prompt("Ingrese una justificación:");
+  
+    if (justificacion !== null) {
+      const data = {
+        justificado: justificacion,
+        clase:row.Clase,
+	    uvs:row.UV
+      };
+
+      fetch(`http://localhost:5000/seccionEliminar/${row.IdSeccion}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+      .then((response) => {
+        // Analizar la respuesta como JSON
+        return response.json();
+      })
+      .then((data) => {
+        // Mostrar el mensaje de respuesta en un alert
+        alert(data.message);
+
+        if (data.status===200) {
+            window.location.reload();
+          console.log(data);
+        } else {
+          throw new Error("Error en la solicitud");
+        }
+      })
+      .catch((error) => {
+        console.error("Error al eliminar la sección:", error);
+      });
+    }
+  };
+  
 
 useEffect(() => {
     obtenerClases()
@@ -274,6 +343,22 @@ const columnas = [
     name:'PERIODO',
     selector :row => row.Periodo
     },
+    {
+        name: "ELIMINAR",
+        cell: (row) => (
+          <h1 className="cursor-pointer" onClick={() => eliminarFila(row)}>
+            <FcDeleteRow />
+          </h1>
+        ),
+      },
+      {
+        name: "EDITAR CUPOS",
+        cell: (row) => (
+          <h1 className="cursor-pointer" onClick={() => handleCuposClick(row)}>
+            <FaPlusCircle style={{ color: "#1e40af "}} />
+          </h1>
+        ),
+      },
     ]
 
 //Mostramos la data en DataTable
@@ -460,9 +545,6 @@ className="form-control"
             </select>
         </div>
 
-        <div className="col-md-6 mb-4">
-            <input className="form-control border-3" type="text" placeholder="Observaciones" aria-label="default input example" onChange={handleObservacionesChange}/>
-        </div>
 
 
         <div className="col-md-6 mb-4">
@@ -506,9 +588,11 @@ className="form-control"
             </label>
             </div>
         </div>
+
         <div className="col-md-6 mb-4">
-            <input className="form-control border-3" type="text" placeholder="Seccion" aria-label="default input example" onChange={handleInputChange}/>
+            <input className="form-control border-3" type="text" placeholder="Observaciones" aria-label="default input example" onChange={handleObservacionesChange}/>
         </div>
+
 
         <div className="col-md-6 mb-4 align-self-left">
         <a className="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalCANCEL" onClick={handleCrearSeccion}>

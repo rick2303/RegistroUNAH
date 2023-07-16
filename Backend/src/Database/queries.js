@@ -33,10 +33,15 @@ export const queries = {
 
     validarDocenteSeccion: `SELECT * FROM Secciones WHERE IdDocente = @IdDocente AND Dias = @Dias AND ((HI <= @HI AND HF >= @HI) OR (HI <= @HF AND HF >= @HF) OR (HI >= @HI AND HF <= @HF)) AND Periodo = @Periodo`,
 
+    obtenerSeccionMaxima:`SELECT MAX(Seccion) AS MaxSeccion FROM Secciones WHERE HI = @HI AND Periodo = @Periodo`,
 
     validarSeccionExistente : `SELECT * FROM Secciones WHERE IdClase = @IdClase AND Seccion = @Seccion AND Periodo = @Periodo AND YEAR(Fecha) = YEAR(@FechaActual)`,
 
-    validarSeccionAulaQuery :`SELECT * FROM Secciones WHERE Edificio = @Edificio  AND Aula = @Aula  AND Periodo = @Periodo  AND ((HI <= @HI AND HF >= @HI) OR (HI>= @HI AND HF <= @HI))`
+    validarSeccionAulaQuery :`SELECT * FROM Secciones WHERE Edificio = @Edificio  AND Aula = @Aula  AND Periodo = @Periodo  AND ((HI <= @HI AND HF >= @HI) OR (HI>= @HI AND HF <= @HI))`,
+
+    deleteSeccion: "EXEC SP_EliminarSeccion @IdSeccion = @idseccion, @Justificacion = @justificado, @Asignatura = @clase, @UV = @uvs;",
+
+    agregarCupos:"UPDATE Secciones SET Cupos = Cupos + @Cupos WHERE IdSeccion = @idseccion; "
 }
 
 export const querys = {
