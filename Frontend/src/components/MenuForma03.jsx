@@ -146,16 +146,14 @@ const MenuForma = () => {
       selector: (row) => row.PERIODO,
     },
   ];
-  const NoDataComponent = () => {
-    return <div>No hay registros para mostrar</div>;
-  };
+
   return (
     <div className="App">
       <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
         Forma 03
       </h1>
       <div className="container">
-        <DataTable columns={columnas1} data={historialData}  noDataComponent={<NoDataComponent />}></DataTable>
+        <DataTable columns={columnas1} data={historialData} />
       </div>
     </div>
   );

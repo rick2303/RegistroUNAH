@@ -32,7 +32,7 @@ function MenuEstudiante() {
       </h1>
       <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-8 lg:px-8">
         <div className=" grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-4 md:gap-8">
-          <article className="hover:animate-background rounded-xl bg-gradient-to-r from-blue-800 via-yellow-400 to-yellow-500 00 p-0.5 shadow-xl transition hover:bg-[length:500%_400%] hover:shadow-sm hover:[animation-duration:_4s]">
+          <article className="hover:animate-background rounded-xl bg-gradient-to-r from-blue-800 via-blue-400 to-blue-500 00 p-0.5 shadow-xl transition hover:bg-[length:500%_400%] hover:shadow-sm hover:[animation-duration:_4s]">
             <div className="rounded-[10px] bg-white p-4 !pb-14 !pt-15 sm:p-6 row">
               <p className="featured-block-text text-center">
                 <strong className="text-xl text-center">Matricula</strong>
@@ -49,9 +49,11 @@ function MenuEstudiante() {
                     className=" grid grid-cols-1 group relative focus:outline-none focus:ring"
                     href="/download"
                   >
-                    <span className=" grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 bg-yellow-500 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"></span>
+                    <span className=" rounded-[25px] grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"
+                    style={{ backgroundColor: '#145eb9' }}
+                    ></span>
 
-                    <span className="relative text-center inline-block border-2 border-current px-8 py-3 text-sm font-bold uppercase tracking-widest text-black group-active:text-opacity-75">
+                    <span className="rounded-[25px] relative text-center inline-block border-2 border-black px-8 py-3 text-sm font-bold uppercase tracking-widest text-white group-active:text-opacity-75" >
                       Ir
                     </span>
                   </a>
@@ -59,7 +61,7 @@ function MenuEstudiante() {
               </div>
             </div>
           </article>
-          <article className="hover:animate-background rounded-xl bg-gradient-to-r from-blue-800 via-yellow-400 to-yellow-500 00 p-0.5 shadow-xl transition hover:bg-[length:500%_400%] hover:shadow-sm hover:[animation-duration:_4s]">
+          <article className="hover:animate-background rounded-xl bg-gradient-to-r from-blue-800 via-blue-400 to-blue-500 00 p-0.5 shadow-xl transition hover:bg-[length:500%_400%] hover:shadow-sm hover:[animation-duration:_4s]">
             <div className=" rounded-[10px] bg-white p-4 !pb-14 !pt-15 sm:p-6 row">
               <p className="featured-block-text text-center">
                 <strong className="text-xl ">Solicitudes</strong>
@@ -76,9 +78,11 @@ function MenuEstudiante() {
                     className=" grid grid-cols-1 group relative focus:outline-none focus:ring"
                     href="/src/html/Solicitudes.html"
                   >
-                    <span className=" grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 bg-yellow-500 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"></span>
+                    <span className=" rounded-[25px] grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"
+                    style={{ backgroundColor: '#145eb9' }}
+                    ></span>
 
-                    <span className="relative text-center inline-block border-2 border-current px-8 py-3 text-sm font-bold uppercase tracking-widest text-black group-active:text-opacity-75">
+                    <span className="rounded-[25px] relative text-center inline-block border-2 border-black px-8 py-3 text-sm font-bold uppercase tracking-widest text-white group-active:text-opacity-75" >
                       Ir
                     </span>
                   </a>
@@ -86,7 +90,7 @@ function MenuEstudiante() {
               </div>
             </div>
           </article>
-          <article className="hover:animate-background rounded-xl bg-gradient-to-r from-blue-800 via-yellow-400 to-yellow-500 00 p-0.5 shadow-xl transition hover:bg-[length:500%_400%] hover:shadow-sm hover:[animation-duration:_4s]">
+          <article className="hover:animate-background rounded-xl bg-gradient-to-r from-blue-800 via-blue-400 to-blue-500 00 p-0.5 shadow-xl transition hover:bg-[length:500%_400%] hover:shadow-sm hover:[animation-duration:_4s]">
             <div className="rounded-[10px] bg-white p-4 !pb-14 !pt-15 sm:p-6 row">
               <p className="featured-block-text text-center">
                 <strong className="text-xl text-center">Chat</strong>
@@ -103,9 +107,11 @@ function MenuEstudiante() {
                     className=" grid grid-cols-1 group relative focus:outline-none focus:ring"
                     href="/download"
                   >
-                    <span className=" grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 bg-yellow-500 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"></span>
+                    <span className=" rounded-[25px] grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"
+                    style={{ backgroundColor: '#145eb9' }}
+                    ></span>
 
-                    <span className="relative text-center inline-block border-2 border-current px-8 py-3 text-sm font-bold uppercase tracking-widest text-black group-active:text-opacity-75">
+                    <span className="rounded-[25px] relative text-center inline-block border-2 border-black px-8 py-3 text-sm font-bold uppercase tracking-widest text-white group-active:text-opacity-75" >
                       Ir
                     </span>
                   </a>
@@ -113,7 +119,7 @@ function MenuEstudiante() {
               </div>
             </div>
           </article>
-          <article className="hover:animate-background rounded-xl bg-gradient-to-r from-blue-800 via-yellow-400 to-yellow-500 00 p-0.5 shadow-xl transition hover:bg-[length:500%_400%] hover:shadow-sm hover:[animation-duration:_4s]">
+          <article className="hover:animate-background rounded-xl bg-gradient-to-r from-blue-800 via-blue-400 to-blue-500 00 p-0.5 shadow-xl transition hover:bg-[length:500%_400%] hover:shadow-sm hover:[animation-duration:_4s]">
             <div className="rounded-[10px] bg-white p-4 !pb-14 !pt-15 sm:p-6 row">
               <p className="featured-block-text text-center">
                 <strong className="text-xl text-center">
@@ -132,9 +138,11 @@ function MenuEstudiante() {
                     className=" grid grid-cols-1 group relative focus:outline-none focus:ring"
                     href="/src/html/Historial.html"
                   >
-                    <span className=" grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 bg-yellow-500 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"></span>
+                    <span className=" rounded-[25px] grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"
+                    style={{ backgroundColor: '#145eb9' }}
+                    ></span>
 
-                    <span className="relative text-center inline-block border-2 border-current px-8 py-3 text-sm font-bold uppercase tracking-widest text-black group-active:text-opacity-75">
+                    <span className="rounded-[25px] relative text-center inline-block border-2 border-black px-8 py-3 text-sm font-bold uppercase tracking-widest text-white group-active:text-opacity-75" >
                       IR
                     </span>
                   </a>
@@ -142,7 +150,7 @@ function MenuEstudiante() {
               </div>
             </div>
           </article>
-          <article className="hover:animate-background rounded-xl bg-gradient-to-r from-blue-800 via-yellow-400 to-yellow-500 00 p-0.5 shadow-xl transition hover:bg-[length:500%_400%] hover:shadow-sm hover:[animation-duration:_4s]">
+          <article className="hover:animate-background rounded-xl bg-gradient-to-r from-blue-800 via-blue-400 to-blue-500 00 p-0.5 shadow-xl transition hover:bg-[length:500%_400%] hover:shadow-sm hover:[animation-duration:_4s]">
             <div className="rounded-[10px] bg-white p-4 !pb-14 !pt-15 sm:p-6 row">
               <p className="featured-block-text text-center">
                 <strong className="text-xl text-center">
@@ -161,9 +169,11 @@ function MenuEstudiante() {
                     className=" grid grid-cols-1 group relative focus:outline-none focus:ring"
                     href="/download"
                   >
-                    <span className=" grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 bg-yellow-500 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"></span>
+                    <span className=" rounded-[25px] grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"
+                    style={{ backgroundColor: '#145eb9' }}
+                    ></span>
 
-                    <span className="relative text-center inline-block border-2 border-current px-8 py-3 text-sm font-bold uppercase tracking-widest text-black group-active:text-opacity-75">
+                    <span className="rounded-[25px] relative text-center inline-block border-2 border-black px-8 py-3 text-sm font-bold uppercase tracking-widest text-white group-active:text-opacity-75" >
                       Ir
                     </span>
                   </a>
@@ -171,7 +181,7 @@ function MenuEstudiante() {
               </div>
             </div>
           </article>
-          <article className="hover:animate-background rounded-xl bg-gradient-to-r from-blue-800 via-yellow-400 to-yellow-500 00 p-0.5 shadow-xl transition hover:bg-[length:500%_400%] hover:shadow-sm hover:[animation-duration:_4s]">
+          <article className="hover:animate-background rounded-xl bg-gradient-to-r from-blue-800 via-blue-400 to-blue-500 00 p-0.5 shadow-xl transition hover:bg-[length:500%_400%] hover:shadow-sm hover:[animation-duration:_4s]">
             <div className="rounded-[10px] bg-white p-4 !pb-14 !pt-15 sm:p-6 row">
               <p className="featured-block-text text-center">
                 <strong className="text-xl text-center">Forma 03</strong>
@@ -186,9 +196,11 @@ function MenuEstudiante() {
                     className=" grid grid-cols-1 group relative focus:outline-none focus:ring"
                     href="/src/html/Forma03.html"
                   >
-                    <span className=" grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 bg-yellow-500 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"></span>
+                    <span className=" rounded-[25px] grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"
+                    style={{ backgroundColor: '#145eb9' }}
+                    ></span>
 
-                    <span className="relative text-center inline-block border-2 border-current px-8 py-3 text-sm font-bold uppercase tracking-widest text-black group-active:text-opacity-75">
+                    <span className="rounded-[25px] relative text-center inline-block border-2 border-black px-8 py-3 text-sm font-bold uppercase tracking-widest text-white group-active:text-opacity-75" >
                       IR 
                     </span>
                   </a>
@@ -197,7 +209,7 @@ function MenuEstudiante() {
             </div>
           </article>
 
-          <article className="hover:animate-background rounded-xl bg-gradient-to-r from-blue-800 via-yellow-400 to-yellow-500 00 p-0.5 shadow-xl transition hover:bg-[length:500%_400%] hover:shadow-sm hover:[animation-duration:_4s]">
+          <article className="hover:animate-background rounded-xl bg-gradient-to-r from-blue-800 via-blue-400 to-blue-500 00 p-0.5 shadow-xl transition hover:bg-[length:500%_400%] hover:shadow-sm hover:[animation-duration:_4s]">
             <div className="rounded-[10px] bg-white p-4 !pb-14 !pt-15 sm:p-6 row">
               <p className="featured-block-text text-center">
                 <strong className="text-xl text-center">
@@ -216,9 +228,11 @@ function MenuEstudiante() {
                     className=" grid grid-cols-1 group relative focus:outline-none focus:ring"
                     href="/src/html/Modificar_Secciones.html"
                   >
-                    <span className=" grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 bg-yellow-500 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"></span>
+                    <span className=" rounded-[25px] grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"
+                    style={{ backgroundColor: '#145eb9' }}
+                    ></span>
 
-                    <span className="relative text-center inline-block border-2 border-current px-8 py-3 text-sm font-bold uppercase tracking-widest text-black group-active:text-opacity-75">
+                    <span className="rounded-[25px] relative text-center inline-block border-2 border-black px-8 py-3 text-sm font-bold uppercase tracking-widest text-white group-active:text-opacity-75" >
                       Ir
                     </span>
                   </a>
