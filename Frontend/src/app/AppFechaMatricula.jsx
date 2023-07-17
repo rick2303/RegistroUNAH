@@ -293,6 +293,7 @@ console.log(a);
                 className="w-100"
                 onClick={guardarFechas}
                 disabled={isGuardarDisabled}
+                title={isGuardarDisabled ? "Ya se agregó el máximo de fechas" : ""}
               >
                 <strong>Guardar</strong>
                 

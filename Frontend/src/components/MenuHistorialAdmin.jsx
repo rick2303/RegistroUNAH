@@ -3,19 +3,18 @@ import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import "styled-components";
 import { Input } from "reactstrap";
-
-
-const paginationComponentOptions = {
-  rowsPerPageText: 'Filas por página',
-  rangeSeparatorText: 'de',
-  selectAllRowsItem: true,
-  selectAllRowsItemText: 'Todos',
+const opcionesPaginacion = {
+  pagination: {
+    previous: "Anterior",
+    next: "Siguiente",
+    rowsPerPage: "Filas por página:",
+    displayRows: "de",
+    paginationLabel: "{start}-{end} de {rows} páginas",
+  },
 };
-
 const MenuHistorialAdmin = () => {
   const [users, setUsers] = useState([]);
   const [inputValue, setInputValue] = useState("");
-
   const showData = async (NumCuenta) => {
     const URL = "http://localhost:5000/historial";
     const response = await fetch(URL, {
@@ -29,13 +28,10 @@ const MenuHistorialAdmin = () => {
    // console.log(data);
     setUsers(data);
   };
-
   useEffect(() => {
     showData(inputValue);
   }, [inputValue]); // Ejecutar el efecto cada vez que inputValue cambie
-
   //configuramos las columnas para DataTable
-
   const columnas = [
     {
       name: "CODIGO",
@@ -72,7 +68,9 @@ const MenuHistorialAdmin = () => {
   ];
 
   //Mostramos la data en DataTable
-
+  const NoDataComponent = () => {
+    return <div>No hay registros para mostrar</div>;
+  };
   return (
     <div className="App">
       <div>
@@ -90,9 +88,10 @@ const MenuHistorialAdmin = () => {
           placeholder="Ingresar número de cuenta"
         />
       </div>
-      <DataTable columns={columnas} data={users} pagination paginationComponentOptions={paginationComponentOptions} noDataComponent={<NoDataComponent />}></DataTable>
+
+
+      <DataTable columns={columnas} data={users} pagination options={opcionesPaginacion} noDataComponent={<NoDataComponent />}></DataTable>
     </div>
   );
 };
-
 export default MenuHistorialAdmin;

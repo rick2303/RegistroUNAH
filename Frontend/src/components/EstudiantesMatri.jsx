@@ -64,6 +64,9 @@ const EstudiantesMatriculadosMain = () => {
       },
 
       ]
+      const NoDataComponent = () => {
+        return <div>No hay registros para mostrar</div>;
+      };
       
     //Mostramos la data en DataTable
 

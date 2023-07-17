@@ -106,7 +106,9 @@ const MenuHistorial = () => {
       selector: (row) => row.OBS,
     },
   ];
-
+  const NoDataComponent = () => {
+    return <div>No hay registros para mostrar</div>;
+  };
   // Mostramos la data en DataTable
   return (
     
@@ -119,7 +121,7 @@ const MenuHistorial = () => {
       <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
           Historial Académico
       </h1>
-      <DataTable columns={columnas} data={historialData} pagination paginationComponentOptions={paginationComponentOptions} />
+      <DataTable columns={columnas} data={historialData} pagination paginationComponentOptions={paginationComponentOptions} noDataComponent={<NoDataComponent />}/>
     </div>
   );
 };

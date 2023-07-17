@@ -4,24 +4,13 @@ import DataTable from "react-data-table-component";
 import "styled-components";
 import { Input, Button } from "reactstrap";
 import { format, parseISO, set } from "date-fns";
-
-
-const paginationComponentOptions = {
-  rowsPerPageText: 'Filas por página',
-  rangeSeparatorText: 'de',
-  selectAllRowsItem: true,
-  selectAllRowsItemText: 'Todos',
-};
-
 const MenuHistorialAdmin = () => {
   const [users, setUsers] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [historialData, setHistorialData] = useState([]);
   const [periodoAcademicoActual, setPeriodoAcademicoActualPAC] = useState("");
-
   const fechaActual = new Date();
   const año = fechaActual.getFullYear();
-
   const obtenerFechasMinMaxIPAC = async () => {
     try {
       const response = await fetch(
@@ -30,7 +19,6 @@ const MenuHistorialAdmin = () => {
       const data = await response.json();
       const fechamin = parseISO(data[0].FechaInicio);
       const fechamax = parseISO(data[0].FechaFinal);
-
       if (fechaActual >= fechamin && fechaActual <= fechamax) {
         setPeriodoAcademicoActualPAC("1PAC");
       }
@@ -38,7 +26,6 @@ const MenuHistorialAdmin = () => {
       console.error("Error al obtener las fechas mínima y máxima:", error);
     }
   };
-
   const obtenerFechasMinMaxIIPAC = async () => {
     try {
       const response = await fetch(
@@ -47,7 +34,6 @@ const MenuHistorialAdmin = () => {
       const data = await response.json();
       const fechamin = parseISO(data[0].FechaInicio);
       const fechamax = parseISO(data[0].FechaFinal);
-
       if (fechaActual >= fechamin && fechaActual <= fechamax) {
         setPeriodoAcademicoActualPAC("2PAC");
       }
@@ -55,7 +41,6 @@ const MenuHistorialAdmin = () => {
       console.error("Error al obtener las fechas mínima y máxima:", error);
     }
   };
-
   const obtenerFechasMinMaxIIIPAC = async () => {
     try {
       const response = await fetch(
@@ -64,7 +49,6 @@ const MenuHistorialAdmin = () => {
       const data = await response.json();
       const fechamin = parseISO(data[0].FechaInicio);
       const fechamax = parseISO(data[0].FechaFinal);
-
       if (fechaActual >= fechamin && fechaActual <= fechamax) {
         setPeriodoAcademicoActualPAC("3PAC");
       }
@@ -72,18 +56,15 @@ const MenuHistorialAdmin = () => {
       console.error("Error al obtener las fechas mínima y máxima:", error);
     }
   };
-
   obtenerFechasMinMaxIPAC();
   obtenerFechasMinMaxIIPAC();
   obtenerFechasMinMaxIIIPAC();
-
   useEffect(() => {
     if (inputValue && periodoAcademicoActual && año) {
       showData(inputValue, periodoAcademicoActual, año);
     }
     console.log(periodoAcademicoActual);
   }, [inputValue, periodoAcademicoActual, año]);
-
   const showData = async (inputValue, periodo, year) => {
     console.log(inputValue);
     try {
@@ -104,7 +85,6 @@ const MenuHistorialAdmin = () => {
     } catch (error) {
       console.error("Error al obtener los datos:", error);
     }
-
     try {
       const URL = "http://localhost:5000/enviarInformacionEstudiante";
       const response = await fetch(URL, {
@@ -164,7 +144,9 @@ const MenuHistorialAdmin = () => {
       selector: (row) => row.PERIODO,
     },
   ];
-
+  const NoDataComponent = () => {
+    return <div>No hay registros para mostrar</div>;
+  };
   return (
     <div className="App">
       <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
@@ -186,7 +168,6 @@ const MenuHistorialAdmin = () => {
         />
       </div>
       <br></br>
-
       {users.length > 0 ? (
         <>
           <img
@@ -200,7 +181,6 @@ const MenuHistorialAdmin = () => {
               margin: "auto",
             }}
           />
-
           <h3 className="text-2xl text-center font-bold pt-4 pb-3 text-gray-900 sm:text-2xl">
             {users[0].Nombre} {users[0].Apellido}
           </h3>
@@ -222,10 +202,9 @@ const MenuHistorialAdmin = () => {
       )}
 
       <div className="container">
-        <DataTable columns={columnas1} data={historialData} pagination paginationComponentOptions={paginationComponentOptions} noDataComponent={<NoDataComponent />}></DataTable>
+        <DataTable columns={columnas1} data={historialData}  noDataComponent={<NoDataComponent />}></DataTable>
       </div>
     </div>
   );
 };
-
 export default MenuHistorialAdmin;

@@ -5,7 +5,7 @@ import DataTable from 'react-data-table-component';
 import 'styled-components'
 import { FaPlusCircle } from "react-icons/fa";
 import {FcDeleteRow} from "react-icons/fc"
-
+import { Input} from "reactstrap";
 
 const paginationComponentOptions = {
   rowsPerPageText: 'Filas por página',
@@ -13,8 +13,6 @@ const paginationComponentOptions = {
   selectAllRowsItem: true,
   selectAllRowsItemText: 'Todos',
 };
-
-
 const SeccionesMain = () => {
     const [Departamento, setDepartamento] = useState("");
     const [CentroRegional, setNumCentroRegional] = useState("");
@@ -36,7 +34,7 @@ const SeccionesMain = () => {
     const [seccion, setSeccion] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [backendResponse, setBackendResponse] = useState("");
-
+    const [inputValue, setInputValue] = useState("");
 
 useEffect(() => {
     const storedData = localStorage.getItem("userData");
@@ -49,9 +47,7 @@ useEffect(() => {
     setNumCentroRegional(centro);
     }
 }, []);
-
 const obtenerClases = async () => {
-
     fetch("http://localhost:5000/TraerClases", {
         method: "POST",
         headers: {
@@ -67,7 +63,6 @@ const obtenerClases = async () => {
         .catch((error) => {
             console.error("Error al obtener los datos:", error);
         });
-
         fetch("http://localhost:5000/TraerDocentes", {
         method: "POST",
         headers: {
@@ -83,9 +78,7 @@ const obtenerClases = async () => {
         .catch((error) => {
             console.error("Error al obtener los datos:", error);
         });
-
 }
-
 const fetchAulas = async (edificio) => {
     // Lógica para obtener la lista de aulas desde tu API, pasando el edificio como parámetro
     try {
@@ -96,11 +89,9 @@ const fetchAulas = async (edificio) => {
       console.log("Error al obtener las aulas", error);
     }
   };
-
   const handleCheckboxChange = (event) => {
     const valorCheckbox = event.target.value;
     const isChecked = event.target.checked;
-
     if (isChecked) {
       // Agregar el valor a los días seleccionados
       setDiasSeleccionados((prevDiasSeleccionados) => [...prevDiasSeleccionados, valorCheckbox]);
@@ -111,7 +102,6 @@ const fetchAulas = async (edificio) => {
       );
     }
   };
-
   const diasConcatenados = diasSeleccionados.join("");
   const handleCuposClick = (row) => {
     const cantidad = prompt("Ingrese la cantidad de cupos a agregar:");
@@ -140,52 +130,40 @@ const fetchAulas = async (edificio) => {
     }
   };
   
-
   const handleEdificioChange = (event) => {
     setEdificio(event.target.value);
   };
-
   const handleInputChange = (event) => {
     setSeccion(event.target.value);
   };
-
   const handleObservacionesChange = (event) => {
     setObservaciones(event.target.value);
   };
-
   const handleAulaChange = (event) => {
     setAulaSeleccionada(event.target.value);
   };
-
   const handlePeriodoChange = (event) => {
     setPeriodoSeleccionado(event.target.value);
   };
-
   const handleHiChange = (event) => {
     setHiSeleccionado(event.target.value);
   };
-
   const handleEsClaseServicioChange = (event) => {
     setEsClaseServicio(event.target.value);
   };
-
   const handleHfChange = (event) => {
     setHfSeleccionado(event.target.value);
   };
-
   const handleClaseChange = (event) => {
     setClaseSeleccionada(event.target.value);
   };
-
   const handleDocenteChange = (event) => {
     setDocenteSeleccionado(event.target.value);
   };
-
   const handleCuposChange = (event) => {
     setCupos(event.target.value);
   };
 const showData = async () => {
-
     fetch("http://localhost:5000/secciones", {
         method: "POST",
         headers: {
@@ -200,7 +178,6 @@ const showData = async () => {
         .catch((error) => {
             console.error("Error al obtener los datos:", error);
         });
-
 } 
 const handleCrearSeccion = async () => {
     try {
@@ -233,23 +210,18 @@ const handleCrearSeccion = async () => {
             ClaseServicio:esClaseServicio
         }),
       });
-
       const data = await response.json();
-
       // Actualizar el estado del mensaje de respuesta
       setBackendResponse(data);
-
       alert(data.message);
       if (response.status===200) {
         window.location.reload();
          console.log(data);
     }
-
     } catch (error) {
       alert("Error al crear la seccion");
     }
   };
-
   const eliminarFila = (row) => {
     // Solicitar al usuario que ingrese una justificación
     const justificacion = prompt("Ingrese una justificación:");
@@ -260,7 +232,6 @@ const handleCrearSeccion = async () => {
         clase:row.Clase,
 	    uvs:row.UV
       };
-
       fetch(`http://localhost:5000/seccionEliminar/${row.IdSeccion}`, {
         method: "DELETE",
         headers: {
@@ -275,7 +246,6 @@ const handleCrearSeccion = async () => {
       .then((data) => {
         // Mostrar el mensaje de respuesta en un alert
         alert(data.message);
-
         if (data.status===200) {
             window.location.reload();
           console.log(data);
@@ -289,28 +259,24 @@ const handleCrearSeccion = async () => {
     }
   };
   
-
 useEffect(() => {
     obtenerClases()
   }, [Departamento])
-
   useEffect(() => {
     showData()
   }, [Departamento, CentroRegional])
-
   useEffect(() => {
     if (edificio) {
       // Lógica para obtener la lista de aulas
       fetchAulas(edificio);
     }
   }, [edificio]);
-
 //configuramos las columnas para DataTable
-
 const columnas = [
     {
     name:'ASIGNATURA',
-    selector : row => row.Asignatura
+    selector : row => row.Asignatura,
+    width: "240px"
     },
     {
     name:'EDIFICIO',
@@ -342,7 +308,8 @@ const columnas = [
     },
     {
     name:'DOCENTE',
-    selector : row => row.Nombre
+    selector : row => row.Nombre,
+    width: "240px"
     },
     {
     name:'SECCION',
@@ -369,17 +336,18 @@ const columnas = [
         ),
       },
     ]
-
+    const filteredData = sections.filter((row) => row.Asignatura.includes(inputValue));
 //Mostramos la data en DataTable
-
+const NoDataComponent = () => {
+  return <div>No hay registros para mostrar</div>;
+};
     return (
-        
+
 
         <div className="App">
         <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
             Crear nuevas secciones
         </h1>
-
         <div className="container">
         <div className="row">
         <div className="col-md-6 mb-4">
@@ -397,7 +365,6 @@ const columnas = [
             ))}
           </select>
         </div>
-
         <div className="col-md-6 mb-4">
       <select
         className="form-select border-3"
@@ -422,11 +389,10 @@ const columnas = [
         <option value="J1">J1</option>
         <option value="K1">K1</option>
         <option value="K2">K2</option>
-        <option value="I1">I1</option>
+        <option value="L1">L1</option>
         <option value="Polideportivo">Polideportivo</option>
       </select>
     </div>
-
         <div className="col-md-6 mb-4">
         <select
             className="form-select border-3"
@@ -442,7 +408,6 @@ const columnas = [
             ))}
           </select>
         </div>
-
         <div className="col-md-6 mb-4">
         <select
           className="form-select border-3"
@@ -458,9 +423,7 @@ const columnas = [
           ))}
         </select>
       </div>
-
         
-
         <div className="col-md-6 mb-4">
             <select 
             className="form-select border-3"
@@ -468,7 +431,7 @@ const columnas = [
             value={hiSeleccionado}
             onChange={handleHiChange}>
             <option selected>HI</option>
-            <option value="700">600</option>
+            <option value="600">600</option>
             <option value="700">700</option>
             <option value="800">800</option>
             <option value="900">900</option>
@@ -485,7 +448,6 @@ const columnas = [
             <option value="2000">2000</option>
             </select>
         </div>
-
         <div className="col-md-6 mb-4">
             <select 
             className="form-select border-3"
@@ -527,12 +489,12 @@ const columnas = [
 
         <div className="col-md-6 mb-4">
         <input
-className="form-control"
+            className="form-control"
             type="text"
             placeholder="Cantidad de cupos"
             value={cupos}
             onChange={handleCuposChange}
-        onKeyPress={(event) => {
+            onKeyPress={(event) => {
             const charCode = event.which ? event.which : event.keyCode;
             if (charCode < 48 || charCode > 57) {
             event.preventDefault();
@@ -540,12 +502,8 @@ className="form-control"
         }}
         aria-label="default input example"
         />
-
         </div>
         
-
-
-
         <div className="col-md-6 mb-4">
             <select className="form-select border-3" aria-label="Default select example" onChange={handleEsClaseServicioChange}>
             <option value="">¿Es clase de servicio?</option>
@@ -553,8 +511,6 @@ className="form-control"
             <option value="NO">NO</option>
             </select>
         </div>
-
-
         <div className="mb-4">
             <p className="pt-4 pb-3 text-gray-900 sm:text-1xl text-left">
             Dias
@@ -596,12 +552,9 @@ className="form-control"
             </label>
             </div>
         </div>
-
         <div className="col-md-6 mb-4">
             <input className="form-control border-3" type="text" placeholder="Observaciones" aria-label="default input example" onChange={handleObservacionesChange}/>
         </div>
-
-
         <div className="col-md-6 mb-4 align-self-left">
         <a className="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalCANCEL" onClick={handleCrearSeccion}>
           Crear sección
@@ -610,24 +563,36 @@ className="form-control"
 
 
 
-        <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
+        <h1 className="text-2xl text-center font-bold pt-3 pb-4 text-gray-900 sm:text-3xl">
             Secciones creadas
         </h1>
-
+        <div>
+        <Input
+          style={{
+            textAlign: "center",
+            marginTop: "5px",
+            marginBottom: "30px",
+            marginLeft: "80px",
+            maxWidth: "300px",
+          }}
+          id="inputCuenta"
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          placeholder="Ingresar Asignatura para filtrar"
+        />
+      </div>
+      <br />
+      <br />
         <DataTable
+        noDataComponent={<NoDataComponent />}
         columns={columnas}
         data={filteredData}
         pagination paginationComponentOptions={paginationComponentOptions}
         ></DataTable>
     </div>
 </div>
-
     </div>
-
     )
-
-
 }
-
-
 export default SeccionesMain;
