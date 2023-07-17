@@ -1,5 +1,5 @@
 export const queries = {
-    get_Docentes: "SELECT * from dbo.empleados where rol='Docente'",
+    get_Docentes: "SELECT * from dbo.empleados where rol='Docente' ORDER BY NumEmpleado DESC",
     getNumEmpleado: "SELECT numEmpleado from dbo.empleados where DNI = @dni",
     insert_Docentes: "INSERT INTO dbo.empleados (DNI, Nombre, Apellido, NumeroTelefono, CorreoInstitucional, CorreoPersonal, Contrasena,FechaNacimiento ,FechaContratacion, Carrera, Direccion, Foto, CentroRegional, Rol,SubRol) VALUES ( @DNI, @Nombre, @Apellido, @NumeroTelefono,@CorreoInstitucional, @CorreoPersonal, @Contrasena, @FechaNacimiento, @FechaContratacion, @Carrera, @Direccion, @Foto, @CentroRegional, @Rol , @SubRol )",
     accessLogin: "SELECT Contrasena, CAST(NumEmpleado AS varchar) AS Codigo, Rol, SubRol, estado FROM dbo.empleados WHERE CAST(NumEmpleado AS varchar) = @Id UNION ALL SELECT Contrasena, CAST(NumCuenta AS varchar) AS NumCuenta, NULL AS rol, NULL AS subrol, NULL as estado FROM dbo.estudiantes WHERE NumCuenta = @Id  ",

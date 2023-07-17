@@ -58,7 +58,9 @@ const EstudiantesMatriculadosMain = () => {
       ]
       
     //Mostramos la data en DataTable
-
+    const NoDataComponent = () => {
+      return <div>No hay registros para mostrar</div>;
+    };
       return (
 
       <div className="App">
@@ -66,6 +68,7 @@ const EstudiantesMatriculadosMain = () => {
         columns={columnas}
         data={users}
         pagination
+        noDataComponent={<NoDataComponent />}
         ></DataTable>
       </div>   )
       

@@ -57,7 +57,7 @@ export const registrarDocente = async (req, res) => {
             .input("Rol", sql.VarChar, Rol)
             .input("SubRol", sql.VarChar, SubRol)
             .query(queries.insert_Docentes);
-        //res.status(200).json({ message: 'Docente registrado correctamente.' });
+        res.status(200).json({ message: 'Docente registrado correctamente.', status:200});
         const numEmpleado = await pool.request().input('DNI', sql.VarChar, DNI).query(queries.getNumEmpleado)
         enviarEmail(CorreoPersonal, Nombre, Apellido, correoInstitucional, numEmpleado.recordset[0].numEmpleado, contrasena, Carrera)
     } catch (error) {
