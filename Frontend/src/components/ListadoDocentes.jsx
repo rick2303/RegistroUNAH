@@ -7,14 +7,12 @@ import { Input, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { format, parseISO } from "date-fns";
 import "../App.css";
 
-const opcionesPaginacion = {
-  pagination: {
-    previous: "Anterior",
-    next: "Siguiente",
-    rowsPerPage: "Filas por página:",
-    displayRows: "de",
-    paginationLabel: "{start}-{end} de {rows} páginas",
-  },
+
+const paginationComponentOptions = {
+  rowsPerPageText: 'Filas por página',
+  rangeSeparatorText: 'de',
+  selectAllRowsItem: true,
+  selectAllRowsItemText: 'Todos',
 };
 
 const ListadoDocentes = () => {
@@ -171,7 +169,7 @@ const ListadoDocentes = () => {
           className="mi-tabla"
           data={filteredData}
           pagination
-          paginationComponentOptions={opcionesPaginacion}
+          paginationComponentOptions={paginationComponentOptions}
           noHeader
           // Para poner las filas no encontradas en español
           noDataComponent={<NoDataComponent />}

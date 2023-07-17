@@ -3,15 +3,13 @@ import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import 'styled-components';
 
-const opcionesPaginacion = {
-    pagination: {
-      previous: "Anterior",
-      next: "Siguiente",
-      rowsPerPage: "Filas por página:",
-      displayRows: "de",
-      paginationLabel: "{start}-{end} de {rows} páginas",
-    },
-  };
+
+const paginationComponentOptions = {
+    rowsPerPageText: 'Filas por página',
+    rangeSeparatorText: 'de',
+    selectAllRowsItem: true,
+    selectAllRowsItemText: 'Todos',
+};
 const EstudiantesFiltradosMatriculados = () => {
     const [users, setUsers] = useState([]);
     const [carreraUsuario, setCarreraUsuario] = useState("");
@@ -91,7 +89,7 @@ const EstudiantesFiltradosMatriculados = () => {
             <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
                 Listado de estudiantes Matriculados en {carreraUsuario}
             </h1>
-            <DataTable columns={columnas} data={users} pagination />
+            <DataTable columns={columnas} data={users} pagination paginationComponentOptions={paginationComponentOptions} />
         </div>
     );
     

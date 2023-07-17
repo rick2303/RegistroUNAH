@@ -7,6 +7,15 @@ import { FaPlusCircle } from "react-icons/fa";
 import {FcDeleteRow} from "react-icons/fc"
 import { Input} from "reactstrap";
 
+
+const paginationComponentOptions = {
+  rowsPerPageText: 'Filas por página',
+  rangeSeparatorText: 'de',
+  selectAllRowsItem: true,
+  selectAllRowsItemText: 'Todos',
+};
+
+
 const SeccionesMain = () => {
     const [Departamento, setDepartamento] = useState("");
     const [CentroRegional, setNumCentroRegional] = useState("");
@@ -631,7 +640,7 @@ const NoDataComponent = () => {
         noDataComponent={<NoDataComponent />}
         columns={columnas}
         data={filteredData}
-        pagination
+        pagination paginationComponentOptions={paginationComponentOptions}
         ></DataTable>
     </div>
 </div>
