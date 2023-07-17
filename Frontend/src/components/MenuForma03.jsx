@@ -3,22 +3,12 @@ import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import "styled-components";
 import { format, parseISO, set } from "date-fns";
-
-const paginationComponentOptions = {
-  rowsPerPageText: 'Filas por página',
-  rangeSeparatorText: 'de',
-  selectAllRowsItem: true,
-  selectAllRowsItemText: 'Todos',
-};
-
 const MenuForma = () => {
   const [NumCuenta, setNumCuenta] = useState("");
   const [historialData, setHistorialData] = useState([]);
   const [periodoAcademicoActual, setPeriodoAcademicoActualPAC] = useState("");
-
   const fechaActual = new Date();
   const año = fechaActual.getFullYear();
-
   useEffect(() => {
     const storedData = localStorage.getItem("userData");
     if (storedData) {
@@ -27,7 +17,6 @@ const MenuForma = () => {
       setNumCuenta(numCuenta);
     }
   }, []);
-
   const obtenerFechasMinMaxIPAC = async () => {
     try {
       const response = await fetch(
@@ -36,7 +25,6 @@ const MenuForma = () => {
       const data = await response.json();
       const fechamin = parseISO(data[0].FechaInicio);
       const fechamax = parseISO(data[0].FechaFinal);
-
       if (fechaActual >= fechamin && fechaActual <= fechamax) {
         setPeriodoAcademicoActualPAC("1PAC");
       }
@@ -44,7 +32,6 @@ const MenuForma = () => {
       console.error("Error al obtener las fechas mínima y máxima:", error);
     }
   };
-
   const obtenerFechasMinMaxIIPAC = async () => {
     try {
       const response = await fetch(
@@ -53,7 +40,6 @@ const MenuForma = () => {
       const data = await response.json();
       const fechamin = parseISO(data[0].FechaInicio);
       const fechamax = parseISO(data[0].FechaFinal);
-
       if (fechaActual >= fechamin && fechaActual <= fechamax) {
         setPeriodoAcademicoActualPAC("2PAC");
       }
@@ -61,7 +47,6 @@ const MenuForma = () => {
       console.error("Error al obtener las fechas mínima y máxima:", error);
     }
   };
-
   const obtenerFechasMinMaxIIIPAC = async () => {
     try {
       const response = await fetch(
@@ -70,7 +55,6 @@ const MenuForma = () => {
       const data = await response.json();
       const fechamin = parseISO(data[0].FechaInicio);
       const fechamax = parseISO(data[0].FechaFinal);
-
       if (fechaActual >= fechamin && fechaActual <= fechamax) {
         setPeriodoAcademicoActualPAC("3PAC");
       }
@@ -78,18 +62,15 @@ const MenuForma = () => {
       console.error("Error al obtener las fechas mínima y máxima:", error);
     }
   };
-
   obtenerFechasMinMaxIPAC();
   obtenerFechasMinMaxIIPAC();
   obtenerFechasMinMaxIIIPAC();
-
   useEffect(() => {
     if (NumCuenta && periodoAcademicoActual && año) {
       showData(NumCuenta, periodoAcademicoActual, año);
     }
     console.log(periodoAcademicoActual);
   }, [NumCuenta, periodoAcademicoActual, año]);
-
   const showData = async (cuenta, periodo, year) => {
     try {
       const URL = "http://localhost:5000/enviarClasesQueEstaCursando";
@@ -162,10 +143,9 @@ const MenuForma = () => {
         Forma 03
       </h1>
       <div className="container">
-        <DataTable columns={columnas1} data={historialData}  pagiantion paginationComponentOptions={paginationComponentOptions} noDataComponent={<NoDataComponent />}></DataTable>
+        <DataTable columns={columnas1} data={historialData}  noDataComponent={<NoDataComponent />}></DataTable>
       </div>
     </div>
   );
 };
-
 export default MenuForma;

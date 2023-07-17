@@ -77,7 +77,7 @@ export default function NavbarDocente() {
         className="p-1 font-normal "
         title="Regresar"
       >
-        <a href={redirectTo} className="flex items-center">
+        <a href={redirectTo} style={{ color: 'white' }}  className="flex items-center">
           <h1 className="text-5xl"><TiArrowBackOutline /></h1>
         </a>
       </Typography>
@@ -88,7 +88,7 @@ export default function NavbarDocente() {
         className="p-1 font-normal "
         title="Salir"
       >
-        <a href="../../index.html" className="flex items-center">
+        <a href="../../index.html" style={{ color: 'white' }} className="flex items-center">
           <h1 className="text-5xl"><BiLogOut/></h1>
         </a>
       </Typography>
@@ -111,8 +111,8 @@ export default function NavbarDocente() {
   return (
     <>
       <header
-        className="border-b  backdrop-blur min-w-full top
-        bg-gradient-to-r from-blue-900 via-yellow-300 to-yellow-400"
+        className="border-b  backdrop-blur min-w-full top"
+        style={{ backgroundColor: '#145eb9' }}
       >
         <div className="flex items-center justify-between text-blue-gray-900">
           <Typography
@@ -120,7 +120,7 @@ export default function NavbarDocente() {
             href="http://127.0.0.1:5173/src/html/Docente.html"
             className="mr-5 cursor-pointer py-1.5 font-medium"
           >
-            <img className="ml-4 h-30 w-40" src="\logounah.png"></img>
+            <img className="ml-3 h-30 w-60" src="\LogoBlancoUNAH.png"></img>
           </Typography>
           <div className="flex items-center gap-4">
             <div className="mr-4 hidden lg:block">{navList}</div>

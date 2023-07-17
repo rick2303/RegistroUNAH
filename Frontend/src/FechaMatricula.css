@@ -89,11 +89,8 @@ label {
   #boton-bonito[disabled] {
 	cursor: not-allowed;
 	content: "Ya se agregó el máximo de fechas";
-	
+
   }
- 
- 
- 
   .mi-tabla {
 	border: 1px solid #ccc;
 	border-radius: 4px;

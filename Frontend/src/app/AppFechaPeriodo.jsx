@@ -2,22 +2,23 @@ import React, { useEffect, useState } from "react";
 import { DatePicker } from "@material-ui/pickers";
 import DataTable from "react-data-table-component";
 import { format } from "date-fns";
-import {FcDeleteRow} from "react-icons/fc"
+import { FcDeleteRow } from "react-icons/fc";
 import "../FechaMatricula.css";
 
-
-
 const AppFechaPeriodo = () => {
-  const [fechaInicioSeleccionada, setFechaInicioSeleccionada] = useState(new Date());
-  const [fechaFinalSeleccionada, setFechaFinalSeleccionada] = useState(new Date());
-  const [pacSeleccionado, setPacSeleccionado] = useState('1PAC');
+  const [fechaInicioSeleccionada, setFechaInicioSeleccionada] = useState(
+    new Date()
+  );
+  const [fechaFinalSeleccionada, setFechaFinalSeleccionada] = useState(
+    new Date()
+  );
+  const [pacSeleccionado, setPacSeleccionado] = useState("1PAC");
   const [historialData2, setHistorialData2] = useState([]);
   const [clickCount, setClickCount] = useState(0);
   const [isPac1Disabled, setIsPac1Disabled] = useState(false);
   const [isPac2Disabled, setIsPac2Disabled] = useState(false);
   const [isPac3Disabled, setIsPac3Disabled] = useState(false);
   const [isGuardarDisabled, setIsGuardarDisabled] = useState(false);
-  
 
   const convertirFechaAJSON = (fechaInicio, fechaFinal) => {
     const fechaJSON = {
@@ -43,7 +44,7 @@ const AppFechaPeriodo = () => {
   const eliminarFila = (row) => {
     // Realizar la solicitud al backend para eliminar la fila con la información de "row"
     const a = JSON.stringify({ idPlanificacion: `${row.idPlanificacion}` });
-console.log(a);
+    console.log(a);
 
     fetch("http://localhost:5000/EliminarPlanificacion", {
       method: "POST",
@@ -52,7 +53,6 @@ console.log(a);
       },
       body: JSON.stringify({ idPlanificacion: `${row.idPlanificacion}` }),
     })
-      
       .then((data) => {
         // Mostrar el mensaje de alerta si la eliminación fue exitosa
         alert("Se ha eliminado la fila exitosamente");
@@ -65,7 +65,10 @@ console.log(a);
   };
 
   const guardarFechas = () => {
-    const fechaJSON = convertirFechaAJSON(fechaInicioSeleccionada, fechaFinalSeleccionada);
+    const fechaJSON = convertirFechaAJSON(
+      fechaInicioSeleccionada,
+      fechaFinalSeleccionada
+    );
     console.log(fechaJSON);
     // Realizar la solicitud al backend para enviar el JSON
     fetch("http://localhost:5000/enviarPlanificacion", {
@@ -131,10 +134,9 @@ console.log(a);
     {
       name: "Eliminar",
       cell: (row) => (
-        <h1 onClick={() => eliminarFila(row)}
-        className="cursor-pointer">
-        <FcDeleteRow className="cursor-pointer"/>
-       </h1>
+        <h1 onClick={() => eliminarFila(row)} className="cursor-pointer">
+          <FcDeleteRow className="cursor-pointer" />
+        </h1>
       ),
       sortable: true,
       center: true,
@@ -144,13 +146,12 @@ console.log(a);
     return <div>No hay registros para mostrar</div>;
   };
   return (
-    < >
+    <>
       <div className="d-flex mt-5">
-  <h1 className="text-2xl mb-4 text-center font-bold pt-2 text-gray-900 sm:text-3xl col-12">
-    Planificación de períodos
-  </h1>
-  
-</div >
+        <h1 className="text-2xl mb-4 text-center font-bold pt-2 text-gray-900 sm:text-3xl col-12">
+          Planificación de períodos
+        </h1>
+      </div>
       <div className="contenedor mx-24">
         <div className="container m-4">
           <div className="row m-4">
@@ -178,18 +179,22 @@ console.log(a);
               <label htmlFor="pac" className="mb-3">
                 Seleccione el PAC
               </label>
-              <select 
+              <select
                 className="form-control"
                 value={pacSeleccionado}
                 onChange={handlePacChange}
               >
-                <option  className=" text-xs" value="1PAC" disabled={isPac1Disabled}>
+                <option
+                  className=" text-xs"
+                  value="1PAC"
+                  disabled={isPac1Disabled}
+                >
                   1PAC
                 </option>
-                <option  value="2PAC" disabled={isPac2Disabled}>
+                <option value="2PAC" disabled={isPac2Disabled}>
                   2PAC
                 </option>
-                <option  value="3PAC" disabled={isPac3Disabled}>
+                <option value="3PAC" disabled={isPac3Disabled}>
                   3PAC
                 </option>
               </select>
@@ -198,29 +203,31 @@ console.log(a);
           <div className="row m-4">
             <div className="col-md-4 col-sm-6"></div>
             <div className="col-md-4 col-sm-6 d-flex justify-content-center align-items-end">
-            <button
-  id="boton-bonito"
-  className="w-100"
-  onClick={guardarFechas}
-  disabled={
-    isGuardarDisabled ||
-    ((pacSeleccionado === "1PAC" || pacSeleccionado === "2PAC") &&
-      historialData2.some((row) => row.PeriodoAcademico === pacSeleccionado))
-  }
-  title={
-    isGuardarDisabled
-      ? "Ya se agregó el máximo de fechas"
-      : (pacSeleccionado === "1PAC" || pacSeleccionado === "2PAC") &&
-        historialData2.some((row) => row.PeriodoAcademico === pacSeleccionado)
-      ? `Ya existe ${pacSeleccionado} en la tabla`
-      : ""
-  }
->
-  <strong>Guardar</strong>
-</button>
-
-
-              
+              <button
+                id="boton-bonito"
+                className="w-100"
+                onClick={guardarFechas}
+                disabled={
+                  isGuardarDisabled ||
+                  ((pacSeleccionado === "1PAC" || pacSeleccionado === "2PAC") &&
+                    historialData2.some(
+                      (row) => row.PeriodoAcademico === pacSeleccionado
+                    ))
+                }
+                title={
+                  isGuardarDisabled
+                    ? "Ya se agregó el máximo de fechas"
+                    : (pacSeleccionado === "1PAC" ||
+                        pacSeleccionado === "2PAC") &&
+                      historialData2.some(
+                        (row) => row.PeriodoAcademico === pacSeleccionado
+                      )
+                    ? `Ya existe ${pacSeleccionado} en la tabla`
+                    : ""
+                }
+              >
+                <strong>Guardar</strong>
+              </button>
             </div>
             <div className="col-md-4"></div>
           </div>

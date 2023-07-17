@@ -1,19 +1,28 @@
-import React, { useState } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from 'reactstrap';
+import React, { useState } from "react";
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+} from "reactstrap";
 
 const ModalDocentes = () => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [Nombre, setNombre] = useState('');
-  const [Apellido, setApellido] = useState('');
-  const [DNI, setDNI] = useState('');
-  const [CorreoPersonal, setCorreoPersonal] = useState('');
-  const [NumeroTelefono, setNumeroTelefono] = useState('');
-  const [FechaNacimiento, setFechaNacimiento] = useState('');
-  const [Direccion, setDireccion] = useState('');
-  const [CentroRegional, setCentroRegional] = useState('');
-  const [Foto, setFoto] = useState('');
-  const [Carrera, setCarrera] = useState('');
-
+  const [Nombre, setNombre] = useState("");
+  const [Apellido, setApellido] = useState("");
+  const [DNI, setDNI] = useState("");
+  const [CorreoPersonal, setCorreoPersonal] = useState("");
+  const [NumeroTelefono, setNumeroTelefono] = useState("");
+  const [FechaNacimiento, setFechaNacimiento] = useState("");
+  const [Direccion, setDireccion] = useState("");
+  const [CentroRegional, setCentroRegional] = useState("");
+  const [Foto, setFoto] = useState("");
+  const [Carrera, setCarrera] = useState("");
 
   const toggleModal = () => {
     setModalOpen(!modalOpen);
@@ -24,30 +33,30 @@ const ModalDocentes = () => {
   };
 
   const borrarCampos = () => {
-    setNombre('');
-    setApellido('');
-    setDNI('');
-    setCorreoPersonal('');
-    setNumeroTelefono('');
-    setFechaNacimiento('');
-    setDireccion('');
-    setCentroRegional('');
-    setFoto('');
-    setCarrera('');
+    setNombre("");
+    setApellido("");
+    setDNI("");
+    setCorreoPersonal("");
+    setNumeroTelefono("");
+    setFechaNacimiento("");
+    setDireccion("");
+    setCentroRegional("");
+    setFoto("");
+    setCarrera("");
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    console.log('Nombre:', Nombre);
-    console.log('Apellido:', Apellido);
-    console.log('DNI:', DNI);
-    console.log('CorreoPersonal:', CorreoPersonal);
-    console.log('NumeroTelefono:', NumeroTelefono);
-    console.log('FechaNacimiento:', FechaNacimiento);
-    console.log('Direccion:', Direccion);
-    console.log('CentroRegional:', CentroRegional);
-    console.log('Foto:', Foto);
+    console.log("Nombre:", Nombre);
+    console.log("Apellido:", Apellido);
+    console.log("DNI:", DNI);
+    console.log("CorreoPersonal:", CorreoPersonal);
+    console.log("NumeroTelefono:", NumeroTelefono);
+    console.log("FechaNacimiento:", FechaNacimiento);
+    console.log("Direccion:", Direccion);
+    console.log("CentroRegional:", CentroRegional);
+    console.log("Foto:", Foto);
 
     toggleModal();
   };
@@ -56,36 +65,36 @@ const ModalDocentes = () => {
     event.preventDefault();
 
     const formData = new FormData();
-    formData.append('DNI', DNI);
-    formData.append('Nombre', Nombre);
-    formData.append('Apellido', Apellido);
-    formData.append('NumeroTelefono', NumeroTelefono);
-    formData.append('CorreoPersonal', CorreoPersonal);
-    formData.append('FechaNacimiento', FechaNacimiento);
-    formData.append('Carrera', Carrera);
-    formData.append('Direccion', Direccion);
-    formData.append('files', Foto);
-    formData.append('CentroRegional', CentroRegional);
+    formData.append("DNI", DNI);
+    formData.append("Nombre", Nombre);
+    formData.append("Apellido", Apellido);
+    formData.append("NumeroTelefono", NumeroTelefono);
+    formData.append("CorreoPersonal", CorreoPersonal);
+    formData.append("FechaNacimiento", FechaNacimiento);
+    formData.append("Carrera", Carrera);
+    formData.append("Direccion", Direccion);
+    formData.append("files", Foto);
+    formData.append("CentroRegional", CentroRegional);
 
     toggleModal();
     borrarCampos();
 
     // Realizar la solicitud HTTP utilizando fetch
-    fetch('http://localhost:5000/registrarDocentes', {
-      method: 'POST',
+    fetch("http://localhost:5000/registrarDocentes", {
+      method: "POST",
       body: formData,
     })
       .then((response) => {
         if (response.status === 200) {
-          alert('Docente agregado correctamente');
+          alert("Docente agregado correctamente");
           return response;
-        }else{
-          alert('Datos incompletos')
+        } else {
+          alert("Datos incompletos");
         }
       })
       .catch((error) => {
-        console.error('Error en la solicitud:', error);
-        alert('Datos incompletos')
+        console.error("Error en la solicitud:", error);
+        alert("Datos incompletos");
       });
   };
 
@@ -93,12 +102,14 @@ const ModalDocentes = () => {
     <div>
       <div onClick={toggleModal} className="grid grid-cols-1">
         <a>
-          <a
-            className="rounded grid grid-cols-1 group relative focus:outline-none focus:ring"
-          >
-            <span className="rounded grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 bg-yellow-500 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"></span>
-            <span className="rounded relative text-center inline-block border-2 border-current px-8 py-3 text-sm font-bold uppercase tracking-widest text-black group-active:text-opacity-75">
-              IR
+          <a className="rounded grid grid-cols-1 group relative focus:outline-none focus:ring">
+            <span
+              className=" rounded-[25px] grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"
+              style={{ backgroundColor: "#145eb9" }}
+            ></span>
+
+            <span className="rounded-[25px] relative text-center inline-block border-2 border-black px-8 py-3 text-sm font-bold uppercase tracking-widest text-white group-active:text-opacity-75">
+              Ir
             </span>
           </a>
         </a>
@@ -129,16 +140,10 @@ const ModalDocentes = () => {
             <FormGroup>
               <Label for="DNI">DNI</Label>
               <Input
-                type="text"
+                type="number"
                 id="DNI"
                 value={DNI}
                 onChange={(e) => setDNI(e.target.value)}
-                onKeyPress={(event) => {
-            const charCode = event.which ? event.which : event.keyCode;
-            if (charCode < 48 || charCode > 57) {
-            event.preventDefault();
-            }
-        }}
               />
             </FormGroup>
             <FormGroup>
@@ -151,21 +156,12 @@ const ModalDocentes = () => {
               />
             </FormGroup>
             <FormGroup>
-            
               <Label for="numCelular">Numero De Celular</Label>
-              
               <Input
-                type="text"
+                type="number"
                 id="numCelular"
-                maxLength="8"
                 value={NumeroTelefono}
                 onChange={(e) => setNumeroTelefono(e.target.value)}
-                onKeyPress={(event) => {
-            const charCode = event.which ? event.which : event.keyCode;
-            if (charCode < 48 || charCode > 57) {
-            event.preventDefault();
-            }
-        }}
               />
             </FormGroup>
             <FormGroup>
@@ -196,9 +192,13 @@ const ModalDocentes = () => {
               />
             </FormGroup>
             <FormGroup>
-
-            <Label for="centroRegional">Centro Regional:</Label>
-                <Input type="select" id="centroRegional" value={CentroRegional} onChange={handleOpcionChange}>
+              <Label for="centroRegional">Centro Regional:</Label>
+              <Input
+                type="select"
+                id="centroRegional"
+                value={CentroRegional}
+                onChange={handleOpcionChange}
+              >
                 <option value="">Seleccione un Centro Regional</option>
                 <option value="CU">Ciudad Universitaria</option>
                 <option value="VS">Valle de Sula</option>
@@ -208,7 +208,7 @@ const ModalDocentes = () => {
                 <option value="CURLP">CURLP</option>
                 <option value="TEC-DANLI">TEC-DANLI</option>
                 <option value="TEC-AGUAN">TEC-AGUAN</option>
-                </Input>
+              </Input>
             </FormGroup>
             <FormGroup>
               <Label for="foto">Foto</Label>
@@ -217,10 +217,9 @@ const ModalDocentes = () => {
                 id="foto"
                 value={Foto}
                 onChange={(e) => setFoto(e.target.value)}
-                accept='.jpg,.pgn,.png'
+                accept=".jpg,.pgn,.png"
               />
             </FormGroup>
-    
           </Form>
         </ModalBody>
         <ModalFooter>

@@ -13,7 +13,7 @@ export const secciones =  async (req, res) => {
             from [dbo].[secciones] s
             INNER join [dbo].[empleados] e on e.NumEmpleado = s.IdDocente
             INNER JOIN [dbo].[clases] c on s.IdClase = c.IdClase
-            where c.Departamento = @departamento and s.CentroRegional = @centroRegional
+            where c.Departamento = @departamento and s.CentroRegional = @centroRegional order by s.IdSeccion desc 
         `);
 
     res.json(result.recordset);
