@@ -5,7 +5,6 @@ import DataTable from 'react-data-table-component';
 import 'styled-components'
 import { FaPlusCircle } from "react-icons/fa";
 import {FcDeleteRow} from "react-icons/fc"
-import { Input} from "reactstrap";
 
 
 const paginationComponentOptions = {
@@ -37,7 +36,7 @@ const SeccionesMain = () => {
     const [seccion, setSeccion] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [backendResponse, setBackendResponse] = useState("");
-    const [inputValue, setInputValue] = useState("");
+
 
 useEffect(() => {
     const storedData = localStorage.getItem("userData");
@@ -311,8 +310,7 @@ useEffect(() => {
 const columnas = [
     {
     name:'ASIGNATURA',
-    selector : row => row.Asignatura,
-    width: "240px"
+    selector : row => row.Asignatura
     },
     {
     name:'EDIFICIO',
@@ -344,8 +342,7 @@ const columnas = [
     },
     {
     name:'DOCENTE',
-    selector : row => row.Nombre,
-    width: "240px"
+    selector : row => row.Nombre
     },
     {
     name:'SECCION',
@@ -372,11 +369,9 @@ const columnas = [
         ),
       },
     ]
-    const filteredData = sections.filter((row) => row.Asignatura.includes(inputValue));
+
 //Mostramos la data en DataTable
-const NoDataComponent = () => {
-  return <div>No hay registros para mostrar</div>;
-};
+
     return (
         
 
@@ -427,7 +422,7 @@ const NoDataComponent = () => {
         <option value="J1">J1</option>
         <option value="K1">K1</option>
         <option value="K2">K2</option>
-        <option value="L1">L1</option>
+        <option value="I1">I1</option>
         <option value="Polideportivo">Polideportivo</option>
       </select>
     </div>
@@ -473,7 +468,7 @@ const NoDataComponent = () => {
             value={hiSeleccionado}
             onChange={handleHiChange}>
             <option selected>HI</option>
-            <option value="600">600</option>
+            <option value="700">600</option>
             <option value="700">700</option>
             <option value="800">800</option>
             <option value="900">900</option>
@@ -532,12 +527,12 @@ const NoDataComponent = () => {
 
         <div className="col-md-6 mb-4">
         <input
-            className="form-control"
+className="form-control"
             type="text"
             placeholder="Cantidad de cupos"
             value={cupos}
             onChange={handleCuposChange}
-            onKeyPress={(event) => {
+        onKeyPress={(event) => {
             const charCode = event.which ? event.which : event.keyCode;
             if (charCode < 48 || charCode > 57) {
             event.preventDefault();
@@ -615,29 +610,11 @@ const NoDataComponent = () => {
 
 
 
-        <h1 className="text-2xl text-center font-bold pt-3 pb-4 text-gray-900 sm:text-3xl">
+        <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
             Secciones creadas
         </h1>
-        <div>
-        <Input
-          style={{
-            textAlign: "center",
-            marginTop: "5px",
-            marginBottom: "30px",
-            marginLeft: "80px",
-            maxWidth: "300px",
-          }}
-          id="inputCuenta"
-          type="text"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          placeholder="Ingresar Asignatura para filtrar"
-        />
-      </div>
-      <br />
-      <br />
+
         <DataTable
-        noDataComponent={<NoDataComponent />}
         columns={columnas}
         data={filteredData}
         pagination paginationComponentOptions={paginationComponentOptions}

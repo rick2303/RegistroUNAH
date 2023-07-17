@@ -129,16 +129,10 @@ const ModalDocentes = () => {
             <FormGroup>
               <Label for="DNI">DNI</Label>
               <Input
-                type="text"
+                type="number"
                 id="DNI"
                 value={DNI}
                 onChange={(e) => setDNI(e.target.value)}
-                onKeyPress={(event) => {
-            const charCode = event.which ? event.which : event.keyCode;
-            if (charCode < 48 || charCode > 57) {
-            event.preventDefault();
-            }
-        }}
               />
             </FormGroup>
             <FormGroup>
@@ -151,21 +145,12 @@ const ModalDocentes = () => {
               />
             </FormGroup>
             <FormGroup>
-            
               <Label for="numCelular">Numero De Celular</Label>
-              
               <Input
-                type="text"
+                type="number"
                 id="numCelular"
-                maxLength="8"
                 value={NumeroTelefono}
                 onChange={(e) => setNumeroTelefono(e.target.value)}
-                onKeyPress={(event) => {
-            const charCode = event.which ? event.which : event.keyCode;
-            if (charCode < 48 || charCode > 57) {
-            event.preventDefault();
-            }
-        }}
               />
             </FormGroup>
             <FormGroup>

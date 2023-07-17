@@ -72,9 +72,7 @@ const MenuHistorialAdmin = () => {
   ];
 
   //Mostramos la data en DataTable
-  const NoDataComponent = () => {
-    return <div>No hay registros para mostrar</div>;
-  };
+
   return (
     <div className="App">
       <div>
@@ -92,8 +90,6 @@ const MenuHistorialAdmin = () => {
           placeholder="Ingresar número de cuenta"
         />
       </div>
-
-  
       <DataTable columns={columnas} data={users} pagination paginationComponentOptions={paginationComponentOptions} noDataComponent={<NoDataComponent />}></DataTable>
     </div>
   );

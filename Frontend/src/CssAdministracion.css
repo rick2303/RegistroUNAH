@@ -44,7 +44,7 @@ h1 {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1em;
-  background-color: #fbd122;
+  background-color: #145eb9;
 }
 button {
   border-radius: 8px;
@@ -53,13 +53,13 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #fbd429 !important;
+  background-color: #145eb9 !important;
   color:#ffffff !important;
   cursor: pointer;
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: #013878;
 }
 button:focus,
 button:focus-visible {

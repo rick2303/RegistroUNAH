@@ -17,7 +17,6 @@ const AppFechaPeriodo = () => {
   const [isPac2Disabled, setIsPac2Disabled] = useState(false);
   const [isPac3Disabled, setIsPac3Disabled] = useState(false);
   const [isGuardarDisabled, setIsGuardarDisabled] = useState(false);
-  
 
   const convertirFechaAJSON = (fechaInicio, fechaFinal) => {
     const fechaJSON = {
@@ -178,18 +177,18 @@ console.log(a);
               <label htmlFor="pac" className="mb-3">
                 Seleccione el PAC
               </label>
-              <select 
+              <select
                 className="form-control"
                 value={pacSeleccionado}
                 onChange={handlePacChange}
               >
-                <option  className=" text-xs" value="1PAC" disabled={isPac1Disabled}>
+                <option className=" text-xs" value="1PAC" disabled={isPac1Disabled}>
                   1PAC
                 </option>
-                <option  value="2PAC" disabled={isPac2Disabled}>
+                <option value="2PAC" disabled={isPac2Disabled}>
                   2PAC
                 </option>
-                <option  value="3PAC" disabled={isPac3Disabled}>
+                <option value="3PAC" disabled={isPac3Disabled}>
                   3PAC
                 </option>
               </select>
@@ -219,8 +218,6 @@ console.log(a);
   <strong>Guardar</strong>
 </button>
 
-
-              
             </div>
             <div className="col-md-4"></div>
           </div>
