@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import {
   Button,
   Modal,
@@ -11,6 +11,8 @@ import {
   Input,
 } from "reactstrap";
 
+
+
 const ModalDocentes = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [Nombre, setNombre] = useState("");
@@ -22,10 +24,15 @@ const ModalDocentes = () => {
   const [Direccion, setDireccion] = useState("");
   const [CentroRegional, setCentroRegional] = useState("");
   const [Foto, setFoto] = useState("");
-  const [Carrera, setCarrera] = useState("");
+  const [Carrera, setCarrera] = useState([]);
+  const [carreraSeleccionada, setCarreraSeleccionada] = useState("");
 
   const toggleModal = () => {
     setModalOpen(!modalOpen);
+  };
+
+  const handleCarreraChange = (event) => {
+    setCarreraSeleccionada(event.target.value);
   };
 
   const handleOpcionChange = (event) => {
@@ -42,7 +49,7 @@ const ModalDocentes = () => {
     setDireccion("");
     setCentroRegional("");
     setFoto("");
-    setCarrera("");
+    setCarreraSeleccionada("");
   };
 
   const handleSubmit = (event) => {
@@ -59,7 +66,24 @@ const ModalDocentes = () => {
     console.log("Foto:", Foto);
 
     toggleModal();
+
   };
+
+  const fetchCarrera = async () => {
+    // Lógica para obtener la lista de aulas desde tu API, pasando el edificio como parámetro
+    try {
+      const response = await fetch(`http://localhost:5000/carreras`);
+      const data = await response.json();
+      setCarrera(data);
+      console.log(data)
+    } catch (error) {
+      console.log("Error al obtener las carreras", error);
+    }
+  };
+  useEffect(() => {
+      fetchCarrera();
+  }, []);
+
 
   const AgregarDocente = (event) => {
     event.preventDefault();
@@ -71,7 +95,7 @@ const ModalDocentes = () => {
     formData.append("NumeroTelefono", NumeroTelefono);
     formData.append("CorreoPersonal", CorreoPersonal);
     formData.append("FechaNacimiento", FechaNacimiento);
-    formData.append("Carrera", Carrera);
+    formData.append("Carrera", carreraSeleccionada);
     formData.append("Direccion", Direccion);
     formData.append("files", Foto);
     formData.append("CentroRegional", CentroRegional);
@@ -140,10 +164,17 @@ const ModalDocentes = () => {
             <FormGroup>
               <Label for="DNI">DNI</Label>
               <Input
-                type="number"
+                type="text"
+                
                 id="DNI"
                 value={DNI}
                 onChange={(e) => setDNI(e.target.value)}
+                onKeyPress={(event) => {
+            const charCode = event.which ? event.which : event.keyCode;
+            if (charCode < 48 || charCode > 57) {
+            event.preventDefault();
+            }
+        }}
               />
             </FormGroup>
             <FormGroup>
@@ -158,10 +189,17 @@ const ModalDocentes = () => {
             <FormGroup>
               <Label for="numCelular">Numero De Celular</Label>
               <Input
-                type="number"
+                type="text"
                 id="numCelular"
+                maxLength="8"
                 value={NumeroTelefono}
                 onChange={(e) => setNumeroTelefono(e.target.value)}
+                onKeyPress={(event) => {
+            const charCode = event.which ? event.which : event.keyCode;
+            if (charCode < 48 || charCode > 57) {
+            event.preventDefault();
+            }
+        }}
               />
             </FormGroup>
             <FormGroup>
@@ -175,12 +213,19 @@ const ModalDocentes = () => {
             </FormGroup>
             <FormGroup>
               <Label for="carrera">Carrera</Label>
-              <Input
-                type="text"
-                id="carrera"
-                value={Carrera}
-                onChange={(e) => setCarrera(e.target.value)}
-              />
+              <select
+          className="form-select border-3"
+          aria-label="Default select example"
+          value={carreraSeleccionada}
+          onChange={handleCarreraChange}
+        >
+          <option>Carrera</option>
+          {Carrera.map((carrera, index) => (
+            <option key={index} value={carrera}>
+              {carrera}
+            </option>
+          ))}
+        </select>
             </FormGroup>
             <FormGroup>
               <Label for="direccion">Direccion</Label>

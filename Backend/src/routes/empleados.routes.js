@@ -2,7 +2,7 @@ import {Router} from 'express';
 const multer = require('multer');
 import path from 'path';
 
-import {getDocentes,registrarDocente,actualizarDocente} from '../controllers/empleados.controllers';
+import {getDocentes,registrarDocente,actualizarDocente,getCarreras} from '../controllers/empleados.controllers';
 
 const routerEmpleados = Router();
 
@@ -24,5 +24,7 @@ routerEmpleados.get('/docentes', getDocentes);
 routerEmpleados.post('/registrarDocentes', upload.array('files', 1), registrarDocente);
 
 routerEmpleados.put('/actualizarDocente/:id', actualizarDocente);
+
+routerEmpleados.get('/carreras',getCarreras)
 
 export default routerEmpleados;

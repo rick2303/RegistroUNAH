@@ -556,7 +556,7 @@ const NoDataComponent = () => {
             <input className="form-control border-3" type="text" placeholder="Observaciones" aria-label="default input example" onChange={handleObservacionesChange}/>
         </div>
         <div className="col-md-6 mb-4 align-self-left">
-        <a className="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalCANCEL" onClick={handleCrearSeccion}>
+        <a className="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalCANCEL" onClick={handleCrearSeccion} style={{ backgroundColor: '#145eb9' }}>
           Crear sección
         </a>
       </div>
