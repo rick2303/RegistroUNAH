@@ -198,15 +198,28 @@ console.log(a);
           <div className="row m-4">
             <div className="col-md-4 col-sm-6"></div>
             <div className="col-md-4 col-sm-6 d-flex justify-content-center align-items-end">
-              <button 
-              id="boton-bonito" 
-              className="w-100" 
-              onClick={guardarFechas} 
-              disabled={isGuardarDisabled}
-              title={isGuardarDisabled ? "Ya se agregó el máximo de fechas" : ""}>
-              <strong>Guardar</strong>
-              
-              </button>
+            <button
+  id="boton-bonito"
+  className="w-100"
+  onClick={guardarFechas}
+  disabled={
+    isGuardarDisabled ||
+    ((pacSeleccionado === "1PAC" || pacSeleccionado === "2PAC") &&
+      historialData2.some((row) => row.PeriodoAcademico === pacSeleccionado))
+  }
+  title={
+    isGuardarDisabled
+      ? "Ya se agregó el máximo de fechas"
+      : (pacSeleccionado === "1PAC" || pacSeleccionado === "2PAC") &&
+        historialData2.some((row) => row.PeriodoAcademico === pacSeleccionado)
+      ? `Ya existe ${pacSeleccionado} en la tabla`
+      : ""
+  }
+>
+  <strong>Guardar</strong>
+</button>
+
+
               
             </div>
             <div className="col-md-4"></div>
