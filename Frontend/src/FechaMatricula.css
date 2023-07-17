@@ -86,6 +86,14 @@ label {
 	transition: all 0.6s ease-out;
 	transform: scale(1, 1);
   }
+  #boton-bonito[disabled] {
+	cursor: not-allowed;
+	content: "Ya se agregó el máximo de fechas";
+	
+  }
+ 
+ 
+ 
   .mi-tabla {
 	border: 1px solid #ccc;
 	border-radius: 4px;
