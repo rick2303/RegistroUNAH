@@ -3,6 +3,14 @@ import React,{useState,useEffect} from 'react';
 import DataTable from 'react-data-table-component';
 import 'styled-components'
 
+
+const paginationComponentOptions = {
+  rowsPerPageText: 'Filas por página',
+  rangeSeparatorText: 'de',
+  selectAllRowsItem: true,
+  selectAllRowsItemText: 'Todos',
+}; 
+
 const EstudiantesMatriculadosMain = () => {
 
 
@@ -67,7 +75,7 @@ const EstudiantesMatriculadosMain = () => {
       <DataTable
         columns={columnas}
         data={users}
-        pagination
+        pagination paginationComponentOptions={paginationComponentOptions}
         noDataComponent={<NoDataComponent />}
         ></DataTable>
       </div>   )

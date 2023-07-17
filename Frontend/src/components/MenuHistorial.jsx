@@ -5,14 +5,11 @@ import 'styled-components';
 import { Button } from "reactstrap";
 
 
-const opcionesPaginacion = {
-  pagination: {
-    previous: "Anterior",
-    next: "Siguiente",
-    rowsPerPage: "Filas por página:",
-    displayRows: "de",
-    paginationLabel: "{start}-{end} de {rows} páginas",
-  },
+const paginationComponentOptions = {
+  rowsPerPageText: 'Filas por página',
+  rangeSeparatorText: 'de',
+  selectAllRowsItem: true,
+  selectAllRowsItemText: 'Todos',
 };
 
 const MenuHistorial = () => {
@@ -122,7 +119,7 @@ const MenuHistorial = () => {
       <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
           Historial Académico
       </h1>
-      <DataTable columns={columnas} data={historialData} pagination options={opcionesPaginacion} />
+      <DataTable columns={columnas} data={historialData} pagination paginationComponentOptions={paginationComponentOptions} />
     </div>
   );
 };

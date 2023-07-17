@@ -4,6 +4,13 @@ import DataTable from "react-data-table-component";
 import "styled-components";
 import { format, parseISO, set } from "date-fns";
 
+const paginationComponentOptions = {
+  rowsPerPageText: 'Filas por página',
+  rangeSeparatorText: 'de',
+  selectAllRowsItem: true,
+  selectAllRowsItemText: 'Todos',
+};
+
 const MenuForma = () => {
   const [NumCuenta, setNumCuenta] = useState("");
   const [historialData, setHistorialData] = useState([]);
@@ -155,7 +162,7 @@ const MenuForma = () => {
         Forma 03
       </h1>
       <div className="container">
-        <DataTable columns={columnas1} data={historialData}  noDataComponent={<NoDataComponent />}></DataTable>
+        <DataTable columns={columnas1} data={historialData}  pagiantion paginationComponentOptions={paginationComponentOptions} noDataComponent={<NoDataComponent />}></DataTable>
       </div>
     </div>
   );

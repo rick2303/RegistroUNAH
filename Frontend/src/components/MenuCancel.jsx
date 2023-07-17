@@ -5,6 +5,14 @@ import "styled-components";
 import { format, parseISO, set } from "date-fns";
 import ModalCargarPDFCancelaciones from "./modalCargarPDFCancelaciones";
 
+
+const paginationComponentOptions = {
+  rowsPerPageText: 'Filas por página',
+  rangeSeparatorText: 'de',
+  selectAllRowsItem: true,
+  selectAllRowsItemText: 'Todos',
+};
+
 const MenuCancelaciones = () => {
   const [NumCuenta, setNumCuenta] = useState("");
   const [historialData, setHistorialData] = useState([]);
@@ -275,6 +283,7 @@ const MenuCancelaciones = () => {
           columns={columnas1}
           data={historialData}
           selectableRows
+          pagination paginationComponentOptions={paginationComponentOptions}
           onSelectedRowsChange={handleSelectedRowsChange} // Callback para obtener las filas seleccionadas
           conditionalRowStyles={[
             {

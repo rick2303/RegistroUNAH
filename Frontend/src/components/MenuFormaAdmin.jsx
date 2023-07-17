@@ -5,6 +5,14 @@ import "styled-components";
 import { Input, Button } from "reactstrap";
 import { format, parseISO, set } from "date-fns";
 
+
+const paginationComponentOptions = {
+  rowsPerPageText: 'Filas por página',
+  rangeSeparatorText: 'de',
+  selectAllRowsItem: true,
+  selectAllRowsItemText: 'Todos',
+};
+
 const MenuHistorialAdmin = () => {
   const [users, setUsers] = useState([]);
   const [inputValue, setInputValue] = useState("");
@@ -216,7 +224,7 @@ const MenuHistorialAdmin = () => {
       )}
 
       <div className="container">
-        <DataTable columns={columnas1} data={historialData}  noDataComponent={<NoDataComponent />}></DataTable>
+        <DataTable columns={columnas1} data={historialData} pagination paginationComponentOptions={paginationComponentOptions} noDataComponent={<NoDataComponent />}></DataTable>
       </div>
     </div>
   );
