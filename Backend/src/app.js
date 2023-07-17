@@ -30,7 +30,7 @@ app.use(express.urlencoded({ extended:false}));
 
 // Configurar la ruta para servir archivos estáticos
 app.use(express.static(path.join(__dirname, 'UploadsPDF')));
-
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
 // Ruta para descargar un archivo PDF
 app.get('/download-PDF', (req, res) => {
   const { documento } = req.query;
