@@ -13,6 +13,18 @@ export const getDocentes = async (req, res) => {
         res.send(error.message);
     }
 }
+
+export const getCarreras = async (req, res) => {
+    const pool = await getConnection();
+    const result = await pool.request()
+        .query(queries.getCarreras);
+
+    const carreras = result.recordset.map((carrera) => carrera.NombreCarrera);
+
+    res.json(carreras);
+
+}
+
 export const getDocenteById = async (req, res) => {
     const {DNI} = req.body
     try {

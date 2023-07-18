@@ -42,7 +42,9 @@ export const queries = {
 
     deleteSeccion: "EXEC SP_EliminarSeccion @IdSeccion = @idseccion, @Justificacion = @justificado, @Asignatura = @clase, @UV = @uvs;",
 
-    agregarCupos:"UPDATE Secciones SET Cupos = CASE WHEN Cupos IS NULL THEN 0 ELSE Cupos + @Cupos END   WHERE IdSeccion = @idseccion;"
+    agregarCupos:"UPDATE Secciones SET Cupos = CASE WHEN Cupos IS NULL THEN 0 ELSE Cupos + @Cupos END   WHERE IdSeccion = @idseccion;",
+
+    getCarreras:"SELECT NombreCarrera from Carrera"
 }
 
 export const querys = {
