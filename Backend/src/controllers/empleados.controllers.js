@@ -25,6 +25,19 @@ export const getCarreras = async (req, res) => {
 
 }
 
+export const getDocenteById = async (req, res) => {
+    const {DNI} = req.body
+    try {
+        const pool = await getConnection();
+        const result = await pool.request()
+        .input('DNI', sql.VarChar, DNI)
+        .query(queries.get_Docente_By_Id);
+        res.json(result.recordset);
+    } catch (error) {
+        res.status(500);
+        res.send(error.message);
+    }
+}
 
 export const registrarDocente = async (req, res) => {
     const Rol = 'DOCENTE';

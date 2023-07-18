@@ -1,8 +1,7 @@
 import {Router} from 'express';
 const multer = require('multer');
 import path from 'path';
-
-import {getDocentes,registrarDocente,actualizarDocente,getCarreras} from '../controllers/empleados.controllers';
+import {getDocentes,registrarDocente,actualizarDocente,getCarreras, getDocenteById} from '../controllers/empleados.controllers';
 
 const routerEmpleados = Router();
 
@@ -20,6 +19,8 @@ const storage = multer.diskStorage({
   const upload = multer({ storage });
 
 routerEmpleados.get('/docentes', getDocentes);
+
+routerEmpleados.get('/docentes/:id', getDocenteById);
 
 routerEmpleados.post('/registrarDocentes', upload.array('files', 1), registrarDocente);
 
