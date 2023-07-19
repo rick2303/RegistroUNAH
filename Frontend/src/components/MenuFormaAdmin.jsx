@@ -186,12 +186,22 @@ const MenuHistorialAdmin = () => {
           </h3>
           <ul>
             <li>
-              <p className="text-xl font-normal pt-4 pb-1 text-gray-900 sm:text-1xl text-center">
+              <p className="font-normal pt-4 pb-1 text-gray-900 sm:text-1xl text-center">
+                Carrera: {users[0].Carrera}
+              </p>
+            </li>
+            <li>
+              <p className="font-normal pt-4 pb-1 text-gray-900 sm:text-1xl text-center">
+                Centro regional: {users[0].CentroRegional}
+              </p>
+            </li>
+            <li>
+              <p className="font-normal pt-4 pb-1 text-gray-900 sm:text-1xl text-center">
                 Indice del Periodo: {users[0].IndicePeriodo}
               </p>
             </li>
             <li>
-              <p className="text-xl font-normal pt-4 pb-5 text-gray-900 sm:text-1xl text-center">
+              <p className="font-normal pt-4 pb-5 text-gray-900 sm:text-1xl text-center">
                 Indice Global: {users[0].IndiceGlobal}
               </p>
             </li>

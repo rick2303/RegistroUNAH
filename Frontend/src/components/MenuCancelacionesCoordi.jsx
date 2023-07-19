@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
-import "styled-components";
 import { format, parseISO, set } from "date-fns";
+import "styled-components";
+
+
 const MenuCancelaciones = () => {
 const [NumCuenta, setNumCuenta] = useState("");
 const [historialData, setHistorialData] = useState([]);
@@ -9,6 +11,84 @@ const [periodoAcademicoActual, setPeriodoAcademicoActualPAC] = useState("");
 const [users, setUsers] = useState([]);
 const fechaActual = new Date();
 const año = fechaActual.getFullYear();
+const [carrera, setCarreraUsuario] = useState("");
+const [centroRegional, setCentroRegional] = useState("");
+const [idClase, setIdClase] = useState("");
+
+useEffect(() => {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+        const userData = JSON.parse(storedData);
+        const Carrera = userData.data.Carrera;
+        const CentroRegional = userData.data.CentroRegional;
+        setCarreraUsuario(Carrera);
+        setCentroRegional(CentroRegional);
+    }
+    showData();
+}, [carrera, centroRegional]);
+
+useEffect(() => {
+    if (NumCuenta && periodoAcademicoActual && año) {
+    showData(NumCuenta, periodoAcademicoActual, año);
+    }
+    console.log(periodoAcademicoActual);
+}, [NumCuenta, periodoAcademicoActual, año]);
+
+const obtenerFechasMinMaxIPAC = async () => {
+try {
+    const response = await fetch(
+    "http://localhost:5000/enviarPlanificacionIPAC"
+    );
+    const data = await response.json();
+    const fechamin = parseISO(data[0].FechaInicio);
+    const fechamax = parseISO(data[0].FechaFinal);
+
+    if (fechaActual >= fechamin && fechaActual <= fechamax) {
+    setPeriodoAcademicoActualPAC("1PAC");
+    }
+} catch (error) {
+    console.error("Error al obtener las fechas mínima y máxima:", error);
+}
+};
+
+const obtenerFechasMinMaxIIPAC = async () => {
+try {
+    const response = await fetch(
+    "http://localhost:5000/enviarPlanificacionIIPAC"
+    );
+    const data = await response.json();
+    const fechamin = parseISO(data[0].FechaInicio);
+    const fechamax = parseISO(data[0].FechaFinal);
+
+    if (fechaActual >= fechamin && fechaActual <= fechamax) {
+    setPeriodoAcademicoActualPAC("2PAC");
+    }
+} catch (error) {
+    console.error("Error al obtener las fechas mínima y máxima:", error);
+}
+};
+
+const obtenerFechasMinMaxIIIPAC = async () => {
+try {
+    const response = await fetch(
+    "http://localhost:5000/enviarPlanificacionIIIPAC"
+    );
+    const data = await response.json();
+    const fechamin = parseISO(data[0].FechaInicio);
+    const fechamax = parseISO(data[0].FechaFinal);
+
+    if (fechaActual >= fechamin && fechaActual <= fechamax) {
+    setPeriodoAcademicoActualPAC("3PAC");
+    }
+} catch (error) {
+    console.error("Error al obtener las fechas mínima y máxima:", error);
+}
+};
+
+obtenerFechasMinMaxIPAC();
+obtenerFechasMinMaxIIPAC();
+obtenerFechasMinMaxIIIPAC();
+
 const handleDownloadPDF = ({ NumCuentaEnviada }) => {
 fetch("http://localhost:5000/download-pdf", {
     method: "POST",
@@ -41,22 +121,28 @@ fetch("http://localhost:5000/download-pdf", {
 };
 
 
-useEffect(() => {
-    showData();
-console.log(periodoAcademicoActual);
-}, [periodoAcademicoActual, año]);
+// useEffect(() => {
+//     showData();
+// console.log(periodoAcademicoActual);
+// }, [periodoAcademicoActual, año]);
 
 const showData = async () => {
     //OBTENER LOS PERIFLES DE LOS ESTUDIANTES
 try {
     const URL = "http://localhost:5000/enviarSolicitudesRealizadasCoordinador";
     const response = await fetch(URL, {
-    method: "GET",
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ carrera: carrera, centroRegional: centroRegional}),
+        
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            setUsers(data);
+            console.log(data);
     });
-    const data = await response.json();
-
-    setUsers(data);
-    console.log(data);
 } catch (error) {
     console.error("Error al obtener los datos:", error);
 }
@@ -118,7 +204,7 @@ const TablaCancelaciones = ({ data, columnas}) => {
     return (
         <div className="table-container" style={{ maxWidth: "1100px", margin: "auto", position: "relative", zIndex: 1 }}>
         <p className="text-xl font-normal pt-4 pb-3 text-gray-900 sm:text-1xl text-left">
-        Darle check a las clases que permite que se le cancelen
+        Clases que solicita cancelar el estudiante:
         </p>
         <form onSubmit={handleSubmit}>
         <DataTable
@@ -136,45 +222,60 @@ function CarruselUsuarios({ users }) {
     const [historialData, setHistorialData] = useState([]);
 
     const enviarCancelacionesCoordiACEPTADA = async (cuentaSend) => {
-
-        console.log("El historial es: ", historialData); 
-
-        const promises = historialData.map((item) => {
+        console.log("El historial es: ", historialData);
+    
         const NumCuenta = cuentaSend.toString();
         console.log("El numero de cuenta es: ", NumCuenta);
         const Estado = "Aprobada";
-        const IdClase = item.IdClase;
-        console.log("el id de la clase es: ", IdClase);
-
-        return fetch("http://localhost:5000/dictamenSolicitudEnviar", {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ numCuenta: NumCuenta, estado: Estado, idClase: IdClase }),
-        })
-        .then((response) => response.json())
-        .then((data) => {
-            if (data.message === "Error al procesar la solicitud") {
-            console.error("Error al enviar las cancelaciones:", data.message);
-            } else {
-            console.log(data);
-            alert("Respuesta enviada al estudiante de la clase: " + IdClase + " con éxito");
-            window.location.reload();
+    
+        for (const item of historialData) {
+            const IdClase = item.IdClase;
+            console.log("el id de la clase es: ", IdClase);
+    
+            try {
+                const responsePut = await fetch("http://localhost:5000/dictamenSolicitudEnviar", {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ numCuenta: NumCuenta, estado: Estado, idClase: IdClase }),
+                });
+    
+                const dataPut = await responsePut.json();
+    
+                if (dataPut.message === "Error al procesar la solicitud") {
+                    console.error("Error al enviar las cancelaciones:", dataPut.message);
+                } else {
+                    console.log(dataPut);
+                    alert("Respuesta enviada al estudiante de la clase: " + IdClase + " con éxito");
+                    window.location.reload();
+                }
+    
+                const responseDelete = await fetch("http://localhost:5000/eliminarClase", {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        numCuenta: NumCuenta,
+                        periodo: periodoAcademicoActual,
+                        idClase: IdClase,
+                        año: año,
+                    }),
+                });
+    
+                const dataDelete = await responseDelete.json();
+    
+                console.log(dataDelete);
+                console.log("Clase eliminada con éxito");
+            } catch (error) {
+                console.error("Error al enviar las cancelaciones:", error);
             }
-        })
-        .catch((error) => {
-            console.error("Error al enviar las cancelaciones:", error);
-        });
-    });
-
-    try {
-        const responses = await Promise.all(promises);
-        console.log(responses);
-    } catch (error) {
-        console.error("Error al enviar las cancelaciones:", error);
-    }
+        }
     };
+    
+    
+    
 
     const enviarCancelacionesCoordiRECHAZADA = async (cuentaSend) => {
 
@@ -280,6 +381,11 @@ return (
             <li>
             <p className="text-xl font-normal p-3 sm:text-1xl text-center">
                 {user.Nombre} {user.Apellido}
+            </p>
+            </li>
+            <li>
+            <p className="pb-2 text-center">
+                {user.CorreoInstitucional}
             </p>
             </li>
             <li>

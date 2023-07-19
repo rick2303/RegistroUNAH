@@ -138,9 +138,12 @@ export const enviarSoliCancelion = async (req, res) => {
 
 
 export const enviarSoliCancelCoordi = async (req, res) => {
+    const { carrera, centroRegional } = req.body;
     const pool = await getConnection();
     const result = await pool.request()
-        .query(querys.geSoliCancelacionesCoordinador);
+    .input("Carrera", sql.VarChar, carrera)
+    .input("CentroRegional", sql.VarChar, centroRegional)
+    .query(querys.geSoliCancelacionesCoordinador);
     res.json(result.recordset);
 };
 
@@ -166,5 +169,17 @@ export const enviarClasesdeSolicitudes = async (req, res) => {
     const result = await pool.request()
     .input("NumCuenta", sql.VarChar, NumCuenta)
     .query(querys.getClasesSolicitud);
+    res.json(result.recordset);
+}
+
+export const EliminarClaseExep = async (req, res) => {
+    const { numCuenta, periodo, idClase, año } = req.body;
+    const pool = await getConnection();
+    const result = await pool.request()
+    .input("NumCuenta", sql.VarChar, numCuenta)
+    .input("Periodo", sql.VarChar, periodo)
+    .input("IdClase", sql.VarChar, idClase)
+    .input("Año", sql.Int, año)
+    .query(querys.EliminarClaseExcep);
     res.json(result.recordset);
 }
