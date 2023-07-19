@@ -124,3 +124,24 @@ Content-Type: application/json
 {
     "Departamento": "Ingenieria en sistemas"
 }
+
+### ver clases que esta cursando un estudiante
+post http://localhost:5000/enviarSolicitudesRealizadasCoordinador
+Content-Type: application/json
+
+{
+    "carrera": "Ingenieria industrial",
+    "centroRegional": "VS"
+}
+
+
+### ver clases que esta cursando un estudiante
+delete  http://localhost:5000/eliminarClase
+Content-Type: application/json
+
+{
+    "numCuenta": "20182001940",
+    "periodo": "2PAC",
+    "idClase": "II-222",
+    "año": 2023
+}
