@@ -5,26 +5,14 @@ import "styled-components";
 import { format, parseISO, set } from "date-fns";
 import ModalCargarPDFCancelaciones from "./modalCargarPDFCancelaciones";
 
-
-const paginationComponentOptions = {
-  rowsPerPageText: 'Filas por página',
-  rangeSeparatorText: 'de',
-  selectAllRowsItem: true,
-  selectAllRowsItemText: 'Todos',
-};
-
 const MenuCancelaciones = () => {
   const [NumCuenta, setNumCuenta] = useState("");
   const [historialData, setHistorialData] = useState([]);
   const [historialData2, setHistorialData2] = useState([]);
   const [periodoAcademicoActual, setPeriodoAcademicoActualPAC] = useState("");
   const [inputValue, setInputValue] = useState("");
-  const [vcodigo, setcodigo] = useState([]);
   const [puedeEnviarPDF, setPuedeEnviarPDF] = useState(true);
-  const [vasignatura, setasignatura] = useState([]);
-  const [vseccion, setseccion] = useState([]);
-  const [vuv, setuv] = useState([]);
-  const [vestado, setestado] = useState([]);
+
 
   const fechaActual = new Date();
   const año = fechaActual.getFullYear();
@@ -179,6 +167,9 @@ const MenuCancelaciones = () => {
       selector: (row) => row.PERIODO,
     },
   ];
+  const NoDataComponent2 = () => {
+    return <div>No hay registros para mostrar</div>;
+  };
 
   // Configuramos las columnas para DataTable
   const columnas = [
@@ -207,17 +198,22 @@ const MenuCancelaciones = () => {
       selector: (row) => row.ESTADO,
     },
   ];
+  const NoDataComponent = () => {
+    return <div>No hay registros para mostrar</div>;
+  };
 
   const [filasSeleccionadas, setFilasSeleccionadas] = useState([]);
 
   const handleSelectedRowsChange = (selectedRows) => {
     if (selectedRows.selectedCount > 0) {
       const filas = selectedRows.selectedRows;
+      console.log(filas);
       setFilasSeleccionadas(filas);
     } else {
       setFilasSeleccionadas([]);
     }
   };
+
 
   const enviarCancelaciones = async () => {
     const razones = document.getElementById(
@@ -262,11 +258,11 @@ const MenuCancelaciones = () => {
       .then((res) => res.json())
       .then((data) => {
         alert("Solicitud procesada exitosamente, ahora suba el archivo PDF");
+        // Después de enviar la solicitud, establecer puedeEnviarSolicitud en false
+        setPuedeEnviarSolicitud(false);
+        setPuedeEnviarPDF(false);
+        setHistorialData2([...historialData2, ...datosCancelaciones]);
       });
-      // Después de enviar la solicitud, establecer puedeEnviarSolicitud en false
-      setPuedeEnviarSolicitud(false);
-      setPuedeEnviarPDF(false);
-      setHistorialData2([...historialData2, ...datosCancelaciones]);
   };
 
   return (
@@ -283,7 +279,7 @@ const MenuCancelaciones = () => {
           columns={columnas1}
           data={historialData}
           selectableRows
-          pagination paginationComponentOptions={paginationComponentOptions}
+          noDataComponent={<NoDataComponent />}
           onSelectedRowsChange={handleSelectedRowsChange} // Callback para obtener las filas seleccionadas
           conditionalRowStyles={[
             {
@@ -306,7 +302,6 @@ const MenuCancelaciones = () => {
             <textarea
               className="form-control form-control-sm border border-2 p-4 rounded"
               id="exampleFormControlTextarea1"
-              maxLength="1500"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
             />
@@ -317,6 +312,7 @@ const MenuCancelaciones = () => {
               type="button"
               className="btn btn-success"
               onClick={enviarCancelaciones}
+              disabled={historialData2.length > 0}
             >
               Procesar solicitud
             </button>
@@ -330,11 +326,11 @@ const MenuCancelaciones = () => {
             className="btn btn-success"
             data-bs-toggle="modal"
             data-bs-target="#ModalCANCEL"
+            disabled={!puedeEnviarPDF}
           >
             Subir archivo PDF
           </a>
           <ModalCargarPDFCancelaciones setPuedeEnviarPDF={setPuedeEnviarPDF}/>
-          
         </div>
 
         <h1 className="text-2xl text-center font-bold pt-1 pb-2 text-gray-900 sm:text-3xl">
@@ -343,7 +339,7 @@ const MenuCancelaciones = () => {
         <p className="text-xl font-normal pt-4 text-gray-900 sm:text-1xl text-left">
         Asegúrese de haber subido el archivo PDF para poder visualizar su solicitud
         </p>
-        <DataTable columns={columnas} data={historialData2} />
+        <DataTable columns={columnas} data={historialData2} noDataComponent={<NoDataComponent2 />}/>
       </div>
     </div>
   );
