@@ -51,11 +51,11 @@ export const querys = {
     getAllStudents: "SELECT * from [dbo].[estudiantes]",
     addNewStudent: "INSERT INTO [dbo].[estudiantes] (NumCuenta, DNI, Nombre, Apellido,NumeroTelefono, CorreoInstitucional, CorreoPersonal, Contrasena, FechaNacimiento, Carrera, Direccion, CentroRegional, PuntajePAA) VALUES (@NumCuenta, @DNI, @Nombre, @Apellido,@NumeroTelefono, @CorreoInstitucional, @CorreoPersonal, @Contrasena, @FechaNacimiento, @Carrera, @Direccion, @CentroRegional, @PuntajePAA);",
     getEstudiantesMatriculados: "SELECT Distinct NumCuenta, Nombre, Apellido, CorreoInstitucional, Carrera, IndiceGlobal, IndicePeriodo FROM [dbo].[estudiantes] e inner join registro_estudiante_clases re on re.IdEstudiante = numCuenta inner join secciones s on re.idSeccion = s.idseccion where YEAR(re.fecha) = year(getdate()) and month(RE.Fecha) > '05'",
-    insertNuevaPlanificacion: "INSERT INTO [dbo].[planificacion_academica] (FechaInicio, FechaFinal, PeriodoAcademico) VALUES (@FechaInicio, @FechaFinal, @PeriodoAcademico)",
+    insertNuevaPlanificacion: "INSERT INTO [dbo].[planificacion_academica] (FechaInicio, FechaFinal, PeriodoAcademico, Sistema) VALUES (@FechaInicio, @FechaFinal, @PeriodoAcademico, @Sistema)",
     getPlanificacionAcademica: "SELECT * FROM [dbo].[planificacion_academica]",
-    insertNuevaMatricula: "INSERT INTO [dbo].[planificacion_matricula] (FechaInicio, FechaFinal, HoraInicio, HoraFinal, PeriodoAcademico) VALUES (@FechaInicio, @FechaFinal,@HoraInicio, @HoraFinal, @PeriodoAcademico)",
+    insertNuevaMatricula: "INSERT INTO [dbo].[planificacion_matricula] (FechaInicio, FechaFinal, HoraInicio, HoraFinal, PeriodoAcademico, Sistema) VALUES (@FechaInicio, @FechaFinal,@HoraInicio, @HoraFinal, @PeriodoAcademico, @Sistema)",
     getMatricula: "select * from [dbo].[planificacion_matricula]",
-    insertProcesoCancelacion: "INSERT INTO [dbo].[planificacion_cancelacionesexcepcionales] (FechaInicio, FechaFinal, HoraInicio, HoraFinal, PeriodoAcademico) VALUES (@FechaInicio, @FechaFinal,@HoraInicio, @HoraFinal, @PeriodoAcademico)",
+    insertProcesoCancelacion: "INSERT INTO [dbo].[planificacion_cancelacionesexcepcionales] (FechaInicio, FechaFinal, HoraInicio, HoraFinal, PeriodoAcademico, Sistema) VALUES (@FechaInicio, @FechaFinal,@HoraInicio, @HoraFinal, @PeriodoAcademico, @Sistema)",
     getCancelacion: "select * from [dbo].[planificacion_cancelacionesexcepcionales]",
     getIPACMatricula: "select * from [dbo].[planificacion_matricula] where PeriodoAcademico ='1PAC'",
     getIIPACMatricula: "select * from [dbo].[planificacion_matricula] where PeriodoAcademico ='2PAC'",
@@ -63,6 +63,7 @@ export const querys = {
     getIPACPlanificacion: "select * from [dbo].[planificacion_academica] where PeriodoAcademico = '1PAC'",
     getIIPACPlanificacion: "select * from [dbo].[planificacion_academica] where PeriodoAcademico = '2PAC'",
     getIIIPACPlanificacion: "select * from [dbo].[planificacion_academica] where PeriodoAcademico = '3PAC'",
+    
     getClasesCursando: "select cs.IdClase as CODIGO, cs.Nombre as ASIGNATURA, cs.uv as UV, s.seccion AS SECCION,s.Edificio AS EDIFICIO,s.Aula AS AULA,s.HI AS HORA_INICIO,s.HF AS HORA_FINAL,s.obs AS OBS, year(re.Fecha) AS Año, Periodo AS PERIODO from registro_estudiante_clases re INNER JOIN estudiantes e on IdEstudiante = NumCuenta INNER join secciones s on re.IdSeccion = s.IdSeccion INNER join clases cs on cs.IdClase = s.IdClase where e.numCuenta=@NumCuenta and Periodo = @Periodo and year(re.Fecha) = @año",
 
     insertPDF: "update [dbo].[registro_cancelaciones_excepcionales] set Documento=@pdfPath where NumCuenta=@Id",
@@ -94,4 +95,8 @@ export const querysADMIN = {
     DeleteMatricula: 'delete planificacion_matricula where idPlanificacion = @idPlanificacion',
     DeleteCancelacionesExcepcionales: 'delete planificacion_cancelacionesexcepcionales where idPlanificacion = @idPlanificacion'
 
+}
+
+export const queryEstudiante= {
+    getState: 'select * from estudiantes_pagos where NumCuenta = @numCuenta'
 }

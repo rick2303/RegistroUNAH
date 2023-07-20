@@ -2,7 +2,7 @@ import { getConnection, querys, querysADMIN, sql} from "../Database"
 const bodyParser = require('body-parser');
 
 export const crearNuevaPlanificacion = async (req, res) => {
-    const {FechaInicio, FechaFinal, PeriodoAcademico } = req.body;
+    const {FechaInicio, FechaFinal, PeriodoAcademico, Sistema } = req.body;
     // validating
     if (FechaInicio == null || FechaFinal == null || PeriodoAcademico == null ) {
         return res.status(400).json({ msg: "Peticion denegada. Por favor, llenar todos los espacios" });
@@ -16,6 +16,7 @@ export const crearNuevaPlanificacion = async (req, res) => {
         .input("FechaInicio", sql.Date, FechaInicio)
         .input("FechaFinal", sql.Date, FechaFinal)
         .input("PeriodoAcademico", sql.VarChar, PeriodoAcademico)
+        .input("Sistema", sql.VarChar, Sistema)
         .query(querys.insertNuevaPlanificacion);
 
         res.json({FechaInicio, FechaFinal, PeriodoAcademico});
@@ -38,7 +39,7 @@ export const renderizarPlanificacion = async (req, res) => {
 }
 
 export const crearNuevaMatricula = async (req, res) => {
-    const {FechaInicio, FechaFinal, HoraInicio, HoraFinal, PeriodoAcademico } = req.body;
+    const {FechaInicio, FechaFinal, HoraInicio, HoraFinal, PeriodoAcademico, Sistema } = req.body;
 
     // validating
     if (FechaInicio == null || FechaFinal == null || HoraInicio == null || HoraFinal == null || PeriodoAcademico == null ) {
@@ -55,6 +56,7 @@ export const crearNuevaMatricula = async (req, res) => {
         .input("HoraInicio", sql.VarChar, HoraInicio)
         .input("HoraFinal", sql.VarChar, HoraFinal)
         .input("PeriodoAcademico", sql.VarChar, PeriodoAcademico)
+        .input("Sistema", sql.VarChar, Sistema)
         .query(querys.insertNuevaMatricula);
 
         res.json({FechaInicio, FechaFinal,HoraInicio, HoraFinal, PeriodoAcademico});
@@ -78,7 +80,7 @@ export const renderizarMatricula = async (req, res) => {
 }
 
 export const crearNuevoProcesoCancelacion = async (req, res) => {
-    const {FechaInicio, FechaFinal, HoraInicio, HoraFinal, PeriodoAcademico } = req.body;
+    const {FechaInicio, FechaFinal, HoraInicio, HoraFinal, PeriodoAcademico, Sistema } = req.body;
 
     // validating
     if (FechaInicio == null || FechaFinal == null || HoraInicio == null || HoraFinal == null || PeriodoAcademico == null ) {
@@ -95,6 +97,7 @@ export const crearNuevoProcesoCancelacion = async (req, res) => {
         .input("HoraInicio", sql.VarChar, HoraInicio)
         .input("HoraFinal", sql.VarChar, HoraFinal)
         .input("PeriodoAcademico", sql.VarChar, PeriodoAcademico)
+        .input("Sistema", sql.VarChar, Sistema)
         .query(querys.insertProcesoCancelacion);
 
         res.json({FechaInicio, FechaFinal,HoraInicio, HoraFinal, PeriodoAcademico});

@@ -17,7 +17,7 @@ export const loginUsuarios = async (req,res)=>{
         const rol=result.recordset[0].Rol 
         const estado = result.recordset[0].estado
         //si las claves son iguales accede.
-        if((contraseñaBD==contraseña && estado == 'ACTIVO') || (contraseñaBD==contraseña && estado == null)){
+        if((contraseñaBD==contraseña && (estado == 'ACTIVO'|| estado == 'Activo')) || (contraseñaBD==contraseña && estado == null)){
             if( rol=='ADMIN' && subrol==null){
                 const admin=await pool.request()
                 .input("Id",sql.VarChar,Id)

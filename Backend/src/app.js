@@ -10,6 +10,7 @@ import routerCancelacionesExep from './routes/CancelacionesExepPFD.routes'
 import routerSecciones from "./routes/Secciones.routes";
 import { Console } from "console";
 import routerAdmin from "./routes/admin.planificaciones.routes";
+import routerEstado from "./routes/estudianteEstadoCuenta.routes";
 //import {} from "./csv/csv";
 const app= express();
 const cors = require('cors');
@@ -42,5 +43,5 @@ console.log(config.port);
 
 app.use(empleadosRoute,loginRoute,perfilEstudiante,perfilEmpleado);
 app.use(usuariosRoute, historialAcademico, routerCancelacionesExep);
-app.use(routerSecciones, routerAdmin);
+app.use(routerSecciones, routerAdmin, routerEstado);
 
