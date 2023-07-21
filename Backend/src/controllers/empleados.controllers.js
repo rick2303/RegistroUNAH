@@ -32,6 +32,7 @@ export const getDocenteById = async (req, res) => {
         const result = await pool.request()
         .input('DNI', sql.VarChar, DNI)
         .query(queries.get_Docente_By_Id);
+        res.status(200);
         res.json(result.recordset[0]);
     } catch (error) {
         res.status(500);
