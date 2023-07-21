@@ -36,6 +36,11 @@ const ListadoDocentes = () => {
       });
   }, []);
 
+
+  useEffect(() => {
+    // Fetch data whenever the inputValue changes
+    fetchData();
+  }, [inputValue]);
   // Configuramos las columnas para DataTable
   const columnas1 = [
     {
@@ -134,7 +139,27 @@ const ListadoDocentes = () => {
         // Realizar cualquier acción adicional en caso de error
       });
   };
-
+// Function to fetch data based on the input value
+const fetchData = () => {
+  console.log(JSON.stringify({ DNI: inputValue }))
+  fetch("http://localhost:5000/docentesDNI", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ DNI: inputValue }), // Send input value as JSON
+  })
+  .then((response) => response.json())
+    .then((data) => {
+      // Si el JSON no es un array, conviértelo en un array con un solo elemento
+      const dataArray = Array.isArray(data) ? data : [data];
+      console.log("Array recibido del backend:", dataArray); // Imprime el array recibido en la consola
+      setHistorialData(dataArray);
+    })
+    .catch((error) => {
+      console.error("Error al obtener los datos:", error);
+    });
+};
   // Para poner las filas no encontradas en español
   const filteredData = historialData.filter((row) => row.DNI.includes(inputValue));
   const NoDataComponent = () => {
