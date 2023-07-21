@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
 
 routerEmpleados.get('/docentes', getDocentes);
 
-routerEmpleados.get('/docentesDNI', getDocenteById);
+routerEmpleados.post('/docentesDNI', getDocenteById);
 
 routerEmpleados.post('/registrarDocentes', upload.array('files', 1), registrarDocente);
 
