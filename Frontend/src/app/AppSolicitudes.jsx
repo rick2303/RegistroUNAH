@@ -1,5 +1,5 @@
 import '../App.css'
-import Navbar from "../components/NavbarEstudiante";
+import Navbar from "../components/Navbar.jsx";
 import MenuSolicitudes from "../components/MenuSolicitudes.jsx";
 
 function AppSolicitudesF() {
