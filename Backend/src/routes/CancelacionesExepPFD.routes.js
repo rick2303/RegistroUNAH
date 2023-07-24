@@ -41,4 +41,5 @@ routerCancelacionesExep.put('/dictamenSolicitudEnviar', DictamenSolicitud);
 
 routerCancelacionesExep.delete('/eliminarClase', EliminarClaseExep);
 
+
 export default routerCancelacionesExep;
