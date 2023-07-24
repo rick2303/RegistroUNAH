@@ -29,11 +29,9 @@ function MenuSolicitudes() {
       <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-8 lg:px-8">
         <div className=" grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-4 md:gap-8">
         <article className="hover:animate-background rounded-xl bg-gradient-to-r from-blue-800 via-blue-400 to-blue-500 00 p-0.5 shadow-xl transition hover:bg-[length:500%_400%] hover:shadow-sm hover:[animation-duration:_4s]">
-            <div className="rounded-[10px] bg-white p-4 !pb-14 !pt-15 sm:p-6 row">
+            <div className=" rounded-[10px] bg-white p-4 !pb-14 !pt-15 sm:p-6 row">
               <p className="featured-block-text text-center">
-                <strong className="text-xl text-center">
-                  Cambio de carrera
-                </strong>
+                <strong className="text-xl ">Cambio de Carrera</strong>
               </p>
               <div className="row">
                 <h1>
@@ -42,10 +40,10 @@ function MenuSolicitudes() {
               </div>
 
               <div className="grid grid-cols-1">
-                <a data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <a href="#">
                   <a
                     className=" grid grid-cols-1 group relative focus:outline-none focus:ring"
-                    href="/download"
+                    href="/src/html/CambiodeCarrera.html"
                   >
                     <span className=" rounded-[25px] grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"
                     style={{ backgroundColor: '#145eb9' }}
