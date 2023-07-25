@@ -46,8 +46,7 @@ export const existenciaSolicitudReposicion = async (req, res) => {
         const result = await pool.request()
             .input('NumCuenta', sql.VarChar, NumCuenta)
             .input('Periodo', sql.VarChar, Periodo)
-            .input('TipoPago', sql.VarChar, TipoPago)
-            .query(queryEstudiante.getExistenciaSolicitud);
+            .query(queryEstudiante.getExistenciaSolicitudReposicion);
         res.json(result.recordset[0])
         res.status(200);
     } catch (error) {
@@ -55,6 +54,7 @@ export const existenciaSolicitudReposicion = async (req, res) => {
     }
 }
 
+/*
 export const existenciaSolicitudMatricula = async (req, res) => {
     const {NumCuenta, Sistema} = req.body;
 
@@ -73,4 +73,4 @@ export const existenciaSolicitudMatricula = async (req, res) => {
     } catch (error) {
         res.status(500).send(error.message)
     }
-}
+} */

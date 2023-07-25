@@ -105,5 +105,5 @@ export const querysADMIN = {
 export const queryEstudiante= {
     getState: 'select * from estudiantes_pagos where NumCuenta = @numCuenta',
     postSolicitudReposicion: 'insert into solicitudes_pagoreposicion (NumCuenta, Justificacion, FechaSolicitud, Periodo) values (@NumCuenta, @Justificacion, GETDATE(), @Periodo)',
-    getExistenciaSolicitud: 'select * from estudiantes_pagos where NumCuenta = @NumCuenta and Periodo = @Periodo and year(FechaPago) = year(GETDATE()) and TipoPago = @TipoPago',
+    getExistenciaSolicitudReposicion: 'select * from solicitudes_pagoreposicion where NumCuenta = @NumCuenta and Periodo = @Periodo and year(FechaSolicitud) = year(GETDATE())',
 }
