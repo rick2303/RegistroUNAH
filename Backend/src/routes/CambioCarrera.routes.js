@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import { getConnection } from '../Database';
-import { obtenerCarerras, obtenerInfoEstudent, solicitudSubidaEstudiante, ObtenerSoliSubidaEstudiante, EliminarsolicitudSubidaEstudiante} from '../controllers/cambioCarerra.controllers.js';
+import { obtenerCarerras, obtenerInfoEstudent, solicitudSubidaEstudiante, ObtenerSoliSubidaEstudiante, EliminarsolicitudSubidaEstudiante, ObtenerSoliCambioCarreraCoordinador, EnviarDictamenCambioCarrera} from '../controllers/cambioCarerra.controllers.js';
 
 const routerCambioCarrera = Router();
 
@@ -13,5 +13,11 @@ routerCambioCarrera.post('/ObtenerSolicitudCambioCarrera', ObtenerSoliSubidaEstu
 routerCambioCarrera.post('/subirSolicitudCambioCarrera', solicitudSubidaEstudiante);
 
 routerCambioCarrera.post('/eliminarSolicitudCambioCarrera', EliminarsolicitudSubidaEstudiante);
+
+// PARA COORDINADOR
+
+routerCambioCarrera.post('/ObtenerSolicitudesCambioCarreraCoordinador', ObtenerSoliCambioCarreraCoordinador);
+
+routerCambioCarrera.post('/EnviarDictamenCambioCarrera', EnviarDictamenCambioCarrera);
 
 export default routerCambioCarrera;

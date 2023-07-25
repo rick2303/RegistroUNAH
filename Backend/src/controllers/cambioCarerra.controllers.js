@@ -20,6 +20,43 @@ export const obtenerCarerras = async (req, res) => {
     }
 };
 
+export const ObtenerSoliCambioCarreraCoordinador = async (req, res) => {
+    const { carreraCambio, centroRegional } = req.body;
+    const pool = await getConnection();
+    const result = await pool
+    .request()
+    .input("carreraCambio", sql.VarChar, carreraCambio)
+    .input("CentroRegional", sql.VarChar, centroRegional)
+    .query(querys.getSoliCambioDeCarreraCoordi);
+res.json(result.recordset);
+};
+
+export const EnviarDictamenCambioCarrera = async (req, res) => {
+    try {
+    const { numCuenta, dictamen, idSolicitud, justificacion  } = req.body; 
+
+    const pool = await getConnection();
+    console.log("NumCuenta:", numCuenta);
+    console.log("Dictamen:", dictamen);
+    console.log("idSolicitud:", idSolicitud);
+    console.log("JustificacionCoordi:", justificacion);
+
+    await pool.request()
+        .input("NumCuenta", sql.VarChar, numCuenta)
+        .input("Dictamen", sql.VarChar, dictamen)
+        .input("IdSolicitud", sql.Int, idSolicitud)
+        .input("JustificacionCoordi", sql.VarChar, justificacion)
+        .query(querys.UpdateEstadoCambioCarrera.replace("@dictamen", dictamen).replace("@numCuenta", numCuenta).replace("@idSolicitud", idSolicitud).replace("@justificacion", justificacion));
+
+    res.json({ message: "Operación completada exitosamente" });
+    } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al procesar la solicitud" });
+    }
+};
+
+
+
 export const obtenerInfoEstudent = async (req, res) => {
     try {
     const { NumCuenta } = req.body; // Obtener el número de cuenta del cuerpo de la solicitud
