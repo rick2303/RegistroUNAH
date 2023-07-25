@@ -3,6 +3,6 @@ import { obtenerEstadoCuenta } from '../controllers/estudianteEstadoCuenta.contr
 
 const routerEstado = Router();
 
-routerEstado.get('/estadoCuenta/:id', obtenerEstadoCuenta)
+routerEstado.get('/estadoCuenta', obtenerEstadoCuenta)
 
 export default routerEstado
