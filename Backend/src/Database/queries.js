@@ -120,10 +120,13 @@ export const queryStudentHistory = {
 export const querysADMIN = {
     DeletePlanificacion: 'delete planificacion_academica where idPlanificacion = @idPlanificacion',
     DeleteMatricula: 'delete planificacion_matricula where idPlanificacion = @idPlanificacion',
-    DeleteCancelacionesExcepcionales: 'delete planificacion_cancelacionesexcepcionales where idPlanificacion = @idPlanificacion'
+    DeleteCancelacionesExcepcionales: 'delete planificacion_cancelacionesexcepcionales where idPlanificacion = @idPlanificacion',
+    getPeriodoActual: 'select PeriodoAcademico from planificacion_academica where GETDATE() BETWEEN FechaInicio and FechaFinal and Sistema = @Sistema'
 
 }
 
 export const queryEstudiante= {
-    getState: 'select * from estudiantes_pagos where NumCuenta = @numCuenta'
+    getState: 'select * from estudiantes_pagos where NumCuenta = @numCuenta',
+    postSolicitudReposicion: 'insert into solicitudes_pagoreposicion (NumCuenta, Justificacion, FechaSolicitud, Periodo) values (@NumCuenta, @Justificacion, GETDATE(), @Periodo)',
+    getExistenciaSolicitudReposicion: 'select * from solicitudes_pagoreposicion where NumCuenta = @NumCuenta and Periodo = @Periodo and year(FechaSolicitud) = year(GETDATE())',
 }
