@@ -55,6 +55,23 @@ export const EnviarDictamenCambioCarrera = async (req, res) => {
     }
 };
 
+export const actualizarCarreraEstudiante  = async (req, res) => {
+    try {
+        const { NumCuenta, Carrera } = req.body; // Obtener el número de cuenta y la nueva carrera del cuerpo de la solicitu
+        const pool = await getConnection();
+        console.log("NUEVA CARRERA:", Carrera)
+        const result = await pool
+        .request()
+        .input('NumCuenta', sql.VarChar, NumCuenta)
+        .input('Carrera', sql.VarChar, Carrera) // Verifica que el nombre sea 'CarreraCambio' aquí
+        .query('UPDATE [dbo].[estudiantes] SET Carrera = @Carrera WHERE NumCuenta = @NumCuenta'); // Verifica que el nombre sea '@CarreraCambio' aquí
+
+        res.json({ message: "Operación completada exitosamente" });
+    } catch (error) {
+        console.error('Error al obtener información del estudiante:', error);
+        res.status(500).json({message: "Error al procesar la solicitud"});
+    }
+};
 
 
 export const obtenerInfoEstudent = async (req, res) => {
