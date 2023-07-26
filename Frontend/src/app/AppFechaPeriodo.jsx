@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DatePicker } from "@material-ui/pickers";
 import DataTable from "react-data-table-component";
-import { format, addWeeks, subWeeks } from "date-fns";
+import { format } from "date-fns";
 import { FcDeleteRow } from "react-icons/fc";
 import "../FechaMatricula.css";
 
@@ -12,7 +12,6 @@ const AppFechaPeriodo = () => {
   const [fechaFinalSeleccionada, setFechaFinalSeleccionada] = useState(
     new Date()
   );
-  
   const [pacSeleccionado, setPacSeleccionado] = useState("1PAC");
   const [historialData2, setHistorialData2] = useState([]);
   const [clickCount, setClickCount] = useState(0);
@@ -26,7 +25,6 @@ const AppFechaPeriodo = () => {
       FechaInicio: fechaInicio.toISOString(),
       FechaFinal: fechaFinal.toISOString(),
       PeriodoAcademico: pacSeleccionado,
-      Sistema: "Trimestral",
     };
     return fechaJSON;
   };
@@ -134,12 +132,6 @@ const AppFechaPeriodo = () => {
       center: true,
     },
     {
-      name: "Sistema",
-      selector: (row) => row.Sistema,
-      sortable: true,
-      center: true,
-    },
-    {
       name: "Eliminar",
       cell: (row) => (
         <h1 onClick={() => eliminarFila(row)} className="cursor-pointer">
@@ -153,54 +145,36 @@ const AppFechaPeriodo = () => {
   const NoDataComponent = () => {
     return <div>No hay registros para mostrar</div>;
   };
-  // Función para calcular la fecha máxima permitida en el segundo DatePicker
-  const calcularMaxFechaFinal = () => {
-    return addWeeks(fechaInicioSeleccionada, 15); // Cambiar 13 por 16 para establecer la fecha máxima permitida a 16 semanas después de la fecha de inicio
-  };
-
-  // Función para calcular la fecha mínima permitida en el segundo DatePicker
-  const calcularMinFechaFinal = () => {
-    return addWeeks(fechaInicioSeleccionada, 13); // Establecer la fecha mínima permitida a 13 semanas después de la fecha de inicio
-  };
   return (
     <>
       <div className="d-flex mt-5">
         <h1 className="text-2xl mb-4 text-center font-bold pt-2 text-gray-900 sm:text-3xl col-12">
-          Planificación de períodos-trimestrales
+          Planificación de períodos
         </h1>
       </div>
       <div className="contenedor mx-24">
         <div className="container m-4">
           <div className="row m-4">
-          <div className="col-md-4">
-        <label htmlFor="fechaInicio">Inicio de Período</label>
-        <DatePicker
-          className="form-control"
-          value={fechaInicioSeleccionada}
-          onChange={handleFechaInicioChange}
-          format="dd MMM yyyy"
-          renderInput={(props) => <input {...props} readOnly />}
-           //minDate={new Date()} // Esto establece la fecha mínima seleccionable a la fecha actual
-           cancelLabel="Cancelar" // Establecer texto para el botón Cancelar en español
-           okLabel="Aceptar" // Establecer texto para el botón Aceptar en español
-        />
-      </div>
-      <div className="col-md-4">
-        <label htmlFor="fechaFinal">Finalización de Período</label>
-        <DatePicker
-          className="form-control"
-          value={fechaFinalSeleccionada}
-          onChange={handleFechaFinalChange}
-          format="dd MMM yyyy"
-          renderInput={(props) => <input {...props} readOnly />}
-          minDate={calcularMinFechaFinal()} // Esto establece la fecha mínima seleccionable a 13 semanas después de la fecha de inicio
-          maxDate={calcularMaxFechaFinal()} // Esto establece la fecha máxima seleccionable a 16 semanas después de la fecha de inicio
-          maxDateMessage="Un periodo no puede tener más de 15 semanas"
-                minDateMessage="Un periodo no puede tener menos de 13 semanas"
-                cancelLabel="Cancelar" // Establecer texto para el botón Cancelar en español
-                okLabel="Aceptar" // Establecer texto para el botón Aceptar en español
-        />
-      </div>
+            <div className="col-md-4">
+              <label htmlFor="fechaInicio">Inicio de Período</label>
+              <DatePicker
+                className="form-control"
+                value={fechaInicioSeleccionada}
+                onChange={handleFechaInicioChange}
+                format="dd MMM yyyy"
+                renderInput={(props) => <input {...props} readOnly />}
+              />
+            </div>
+            <div className="col-md-4">
+              <label htmlFor="fechaFinal">Finalización de Período</label>
+              <DatePicker
+                className="form-control"
+                value={fechaFinalSeleccionada}
+                onChange={handleFechaFinalChange}
+                format="dd MMM yyyy"
+                renderInput={(props) => <input {...props} readOnly />}
+              />
+            </div>
             <div className="col-md-4">
               <label htmlFor="pac" className="mb-3">
                 Seleccione el PAC
