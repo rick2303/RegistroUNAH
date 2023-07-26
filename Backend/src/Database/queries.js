@@ -44,7 +44,29 @@ export const queries = {
 
     agregarCupos:"UPDATE Secciones SET Cupos = CASE WHEN Cupos IS NULL THEN 0 ELSE Cupos + @Cupos END   WHERE IdSeccion = @idseccion;",
 
-    getCarreras:"SELECT NombreCarrera from Carrera"
+    getCarreras:"SELECT NombreCarrera from Carrera",
+
+    insertSolicitudCambioCentro:"INSERT INTO solicitud_cambiocentro VALUES (@NumCuenta,@CentroRegional,@CentroNuevo,@Justificacion,@FechaSolicitud,'EN ESPERA','NO PAGADO')",
+
+    getSolicitudesCambioCentro:`SELECT DISTINCT es.NumCuenta,es.Nombre, es.Apellido, esp.TipoPago as Solicitud, scc.Justificacion, es.CorreoInstitucional,  
+    es.IndiceGlobal, es.CentroRegional as 'Centro actual', scc.CentroNuevo  as 'Centro Nuevo',esp.Estado, scc.Dictamen 
+    FROM estudiantes as es 
+    LEFT JOIN solicitud_cambiocentro as scc ON es.NumCuenta = scc.NumCuenta 
+    LEFT JOIN estudiantes_pagos as esp ON es.NumCuenta = esp.NumCuenta 
+    WHERE esp.TipoPago = 'CAMBIO DE CENTRO' 
+    AND esp.Estado = 'PAGADO'
+    AND scc.CentroNuevo= @CentroRegional
+    AND scc.Dictamen='EN ESPERA'
+    AND scc.Estado='PAGADO'`,
+
+    UpdateDictamenCambioCentro:"update solicitud_cambiocentro set Dictamen=@Dictamen where NumCuenta=@NumCuenta AND Dictamen ='EN ESPERA'",
+
+    UpdateCambioCentro:"update dbo.estudiantes set CentroRegional=@CentroRegional where NumCuenta=@NumCuenta",
+
+    
+
+
+    
 }
 
 export const querys = {
