@@ -46,5 +46,5 @@ console.log(config.port);
 
 app.use(empleadosRoute,loginRoute,perfilEstudiante,perfilEmpleado);
 app.use(usuariosRoute, historialAcademico, routerCancelacionesExep,routerSolicitudes);
-app.use(routerSecciones, routerAdmin, routerEstado);
+app.use(routerSecciones, routerAdmin, routerEstado, routerCambioCarrera);
 
