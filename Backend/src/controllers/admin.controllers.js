@@ -37,7 +37,6 @@ export const renderizarPlanificacion = async (req, res) => {
         }  
 
 }
-
 export const renderizarPlanificacionSemestral = async (req, res) => {
     try {
         const pool = await getConnection();
@@ -49,7 +48,6 @@ export const renderizarPlanificacionSemestral = async (req, res) => {
         }  
 
 }
-
 export const crearNuevaMatricula = async (req, res) => {
     const {FechaInicio, FechaFinal, HoraInicio, HoraFinal, PeriodoAcademico, Sistema } = req.body;
 

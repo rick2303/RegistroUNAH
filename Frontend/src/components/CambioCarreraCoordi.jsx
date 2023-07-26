@@ -1,7 +1,7 @@
-
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from "react";
 import "styled-components";
+
 
 const MenuCambioCarreraCoordi = () => {
 const [NumCuenta, setNumCuenta] = useState("");
@@ -217,6 +217,22 @@ return (
                 Indice Global: {user.IndiceGlobal}
             </p>
             </li>
+            <li>
+            <p className="pb-1 text-center">
+                Puntaje PAA: {user.PuntajePAA}
+            </p>
+            </li>
+            <li>
+            <p className="pb-1 text-center">
+                Puntaje PAM: {user.PuntajePAM}
+            </p>
+            </li>
+            <li>
+            <p className="pb-1 text-center">
+                Puntaje PCCNS: {user.PuntajePCCNS}
+            </p>
+            </li>
+
         </ul>
 
 
@@ -303,7 +319,7 @@ return (
 return (
     <div className="App">
     <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
-         {users.length} solicitudes
+        Cambio de carrera  - {users.length} solicitudes
     </h1>
 
     <div className="container">
@@ -316,5 +332,4 @@ return (
     </div>
 );
 };
-
 export default MenuCambioCarreraCoordi;
