@@ -1,8 +1,12 @@
 import {Router} from 'express';
-import { obtenerEstadoCuenta } from '../controllers/estudianteEstadoCuenta.controllers';
+import { obtenerEstadoCuenta, crearSolicitudReposicion, existenciaSolicitudMatricula, existenciaSolicitudReposicion } from '../controllers/estudianteEstadoCuenta.controllers';
 
 const routerEstado = Router();
 
-routerEstado.get('/estadoCuenta/:id', obtenerEstadoCuenta)
+routerEstado.get('/estadoCuenta', obtenerEstadoCuenta)
+routerEstado.post('/subirSolicitud', crearSolicitudReposicion)
+//routerEstado.get('/existenciaSolicitudMatricula', existenciaSolicitudMatricula)
+routerEstado.get('/existenciaSolicitudReposicion', existenciaSolicitudReposicion)
+
 
 export default routerEstado
