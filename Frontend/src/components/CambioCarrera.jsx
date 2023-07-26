@@ -304,6 +304,7 @@ return (
         noDataComponent={<NoDataComponent />}
         />
     </div>
+
     {selectedRow && (
         <Modal isOpen={modalOpen} toggle={toggleModal}>
             <ModalHeader className="text-white bg-blue-800 text-2xl">
@@ -339,12 +340,10 @@ return (
             </ModalBody>
             </Modal>
         )}
-
     </div>
     )}
 </div>
 );
-
 };
 
 export default MenuCambioCarrera;

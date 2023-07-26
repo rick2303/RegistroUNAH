@@ -1,20 +1,19 @@
+
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from "react";
 import "styled-components";
 
+const MenuCambioCentroCoordi = () => {
 
-const MenuCambioCarreraCoordi = () => {
-const [NumCuenta, setNumCuenta] = useState("");
-const [users, setUsers] = useState([]);
-const [carrera, setCarreraUsuario] = useState("");
-const [centroRegional, setCentroRegional] = useState("");
-const [numeroSolicitud, setNumeroSolicitud] = useState("");
-const [inputValue, setInputValue] = useState("");
-const [carreraCambioEstudiante, SetCarreraCambioEstudiante] = useState("");
-
-useEffect(() => {
-    const storedData = localStorage.getItem("userData");
-    if (storedData) {
+    const [carrera, setCarreraUsuario] = useState("");
+    const [centroRegional, setCentroRegional] = useState("");
+    const [numeroSolicitud, setNumeroSolicitud] = useState("");
+    const [cambioCentro, setCambioCentroEstudiante] = useState("");
+  
+    useEffect(() => {
+      const storedData = localStorage.getItem("userData");
+      if (storedData) {
         const userData = JSON.parse(storedData);
         const Carrera = userData.data.Carrera;
         const CentroRegional = userData.data.CentroRegional;
@@ -22,39 +21,34 @@ useEffect(() => {
         console.log("Centro Regional del usuario:", CentroRegional);
         setCarreraUsuario(Carrera);
         setCentroRegional(CentroRegional);
-    }
-    showData();
-}, [carrera, centroRegional]);
-
-
-const showData = async () => {
-    //OBTENER LOS PERIFLES DE LOS ESTUDIANTES
-try {
-    console.log("La carrera es: ", carrera);
-    console.log("El centro regional es: ", centroRegional);
-    const URL = "http://localhost:5000/ObtenerSolicitudesCambioCarreraCoordinador";
-    const response = await fetch(URL, {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ carreraCambio: carrera, centroRegional: centroRegional}),
-        
-    })
-        .then((res) => res.json())
-        .then((data) => {
+      }
+      showData();
+    }, [carrera, centroRegional]);
+  
+    const showData = async () => {
+      try {
+        console.log("La carrera es: ", carrera);
+        console.log("El centro regional es: ", centroRegional);
+        const URL = "http://localhost:5000/ObtenerSolicitudesCambioCentroCoordinador";
+        const response = await fetch(URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ centroRegional: centroRegional }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
             setUsers(data);
             setNumeroSolicitud(data[0].IdSolicitud);
-            SetCarreraCambioEstudiante(data[0].CarreraDeCambio);
-            console.log("CAMBIO DE CARRERA DEL ESTUDIANTE:", data[0].CarreraDeCambio);
+            setCambioCentroEstudiante(data[0].CambioCentro);
+            console.log("CAMBIO DE CENTRO DEL ESTUDIANTE:", data[0].CambioCentro);
             console.log(data);
-    });
-} catch (error) {
-    console.error("Error al obtener los datos:", error);
-}
-
-};
-
+          });
+      } catch (error) {
+        console.error("Error al obtener los datos:", error);
+      }
+    };
 
 
 function CarruselUsuarios({ users }) {
@@ -78,14 +72,14 @@ function CarruselUsuarios({ users }) {
                 justificacion: justificacion
             };
         
-            const cambiarCarreraData = {
+            const cambioCentroData = {
                 NumCuenta: NumCuenta,
-                Carrera: carreraCambioEstudiante
+                Centro: centroRegional,
             };
             console.log("Dictamen:", dictamenData);
-            console.log("Cambio de carrera:", cambiarCarreraData.Carrera);
+            console.log("Cambio de centro:", cambioCentroData.CentroRegional);
         
-            const enviarDictamenPromise = fetch("http://localhost:5000/EnviarDictamenCambioCarrera", {
+            const enviarDictamenPromise = fetch("http://localhost:5000/EnviarDictamenCambioCentro", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -93,20 +87,20 @@ function CarruselUsuarios({ users }) {
                 body: JSON.stringify(dictamenData)
             });
         
-            const realizarCambioPromise = fetch("http://localhost:5000/realizarCambioDeCarrera", {
+            const realizarCambioPromise = fetch("http://localhost:5000/realizarCambioCentro", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(cambiarCarreraData)
+                body: JSON.stringify(cambioCentroData)
             });
         
             Promise.all([enviarDictamenPromise, realizarCambioPromise])
                 .then((responses) => Promise.all(responses.map((response) => response.json())))
                 .then((data) => {
-                    const [dictamenData, cambioCarreraData] = data;
+                    const [dictamenData, cambioCentroData] = data;
                     console.log("Dictamen:", dictamenData);
-                    console.log("Cambio de carrera:", cambioCarreraData);
+                    console.log("Cambio de Centro:", cambioCarreraData);
                     if (dictamenData.message === "Error al procesar la solicitud") {
                         console.error("Error al enviar las cancelaciones:", dictamenData.message);
                     } else {
@@ -116,7 +110,7 @@ function CarruselUsuarios({ users }) {
                     }
                 })
                 .catch((error) => {
-                    console.error("Error al enviar el cambio de carrera:", error);
+                    console.error("Error al enviar el cambio de centro:", error);
                 });
         } else {
             alert("No se ha enviado la respuesta");
@@ -140,7 +134,7 @@ function CarruselUsuarios({ users }) {
     
         if (justificacion !== null && justificacion.trim() !== "") {
 
-        return fetch("http://localhost:5000/EnviarDictamenCambioCarrera", {
+        return fetch("http://localhost:5000/EnviarDictamenCambioCentro", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -158,7 +152,7 @@ function CarruselUsuarios({ users }) {
             }
         })
         .catch((error) => {
-            console.error("Error al enviar el cambio de carrera:", error);
+            console.error("Error al enviar el cambio de centro:", error);
         });
     } else {
         alert("No se ha enviado la respuesta");
@@ -217,22 +211,6 @@ return (
                 Indice Global: {user.IndiceGlobal}
             </p>
             </li>
-            <li>
-            <p className="pb-1 text-center">
-                Puntaje PAA: {user.PuntajePAA}
-            </p>
-            </li>
-            <li>
-            <p className="pb-1 text-center">
-                Puntaje PAM: {user.PuntajePAM}
-            </p>
-            </li>
-            <li>
-            <p className="pb-1 text-center">
-                Puntaje PCCNS: {user.PuntajePCCNS}
-            </p>
-            </li>
-
         </ul>
 
 
@@ -243,11 +221,11 @@ return (
         <br></br>
 
         <div className="container" style={{ position: "relative", zIndex: 1 }}>
-        <h2 style={{ fontSize:"20px" }} >Actual carrera del estudiante: {user.Carrera}</h2>
+        <h2 style={{ fontSize:"20px" }} >Centro Actual: {user.CentroRegional}</h2>
         <br></br>
             <div className="card mx-auto">
             <div className="card-body p-1">
-                <h2 className="card-title">Razones por la que el estudiante solicita el cambio de carrera:</h2>
+                <h2 className="card-title">Razones por la que el estudiante solicita el cambio de centro:</h2>
                 <p className="card-text">{user.RazonDeCambio}</p>
             </div>
             </div>
@@ -319,7 +297,7 @@ return (
 return (
     <div className="App">
     <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
-        Cambio de carrera  - {users.length} solicitudes
+         {users.length} solicitudes
     </h1>
 
     <div className="container">
@@ -332,4 +310,6 @@ return (
     </div>
 );
 };
-export default MenuCambioCarreraCoordi;
+
+
+export default MenuCambioCentroCoordi;
