@@ -124,6 +124,12 @@ try {
 }
 };
 
+const tieneSolicitudesEnEspera = () => {
+    // Verificar si el estudiante tiene alguna solicitud "EN ESPERA"
+    return filteredData.some((solicitud) => solicitud.Dictamen === "EN ESPERA");
+};
+
+
 const columnas1 = [
     {
     name: "FECHA DE SOLICITUD",
@@ -275,7 +281,7 @@ return (
         </div>
 
         <div className="grid grid-cols-1">
-        <button type="button" className="btn btn-success" onClick={handleSubmit}>
+        <button type="button" className="btn btn-success" onClick={handleSubmit} disabled={tieneSolicitudesEnEspera()}>
             Enviar Solicitud
         </button>
         </div>
@@ -293,6 +299,7 @@ return (
         data={filteredData}
         />
     </div>
+
     {selectedRow && (
         <Modal isOpen={modalOpen} toggle={toggleModal}>
             <ModalHeader className="text-white bg-blue-800 text-2xl">
@@ -328,12 +335,10 @@ return (
             </ModalBody>
             </Modal>
         )}
-
     </div>
     )}
 </div>
 );
-
 };
 
 export default MenuCambioCarrera;
