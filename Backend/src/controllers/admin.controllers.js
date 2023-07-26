@@ -38,6 +38,18 @@ export const renderizarPlanificacion = async (req, res) => {
 
 }
 
+export const renderizarPlanificacionSemestral = async (req, res) => {
+    try {
+        const pool = await getConnection();
+        const result = await pool.request().query(querys.getPlanificacionAcademicaSemestral);
+        res.json(result.recordset);
+        } catch (error) {
+        res.status(500);
+        res.send(error.message);
+        }  
+
+}
+
 export const crearNuevaMatricula = async (req, res) => {
     const {FechaInicio, FechaFinal, HoraInicio, HoraFinal, PeriodoAcademico, Sistema } = req.body;
 
