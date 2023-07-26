@@ -10,6 +10,7 @@ const [carrera, setCarreraUsuario] = useState("");
 const [centroRegional, setCentroRegional] = useState("");
 const [numeroSolicitud, setNumeroSolicitud] = useState("");
 const [inputValue, setInputValue] = useState("");
+const [carreraCambioEstudiante, SetCarreraCambioEstudiante] = useState("");
 
 useEffect(() => {
     const storedData = localStorage.getItem("userData");
@@ -44,6 +45,8 @@ try {
         .then((data) => {
             setUsers(data);
             setNumeroSolicitud(data[0].IdSolicitud);
+            SetCarreraCambioEstudiante(data[0].CarreraDeCambio);
+            console.log("CAMBIO DE CARRERA DEL ESTUDIANTE:", data[0].CarreraDeCambio);
             console.log(data);
     });
 } catch (error) {
@@ -68,30 +71,58 @@ function CarruselUsuarios({ users }) {
         const justificacion = prompt("Colocar una Justificacion de la respuesta:");
     
         if (justificacion !== null && justificacion.trim() !== "") {
+            const dictamenData = {
+                numCuenta: NumCuenta,
+                dictamen: Estado,
+                idSolicitud: numeroSolicitud,
+                justificacion: justificacion
+            };
+        
+            const cambiarCarreraData = {
+                NumCuenta: NumCuenta,
+                Carrera: carreraCambioEstudiante
+            };
+            console.log("Dictamen:", dictamenData);
+            console.log("Cambio de carrera:", cambiarCarreraData.Carrera);
+        
+            const enviarDictamenPromise = fetch("http://localhost:5000/EnviarDictamenCambioCarrera", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(dictamenData)
+            });
+        
+            const realizarCambioPromise = fetch("http://localhost:5000/realizarCambioDeCarrera", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(cambiarCarreraData)
+            });
+        
+            Promise.all([enviarDictamenPromise, realizarCambioPromise])
+                .then((responses) => Promise.all(responses.map((response) => response.json())))
+                .then((data) => {
+                    const [dictamenData, cambioCarreraData] = data;
+                    console.log("Dictamen:", dictamenData);
+                    console.log("Cambio de carrera:", cambioCarreraData);
+                    if (dictamenData.message === "Error al procesar la solicitud") {
+                        console.error("Error al enviar las cancelaciones:", dictamenData.message);
+                    } else {
+                        console.log(data);
+                        alert("Respuesta enviada al estudiante con éxito");
+                        window.location.reload();
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error al enviar el cambio de carrera:", error);
+                });
+        } else {
+            alert("No se ha enviado la respuesta");
+        }
+        
 
-        return fetch("http://localhost:5000/EnviarDictamenCambioCarrera", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ numCuenta: NumCuenta, dictamen: Estado, idSolicitud: numeroSolicitud, justificacion: justificacion }),
-        })
-        .then((response) => response.json())
-        .then((data) => {
-            if (data.message === "Error al procesar la solicitud") {
-            console.error("Error al enviar las cancelaciones:", data.message);
-            } else {
-            console.log(data);
-            alert("Respuesta enviada al estudiante con éxito");
-            window.location.reload();
-            }
-        })
-        .catch((error) => {
-            console.error("Error al enviar el cambio de carrera:", error);
-        });
-    } else {
-        alert("No se ha enviado la respuesta");
-    }
     };
     
     
