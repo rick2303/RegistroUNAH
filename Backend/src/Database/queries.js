@@ -75,6 +75,7 @@ export const querys = {
     getEstudiantesMatriculados: "SELECT Distinct NumCuenta, Nombre, Apellido, CorreoInstitucional, Carrera, IndiceGlobal, IndicePeriodo FROM [dbo].[estudiantes] e inner join registro_estudiante_clases re on re.IdEstudiante = numCuenta inner join secciones s on re.idSeccion = s.idseccion where YEAR(re.fecha) = year(getdate()) and month(RE.Fecha) > '05'",
     insertNuevaPlanificacion: "INSERT INTO [dbo].[planificacion_academica] (FechaInicio, FechaFinal, PeriodoAcademico, Sistema) VALUES (@FechaInicio, @FechaFinal, @PeriodoAcademico, @Sistema)",
     getPlanificacionAcademica: "SELECT * FROM [dbo].[planificacion_academica] WHERE Sistema='Trimestral'",
+    getPlanificacionAcademicaSemestral: "SELECT * FROM [dbo].[planificacion_academica] WHERE Sistema='Semestral'",
     insertNuevaMatricula: "INSERT INTO [dbo].[planificacion_matricula] (FechaInicio, FechaFinal, HoraInicio, HoraFinal, PeriodoAcademico, Sistema) VALUES (@FechaInicio, @FechaFinal,@HoraInicio, @HoraFinal, @PeriodoAcademico, @Sistema)",
     getMatricula: "select * from [dbo].[planificacion_matricula]",
     insertProcesoCancelacion: "INSERT INTO [dbo].[planificacion_cancelacionesexcepcionales] (FechaInicio, FechaFinal, HoraInicio, HoraFinal, PeriodoAcademico, Sistema) VALUES (@FechaInicio, @FechaFinal,@HoraInicio, @HoraFinal, @PeriodoAcademico, @Sistema)",

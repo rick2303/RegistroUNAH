@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import { getConnection } from '../Database';
-import {crearNuevaPlanificacion, renderizarPlanificacion, crearNuevaMatricula, renderizarMatricula, crearNuevoProcesoCancelacion, renderizarCancelaciones, enviarMatriculaIPAC, enviarMatriculaIIPAC, enviarMatriculaIIIPAC, enviarIPAC, enviarIIPAC, enviarIIIPAC} from '../controllers/admin.controllers';
+import {crearNuevaPlanificacion, renderizarPlanificacion,renderizarPlanificacionSemestral, crearNuevaMatricula, renderizarMatricula, crearNuevoProcesoCancelacion, renderizarCancelaciones, enviarMatriculaIPAC, enviarMatriculaIIPAC, enviarMatriculaIIIPAC, enviarIPAC, enviarIIPAC, enviarIIIPAC} from '../controllers/admin.controllers';
 import {getEstudiantes, createNewStudent, updatePassword, getEstudiantesMatriculados} from '../controllers/usuarios.controllers';
 import {enviarClasesCursando,enviarInfoEstuForma03} from '../controllers/cancelacionesExcepcionales.controllers';
 import {sendEmail} from '../controllers/recuperacionContra.controllers';
@@ -12,6 +12,7 @@ const router = Router();
 router.post('/enviarPlanificacion', crearNuevaPlanificacion);
 
 router.get('/renderizarPlanificacion', renderizarPlanificacion);
+router.get('/renderizarPlanificacionSemestral', renderizarPlanificacionSemestral);
 
 router.post('/enviarMatricula', crearNuevaMatricula);
 
