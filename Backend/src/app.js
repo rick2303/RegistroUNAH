@@ -12,7 +12,6 @@ import routerSecciones from "./routes/Secciones.routes";
 import { Console } from "console";
 import routerAdmin from "./routes/admin.planificaciones.routes";
 import routerEstado from "./routes/estudianteEstadoCuenta.routes";
-
 import routerSolicitudes from "./routes/solicitudes.routes"
 //import {} from "./csv/csv";
 const app= express();
