@@ -3,22 +3,21 @@ import { DatePicker } from "@material-ui/pickers";
 import DataTable from "react-data-table-component";
 import { format, addWeeks, subWeeks } from "date-fns";
 import { FcDeleteRow } from "react-icons/fc";
+import { es } from "date-fns/locale"; // Importar el idioma español
 import "../FechaMatricula.css";
 
-const AppFechaPeriodo = () => {
+const AppFechaPeriodoSemestral = () => {
   const [fechaInicioSeleccionada, setFechaInicioSeleccionada] = useState(
     new Date()
   );
   const [fechaFinalSeleccionada, setFechaFinalSeleccionada] = useState(
     new Date()
   );
-  
   const [pacSeleccionado, setPacSeleccionado] = useState("1PAC");
   const [historialData2, setHistorialData2] = useState([]);
   const [clickCount, setClickCount] = useState(0);
   const [isPac1Disabled, setIsPac1Disabled] = useState(false);
   const [isPac2Disabled, setIsPac2Disabled] = useState(false);
-  const [isPac3Disabled, setIsPac3Disabled] = useState(false);
   const [isGuardarDisabled, setIsGuardarDisabled] = useState(false);
 
   const convertirFechaAJSON = (fechaInicio, fechaFinal) => {
@@ -26,7 +25,7 @@ const AppFechaPeriodo = () => {
       FechaInicio: fechaInicio.toISOString(),
       FechaFinal: fechaFinal.toISOString(),
       PeriodoAcademico: pacSeleccionado,
-      Sistema: "Trimestral",
+      Sistema: "Semestral",
     };
     return fechaJSON;
   };
@@ -57,12 +56,12 @@ const AppFechaPeriodo = () => {
     })
       .then((data) => {
         // Mostrar el mensaje de alerta si la eliminación fue exitosa
-        alert("Se ha eliminado la fila exitosamente");
+        alert("Se ha eliminado la planificación exitosamente");
         // Incrementar el contador de clics
         setClickCount(clickCount + 1);
       })
       .catch((error) => {
-        console.error("Error al eliminar la fila:", error);
+        console.error("Error al eliminar la planificación:", error);
       });
   };
 
@@ -93,7 +92,7 @@ const AppFechaPeriodo = () => {
   };
 
   useEffect(() => {
-    fetch("http://localhost:5000/renderizarPlanificacion")
+    fetch("http://localhost:5000/renderizarPlanificacionSemestral")
       .then((response) => response.json())
       .then((data) => {
         setHistorialData2(data);
@@ -102,11 +101,11 @@ const AppFechaPeriodo = () => {
         // Verificar si hay registros con los valores "1PAC", "2PAC" y "3PAC" en PeriodoAcademico
         const hasPac1 = data.some((row) => row.PeriodoAcademico === "1PAC");
         const hasPac2 = data.some((row) => row.PeriodoAcademico === "2PAC");
-        const hasPac3 = data.some((row) => row.PeriodoAcademico === "3PAC");
+       
         setIsPac1Disabled(hasPac1);
         setIsPac2Disabled(hasPac2);
-        setIsPac3Disabled(hasPac3);
-        setIsGuardarDisabled(hasPac1 && hasPac2 && hasPac3);
+        
+        setIsGuardarDisabled(hasPac1 && hasPac2 );
       })
       .catch((error) => {
         console.error("Error al obtener las fechas mínima y máxima:", error);
@@ -155,39 +154,39 @@ const AppFechaPeriodo = () => {
   };
   // Función para calcular la fecha máxima permitida en el segundo DatePicker
   const calcularMaxFechaFinal = () => {
-    return addWeeks(fechaInicioSeleccionada, 15); // Cambiar 13 por 16 para establecer la fecha máxima permitida a 16 semanas después de la fecha de inicio
+    return addWeeks(fechaInicioSeleccionada, 23); // Cambiar 13 por 16 para establecer la fecha máxima permitida a 16 semanas después de la fecha de inicio
   };
 
   // Función para calcular la fecha mínima permitida en el segundo DatePicker
   const calcularMinFechaFinal = () => {
-    return addWeeks(fechaInicioSeleccionada, 13); // Establecer la fecha mínima permitida a 13 semanas después de la fecha de inicio
+    return addWeeks(fechaInicioSeleccionada, 20); // Establecer la fecha mínima permitida a 13 semanas después de la fecha de inicio
   };
   return (
     <>
       <div className="d-flex mt-5">
         <h1 className="text-2xl mb-4 text-center font-bold pt-2 text-gray-900 sm:text-3xl col-12">
-          Planificación de períodos-trimestrales
+          Planificación de períodos-semestrales
         </h1>
       </div>
       <div className="contenedor mx-24">
         <div className="container m-4">
           <div className="row m-4">
-          <div className="col-md-4">
-        <label htmlFor="fechaInicio">Inicio de Período</label>
-        <DatePicker
-          className="form-control"
-          value={fechaInicioSeleccionada}
-          onChange={handleFechaInicioChange}
-          format="dd MMM yyyy"
-          renderInput={(props) => <input {...props} readOnly />}
-           //minDate={new Date()} // Esto establece la fecha mínima seleccionable a la fecha actual
-           cancelLabel="Cancelar" // Establecer texto para el botón Cancelar en español
-           okLabel="Aceptar" // Establecer texto para el botón Aceptar en español
-        />
-      </div>
-      <div className="col-md-4">
-        <label htmlFor="fechaFinal">Finalización de Período</label>
-        <DatePicker
+            <div className="col-md-4">
+              <label htmlFor="fechaInicio">Inicio de Período</label>
+              <DatePicker
+                className="form-control"
+                value={fechaInicioSeleccionada}
+                onChange={handleFechaInicioChange}
+                format="dd MMM yyyy"
+                renderInput={(props) => <input {...props} readOnly />}
+                //minDate={new Date()} // Esto establece la fecha mínima seleccionable a la fecha actual
+                cancelLabel="Cancelar" // Establecer texto para el botón Cancelar en español
+                okLabel="Aceptar" // Establecer texto para el botón Aceptar en español
+             />
+            </div>
+            <div className="col-md-4">
+              <label htmlFor="fechaFinal">Finalización de Período</label>
+              <DatePicker
           className="form-control"
           value={fechaFinalSeleccionada}
           onChange={handleFechaFinalChange}
@@ -195,12 +194,12 @@ const AppFechaPeriodo = () => {
           renderInput={(props) => <input {...props} readOnly />}
           minDate={calcularMinFechaFinal()} // Esto establece la fecha mínima seleccionable a 13 semanas después de la fecha de inicio
           maxDate={calcularMaxFechaFinal()} // Esto establece la fecha máxima seleccionable a 16 semanas después de la fecha de inicio
-          maxDateMessage="Un periodo no puede tener más de 15 semanas"
-                minDateMessage="Un periodo no puede tener menos de 13 semanas"
+          maxDateMessage="Un periodo no puede tener más de 23 semanas"
+                minDateMessage="Un periodo no puede tener menos de 20 semanas"
                 cancelLabel="Cancelar" // Establecer texto para el botón Cancelar en español
                 okLabel="Aceptar" // Establecer texto para el botón Aceptar en español
         />
-      </div>
+            </div>
             <div className="col-md-4">
               <label htmlFor="pac" className="mb-3">
                 Seleccione el PAC
@@ -220,9 +219,7 @@ const AppFechaPeriodo = () => {
                 <option value="2PAC" disabled={isPac2Disabled}>
                   2PAC
                 </option>
-                <option value="3PAC" disabled={isPac3Disabled}>
-                  3PAC
-                </option>
+              
               </select>
             </div>
           </div>
@@ -272,4 +269,4 @@ const AppFechaPeriodo = () => {
   );
 };
 
-export default AppFechaPeriodo;
+export default AppFechaPeriodoSemestral;

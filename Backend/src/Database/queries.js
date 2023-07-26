@@ -44,7 +44,29 @@ export const queries = {
 
     agregarCupos:"UPDATE Secciones SET Cupos = CASE WHEN Cupos IS NULL THEN 0 ELSE Cupos + @Cupos END   WHERE IdSeccion = @idseccion;",
 
-    getCarreras:"SELECT NombreCarrera from Carrera"
+    getCarreras:"SELECT NombreCarrera from Carrera",
+
+    insertSolicitudCambioCentro:"INSERT INTO solicitud_cambiocentro VALUES (@NumCuenta,@CentroRegional,@CentroNuevo,@Justificacion,@FechaSolicitud,'EN ESPERA','NO PAGADO')",
+
+    getSolicitudesCambioCentro:`SELECT DISTINCT es.NumCuenta,es.Nombre, es.Apellido, esp.TipoPago as Solicitud, scc.Justificacion, es.CorreoInstitucional,  
+    es.IndiceGlobal, es.CentroRegional as 'Centro actual', scc.CentroNuevo  as 'Centro Nuevo',esp.Estado, scc.Dictamen 
+    FROM estudiantes as es 
+    LEFT JOIN solicitud_cambiocentro as scc ON es.NumCuenta = scc.NumCuenta 
+    LEFT JOIN estudiantes_pagos as esp ON es.NumCuenta = esp.NumCuenta 
+    WHERE esp.TipoPago = 'CAMBIO DE CENTRO' 
+    AND esp.Estado = 'PAGADO'
+    AND scc.CentroNuevo= @CentroRegional
+    AND scc.Dictamen='EN ESPERA'
+    AND scc.Estado='PAGADO'`,
+
+    UpdateDictamenCambioCentro:"update solicitud_cambiocentro set Dictamen=@Dictamen where NumCuenta=@NumCuenta AND Dictamen ='EN ESPERA'",
+
+    UpdateCambioCentro:"update dbo.estudiantes set CentroRegional=@CentroRegional where NumCuenta=@NumCuenta",
+
+    
+
+
+    
 }
 
 export const querys = {
@@ -52,7 +74,8 @@ export const querys = {
     addNewStudent: "INSERT INTO [dbo].[estudiantes] (NumCuenta, DNI, Nombre, Apellido,NumeroTelefono, CorreoInstitucional, CorreoPersonal, Contrasena, FechaNacimiento, Carrera, Direccion, CentroRegional, PuntajePAA) VALUES (@NumCuenta, @DNI, @Nombre, @Apellido,@NumeroTelefono, @CorreoInstitucional, @CorreoPersonal, @Contrasena, @FechaNacimiento, @Carrera, @Direccion, @CentroRegional, @PuntajePAA);",
     getEstudiantesMatriculados: "SELECT Distinct NumCuenta, Nombre, Apellido, CorreoInstitucional, Carrera, IndiceGlobal, IndicePeriodo FROM [dbo].[estudiantes] e inner join registro_estudiante_clases re on re.IdEstudiante = numCuenta inner join secciones s on re.idSeccion = s.idseccion where YEAR(re.fecha) = year(getdate()) and month(RE.Fecha) > '05'",
     insertNuevaPlanificacion: "INSERT INTO [dbo].[planificacion_academica] (FechaInicio, FechaFinal, PeriodoAcademico, Sistema) VALUES (@FechaInicio, @FechaFinal, @PeriodoAcademico, @Sistema)",
-    getPlanificacionAcademica: "SELECT * FROM [dbo].[planificacion_academica]",
+    getPlanificacionAcademica: "SELECT * FROM [dbo].[planificacion_academica] WHERE Sistema='Trimestral'",
+    getPlanificacionAcademicaSemestral: "SELECT * FROM [dbo].[planificacion_academica] WHERE Sistema='Semestral'",
     insertNuevaMatricula: "INSERT INTO [dbo].[planificacion_matricula] (FechaInicio, FechaFinal, HoraInicio, HoraFinal, PeriodoAcademico, Sistema) VALUES (@FechaInicio, @FechaFinal,@HoraInicio, @HoraFinal, @PeriodoAcademico, @Sistema)",
     getMatricula: "select * from [dbo].[planificacion_matricula]",
     insertProcesoCancelacion: "INSERT INTO [dbo].[planificacion_cancelacionesexcepcionales] (FechaInicio, FechaFinal, HoraInicio, HoraFinal, PeriodoAcademico, Sistema) VALUES (@FechaInicio, @FechaFinal,@HoraInicio, @HoraFinal, @PeriodoAcademico, @Sistema)",
@@ -73,6 +96,8 @@ export const querys = {
     
     geSoliCancelacionesCoordinador: "SELECT DISTINCT rce.NumCuenta, rce.Descripcion, rce.Estado, e.Nombre, e.Apellido, e.IndiceGlobal, e.IndicePeriodo, e.CorreoInstitucional, pe.Imagen1 , e.Carrera, e.CentroRegional FROM [dbo].[registro_cancelaciones_excepcionales] AS rce INNER JOIN [dbo].[estudiantes] e ON e.NumCuenta = rce.NumCuenta INNER JOIN [dbo].[perfil_estudiante] pe ON pe.IdPerfil = e.NumCuenta WHERE rce.Estado = 'Pendiente' And e.Carrera = @carrera And e.CentroRegional = @CentroRegional",
 
+    getSoliCambioDeCarreraCoordi:"SELECT DISTINCT sc.NumCuenta, sc.RazonDeCambio, sc.Estado,sc.Dictamen, e.Nombre, e.Apellido, e.IndiceGlobal, e.IndicePeriodo, pe.Imagen1, sc.Carrera, sc.CarreraDeCambio, sc.CentroRegional, e.CorreoInstitucional, sc.IdSolicitud FROM [dbo].[solicitud_cambiocarrera] AS sc INNER JOIN [dbo].[estudiantes] e ON e.NumCuenta = sc.NumCuenta INNER JOIN [dbo].[perfil_estudiante] pe ON pe.IdPerfil = e.NumCuenta WHERE sc.Estado = 'PAGADO' AND sc.CarreraDeCambio= @carreraCambio AND sc.CentroRegional=@CentroRegional AND sc.Dictamen='EN ESPERA'",
+
     getPdfSolicitud: "select DISTINCT Documento from [dbo].[registro_cancelaciones_excepcionales] where NumCuenta = @NumCuenta",
 
     getSoliCancelacionesCount: "SELECT COUNT(DISTINCT NumCuenta) AS total_filas FROM registro_cancelaciones_excepcionales;",
@@ -85,6 +110,8 @@ export const querys = {
     getInfoEstudent: "select * from [dbo].[estudiantes] where NumCuenta = @NumCuenta",
     getSoliEstu: "select * from [dbo].[solicitud_cambiocarrera] where NumCuenta = @NumCuenta",
     insertSolicitudCambioCarrera: "insert into [dbo].[solicitud_cambiocarrera] (NumCuenta, Nombre, Apellido, Carrera, CentroRegional, IndiceGlobal, PuntajePAA, CarreraDeCambio, RazonDeCambio, FechaSolicitud, Dictamen) values (@NumCuenta, @Nombre, @Apellido, @Carrera, @CentroRegional, @IndiceGlobal, @PuntajePAA, @CarreraDeCambio, @RazonDeCambio, @FechaSolicitud, @Dictamen)",
+    UpdateEstadoCambioCarrera: "UPDATE [dbo].[solicitud_cambiocarrera] SET Dictamen =  '@dictamen', JustificacionCoordi = '@justificacion' WHERE NumCuenta = @numCuenta AND IdSolicitud = @idSolicitud",
+    updateCambioCarreraEstudiante:"UPDATE [dbo].[estudiantes] SET Carrera = @CarreraCambio WHERE NumCuenta = @numCuenta",
 
 
 
@@ -99,10 +126,15 @@ export const queryStudentHistory = {
 export const querysADMIN = {
     DeletePlanificacion: 'delete planificacion_academica where idPlanificacion = @idPlanificacion',
     DeleteMatricula: 'delete planificacion_matricula where idPlanificacion = @idPlanificacion',
-    DeleteCancelacionesExcepcionales: 'delete planificacion_cancelacionesexcepcionales where idPlanificacion = @idPlanificacion'
+    DeleteCancelacionesExcepcionales: 'delete planificacion_cancelacionesexcepcionales where idPlanificacion = @idPlanificacion',
+    getPeriodoActual: 'select PeriodoAcademico from planificacion_academica where GETDATE() BETWEEN FechaInicio and FechaFinal and Sistema = @Sistema'
 
 }
 
 export const queryEstudiante= {
-    getState: 'select * from estudiantes_pagos where NumCuenta = @numCuenta'
+
+    getState: 'select * from estudiantes_pagos where NumCuenta = @numCuenta',
+    postSolicitudReposicion: 'insert into solicitudes_pagoreposicion (NumCuenta, Justificacion, FechaSolicitud, Periodo) values (@NumCuenta, @Justificacion, GETDATE(), @Periodo)',
+    getExistenciaSolicitudReposicion: 'select * from solicitudes_pagoreposicion where NumCuenta = @NumCuenta and Periodo = @Periodo and year(FechaSolicitud) = year(GETDATE())',
 }
+

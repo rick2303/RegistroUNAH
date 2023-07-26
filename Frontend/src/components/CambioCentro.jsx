@@ -9,11 +9,8 @@ const MenuCambioCentro = () => {
   const [NumCuenta, setNumCuenta] = useState("");
   const [Nombre, setNombre] = useState("");
   const [Apellido, setApellido] = useState("");
-  const [Carrera, setCarrera] = useState(""); // Cambio de carrera a cambio de centro regional
   const [CentroRegional, setCentroRegional] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
-  const [IndiceGlobal, setIndiceGlobal] = useState("");
-  const [PuntajePAA, setPuntajePAA] = useState("");
   const [centroSeleccionado, setCentroSeleccionado] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -29,14 +26,12 @@ const MenuCambioCentro = () => {
       const numCuenta = userData.data.NumCuenta;
       const nombre = userData.data.Nombre;
       const apellido = userData.data.apellido; 
-      const carrera = userData.data.Carrera; // Cambio de carrera a cambio de centro regional
       console.log(numCuenta);
       console.log(nombre);
       console.log(apellido);
       setNombre(nombre);
       setApellido(apellido);
-      setNumCuenta(numCuenta);
-      setCarrera(carrera); // Cambio de carrera a cambio de centro regional
+      setNumCuenta(numCuenta)
     }
     fetchInfoAndCentros();
   }, [NumCuenta]);
@@ -51,11 +46,8 @@ const MenuCambioCentro = () => {
       NumCuenta: NumCuenta,
       Nombre: Nombre,
       Apellido: Apellido,
-      Carrera: Carrera, // Cambio de carrera a cambio de centro regional
-      CentroRegional: CentroRegional, // Agregar el CentroRegional seleccionado
-      IndiceGlobal: IndiceGlobal,
-      PuntajePAA: PuntajePAA,
-      CentroDeCambio: centroSeleccionado, // Cambio de Carrera a Cambio de Centro
+      CentroRegional: CentroRegional,
+      CentroDeCambio: centroSeleccionado,
       RazonDeCambio: inputValue,
       FechaSolicitud: fechaActual,
       Dictamen: "EN ESPERA", 
@@ -64,7 +56,7 @@ const MenuCambioCentro = () => {
     // Resto del código se mantiene igual
     console.log(data);
 
-    fetch("http://localhost:5000/subirSolicitudCambioCentro", { // Cambio de ruta para el cambio de centro
+    fetch("http://localhost:5000/subirSolicitudCambioCentro", { 
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -112,9 +104,6 @@ const fetchInfoAndCentros = async () => {
     // Eliminar duplicados utilizando un Set y luego convertirlo nuevamente a un array
     const centrosUnicos = Array.from(new Set(centrosData)); // Cambio de variable de carrerasUnicas a centrosUnicos
     setCentros(centrosUnicos);
-    setCentroRegional(infoData[0].CentroRegional); // Cambio de variable Carrera a CentroRegional
-    setIndiceGlobal(infoData[0].IndiceGlobal);
-    setPuntajePAA(infoData[0].PuntajePAA);
     console.log(infoData);
     console.log(soliData);
   } catch (error) {
@@ -132,14 +121,6 @@ const fetchInfoAndCentros = async () => {
     {
       name: "FECHA DE SOLICITUD",
       selector: (row) => row.FechaSolicitud.split("T")[0],
-  },
-  {
-      name: "CARRERA ACTUAL",
-      selector: (row) => row.Carrera,
-  },
-  {
-      name: "CARRERA DE CAMBIO",
-      selector: (row) => row.CarreraDeCambio,
   },
   {
       name: "NOMBRE",
@@ -178,44 +159,10 @@ const fetchInfoAndCentros = async () => {
     toggleModal();
   };
 
-  const EliminarInformacion = (row) => {
-    console.log(row.IdSolicitud);
-    const IdSolicitud = parseInt(row.IdSolicitud);
-    console.log(IdSolicitud);
-    if (isNaN(IdSolicitud)) {
-        console.error('El valor de IdSolicitud no es un número válido.');
-        return;
-    }
-
-    fetch("http://localhost:5000/eliminarSolicitudCambioCarrera", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ IdSolicitud: IdSolicitud }),
-    })
-    .then((res) => {
-        if (!res.ok) {
-            console.error('La respuesta no fue exitosa:', res.status, res.statusText);
-            throw new Error('La solicitud no pudo ser eliminada.');
-        }
-        return res.json(); // Parsear la respuesta como JSON
-    })
-    .then((data) => {
-        console.log("Solicitud eliminada exitosamente");
-        alert("Solicitud eliminada exitosamente");
-        window.location.reload();
-    })
-    .catch((error) => {
-        console.error("Error en la eliminación de la solicitud", error);
-    });   
-  };
-
   const toggleModal = () => {
     setModalOpen(!modalOpen);
   };
 
-  
 
  
   return (
@@ -290,12 +237,6 @@ const fetchInfoAndCentros = async () => {
                 <ul>
                 <li>
                     <strong>Fecha de solicitud:</strong> {selectedRow.FechaSolicitud.split("T")[0]}
-                </li>
-                <li>
-                    <strong>Centro actual:</strong> {selectedRow.Carrera}
-                </li>
-                <li>
-                    <strong>Centro al que quiere hacer el cambio:</strong> {selectedRow.CarreraDeCambio}
                 </li>
                 <li>
                     <strong>Nombre:</strong> {selectedRow.Nombre + " " + selectedRow.Apellido}
