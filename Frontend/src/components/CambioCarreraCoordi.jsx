@@ -217,6 +217,22 @@ return (
                 Indice Global: {user.IndiceGlobal}
             </p>
             </li>
+            <li>
+            <p className="pb-1 text-center">
+                Puntaje PAA: {user.PuntajePAA}
+            </p>
+            </li>
+            <li>
+            <p className="pb-1 text-center">
+                Puntaje PAM: {user.PuntajePAM}
+            </p>
+            </li>
+            <li>
+            <p className="pb-1 text-center">
+                Puntaje PCCNS: {user.PuntajePCCNS}
+            </p>
+            </li>
+
         </ul>
 
 
