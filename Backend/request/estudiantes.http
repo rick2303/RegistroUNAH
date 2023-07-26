@@ -72,6 +72,9 @@ Content-Type: application/json
 ### get planificacion
 GET http://localhost:5000/enviarSolicitudesRealizadasCoordinador
 
+### get planificacion
+GET http://localhost:5000/carreras
+
 ### ver clases que esta cursando un estudiante
 post http://localhost:5000/download-pdf
 Content-Type: application/json
@@ -85,6 +88,15 @@ GET http://localhost:5000/enviarSolicitudesRealizadasCoordinador
 
 ### get planificacion
 GET http://localhost:5000/enviarSolicitudesContadas
+
+
+### ver clases que esta cursando un estudiante
+post http://localhost:5000/obtenerInfoEstudiant
+Content-Type: application/json
+
+{
+    "NumCuenta": "20168003632"
+}
 
 ### ver clases que esta cursando un estudiante
 post http://localhost:5000/dictamenSolicitud
@@ -103,6 +115,16 @@ Content-Type: application/json
     "numCuenta": "20191009775",
     "estado": "Pendiente",
     "idClase":"IS-501"
+}
+
+### ver clases que esta cursando un estudiante
+post http://localhost:5000/EnviarDictamenCambioCarrera
+Content-Type: application/json
+
+{
+    "numCuenta": "20211006829",
+    "dictamen": "RECHAZADO",
+    "idSolicitud":"13"
 }
 
 ### get planificacion
@@ -144,4 +166,14 @@ Content-Type: application/json
     "periodo": "2PAC",
     "idClase": "II-222",
     "año": 2023
+}
+
+
+### ver clases que esta cursando un estudiante
+post http://localhost:5000/ObtenerSolicitudesCambioCarreraCoordinador
+Content-Type: application/json
+
+{
+    "carreraCambio": "Ingenieria industrial",
+    "centroRegional": "CU"
 }

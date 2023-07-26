@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import {
-  FcReadingEbook,
-  FcInspection,
-  FcLeave,
-  FcNeutralTrading,
+FcReadingEbook,
+FcInspection,
+FcLeave,
+FcNeutralTrading,
 } from "react-icons/fc";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -42,10 +42,9 @@ return (
             </div>
 
             <div className="grid grid-cols-1">
-            <a data-bs-toggle="modal" data-bs-target="#exampleModal">
                 <a
                 className=" grid grid-cols-1 group relative focus:outline-none focus:ring"
-                href="/download"
+                href="/src/html/CambioCarreraCoordi.html"
                 >
                     <span className=" rounded-[25px] grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"
                     style={{ backgroundColor: '#145eb9' }}
@@ -55,7 +54,6 @@ return (
                     Ir
                 </span>
                 </a>
-            </a>
             </div>
         </div>
         </article>

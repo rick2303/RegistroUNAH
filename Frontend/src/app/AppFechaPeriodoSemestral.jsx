@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import { FcDeleteRow } from "react-icons/fc";
 import "../FechaMatricula.css";
 
-const AppFechaPeriodo = () => {
+const AppFechaPeriodoSemestral = () => {
   const [fechaInicioSeleccionada, setFechaInicioSeleccionada] = useState(
     new Date()
   );
@@ -25,7 +25,7 @@ const AppFechaPeriodo = () => {
       FechaInicio: fechaInicio.toISOString(),
       FechaFinal: fechaFinal.toISOString(),
       PeriodoAcademico: pacSeleccionado,
-      Sistema: "Trimestral",
+      Sistema: "Semestral",
     };
     return fechaJSON;
   };
@@ -156,7 +156,7 @@ const AppFechaPeriodo = () => {
     <>
       <div className="d-flex mt-5">
         <h1 className="text-2xl mb-4 text-center font-bold pt-2 text-gray-900 sm:text-3xl col-12">
-          Planificación de períodos-trimestrales
+          Planificación de períodos-semestrales
         </h1>
       </div>
       <div className="contenedor mx-24">
@@ -253,4 +253,4 @@ const AppFechaPeriodo = () => {
   );
 };
 
-export default AppFechaPeriodo;
+export default AppFechaPeriodoSemestral;
