@@ -7,3 +7,6 @@ routerEstado.get('/estadoCuenta', obtenerEstadoCuenta)
 routerEstado.post('/subirSolicitud', crearSolicitudReposicion)
 //routerEstado.get('/existenciaSolicitudMatricula', existenciaSolicitudMatricula)
 routerEstado.get('/existenciaSolicitudReposicion', existenciaSolicitudReposicion)
+
+
+export default routerEstado

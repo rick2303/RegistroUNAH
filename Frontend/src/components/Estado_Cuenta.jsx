@@ -35,10 +35,6 @@ const EstadoCuenta = () => {
 
   return (
 
-    
-
-
-
     <div>
          <div onClick={toggleModal} className="grid grid-cols-1">
         <a>
@@ -54,7 +50,7 @@ const EstadoCuenta = () => {
           </a>
         </a>
       </div>
- 
+
       <Modal isOpen={modal} toggle={toggleModal}>
         <ModalHeader toggle={toggleModal}>Estado de Cuenta</ModalHeader>
         <ModalBody>

@@ -232,7 +232,6 @@ return (
                 Puntaje PCCNS: {user.PuntajePCCNS}
             </p>
             </li>
-
         </ul>
 
 
