@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import { DateTimePicker } from "@material-ui/pickers";
 import DataTable from "react-data-table-component";
 import { format } from "date-fns";
-import { TiArrowBackOutline } from "react-icons/ti";
 import "../FechaMatricula.css";
+import { TiArrowBackOutline } from "react-icons/ti";
 import {FcDeleteRow} from "react-icons/fc"
-
-const AppFechaCancelaciones = () => {
+const AppFechaNotasSemestrales = () => {
   const [fechaInicioSeleccionada, setFechaInicioSeleccionada] = useState(new Date());
   const [fechaFinalSeleccionada, setFechaFinalSeleccionada] = useState(new Date());
   const [pacSeleccionado, setPacSeleccionado] = useState("1PAC");
@@ -16,13 +15,12 @@ const AppFechaCancelaciones = () => {
   const [clickCount, setClickCount] = useState(0);
   const [isPac1Disabled, setIsPac1Disabled] = useState(false);
   const [isPac2Disabled, setIsPac2Disabled] = useState(false);
-  const [isPac3Disabled, setIsPac3Disabled] = useState(false);
   const [isGuardarDisabled, setIsGuardarDisabled] = useState(false);
 
   useEffect(() => {
     obtenerFechasMinMax("1PAC"); // Obtener las fechas mínimas y máximas del 1PAC al inicio
     obtenerHistorialData();
-    fetch("http://localhost:5000/renderizarCancelaciones")
+    fetch("http://localhost:5000/renderizarFechaNotaSemestral")
       .then((response) => response.json())
       .then((data) => {
         setHistorialData2(data);
@@ -31,11 +29,11 @@ const AppFechaCancelaciones = () => {
         // Verificar si hay registros con los valores "1PAC", "2PAC" y "3PAC" en PeriodoAcademico
         const hasPac1 = data.some((row) => row.PeriodoAcademico === "1PAC");
         const hasPac2 = data.some((row) => row.PeriodoAcademico === "2PAC");
-        const hasPac3 = data.some((row) => row.PeriodoAcademico === "3PAC");
+       
         setIsPac1Disabled(hasPac1);
         setIsPac2Disabled(hasPac2);
-        setIsPac3Disabled(hasPac3);
-        setIsGuardarDisabled(hasPac1 && hasPac2 && hasPac3);
+    
+        setIsGuardarDisabled(hasPac1 && hasPac2);
       })
       .catch((error) => {
         console.error("Error al obtener las fechas mínima y máxima:", error);
@@ -44,7 +42,7 @@ const AppFechaCancelaciones = () => {
 
   const obtenerFechasMinMax = (selectedValue) => {
     if (selectedValue === "1PAC") {
-      fetch("http://localhost:5000/enviarPlanificacionIPAC")
+      fetch("http://localhost:5000/enviarPlanificacionIPACSemestral")
         .then((response) => response.json())
         .then((data) => {
           setFechaMinima(new Date(data[0].FechaInicio));
@@ -55,7 +53,7 @@ const AppFechaCancelaciones = () => {
           console.error("Error al obtener las fechas mínima y máxima:", error);
         });
     } else if (selectedValue === "2PAC") {
-      fetch("http://localhost:5000/enviarPlanificacionIIPAC")
+      fetch("http://localhost:5000/enviarPlanificacionIIPACSemestral")
         .then((response) => response.json())
         .then((data) => {
           setFechaMinima(new Date(data[0].FechaInicio));
@@ -65,22 +63,11 @@ const AppFechaCancelaciones = () => {
         .catch((error) => {
           console.error("Error al obtener las fechas mínima y máxima:", error);
         });
-    } else if (selectedValue === "3PAC") {
-      fetch("http://localhost:5000/enviarPlanificacionIIIPAC")
-        .then((response) => response.json())
-        .then((data) => {
-          setFechaMinima(new Date(data[0].FechaInicio));
-          setFechaMaxima(new Date(data[0].FechaFinal));
-          console.log(data[0]);
-        })
-        .catch((error) => {
-          console.error("Error al obtener las fechas mínima y máxima:", error);
-        });
-    }
+    } 
   };
 
   const obtenerHistorialData = () => {
-    fetch("http://localhost:5000/renderizarCancelaciones")
+    fetch("http://localhost:5000/renderizarFechaNotaSemestral")
       .then((response) => response.json())
       .then((data) => {
         setHistorialData2(data);
@@ -106,7 +93,7 @@ const AppFechaCancelaciones = () => {
         second: "2-digit",
       }),
       PeriodoAcademico: pacSeleccionado,
-      Sistema: "Trimestral",
+      Sistema: "Semestral",
     };
     console.log(fechaJSON);
     return fechaJSON;
@@ -133,7 +120,7 @@ const AppFechaCancelaciones = () => {
       fechaFinalSeleccionada
     );
     console.log(fechaJSON);
-    fetch("http://localhost:5000/enviarCancelaciones", {
+    fetch("http://localhost:5000/enviarFechaNotas", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -154,7 +141,7 @@ const AppFechaCancelaciones = () => {
     const a = JSON.stringify({ idPlanificacion: `${row.idPlanificacion}` });
 console.log(a);
 
-    fetch("http://localhost:5000/EliminarCancelacionesExcepcionales", {
+    fetch("http://localhost:5000/EliminarFechaNotas", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -219,12 +206,13 @@ console.log(a);
     {
       name: "Eliminar",
       cell: (row) => (
-       <h1  className="cursor-pointer"
-       onClick={() => eliminarFila(row)}>
+        <h1 
+        className="cursor-pointer"
+        onClick={() => eliminarFila(row)}>
         <FcDeleteRow />
        </h1>
-        
       ),
+      sortable: true,
       center: true,
     },
   ];
@@ -234,20 +222,17 @@ console.log(a);
   
   return (
     <>
-    
-    <div className="d-flex mt-5">
+      <div className="d-flex mt-5">
   <h1 className="text-2xl mb-4 text-center font-bold pt-2 text-gray-900 sm:text-3xl col-12">
-    Cancelaciones Excepcionales-Trimestrales
+    Período de ingreso de notas-Semestrales
   </h1>
   
 </div>
-
-      
       <div className="contenedor mx-24">
         <div className="container m-4">
           <div className="row m-4">
             <div className="col-md-4">
-              <label htmlFor="fechaInicio">Inicio de Cancelaciones</label>
+              <label htmlFor="fechaInicio">Inicio ingreso de notas</label>
               <DateTimePicker
                 className="form-control"
                 value={fechaInicioSeleccionada}
@@ -263,7 +248,7 @@ console.log(a);
               />
             </div>
             <div className="col-md-4">
-              <label htmlFor="fechaFinal">Finalización de Cancelaciones</label>
+              <label htmlFor="fechaFinal">Finalización ingreso de notas</label>
               <DateTimePicker
                 className="form-control"
                 value={fechaFinalSeleccionada}
@@ -293,9 +278,7 @@ console.log(a);
                 <option value="2PAC" disabled={isPac2Disabled}>
                   2PAC
                 </option>
-                <option value="3PAC" disabled={isPac3Disabled}>
-                  3PAC
-                </option>
+           
               </select>
             </div>
           </div>
@@ -316,8 +299,7 @@ console.log(a);
                 title={
                   isGuardarDisabled
                     ? "Ya se agregó el máximo de fechas"
-                    : (pacSeleccionado === "1PAC" ||
-                        pacSeleccionado === "2PAC") &&
+                    : (pacSeleccionado === "1PAC" ) &&
                       historialData2.some(
                         (row) => row.PeriodoAcademico === pacSeleccionado
                       )
@@ -326,6 +308,7 @@ console.log(a);
                 }
               >
                 <strong>Guardar</strong>
+                
               </button>
             </div>
             <div className="col-md-4"></div>
@@ -345,4 +328,4 @@ console.log(a);
   );
 };
 
-export default AppFechaCancelaciones;
+export default AppFechaNotasSemestrales;

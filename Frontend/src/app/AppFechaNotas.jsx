@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { DateTimePicker } from "@material-ui/pickers";
 import DataTable from "react-data-table-component";
-import { format } from "date-fns";
-import { TiArrowBackOutline } from "react-icons/ti";
+import { format, addDays } from "date-fns";
+import es from "date-fns/locale/es";
 import "../FechaMatricula.css";
+import { TiArrowBackOutline } from "react-icons/ti";
 import {FcDeleteRow} from "react-icons/fc"
-
-const AppFechaCancelaciones = () => {
+const AppFechaNotas = () => {
   const [fechaInicioSeleccionada, setFechaInicioSeleccionada] = useState(new Date());
   const [fechaFinalSeleccionada, setFechaFinalSeleccionada] = useState(new Date());
   const [pacSeleccionado, setPacSeleccionado] = useState("1PAC");
@@ -22,7 +22,7 @@ const AppFechaCancelaciones = () => {
   useEffect(() => {
     obtenerFechasMinMax("1PAC"); // Obtener las fechas mínimas y máximas del 1PAC al inicio
     obtenerHistorialData();
-    fetch("http://localhost:5000/renderizarCancelaciones")
+    fetch("http://localhost:5000/renderizarFechaNota")
       .then((response) => response.json())
       .then((data) => {
         setHistorialData2(data);
@@ -80,14 +80,14 @@ const AppFechaCancelaciones = () => {
   };
 
   const obtenerHistorialData = () => {
-    fetch("http://localhost:5000/renderizarCancelaciones")
+    fetch("http://localhost:5000/renderizarFechaNota")
       .then((response) => response.json())
       .then((data) => {
         setHistorialData2(data);
         console.log(data);
       })
       .catch((error) => {
-        console.error("Error al obtener el historial de matrícula:", error);
+        console.error("Error al obtener el historial:", error);
       });
   };
 
@@ -133,7 +133,7 @@ const AppFechaCancelaciones = () => {
       fechaFinalSeleccionada
     );
     console.log(fechaJSON);
-    fetch("http://localhost:5000/enviarCancelaciones", {
+    fetch("http://localhost:5000/enviarFechaNotas", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -154,7 +154,7 @@ const AppFechaCancelaciones = () => {
     const a = JSON.stringify({ idPlanificacion: `${row.idPlanificacion}` });
 console.log(a);
 
-    fetch("http://localhost:5000/EliminarCancelacionesExcepcionales", {
+    fetch("http://localhost:5000/EliminarFechaNotas", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -219,12 +219,13 @@ console.log(a);
     {
       name: "Eliminar",
       cell: (row) => (
-       <h1  className="cursor-pointer"
-       onClick={() => eliminarFila(row)}>
+        <h1 
+        className="cursor-pointer"
+        onClick={() => eliminarFila(row)}>
         <FcDeleteRow />
        </h1>
-        
       ),
+      sortable: true,
       center: true,
     },
   ];
@@ -234,20 +235,17 @@ console.log(a);
   
   return (
     <>
-    
-    <div className="d-flex mt-5">
+      <div className="d-flex mt-5">
   <h1 className="text-2xl mb-4 text-center font-bold pt-2 text-gray-900 sm:text-3xl col-12">
-    Cancelaciones Excepcionales-Trimestrales
+    Período de ingreso de notas-Trimestrales
   </h1>
   
 </div>
-
-      
       <div className="contenedor mx-24">
         <div className="container m-4">
           <div className="row m-4">
             <div className="col-md-4">
-              <label htmlFor="fechaInicio">Inicio de Cancelaciones</label>
+              <label htmlFor="fechaInicio">Inicio ingreso de notas</label>
               <DateTimePicker
                 className="form-control"
                 value={fechaInicioSeleccionada}
@@ -263,7 +261,7 @@ console.log(a);
               />
             </div>
             <div className="col-md-4">
-              <label htmlFor="fechaFinal">Finalización de Cancelaciones</label>
+              <label htmlFor="fechaFinal">Finalización ingreso de notas</label>
               <DateTimePicker
                 className="form-control"
                 value={fechaFinalSeleccionada}
@@ -326,6 +324,7 @@ console.log(a);
                 }
               >
                 <strong>Guardar</strong>
+                
               </button>
             </div>
             <div className="col-md-4"></div>
@@ -345,4 +344,4 @@ console.log(a);
   );
 };
 
-export default AppFechaCancelaciones;
+export default AppFechaNotas;

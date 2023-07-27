@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import { DateTimePicker } from "@material-ui/pickers";
 import DataTable from "react-data-table-component";
 import { format } from "date-fns";
-import { TiArrowBackOutline } from "react-icons/ti";
 import "../FechaMatricula.css";
 import {FcDeleteRow} from "react-icons/fc"
 
-const AppFechaCancelaciones = () => {
+const AppFechaCancelacionesSemestrales = () => {
   const [fechaInicioSeleccionada, setFechaInicioSeleccionada] = useState(new Date());
   const [fechaFinalSeleccionada, setFechaFinalSeleccionada] = useState(new Date());
   const [pacSeleccionado, setPacSeleccionado] = useState("1PAC");
@@ -16,13 +15,12 @@ const AppFechaCancelaciones = () => {
   const [clickCount, setClickCount] = useState(0);
   const [isPac1Disabled, setIsPac1Disabled] = useState(false);
   const [isPac2Disabled, setIsPac2Disabled] = useState(false);
-  const [isPac3Disabled, setIsPac3Disabled] = useState(false);
   const [isGuardarDisabled, setIsGuardarDisabled] = useState(false);
 
   useEffect(() => {
     obtenerFechasMinMax("1PAC"); // Obtener las fechas mínimas y máximas del 1PAC al inicio
     obtenerHistorialData();
-    fetch("http://localhost:5000/renderizarCancelaciones")
+    fetch("http://localhost:5000/renderizarCancelacionesSemestrales")
       .then((response) => response.json())
       .then((data) => {
         setHistorialData2(data);
@@ -31,11 +29,9 @@ const AppFechaCancelaciones = () => {
         // Verificar si hay registros con los valores "1PAC", "2PAC" y "3PAC" en PeriodoAcademico
         const hasPac1 = data.some((row) => row.PeriodoAcademico === "1PAC");
         const hasPac2 = data.some((row) => row.PeriodoAcademico === "2PAC");
-        const hasPac3 = data.some((row) => row.PeriodoAcademico === "3PAC");
         setIsPac1Disabled(hasPac1);
         setIsPac2Disabled(hasPac2);
-        setIsPac3Disabled(hasPac3);
-        setIsGuardarDisabled(hasPac1 && hasPac2 && hasPac3);
+        setIsGuardarDisabled(hasPac1 && hasPac2);
       })
       .catch((error) => {
         console.error("Error al obtener las fechas mínima y máxima:", error);
@@ -44,7 +40,7 @@ const AppFechaCancelaciones = () => {
 
   const obtenerFechasMinMax = (selectedValue) => {
     if (selectedValue === "1PAC") {
-      fetch("http://localhost:5000/enviarPlanificacionIPAC")
+      fetch("http://localhost:5000/enviarPlanificacionIPACSemestral")
         .then((response) => response.json())
         .then((data) => {
           setFechaMinima(new Date(data[0].FechaInicio));
@@ -55,7 +51,7 @@ const AppFechaCancelaciones = () => {
           console.error("Error al obtener las fechas mínima y máxima:", error);
         });
     } else if (selectedValue === "2PAC") {
-      fetch("http://localhost:5000/enviarPlanificacionIIPAC")
+      fetch("http://localhost:5000/enviarPlanificacionIIPACSemestral")
         .then((response) => response.json())
         .then((data) => {
           setFechaMinima(new Date(data[0].FechaInicio));
@@ -65,22 +61,11 @@ const AppFechaCancelaciones = () => {
         .catch((error) => {
           console.error("Error al obtener las fechas mínima y máxima:", error);
         });
-    } else if (selectedValue === "3PAC") {
-      fetch("http://localhost:5000/enviarPlanificacionIIIPAC")
-        .then((response) => response.json())
-        .then((data) => {
-          setFechaMinima(new Date(data[0].FechaInicio));
-          setFechaMaxima(new Date(data[0].FechaFinal));
-          console.log(data[0]);
-        })
-        .catch((error) => {
-          console.error("Error al obtener las fechas mínima y máxima:", error);
-        });
-    }
+    } 
   };
 
   const obtenerHistorialData = () => {
-    fetch("http://localhost:5000/renderizarCancelaciones")
+    fetch("http://localhost:5000/renderizarCancelacionesSemestrales")
       .then((response) => response.json())
       .then((data) => {
         setHistorialData2(data);
@@ -106,7 +91,7 @@ const AppFechaCancelaciones = () => {
         second: "2-digit",
       }),
       PeriodoAcademico: pacSeleccionado,
-      Sistema: "Trimestral",
+      Sistema: "Semestral",
     };
     console.log(fechaJSON);
     return fechaJSON;
@@ -163,11 +148,11 @@ console.log(a);
     })
       
       .then((data) => {
-        alert("Se ha eliminado la fila exitosamente");
+        alert("Se ha eliminado la planificación exitosamente");
         setClickCount(clickCount + 1);
       })
       .catch((error) => {
-        console.error("Error al eliminar la fila:", error);
+        console.error("Error al eliminar la planificación", error);
       });
   };
 
@@ -237,7 +222,7 @@ console.log(a);
     
     <div className="d-flex mt-5">
   <h1 className="text-2xl mb-4 text-center font-bold pt-2 text-gray-900 sm:text-3xl col-12">
-    Cancelaciones Excepcionales-Trimestrales
+    Cancelaciones Excepcionales-Semestales
   </h1>
   
 </div>
@@ -293,9 +278,7 @@ console.log(a);
                 <option value="2PAC" disabled={isPac2Disabled}>
                   2PAC
                 </option>
-                <option value="3PAC" disabled={isPac3Disabled}>
-                  3PAC
-                </option>
+               
               </select>
             </div>
           </div>
@@ -316,8 +299,7 @@ console.log(a);
                 title={
                   isGuardarDisabled
                     ? "Ya se agregó el máximo de fechas"
-                    : (pacSeleccionado === "1PAC" ||
-                        pacSeleccionado === "2PAC") &&
+                    : (pacSeleccionado === "1PAC" ) &&
                       historialData2.some(
                         (row) => row.PeriodoAcademico === pacSeleccionado
                       )
@@ -345,4 +327,4 @@ console.log(a);
   );
 };
 
-export default AppFechaCancelaciones;
+export default AppFechaCancelacionesSemestrales;

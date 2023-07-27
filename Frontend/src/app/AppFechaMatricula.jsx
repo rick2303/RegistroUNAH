@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { DateTimePicker } from "@material-ui/pickers";
 import DataTable from "react-data-table-component";
-import { format } from "date-fns";
+import { format, addDays } from "date-fns";
+import es from "date-fns/locale/es";
 import "../FechaMatricula.css";
 import { TiArrowBackOutline } from "react-icons/ti";
 import {FcDeleteRow} from "react-icons/fc"
@@ -105,6 +106,7 @@ const AppFechaMatricula = () => {
         second: "2-digit",
       }),
       PeriodoAcademico: pacSeleccionado,
+      Sistema: "Trimestral",
     };
     console.log(fechaJSON);
     return fechaJSON;
@@ -209,6 +211,12 @@ console.log(a);
       center: true,
     },
     {
+      name: "Sistema",
+      selector: (row) => row.Sistema,
+      sortable: true,
+      center: true,
+    },
+    {
       name: "Eliminar",
       cell: (row) => (
         <h1 
@@ -229,7 +237,7 @@ console.log(a);
     <>
       <div className="d-flex mt-5">
   <h1 className="text-2xl mb-4 text-center font-bold pt-2 text-gray-900 sm:text-3xl col-12">
-    Planificación de Matrícula
+    Planificación de Matrícula-Trimestral
   </h1>
   
 </div>
@@ -248,6 +256,8 @@ console.log(a);
                 maxDateMessage="La fecha no debe ser posterior a la fecha máxima"
                 minDateMessage="La fecha no debe ser anterior a la fecha mínima"
                 renderInput={(props) => <input {...props} readOnly />}
+                cancelLabel="Cancelar" // Establecer texto para el botón Cancelar en español
+                okLabel="Aceptar" // Establecer texto para el botón Aceptar en español
               />
             </div>
             <div className="col-md-4">
@@ -262,6 +272,8 @@ console.log(a);
                 maxDateMessage="La fecha no debe ser posterior a la fecha máxima"
                 minDateMessage="La fecha no debe ser anterior a la fecha mínima"
                 renderInput={(props) => <input {...props} readOnly />}
+                cancelLabel="Cancelar" // Establecer texto para el botón Cancelar en español
+                okLabel="Aceptar" // Establecer texto para el botón Aceptar en español
               />
             </div>
             <div className="col-md-4">
@@ -292,8 +304,24 @@ console.log(a);
                 id="boton-bonito"
                 className="w-100"
                 onClick={guardarFechas}
-                disabled={isGuardarDisabled}
-                title={isGuardarDisabled ? "Ya se agregó el máximo de fechas" : ""}
+                disabled={
+                  isGuardarDisabled ||
+                  ((pacSeleccionado === "1PAC" || pacSeleccionado === "2PAC") &&
+                    historialData2.some(
+                      (row) => row.PeriodoAcademico === pacSeleccionado
+                    ))
+                }
+                title={
+                  isGuardarDisabled
+                    ? "Ya se agregó el máximo de fechas"
+                    : (pacSeleccionado === "1PAC" ||
+                        pacSeleccionado === "2PAC") &&
+                      historialData2.some(
+                        (row) => row.PeriodoAcademico === pacSeleccionado
+                      )
+                    ? `Ya existe ${pacSeleccionado} en la tabla`
+                    : ""
+                }
               >
                 <strong>Guardar</strong>
                 
