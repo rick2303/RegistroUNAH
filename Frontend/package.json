@@ -22,6 +22,7 @@
     "mdb-react-ui-kit": "^6.1.0",
     "morgan": "^1.10.0",
     "mssql": "^9.1.1",
+    "mui-datatables": "^4.3.0",
     "react": "^18.2.0",
     "react-data-table-component": "^7.5.3",
     "react-dom": "^18.2.0",

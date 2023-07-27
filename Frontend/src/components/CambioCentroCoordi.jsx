@@ -10,6 +10,9 @@ const MenuCambioCentroCoordi = () => {
     const [centroRegional, setCentroRegional] = useState("");
     const [numeroSolicitud, setNumeroSolicitud] = useState("");
     const [cambioCentro, setCambioCentroEstudiante] = useState("");
+    const [NumCuenta, setNumCuenta] = useState("");
+    const [users, setUsers] = useState([]);
+
   
     useEffect(() => {
       const storedData = localStorage.getItem("userData");
@@ -29,7 +32,7 @@ const MenuCambioCentroCoordi = () => {
       try {
         console.log("La carrera es: ", carrera);
         console.log("El centro regional es: ", centroRegional);
-        const URL = "http://localhost:5000/ObtenerSolicitudesCambioCentroCoordinador";
+        const URL = "http://localhost:5000/CambioCentroCoordi";
         const response = await fetch(URL, {
           method: "POST",
           headers: {
@@ -79,7 +82,7 @@ function CarruselUsuarios({ users }) {
             console.log("Dictamen:", dictamenData);
             console.log("Cambio de centro:", cambioCentroData.CentroRegional);
         
-            const enviarDictamenPromise = fetch("http://localhost:5000/EnviarDictamenCambioCentro", {
+            const enviarDictamenPromise = fetch("http://localhost:5000/DictamenCambioCentro/:id", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -87,7 +90,7 @@ function CarruselUsuarios({ users }) {
                 body: JSON.stringify(dictamenData)
             });
         
-            const realizarCambioPromise = fetch("http://localhost:5000/realizarCambioCentro", {
+            const realizarCambioPromise = fetch("http://localhost:5000/CambioCentro/:id", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -100,7 +103,7 @@ function CarruselUsuarios({ users }) {
                 .then((data) => {
                     const [dictamenData, cambioCentroData] = data;
                     console.log("Dictamen:", dictamenData);
-                    console.log("Cambio de Centro:", cambioCarreraData);
+                    console.log("Cambio de Centro:", cambioCentroData);
                     if (dictamenData.message === "Error al procesar la solicitud") {
                         console.error("Error al enviar las cancelaciones:", dictamenData.message);
                     } else {
@@ -134,7 +137,7 @@ function CarruselUsuarios({ users }) {
     
         if (justificacion !== null && justificacion.trim() !== "") {
 
-        return fetch("http://localhost:5000/EnviarDictamenCambioCentro", {
+        return fetch("http://localhost:5000/DictamenCambioCentro/:id", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -293,22 +296,6 @@ return (
 );
 }
 
-
-return (
-    <div className="App">
-    <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
-         {users.length} solicitudes
-    </h1>
-
-    <div className="container">
-        {users.length > 0 && <CarruselUsuarios users={users} />}
-    <div className="pt-50">
-
-
-    </div>
-    </div>
-    </div>
-);
 };
 
 

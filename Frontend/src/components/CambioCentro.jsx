@@ -4,6 +4,7 @@ import DataTable from "react-data-table-component";
 import "styled-components";
 import { FcCancel, FcFinePrint } from "react-icons/fc";
 import { Input, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import ModalCargarPDFCancelaciones from "./modalCargarPDFCancelaciones";
 
 const MenuCambioCentro = () => {
   const [NumCuenta, setNumCuenta] = useState("");
@@ -17,6 +18,7 @@ const MenuCambioCentro = () => {
   const [centrosData, setCentros] = useState([]);
   const [InfoEstudiante, setInfoEstudiante] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
+  const [puedeEnviarPDF, setPuedeEnviarPDF] = useState(true);
   const fechaActual = new Date();
 
   useEffect(() => {
@@ -117,7 +119,7 @@ const fetchInfoAndCentros = async () => {
      return filteredData.some((solicitud) => solicitud.Dictamen === "EN ESPERA");
 
   };
-  const columnas1 = [
+  const columnas = [
     {
       name: "FECHA DE SOLICITUD",
       selector: (row) => row.FechaSolicitud.split("T")[0],
@@ -163,6 +165,7 @@ const fetchInfoAndCentros = async () => {
     setModalOpen(!modalOpen);
   };
 
+  
 
  
   return (
@@ -221,7 +224,7 @@ const fetchInfoAndCentros = async () => {
       
         <br />
         <DataTable
-        columns={columnas1}
+        columns={columnas}
         className="mi-tabla"
         data={filteredData}
         />
@@ -255,6 +258,23 @@ const fetchInfoAndCentros = async () => {
             </Modal>
         )}
     </div>
+    <br>
+    </br>
+    <br>
+
+    </br>
+    <div className="d-flex justify-content-center">
+          <a
+            className="btn btn-success"
+            data-bs-toggle="modal"
+            data-bs-target="#ModalCANCEL"
+            disabled={!puedeEnviarPDF}
+          >
+            Subir archivo PDF
+          </a>
+          <ModalCargarPDFCancelaciones setPuedeEnviarPDF={setPuedeEnviarPDF}/>
+        </div>
+
     </div>
   );
 };
