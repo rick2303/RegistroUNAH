@@ -108,6 +108,7 @@ try {
     const soliData = await soliRes.json();
 
     setInfoEstudiante(infoData);
+    console.log(infoData);
     setFilteredData(soliData);
     // Eliminar duplicados utilizando un Set y luego convertirlo nuevamente a un array
     const carrerasUnicas = Array.from(new Set(carrerasData));
@@ -115,6 +116,7 @@ try {
     setCentro(infoData[0].CentroRegional);
     setIndiceGlobal(infoData[0].IndiceGlobal);
     setPuntajePAA(infoData[0].PuntajePAA);
+    setCarrera(infoData[0].Carrera);
     console.log(infoData);
     // Manejar los datos de la solicitud obtenidos de soliData, por ejemplo:
     console.log(soliData);
@@ -173,6 +175,9 @@ const columnas1 = [
     ),
 },
 ];
+const NoDataComponent = () => {
+    return <div>No hay registros para mostrar</div>;
+  };
 
 const mostrarInformacion = (row) => {
     setSelectedRow(row);
@@ -297,6 +302,7 @@ return (
         columns={columnas1}
         className="mi-tabla"
         data={filteredData}
+        noDataComponent={<NoDataComponent />}
         />
     </div>
     {selectedRow && (

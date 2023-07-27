@@ -3,7 +3,7 @@ import { obtenerEstadoCuenta, crearSolicitudReposicion, existenciaSolicitudMatri
 
 const routerEstado = Router();
 
-routerEstado.get('/estadoCuenta', obtenerEstadoCuenta)
+routerEstado.post('/estadoCuenta', obtenerEstadoCuenta)
 routerEstado.post('/subirSolicitud', crearSolicitudReposicion)
 //routerEstado.get('/existenciaSolicitudMatricula', existenciaSolicitudMatricula)
 routerEstado.get('/existenciaSolicitudReposicion', existenciaSolicitudReposicion)

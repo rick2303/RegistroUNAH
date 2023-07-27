@@ -1,4 +1,3 @@
-import { VarChar } from "mssql";
 import { getConnection, queryEstudiante, sql, querysADMIN} from "../Database"
 
 
