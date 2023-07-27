@@ -10,5 +10,3 @@ const AppEstadoCuenta = () => {
     </div>
   );
 };
-
-ReactDOM.render(<AppEstadoCuenta />, document.getElementById('estadocuenta'));

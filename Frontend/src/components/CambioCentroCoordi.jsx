@@ -1,5 +1,4 @@
 
-
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from "react";
 import "styled-components";
@@ -10,7 +9,7 @@ const MenuCambioCentroCoordi = () => {
     const [centroRegional, setCentroRegional] = useState("");
     const [numeroSolicitud, setNumeroSolicitud] = useState("");
     const [cambioCentro, setCambioCentroEstudiante] = useState("");
-  
+
     useEffect(() => {
       const storedData = localStorage.getItem("userData");
       if (storedData) {
@@ -24,7 +23,7 @@ const MenuCambioCentroCoordi = () => {
       }
       showData();
     }, [carrera, centroRegional]);
-  
+
     const showData = async () => {
       try {
         console.log("La carrera es: ", carrera);
@@ -60,10 +59,10 @@ function CarruselUsuarios({ users }) {
         console.log("El numero de cuenta es: ", NumCuenta);
         const Estado = "APROBADO";
         console.log("el id de la clase es: ", numeroSolicitud);
-        
+
         // Solicitar al usuario que ingrese una justificación
         const justificacion = prompt("Colocar una Justificacion de la respuesta:");
-    
+
         if (justificacion !== null && justificacion.trim() !== "") {
             const dictamenData = {
                 numCuenta: NumCuenta,
@@ -71,14 +70,14 @@ function CarruselUsuarios({ users }) {
                 idSolicitud: numeroSolicitud,
                 justificacion: justificacion
             };
-        
+
             const cambioCentroData = {
                 NumCuenta: NumCuenta,
                 Centro: centroRegional,
             };
             console.log("Dictamen:", dictamenData);
             console.log("Cambio de centro:", cambioCentroData.CentroRegional);
-        
+
             const enviarDictamenPromise = fetch("http://localhost:5000/EnviarDictamenCambioCentro", {
                 method: "POST",
                 headers: {
@@ -86,7 +85,7 @@ function CarruselUsuarios({ users }) {
                 },
                 body: JSON.stringify(dictamenData)
             });
-        
+
             const realizarCambioPromise = fetch("http://localhost:5000/realizarCambioCentro", {
                 method: "POST",
                 headers: {
@@ -94,7 +93,7 @@ function CarruselUsuarios({ users }) {
                 },
                 body: JSON.stringify(cambioCentroData)
             });
-        
+
             Promise.all([enviarDictamenPromise, realizarCambioPromise])
                 .then((responses) => Promise.all(responses.map((response) => response.json())))
                 .then((data) => {
@@ -115,12 +114,12 @@ function CarruselUsuarios({ users }) {
         } else {
             alert("No se ha enviado la respuesta");
         }
-        
+
 
     };
-    
-    
-    
+
+
+
 
     const enviarCancelacionesCoordiRECHAZADA = async (cuentaSend) => {
 
@@ -128,10 +127,10 @@ function CarruselUsuarios({ users }) {
         console.log("El numero de cuenta es: ", NumCuenta);
         const Estado = "RECHAZADO";
         console.log("el id de la clase es: ", numeroSolicitud);
-        
+
         // Solicitar al usuario que ingrese una justificación
         const justificacion = prompt("Colocar una Justificacion de la respuesta:");
-    
+
         if (justificacion !== null && justificacion.trim() !== "") {
 
         return fetch("http://localhost:5000/EnviarDictamenCambioCentro", {

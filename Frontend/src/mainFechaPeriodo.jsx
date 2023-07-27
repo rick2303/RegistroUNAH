@@ -13,10 +13,10 @@ ReactDOM.render(
   <Navbar />
 </div>
 
-
+	
 	<div className='mt-40'>
 	<MuiPickersUtilsProvider utils={DateFnUtils} locale={esLocale}>
-
+	
 	<AppFechaPeriodo />
 	</MuiPickersUtilsProvider>	
 		
@@ -29,7 +29,7 @@ ReactDOM.render(
 		
 	</div>
 
-
+	
 	</React.StrictMode>,
 	document.getElementById('FechaPeriodo')
 );
