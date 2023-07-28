@@ -5,7 +5,6 @@ import AppFechaMatricula from './app/AppFechaMatricula';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import DateFnUtils from '@date-io/date-fns';
 import esLocale from "date-fns/locale/es";
-import AppFechaMatriculaSemestral from './app/AppFechaMatriculaSemestral';
 import Navbar from './components/Navbar';
 ReactDOM.render(
 	<React.StrictMode>
@@ -17,10 +16,7 @@ ReactDOM.render(
 	
 	<AppFechaMatricula />
 	</MuiPickersUtilsProvider>	
-	<MuiPickersUtilsProvider utils={DateFnUtils} locale={esLocale}>
-	
-	<AppFechaMatriculaSemestral />
-	</MuiPickersUtilsProvider>	
+		
 	</div>
 	</React.StrictMode>,
 	document.getElementById('FechaMatricula')
