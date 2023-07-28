@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import "../App.css";
+
 function CargarArchivo() {
   const [selectedFile, setSelectedFile] = useState(null);
   const inputFileRef = useRef(null);
@@ -41,9 +41,9 @@ function CargarArchivo() {
   
 
   return (
-    <form className="flex justify-between" onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <input type="file" onChange={handleFileChange} ref={inputFileRef} accept=".csv" />
-      <button className="boton_guardar px-1 py-0 w-20 h-8 text-center p-2" type="submit">Cargar</button>
+      <button type="submit">Cargar</button>
     </form>
   );
 }

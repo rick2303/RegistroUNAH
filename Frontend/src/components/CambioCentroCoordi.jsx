@@ -4,311 +4,272 @@ import React, { useState, useEffect } from "react";
 import "styled-components";
 
 const MenuCambioCentroCoordi = () => {
-
-    const [carrera, setCarreraUsuario] = useState("");
+    const [NumCuenta, setNumCuenta] = useState("");
+    const [periodoAcademicoActual, setPeriodoAcademicoActualPAC] = useState("");
+    const [users, setUsers] = useState([]);
+    const fechaActual = new Date();
+    const año = fechaActual.getFullYear();
     const [centroRegional, setCentroRegional] = useState("");
-    const [numeroSolicitud, setNumeroSolicitud] = useState("");
-    const [cambioCentro, setCambioCentroEstudiante] = useState("");
-
+    
     useEffect(() => {
-      const storedData = localStorage.getItem("userData");
-      if (storedData) {
-        const userData = JSON.parse(storedData);
-        const Carrera = userData.data.Carrera;
-        const CentroRegional = userData.data.CentroRegional;
-        console.log("Carrera del usuario:", Carrera);
-        console.log("Centro Regional del usuario:", CentroRegional);
-        setCarreraUsuario(Carrera);
-        setCentroRegional(CentroRegional);
-      }
-      showData();
-    }, [carrera, centroRegional]);
+        const storedData = localStorage.getItem("userData");
+        if (storedData) {
+            const userData = JSON.parse(storedData);
+            const CentroRegional = userData.data.CentroRegional;
+            setCentroRegional(CentroRegional);
+        }
+        showData();
+    }, []);
+    
+    const obtenerFechasMinMaxIPAC = async () => {
+    try {
+        const response = await fetch(
+        "http://localhost:5000/enviarPlanificacionIPAC"
+        );
+        const data = await response.json();
+        const fechamin = parseISO(data[0].FechaInicio);
+        const fechamax = parseISO(data[0].FechaFinal);
+    
+        if (fechaActual >= fechamin && fechaActual <= fechamax) {
+        setPeriodoAcademicoActualPAC("1PAC");
+        }
+    } catch (error) {
+        console.error("Error al obtener las fechas mínima y máxima:", error);
+    }
+    };
+    
+    const obtenerFechasMinMaxIIPAC = async () => {
+    try {
+        const response = await fetch(
+        "http://localhost:5000/enviarPlanificacionIIPAC"
+        );
+        const data = await response.json();
+        const fechamin = parseISO(data[0].FechaInicio);
+        const fechamax = parseISO(data[0].FechaFinal);
+    
+        if (fechaActual >= fechamin && fechaActual <= fechamax) {
+        setPeriodoAcademicoActualPAC("2PAC");
+        }
+    } catch (error) {
+        console.error("Error al obtener las fechas mínima y máxima:", error);
+    }
+    };
+    
+    const obtenerFechasMinMaxIIIPAC = async () => {
+    try {
+        const response = await fetch(
+        "http://localhost:5000/enviarPlanificacionIIIPAC"
+        );
+        const data = await response.json();
+        const fechamin = parseISO(data[0].FechaInicio);
+        const fechamax = parseISO(data[0].FechaFinal);
+    
+        if (fechaActual >= fechamin && fechaActual <= fechamax) {
+        setPeriodoAcademicoActualPAC("3PAC");
+        }
+    } catch (error) {
+        console.error("Error al obtener las fechas mínima y máxima:", error);
+    }
+    };
+    
+    obtenerFechasMinMaxIPAC();
+    obtenerFechasMinMaxIIPAC();
+    obtenerFechasMinMaxIIIPAC();
 
-    const showData = async () => {
-      try {
-        console.log("La carrera es: ", carrera);
-        console.log("El centro regional es: ", centroRegional);
-        const URL = "http://localhost:5000/ObtenerSolicitudesCambioCentroCoordinador";
+
+    const descargarJustificacion = async (cuenta) => {
+        const URL = `http://localhost:5000/descargarPDFCambioCarrera/${cuenta}`;
         const response = await fetch(URL, {
-          method: "POST",
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ centroRegional: centroRegional }),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            setUsers(data);
-            setNumeroSolicitud(data[0].IdSolicitud);
-            setCambioCentroEstudiante(data[0].CambioCentro);
-            console.log("CAMBIO DE CENTRO DEL ESTUDIANTE:", data[0].CambioCentro);
-            console.log(data);
-          });
-      } catch (error) {
-        console.error("Error al obtener los datos:", error);
-      }
-    };
-
-
-function CarruselUsuarios({ users }) {
-    const [activeIndex, setActiveIndex] = useState(0);
-    const [currentNumCuenta, setCurrentNumCuenta] = useState("");
-
-    const enviarCancelacionesCoordiACEPTADA = async (cuentaSend) => {
-        const NumCuenta = cuentaSend.toString();
-        console.log("El numero de cuenta es: ", NumCuenta);
-        const Estado = "APROBADO";
-        console.log("el id de la clase es: ", numeroSolicitud);
-
-        // Solicitar al usuario que ingrese una justificación
-        const justificacion = prompt("Colocar una Justificacion de la respuesta:");
-
-        if (justificacion !== null && justificacion.trim() !== "") {
-            const dictamenData = {
-                numCuenta: NumCuenta,
-                dictamen: Estado,
-                idSolicitud: numeroSolicitud,
-                justificacion: justificacion
-            };
-
-            const cambioCentroData = {
-                NumCuenta: NumCuenta,
-                Centro: centroRegional,
-            };
-            console.log("Dictamen:", dictamenData);
-            console.log("Cambio de centro:", cambioCentroData.CentroRegional);
-
-            const enviarDictamenPromise = fetch("http://localhost:5000/EnviarDictamenCambioCentro", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(dictamenData)
-            });
-
-            const realizarCambioPromise = fetch("http://localhost:5000/realizarCambioCentro", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(cambioCentroData)
-            });
-
-            Promise.all([enviarDictamenPromise, realizarCambioPromise])
-                .then((responses) => Promise.all(responses.map((response) => response.json())))
-                .then((data) => {
-                    const [dictamenData, cambioCentroData] = data;
-                    console.log("Dictamen:", dictamenData);
-                    console.log("Cambio de Centro:", cambioCarreraData);
-                    if (dictamenData.message === "Error al procesar la solicitud") {
-                        console.error("Error al enviar las cancelaciones:", dictamenData.message);
-                    } else {
-                        console.log(data);
-                        alert("Respuesta enviada al estudiante con éxito");
-                        window.location.reload();
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error al enviar el cambio de centro:", error);
-                });
-        } else {
-            alert("No se ha enviado la respuesta");
-        }
-
-
-    };
-
-
-
-
-    const enviarCancelacionesCoordiRECHAZADA = async (cuentaSend) => {
-
-        const NumCuenta = cuentaSend.toString();
-        console.log("El numero de cuenta es: ", NumCuenta);
-        const Estado = "RECHAZADO";
-        console.log("el id de la clase es: ", numeroSolicitud);
-
-        // Solicitar al usuario que ingrese una justificación
-        const justificacion = prompt("Colocar una Justificacion de la respuesta:");
-
-        if (justificacion !== null && justificacion.trim() !== "") {
-
-        return fetch("http://localhost:5000/EnviarDictamenCambioCentro", {
+        });
+        const buffer = await response.arrayBuffer();
+        const blob = new Blob([buffer], { type: "application/pdf" });
+      
+        const url = window.URL.createObjectURL(blob);
+      
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `Justificacion-${cuenta}.pdf`
+        a.click();
+      
+        window.URL.revokeObjectURL(url);
+      };
+    
+      
+  const DescargarPdf = () => {
+    descargarJustificacion();
+  };
+    
+    
+    const showData = async () => {
+        //OBTENER LOS PERIFLES DE LOS ESTUDIANTES
+    try {
+        const URL = "http://localhost:5000/CambioCentroCoordi";
+        const response = await fetch(URL, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ numCuenta: NumCuenta, dictamen: Estado, idSolicitud: numeroSolicitud, justificacion: justificacion }),
+            },
+            body: JSON.stringify({CentroRegional:"VS"}),
+            
         })
-        .then((response) => response.json())
-        .then((data) => {
-            if (data.message === "Error al procesar la solicitud") {
-            console.error("Error al enviar las cancelaciones:", data.message);
-            } else {
-            console.log(data);
-            alert("Respuesta enviada al estudiante con éxito");
-            window.location.reload();
-            }
-        })
-        .catch((error) => {
-            console.error("Error al enviar el cambio de centro:", error);
+            .then((res) => res.json())
+            .then((data) => {
+              
+                setUsers(data);
+                
+                console.log(data)
+                for (const i of data)
+                {
+                    console.log(i);
+                    
+                }
         });
-    } else {
-        alert("No se ha enviado la respuesta");
+    } catch (error) {
+        console.error("Error al obtener los datos:", error);
     }
     };
 
+    const handleSubmit = (event) => {
+    event.preventDefault(); // Evitar la recarga de la página al enviar el formulario
+    };
+   
+    
+    function CarruselUsuarios({ users }) {
+        const [activeIndex, setActiveIndex] = useState(0);
+        const [currentNumCuenta, setCurrentNumCuenta] = useState("");
 
-useEffect(() => {
-    if (users.length > 0) {
-    setCurrentNumCuenta(users[activeIndex].NumCuenta);
+    
+        const handleNext = () => {
+            setActiveIndex((prevIndex) => (prevIndex + 1) % users.length);
+        };
+    
+        const handlePrev = () => {
+            setActiveIndex((prevIndex) => (prevIndex - 1 + users.length) % users.length);
+        };
+    
+    
+    return (
+    
+        <div id="carrusel" className="carousel">
+        {users.map((user, index) => (
+            <div
+            key={index}
+            className={index === activeIndex ? "carousel-item active" : "carousel-item"}
+            >
+            <ul>
+                <li>
+                <p className="text-xl font-normal p-3 sm:text-1xl text-center">
+                    {user.Nombre} {user.Apellido}
+                </p>
+                </li>
+                <li>
+                <p className="pb-2 text-center">
+                    {user.CorreoInstitucional}
+                </p>
+                </li>
+                <li>
+                <p className="pb-1 text-center">
+                    Indice Global: {user.IndiceGlobal}
+                </p>
+                </li>
+            </ul>
+    
+            <div>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <a 
+                    onClick={()=>DescargarPdf(user.NumCuenta)}
+                    style={{
+                    marginRight: "10px",
+                    backgroundColor: "#ffba42",
+                    borderRadius: "10%",
+                    fontSize: "1em",
+                    padding: "8px 16px",
+                    color: "white",
+                    cursor: "pointer",
+                    border: "1px solid white",
+                    boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)"
+                    }}
+                >
+                    Descargar pdf 
+                </a>
+    
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <a 
+                   
+                    style={{ 
+                    backgroundColor: "#eb5656",
+                    borderRadius: "10%",
+                    fontSize: "1em",
+                    padding: "8px 16px",
+                    color: "white",
+                    cursor: "pointer",
+                    border: "1px solid white",
+                    boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)"
+                    }}>Negar solicitud</a>
+    
+                <a 
+                    
+                    type="button"
+                    style={{ 
+                        marginLeft: "10px",
+                        backgroundColor: "#69c825",
+                        borderRadius: "10%",
+                        fontSize: "1em",
+                        padding: "8px 16px",
+                        color: "white",
+                        cursor: "pointer",
+                        border: "1px solid white",
+                        boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)"
+                    }}
+                >
+                    Aceptar solicitud
+                </a>
+    
+    
+                </div>
+                </div>
+    
+            </div>
+            <br></br>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <button onClick={handlePrev} className="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev" 
+            style={{ width: '200px', marginRight: '5px', position: 'relative', zIndex: 2, boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",border: "1px solid white"}}>
+                <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span className="visually-hidden">Previous</span>
+                Anterior
+            </button>
+            <button onClick={handleNext} className="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next" style={{ width: '200px', marginLeft: '5px', position: 'relative', zIndex: 2 , boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",border: "1px solid white"}}>
+                Siguiente
+                <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                <span className="visually-hidden">Next</span>
+            </button>
+            </div>
+    
+            </div>
+        ))}
+        </div>
+    );
     }
-}, [users, activeIndex]);
-
-
-    const handleNext = () => {
-        setActiveIndex((prevIndex) => (prevIndex + 1) % users.length);
-    };
-
-    const handlePrev = () => {
-        setActiveIndex((prevIndex) => (prevIndex - 1 + users.length) % users.length);
-    };
-
-
-return (
-
-    <div id="carrusel" className="carousel">
-    {users.map((user, index) => (
-        <div
-        key={index}
-        className={index === activeIndex ? "carousel-item active" : "carousel-item"}
-        >
-        <img
-            src={"../img/uploads/" + user.Imagen1}
-            alt="No tiene imagen de perfil"
-            style={{
-            width: "100px",
-            height: "100px",
-            borderRadius: "20%",
-            objectFit: "cover",
-            margin: "auto",
-            }}
-        />
-        <ul>
-            <li>
-            <p className="text-xl font-normal p-3 sm:text-1xl text-center">
-                {user.Nombre} {user.Apellido}
-            </p>
-            </li>
-            <li>
-            <p className="pb-2 text-center">
-                {user.CorreoInstitucional}
-            </p>
-            </li>
-            <li>
-            <p className="pb-1 text-center">
-                Indice Global: {user.IndiceGlobal}
-            </p>
-            </li>
-        </ul>
-
-
-        <br></br>
-        <div className="table-container" style={{ maxWidth: "1100px", margin: "auto" , position: "relative", zIndex: 1 }}>
-        </div>
-
-        <br></br>
-
-        <div className="container" style={{ position: "relative", zIndex: 1 }}>
-        <h2 style={{ fontSize:"20px" }} >Centro Actual: {user.CentroRegional}</h2>
-        <br></br>
-            <div className="card mx-auto">
-            <div className="card-body p-1">
-                <h2 className="card-title">Razones por la que el estudiante solicita el cambio de centro:</h2>
-                <p className="card-text">{user.RazonDeCambio}</p>
-            </div>
-            </div>
-        </div>
-
-
-        <br></br>
-        <div>
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <a
-            onClick={() => enviarCancelacionesCoordiRECHAZADA(user.NumCuenta)}
-            style={{
-            backgroundColor: "#eb5656",
-            borderRadius: "10%",
-            fontSize: "1em",
-            padding: "8px 16px",
-            color: "white",
-            cursor: "pointer",
-            border: "1px solid white",
-            boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
-            marginRight: "10px", // Opcional: para agregar un espacio entre los botones
-            }}
-        >
-            Negar solicitud
-        </a>
-
-        <a
-            onClick={() => enviarCancelacionesCoordiACEPTADA(user.NumCuenta)}
-            type="button"
-            style={{
-            backgroundColor: "#69c825",
-            borderRadius: "10%",
-            fontSize: "1em",
-            padding: "8px 16px",
-            color: "white",
-            cursor: "pointer",
-            border: "1px solid white",
-            boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
-            }}
-        >
-            Aceptar solicitud
-        </a>
-        </div>
-
-
-        </div>
-        <br></br>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <button onClick={handlePrev} className="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev" 
-        style={{ width: '200px', marginRight: '5px', position: 'relative', zIndex: 2, boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",border: "1px solid white"}}>
-            <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span className="visually-hidden">Previous</span>
-            Anterior
-        </button>
-        <button onClick={handleNext} className="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next" style={{ width: '200px', marginLeft: '5px', position: 'relative', zIndex: 2 , boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",border: "1px solid white"}}>
-            Siguiente
-            <span className="carousel-control-next-icon" aria-hidden="true"></span>
-            <span className="visually-hidden">Next</span>
-        </button>
-        </div>
-
-        </div>
-    ))}
-    </div>
-);
-}
-
-
-return (
-    <div className="App">
-    <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
-         {users.length} solicitudes
-    </h1>
-
-    <div className="container">
+    
+    
+    return (
+        <div className="App">
+        <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
+            Cambio de Centro - {users.length} solicitudes
+        </h1>
+    
+        <div className="container">
         {users.length > 0 && <CarruselUsuarios users={users} />}
-    <div className="pt-50">
+        </div>
+    
+        </div>
+    );
+    };
 
-
-    </div>
-    </div>
-    </div>
-);
-};
 
 
 export default MenuCambioCentroCoordi;

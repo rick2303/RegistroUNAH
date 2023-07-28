@@ -33,13 +33,12 @@ export default function Navbar() {
   if (currentPath === "/src/html/FechaCancelaciones.html" ) {
     redirectTo = "../html/Administracion.html";
   }
-  if (currentPath === "/src/html/FechaNotas.html" ) {
-    redirectTo = "../html/Administracion.html";
-  }
   if (currentPath === "/src/html/FechaMatricula.html" ) {
     redirectTo = "../html/Administracion.html";
   }
-
+  if (currentPath === "/src/html/Administracion.html" ) {
+    redirectTo = "../../index.html";
+  }
   if (currentPath === "/src/html/ListadoDocentes.html" ) {
     redirectTo = "../html/Administracion.html";
   }
@@ -78,15 +77,9 @@ export default function Navbar() {
         className="p-1 font-normal "
         title="Regresar"
       >
-         {currentPath !== "/src/html/Administracion.html" &&
-      currentPath !== "/src/html/Jefatura.html" &&
-      currentPath !== "/src/html/Coordinacion.html" && (
-        <a href={redirectTo} style={{ color: "white" }} className="flex items-center">
-          <h1 className="text-5xl cursor-pointer">
-            <TiArrowBackOutline />
-          </h1>
+        <a href={redirectTo} style={{ color: 'white' }} className="flex items-center">
+          <h1 className="text-5xl cursor-pointer"><TiArrowBackOutline /></h1>
         </a>
-      )}
       </Typography>
       <Typography
         as="li"
