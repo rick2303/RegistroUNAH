@@ -1,4 +1,4 @@
-import { getConnection, queries, sql } from "../Database";
+import { getConnection, queries,querys, sql } from "../Database";
 import path from 'path';
 import fs from 'fs';
 
@@ -86,6 +86,15 @@ export const descargarPDFCambioCarrera = async (req, res) => {
     }
   };
 
+  export const ObtenersolicitudCambioCentro = async (req, res) => {
+    const { NumCuenta} = req.body;
+    const pool = await getConnection();
+    const result = await pool.request()
+        .input("NumCuenta", sql.VarChar, NumCuenta)
+        .query(querys.getCambioCentroSoli);
+
+        res.json(result.recordset);
+};
 
 export const DictamenCambioCentro = async(req, res) => {
 
@@ -130,3 +139,44 @@ export const DictamenCambioCentro = async(req, res) => {
     }
 
 }
+
+
+export const obtenerCentrosRegionales = async (req, res) => {
+    try {
+    const pool = await getConnection();
+    const result = await pool.request().query(querys.getCentrosRegionales);
+    // Obtener los datos de las carreras desde result.recordset
+    const centro = result.recordset.map((centro) => ({
+        NombreCentro: centro.NombreCentro,
+        Centro: centro.Centro,
+    }));
+
+    res.json(centro);
+
+    } catch (error) {
+    console.error('Error al obtener carreras:', error);
+    res.status(500).json({ message: 'Error al obtener las carreras' });
+    }
+};
+
+export const updateCambioCentro = async (req, res) => {
+    try {
+    const { numCuenta, Centro, idSolicitud } = req.body; 
+
+    const pool = await getConnection();
+    console.log("NumCuenta:", numCuenta);
+    console.log("Centro:", Centro);
+    console.log("IdClase:", idSolicitud);
+
+    await pool.request()
+        .input("NumCuenta", sql.VarChar, numCuenta)
+        .input("CentroNuevo", sql.VarChar, Centro)
+        .input("IdSolicitud", sql.Int, idSolicitud)
+        .query(querys.updateCentroNuevo.replace("@Centro", Centro).replace("@numCuenta", numCuenta).replace("@idSolicitud", idSolicitud));
+
+    res.json({ message: "Operación completada exitosamente" });
+    } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al procesar la solicitud" });
+    }
+};
