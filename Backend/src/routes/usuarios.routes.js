@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import { getConnection } from '../Database';
-import {crearNuevaPlanificacion, renderizarPlanificacion, renderizarPlanificacionSemestral,crearNuevaMatricula, renderizarMatricula, crearNuevoProcesoCancelacion, renderizarCancelaciones, enviarMatriculaIPAC, enviarMatriculaIIPAC, enviarMatriculaIIIPAC, enviarIPAC, enviarIIPAC, enviarIIIPAC, renderizarMatriculaSemestral, enviarIPACSemestral, enviarIIPACSemestral, renderizarCancelacionesSemestral, renderizarFechaNotas, renderizarFechaNotasSemestral, crearFechaNotas} from '../controllers/admin.controllers';
+import {crearNuevaPlanificacion, renderizarPlanificacion, renderizarPlanificacionSemestral,crearNuevaMatricula, renderizarMatricula, crearNuevoProcesoCancelacion, renderizarCancelaciones, enviarMatriculaIPAC, enviarMatriculaIIPAC, enviarMatriculaIIIPAC, enviarIPAC, enviarIIPAC, enviarIIIPAC} from '../controllers/admin.controllers';
 import {getEstudiantes, createNewStudent, updatePassword, getEstudiantesMatriculados} from '../controllers/usuarios.controllers';
 import {enviarClasesCursando,enviarInfoEstuForma03} from '../controllers/cancelacionesExcepcionales.controllers';
 import {sendEmail} from '../controllers/recuperacionContra.controllers';
@@ -12,31 +12,22 @@ const router = Router();
 router.post('/enviarPlanificacion', crearNuevaPlanificacion);
 
 router.get('/renderizarPlanificacion', renderizarPlanificacion);
-router.get('/renderizarPlanificacionSemestra', renderizarPlanificacionSemestral);
 
 router.post('/enviarMatricula', crearNuevaMatricula);
 
-router.post('/enviarFechaNotas', crearFechaNotas);
-
 router.get('/renderizarMatricula', renderizarMatricula);
-router.get('/renderizarMatriculaSemestral', renderizarMatriculaSemestral);
 
 router.post('/enviarCancelaciones', crearNuevoProcesoCancelacion);
 
 router.get('/renderizarCancelaciones', renderizarCancelaciones);
-router.get('/renderizarCancelacionesSemestrales', renderizarCancelacionesSemestral);
-
-router.get('/renderizarFechaNota', renderizarFechaNotas);
-router.get('/renderizarFechaNotaSemestral', renderizarFechaNotasSemestral);
 
 router.get('/enviarPlanificacionIPAC', enviarIPAC);
 
 router.get('/enviarPlanificacionIIPAC', enviarIIPAC);
 
 router.get('/enviarPlanificacionIIIPAC', enviarIIIPAC);
-router.get('/enviarPlanificacionIPACSemestral', enviarIPACSemestral);
 
-router.get('/enviarPlanificacionIIPACSemestral', enviarIIPACSemestral);
+router.get('/renderizarPlanificacionSemestral', renderizarPlanificacionSemestral);
 
 router.get('/enviarMatriculaIPAC', enviarMatriculaIPAC);
 
