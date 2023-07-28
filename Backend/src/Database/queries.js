@@ -70,25 +70,18 @@ export const querys = {
     addNewStudent: "INSERT INTO [dbo].[estudiantes] (NumCuenta, DNI, Nombre, Apellido,NumeroTelefono, CorreoInstitucional, CorreoPersonal, Contrasena, FechaNacimiento, Carrera, Direccion, CentroRegional, PuntajePAA) VALUES (@NumCuenta, @DNI, @Nombre, @Apellido,@NumeroTelefono, @CorreoInstitucional, @CorreoPersonal, @Contrasena, @FechaNacimiento, @Carrera, @Direccion, @CentroRegional, @PuntajePAA);",
     getEstudiantesMatriculados: "SELECT Distinct NumCuenta, Nombre, Apellido, CorreoInstitucional, Carrera, IndiceGlobal, IndicePeriodo FROM [dbo].[estudiantes] e inner join registro_estudiante_clases re on re.IdEstudiante = numCuenta inner join secciones s on re.idSeccion = s.idseccion where YEAR(re.fecha) = year(getdate()) and month(RE.Fecha) > '05'",
     insertNuevaPlanificacion: "INSERT INTO [dbo].[planificacion_academica] (FechaInicio, FechaFinal, PeriodoAcademico, Sistema) VALUES (@FechaInicio, @FechaFinal, @PeriodoAcademico, @Sistema)",
-    getPlanificacionAcademica: "SELECT * FROM [dbo].[planificacion_academica] WHERE Sistema='Trimestral'Order by FechaInicio",
-    getPlanificacionAcademicaSemestral: "SELECT * FROM [dbo].[planificacion_academica] WHERE Sistema='Semestral' Order by FechaInicio",
+    getPlanificacionAcademica: "SELECT * FROM [dbo].[planificacion_academica] WHERE Sistema='Trimestral'",
+    getPlanificacionAcademicaSemestral: "SELECT * FROM [dbo].[planificacion_academica] WHERE Sistema='Semestral'",
     insertNuevaMatricula: "INSERT INTO [dbo].[planificacion_matricula] (FechaInicio, FechaFinal, HoraInicio, HoraFinal, PeriodoAcademico, Sistema) VALUES (@FechaInicio, @FechaFinal,@HoraInicio, @HoraFinal, @PeriodoAcademico, @Sistema)",
-    insertFechaNotas: "INSERT INTO [dbo].[planificacion_ingresonotas] (FechaInicio, FechaFinal, HoraInicio, HoraFinal, PeriodoAcademico, Sistema) VALUES (@FechaInicio, @FechaFinal,@HoraInicio, @HoraFinal, @PeriodoAcademico, @Sistema)",
-    getMatricula: "select * from [dbo].[planificacion_matricula] WHERE Sistema='Trimestral' Order by FechaInicio",
-    getMatriculaSemestral: "select * from [dbo].[planificacion_matricula] WHERE Sistema='Semestral' Order by FechaInicio",
+    getMatricula: "select * from [dbo].[planificacion_matricula]",
     insertProcesoCancelacion: "INSERT INTO [dbo].[planificacion_cancelacionesexcepcionales] (FechaInicio, FechaFinal, HoraInicio, HoraFinal, PeriodoAcademico, Sistema) VALUES (@FechaInicio, @FechaFinal,@HoraInicio, @HoraFinal, @PeriodoAcademico, @Sistema)",
-    getCancelacion: "select * from [dbo].[planificacion_cancelacionesexcepcionales] WHERE Sistema='Trimestral' Order by FechaInicio",
-    getCancelacionSemestral: "select * from [dbo].[planificacion_cancelacionesexcepcionales] WHERE Sistema='Semestral' Order by FechaInicio",
-    getFechaNotas: "select * from [dbo].[planificacion_ingresonotas] WHERE Sistema='Trimestral' Order by FechaInicio",
-    getFechaNotasSemestral: "select * from [dbo].[planificacion_ingresonotas] WHERE Sistema='Semestral' Order by FechaInicio",
+    getCancelacion: "select * from [dbo].[planificacion_cancelacionesexcepcionales]",
     getIPACMatricula: "select * from [dbo].[planificacion_matricula] where PeriodoAcademico ='1PAC'",
     getIIPACMatricula: "select * from [dbo].[planificacion_matricula] where PeriodoAcademico ='2PAC'",
     getIIIPACMatricula: "select * from [dbo].[planificacion_matricula] where PeriodoAcademico ='3PAC'",
-    getIPACPlanificacion: "select * from [dbo].[planificacion_academica] where PeriodoAcademico = '1PAC' AND Sistema='Trimestral'",
-    getIIPACPlanificacion: "select * from [dbo].[planificacion_academica] where PeriodoAcademico = '2PAC' AND Sistema='Trimestral'",
-    getIIIPACPlanificacion: "select * from [dbo].[planificacion_academica] where PeriodoAcademico = '3PAC' AND Sistema='Trimestral'",
-    getIPACPlanificacionSemestral: "select * from [dbo].[planificacion_academica] where PeriodoAcademico = '1PAC' AND Sistema='Semestral'",
-    getIIPACPlanificacionSemestral: "select * from [dbo].[planificacion_academica] where PeriodoAcademico = '2PAC' AND Sistema='Semestral'",
+    getIPACPlanificacion: "select * from [dbo].[planificacion_academica] where PeriodoAcademico = '1PAC'",
+    getIIPACPlanificacion: "select * from [dbo].[planificacion_academica] where PeriodoAcademico = '2PAC'",
+    getIIIPACPlanificacion: "select * from [dbo].[planificacion_academica] where PeriodoAcademico = '3PAC'",
     
     getClasesCursando: "select cs.IdClase as CODIGO, cs.Nombre as ASIGNATURA, cs.uv as UV, s.seccion AS SECCION,s.Edificio AS EDIFICIO,s.Aula AS AULA,s.HI AS HORA_INICIO,s.HF AS HORA_FINAL,s.obs AS OBS, year(re.Fecha) AS Año, Periodo AS PERIODO from registro_estudiante_clases re INNER JOIN estudiantes e on IdEstudiante = NumCuenta INNER join secciones s on re.IdSeccion = s.IdSeccion INNER join clases cs on cs.IdClase = s.IdClase where e.numCuenta=@NumCuenta and Periodo = @Periodo and year(re.Fecha) = @año",
 
@@ -116,6 +109,12 @@ export const querys = {
     updateCambioCarreraEstudiante:"UPDATE [dbo].[estudiantes] SET Carrera = @CarreraCambio WHERE NumCuenta = @numCuenta",
     UpdateEstadoCambioCarrera: "UPDATE [dbo].[solicitud_cambiocarrera] SET Dictamen =  '@dictamen', JustificacionCoordi = '@justificacion' WHERE NumCuenta = @numCuenta AND IdSolicitud = @idSolicitud",
     updateCambioCarreraEstudiante:"UPDATE [dbo].[estudiantes] SET Carrera = @CarreraCambio WHERE NumCuenta = @numCuenta",
+
+    getCambioCentroSoli:"select * from [dbo].[solicitud_cambiocentro] where NumCuenta=@NumCuenta",  
+
+    getCentrosRegionales:"select NombreCentro, Centro from [dbo].[centro_regionales]",
+
+    updateCentroNuevo:"update [dbo].[solicitud_cambiocentro] set CentroNuevo='@Centro' where NumCuenta=numCuenta AND IdSolicitud=idSolicitud",
 };
 
 export const queryStudentHistory = {
@@ -127,7 +126,6 @@ export const queryStudentHistory = {
 export const querysADMIN = {
     DeletePlanificacion: 'delete planificacion_academica where idPlanificacion = @idPlanificacion',
     DeleteMatricula: 'delete planificacion_matricula where idPlanificacion = @idPlanificacion',
-    DeleteFechaNotas: 'delete planificacion_ingresonotas where idPlanificacion = @idPlanificacion',
     DeleteCancelacionesExcepcionales: 'delete planificacion_cancelacionesexcepcionales where idPlanificacion = @idPlanificacion',
     getPeriodoActual: 'select PeriodoAcademico from planificacion_academica where GETDATE() BETWEEN FechaInicio and FechaFinal and Sistema = @Sistema'
 
