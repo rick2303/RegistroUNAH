@@ -24,7 +24,7 @@ routerSolicitudes.post('/ObtenerCambiosCentro', ObtenersolicitudCambioCentro)
 
 routerSolicitudes.get('/centrosRegionales', obtenerCentrosRegionales);
 
-routerSolicitudes.post('/UpdateCambioCentro', updateCambioCentro)
+//routerSolicitudes.post('/UpdateCambioCentro', updateCambioCentro)
 
 routerSolicitudes.post('/CambioCentro/:id', upload.single('file'), solicitudCambioCentro)
 

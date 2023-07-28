@@ -53,22 +53,7 @@ const MenuCambioCentro = () => {
     // Resto del código se mantiene igual
     console.log(data);
 
-    fetch(`http://localhost:5000/UpdateCambioCentro`, { 
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-    .then((response) => {
-      console.log("Solicitud exitosa");
-      alert("Solicitud exitosa");
-      setInputValue("");
-      window.location.reload();
-    })
-    .catch((error) => {
-      console.error("Error en la Solicitud", error);
-    });
+
   };
   
 
@@ -162,26 +147,11 @@ const tieneSolicitudesEnEspera = () => {
       </h1>
      
         <div className="container ">
-          <br />
-                    
-    <p className="pt-4 pb-3 text-gray-900 sm:text-1xl text-left">
-        Suba el pdf que contenga la justificacion del cambio de centro 
-    </p>
-
-    <div className="d-flex align-items-center">
-        <a
-            className="btn btn-success"
-            data-bs-toggle="modal"
-            data-bs-target="#ModalCANCEL"
-            disabled={!puedeEnviarPDF}
-          >
-            Subir archivo PDF
-          </a>
-    </div>
           <div className="container pt-5">
             <label htmlFor="centroRegional">Seleccione el Centro Regional al que desea trasladarse:</label>
             <br />
             <br />
+
           <select
             className="form-select border-1 w-50"
             id="centro"
@@ -198,7 +168,21 @@ const tieneSolicitudesEnEspera = () => {
             ))}
           </select>
           </div>
-          
+          <br />
+            <br />
+         
+
+    <div className="d-flex align-items-center">
+     <label htmlFor="centroRegional">Suba el pdf que contenga la justificacion del cambio de centro   </label>
+        <a
+            className="btn btn-primary ml-5"
+            data-bs-toggle="modal"
+            data-bs-target="#ModalCANCEL"
+            disabled={!puedeEnviarPDF}
+          >
+            Subir archivo PDF
+          </a>
+    </div>
           <div className="pt-4">
           <button type="button" className="btn btn-success" onClick={handleSubmit} disabled={tieneSolicitudesEnEspera()}>
               Enviar Solicitud

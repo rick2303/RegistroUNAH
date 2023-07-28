@@ -36,16 +36,21 @@ const handleSubmit = (event) => {
         method: "POST",
         body: formData,
     })
-        .then((response) => {
-        console.log(response);
-        if (response.status === 200) {
-            alert("Archivo recibido. Solicitud de cambio de centro enviada al coordinador de carrera. ");
-            console.log(response);
-            window.location.reload();
-            return response;
-
+    .then((response) => {
+        if (!response.ok) {
+          throw new Error("Algo crashea");
         }
-        })
+        return response.json();
+      })
+      .then((data) => {
+        if(data.ok) {
+        alert(JSON.stringify(data.message));
+        window.location.reload();
+        }else{
+            alert(JSON.stringify(data.message));
+            window.location.reload();
+        }
+      })
         .finally(() => {
         setSelectedFile(null); // Reiniciar la selección de archivo
         if (inputFileRef.current) {
