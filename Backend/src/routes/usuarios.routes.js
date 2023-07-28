@@ -12,6 +12,7 @@ const router = Router();
 router.post('/enviarPlanificacion', crearNuevaPlanificacion);
 
 router.get('/renderizarPlanificacion', renderizarPlanificacion);
+router.get('/renderizarPlanificacionSemestra', renderizarPlanificacionSemestral);
 
 router.post('/enviarMatricula', crearNuevaMatricula);
 
