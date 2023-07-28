@@ -78,9 +78,13 @@ export default function Navbar() {
         className="p-1 font-normal "
         title="Regresar"
       >
-        {currentPath !== "/src/html/Administracion.html" && (
-        <a href={redirectTo} style={{ color: 'white' }} className="flex items-center">
-          <h1 className="text-5xl cursor-pointer"><TiArrowBackOutline /></h1>
+         {currentPath !== "/src/html/Administracion.html" &&
+      currentPath !== "/src/html/Jefatura.html" &&
+      currentPath !== "/src/html/Coordinacion.html" && (
+        <a href={redirectTo} style={{ color: "white" }} className="flex items-center">
+          <h1 className="text-5xl cursor-pointer">
+            <TiArrowBackOutline />
+          </h1>
         </a>
       )}
       </Typography>
