@@ -1,11 +1,11 @@
 import '../App.css'
-import NavbarEstudiante from "../components/NavbarEstudiante";
+import Navbar from "../components/Navbar.jsx";
 import MenuSolicitudes from "../components/MenuSolicitudes.jsx";
 
 function AppSolicitudesF() {
 return (
     <>
-        <NavbarEstudiante /> 
+        <Navbar /> 
         <MenuSolicitudes/> 
     </>
 )
