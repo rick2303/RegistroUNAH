@@ -121,7 +121,10 @@ fetch("http://localhost:5000/download-pdf", {
 };
 
 
-
+// useEffect(() => {
+//     showData();
+// console.log(periodoAcademicoActual);
+// }, [periodoAcademicoActual, año]);
 const showData = async () => {
     //OBTENER LOS PERIFLES DE LOS ESTUDIANTES
 try {

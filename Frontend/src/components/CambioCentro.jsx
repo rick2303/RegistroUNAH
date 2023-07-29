@@ -4,7 +4,7 @@ import DataTable from "react-data-table-component";
 import "styled-components";
 import { FcCancel, FcFinePrint } from "react-icons/fc";
 import { Input, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-import ModalCargarPDFCancelaciones from "./modalCargarPDFCancelaciones";
+import ModalCargarPDFCambioCentro from "./modalCargarPDFCancelaciones";
 
 const MenuCambioCentro = () => {
   const [NumCuenta, setNumCuenta] = useState("");
@@ -179,7 +179,7 @@ const tieneSolicitudesEnEspera = () => {
             {centrosData.map((centro) => (
                 // Solo usamos "carrera" como nombre de variable
                 <option key={centro.NombreCentro} value={centro.Centro}>
-                {centro.NombreCentro}
+                {centro.NombreCentro.toUpperCase()}
                 </option>
             ))}
           </select>
@@ -190,7 +190,7 @@ const tieneSolicitudesEnEspera = () => {
          
 
     <div className="d-flex align-items-center">
-     <label htmlFor="centroRegional">Suba el pdf que contenga la justificacion del cambio de centro   </label>
+     <label htmlFor="centroRegional">Suba el archivo pdf que contenga la justificacion del cambio de centro   </label>
         <a
             className="btn btn-primary ml-5"
             data-bs-toggle="modal"
@@ -226,7 +226,7 @@ const tieneSolicitudesEnEspera = () => {
     </br>
     <div className="d-flex justify-content-center">
 
-          <ModalCargarPDFCancelaciones setPuedeEnviarPDF={setPuedeEnviarPDF}/>
+          <ModalCargarPDFCambioCentro setPuedeEnviarPDF={setPuedeEnviarPDF}/>
         </div>
 
     </div>

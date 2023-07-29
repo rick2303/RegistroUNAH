@@ -10,7 +10,7 @@ import {
   Label,
   Input,
 } from "reactstrap";
-
+import "../App.css"
 
 
 const ModalDocentes = () => {
@@ -132,14 +132,19 @@ const ModalDocentes = () => {
               style={{ backgroundColor: "#145eb9" }}
             ></span>
 
-            <span className="rounded-[25px] relative text-center inline-block border-2 border-black px-8 py-3 text-sm font-bold uppercase tracking-widest text-white group-active:text-opacity-75">
+            <span className=" cursor-pointer rounded-[25px] relative text-center inline-block border-2 border-black px-8 py-3 text-sm font-bold uppercase tracking-widest text-white group-active:text-opacity-75">
               Ir
             </span>
           </a>
         </a>
       </div>
       <Modal isOpen={modalOpen} toggle={toggleModal}>
-        <ModalHeader>REGISTRAR DOCENTES</ModalHeader>
+      <ModalHeader className="text-white bg-blue-800 text-2xl">
+        <strong>Registrar Docentes</strong> 
+        <button className="close boton_cierre" onClick={toggleModal}>
+              <span aria-hidden="true">X</span>
+            </button>
+        </ModalHeader>
         <ModalBody>
           <Form onSubmit={handleSubmit}>
             {/* Resto del código del formulario */}
@@ -268,7 +273,7 @@ const ModalDocentes = () => {
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={AgregarDocente}>
+          <Button color="boton_guardar" onClick={AgregarDocente}>
             Registrar
           </Button>
           <Button color="secondary" onClick={toggleModal}>

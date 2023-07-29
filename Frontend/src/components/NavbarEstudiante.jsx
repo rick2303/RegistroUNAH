@@ -36,9 +36,29 @@ export default function NavbarEstudiante() {
 
   if (currentPath === "/src/html/Estudiante.html") {
     redirectTo = "../";
-  } else {
+  } 
+  if (currentPath === "/src/html/Solicitudes.html") {
     redirectTo = "../html/Estudiante.html";
   }
+  if (currentPath === "/src/html/Historial.html") {
+    redirectTo = "../html/Estudiante.html";
+  }
+  if (currentPath === "/src/html/Forma03.html") {
+    redirectTo = "../html/Estudiante.html";
+  }
+  if (currentPath === "/src/html/CambiodeCarrera.html") {
+    redirectTo = "../html/Solicitudes.html";
+  }
+  if (currentPath === "/src/html/CancelacionExepc.html") {
+    redirectTo = "../html/Solicitudes.html";
+  }
+  if (currentPath === "/src/html/CambioCentro.html") {
+    redirectTo = "../html/Solicitudes.html";
+  }
+  if (currentPath === "/src/html/PagoReposicion.html") {
+    redirectTo = "../html/Solicitudes.html";
+  }
+
 
   console.log(currentPath);
   const navList = (
@@ -50,9 +70,11 @@ export default function NavbarEstudiante() {
         className="p-1 font-normal "
         title="Regresar"
       >
-        <a href={redirectTo} className="flex items-center">
-          <h1 className="text-5xl" style={{ color: 'white' }}><TiArrowBackOutline /></h1>
+        {currentPath !== "/src/html/Estudiante.html" && (
+        <a href={redirectTo} style={{ color: 'white' }} className="flex items-center">
+          <h1 className="text-5xl cursor-pointer"><TiArrowBackOutline /></h1>
         </a>
+      )}
       </Typography>
       <Typography
         as="li"

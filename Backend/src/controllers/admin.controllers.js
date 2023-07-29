@@ -78,6 +78,34 @@ export const crearNuevaMatricula = async (req, res) => {
     }
 
 }
+export const crearFechaNotas = async (req, res) => {
+    const {FechaInicio, FechaFinal, HoraInicio, HoraFinal, PeriodoAcademico, Sistema } = req.body;
+
+    // validating
+    if (FechaInicio == null || FechaFinal == null || HoraInicio == null || HoraFinal == null || PeriodoAcademico == null ) {
+        return res.status(400).json({ msg: "Peticion denegada. Por favor, llenar todos los espacios" });
+    }
+
+    try {
+        const pool = await getConnection();
+
+        await pool
+        .request()
+        .input("FechaInicio", sql.Date, FechaInicio)
+        .input("FechaFinal", sql.Date, FechaFinal)
+        .input("HoraInicio", sql.VarChar, HoraInicio)
+        .input("HoraFinal", sql.VarChar, HoraFinal)
+        .input("PeriodoAcademico", sql.VarChar, PeriodoAcademico)
+        .input("Sistema", sql.VarChar, Sistema)
+        .query(querys.insertFechaNotas);
+
+        res.json({FechaInicio, FechaFinal,HoraInicio, HoraFinal, PeriodoAcademico});
+    } catch (error) {
+        res.status(500);
+        res.send(error.message);
+    }
+
+}
 
 export const renderizarMatricula = async (req, res) => {
     try {
@@ -91,6 +119,17 @@ export const renderizarMatricula = async (req, res) => {
 
 }
 
+export const renderizarMatriculaSemestral = async (req, res) => {
+    try {
+        const pool = await getConnection();
+        const result = await pool.request().query(querys.getMatriculaSemestral);
+        res.json(result.recordset);
+        } catch (error) {
+        res.status(500);
+        res.send(error.message);
+        }  
+
+}
 export const crearNuevoProcesoCancelacion = async (req, res) => {
     const {FechaInicio, FechaFinal, HoraInicio, HoraFinal, PeriodoAcademico, Sistema } = req.body;
 
@@ -131,6 +170,7 @@ export const renderizarCancelaciones = async (req, res) => {
 
 }
 
+
 export const enviarIPAC = async (req, res) => {
     try {
         const pool = await getConnection();
@@ -143,6 +183,39 @@ export const enviarIPAC = async (req, res) => {
 
 }
 
+export const renderizarCancelacionesSemestral = async (req, res) => {
+    try {
+        const pool = await getConnection();
+        const result = await pool.request().query(querys.getCancelacionSemestral);
+        res.json(result.recordset);
+        } catch (error) {
+        res.status(500);
+        res.send(error.message);
+        }  
+
+}
+export const renderizarFechaNotas = async (req, res) => {
+    try {
+        const pool = await getConnection();
+        const result = await pool.request().query(querys.getFechaNotas);
+        res.json(result.recordset);
+        } catch (error) {
+        res.status(500);
+        res.send(error.message);
+        }  
+
+}
+
+export const renderizarFechaNotasSemestral = async (req, res) => {
+    try {
+        const pool = await getConnection();
+        const result = await pool.request().query(querys.getFechaNotasSemestral);
+        res.json(result.recordset);
+        } catch (error) {
+        res.status(500);
+        res.send(error.message);
+        }  
+    }
 export const enviarIIPAC = async (req, res) => {
     try {
         const pool = await getConnection();
@@ -158,6 +231,29 @@ export const enviarIIIPAC = async (req, res) => {
     try {
         const pool = await getConnection();
         const result = await pool.request().query(querys.getIIIPACPlanificacion);
+        res.json(result.recordset);
+        } catch (error) {
+        res.status(500);
+        res.send(error.message);
+        }  
+}
+
+export const enviarIPACSemestral = async (req, res) => {
+    try {
+        const pool = await getConnection();
+        const result = await pool.request().query(querys.getIPACPlanificacionSemestral);
+        res.json(result.recordset);
+        } catch (error) {
+        res.status(500);
+        res.send(error.message);
+        }  
+
+}
+
+export const enviarIIPACSemestral = async (req, res) => {
+    try {
+        const pool = await getConnection();
+        const result = await pool.request().query(querys.getIIPACPlanificacionSemestral);
         res.json(result.recordset);
         } catch (error) {
         res.status(500);
@@ -213,6 +309,15 @@ export const EliminarMatricula = async (req, res) => {
         const result = await pool.request()
         .input("idPlanificacion", sql.Int, idPlanificacion)
         .query(querysADMIN.DeleteMatricula)
+        res.json(result.recordset);
+}
+
+export const EliminarFechaNotas = async (req, res) => {
+    const {idPlanificacion} = req.body;
+        const pool = await getConnection();
+        const result = await pool.request()
+        .input("idPlanificacion", sql.Int, idPlanificacion)
+        .query(querysADMIN.DeleteFechaNotas)
         res.json(result.recordset);
 }
 

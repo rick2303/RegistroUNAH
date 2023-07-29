@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
+import AppFechaCancelacionesSemestrales from './app/AppFechaCancelacionesSemestrales';
 import AppFechaCancelaciones from './app/AppFechaCancelaciones';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import DateFnUtils from '@date-io/date-fns';
@@ -16,7 +16,14 @@ ReactDOM.render(
 	
 	<AppFechaCancelaciones />
 	</MuiPickersUtilsProvider>	
-		
+
+	</div>	
+	<div className='mt-14'>
+	<MuiPickersUtilsProvider utils={DateFnUtils} locale={esLocale}>
+
+	<AppFechaCancelacionesSemestrales />
+	</MuiPickersUtilsProvider>	
+
 	</div>	
 	</React.StrictMode>,
 	document.getElementById('FechaCancelaciones')
