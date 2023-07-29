@@ -37,6 +37,7 @@ if (storedData) {
     setNombre(nombre);
     setApellido(apellido);
     setNumCuenta(numCuenta);
+    setCarrera(carrera);
 }
 fetchInfoAndCarreras(); // Hacer las peticiones de información del estudiante y carreras al cargar la página
 }, [NumCuenta]);
@@ -115,7 +116,7 @@ try {
     setCentro(infoData[0].CentroRegional);
     setIndiceGlobal(infoData[0].IndiceGlobal);
     setPuntajePAA(infoData[0].PuntajePAA);
-    setCarrera(infoData[0].Carrera)
+    setCarrera(infoData[0].Carrera);
     console.log(infoData);
     // Manejar los datos de la solicitud obtenidos de soliData, por ejemplo:
     console.log(soliData);
@@ -304,7 +305,6 @@ return (
         noDataComponent={<NoDataComponent />}
         />
     </div>
-
     {selectedRow && (
         <Modal isOpen={modalOpen} toggle={toggleModal}>
             <ModalHeader className="text-white bg-blue-800 text-2xl">
@@ -340,10 +340,12 @@ return (
             </ModalBody>
             </Modal>
         )}
+
     </div>
     )}
 </div>
 );
+
 };
 
 export default MenuCambioCarrera;

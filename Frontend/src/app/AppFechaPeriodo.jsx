@@ -12,7 +12,6 @@ const AppFechaPeriodo = () => {
   const [fechaFinalSeleccionada, setFechaFinalSeleccionada] = useState(
     new Date()
   );
-  
   const [pacSeleccionado, setPacSeleccionado] = useState("1PAC");
   const [historialData2, setHistorialData2] = useState([]);
   const [clickCount, setClickCount] = useState(0);
@@ -153,15 +152,15 @@ const AppFechaPeriodo = () => {
   const NoDataComponent = () => {
     return <div>No hay registros para mostrar</div>;
   };
-  // Función para calcular la fecha máxima permitida en el segundo DatePicker
-  const calcularMaxFechaFinal = () => {
-    return addWeeks(fechaInicioSeleccionada, 15); // Cambiar 13 por 16 para establecer la fecha máxima permitida a 16 semanas después de la fecha de inicio
-  };
-
-  // Función para calcular la fecha mínima permitida en el segundo DatePicker
-  const calcularMinFechaFinal = () => {
-    return addWeeks(fechaInicioSeleccionada, 13); // Establecer la fecha mínima permitida a 13 semanas después de la fecha de inicio
-  };
+    // Función para calcular la fecha máxima permitida en el segundo DatePicker
+    const calcularMaxFechaFinal = () => {
+      return addWeeks(fechaInicioSeleccionada, 15); // Cambiar 13 por 16 para establecer la fecha máxima permitida a 16 semanas después de la fecha de inicio
+    };
+  
+    // Función para calcular la fecha mínima permitida en el segundo DatePicker
+    const calcularMinFechaFinal = () => {
+      return addWeeks(fechaInicioSeleccionada, 13); // Establecer la fecha mínima permitida a 13 semanas después de la fecha de inicio
+    };
   return (
     <>
       <div className="d-flex mt-5">
@@ -172,7 +171,7 @@ const AppFechaPeriodo = () => {
       <div className="contenedor mx-24">
         <div className="container m-4">
           <div className="row m-4">
-          <div className="col-md-4">
+             <div className="col-md-4">
         <label htmlFor="fechaInicio">Inicio de Período</label>
         <DatePicker
           className="form-control"

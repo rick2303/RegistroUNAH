@@ -10,7 +10,7 @@ import {
   FcDiploma1,
 } from "react-icons/fc";
 import "bootstrap/dist/css/bootstrap.min.css";
-import StudentModal from "./Estado_Cuenta";
+import EstadoCuenta from "./Estado_Cuenta";
 
 function MenuEstudiante() {
   const [nombreUsuario, setNombreUsuario] = useState("");
@@ -165,7 +165,7 @@ function MenuEstudiante() {
               </div>
 
               <div className="grid grid-cols-1">
-                <StudentModal></StudentModal>
+                <EstadoCuenta></EstadoCuenta>
               </div>
             </div>
           </article>

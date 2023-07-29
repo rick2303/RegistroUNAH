@@ -49,7 +49,7 @@ export const queries = {
     insertSolicitudCambioCentro:"INSERT INTO solicitud_cambiocentro VALUES (@NumCuenta,@CentroRegional,@CentroNuevo,@Justificacion,@FechaSolicitud,'EN ESPERA','NO PAGADO')",
 
     getSolicitudesCambioCentro:`SELECT DISTINCT es.NumCuenta,es.Nombre, es.Apellido, esp.TipoPago as Solicitud, scc.Justificacion, es.CorreoInstitucional,  
-    es.IndiceGlobal, es.CentroRegional as 'Centro actual', scc.CentroNuevo  as 'Centro Nuevo',esp.Estado, scc.Dictamen 
+    es.IndiceGlobal, es.CentroRegional as 'CentroActual', scc.CentroNuevo  as 'CentroNuevo',esp.Estado, scc.Dictamen 
     FROM estudiantes as es 
     LEFT JOIN solicitud_cambiocentro as scc ON es.NumCuenta = scc.NumCuenta 
     LEFT JOIN estudiantes_pagos as esp ON es.NumCuenta = esp.NumCuenta 
@@ -57,7 +57,8 @@ export const queries = {
     AND esp.Estado = 'PAGADO'
     AND scc.CentroNuevo= @CentroRegional
     AND scc.Dictamen='EN ESPERA'
-    AND scc.Estado='PAGADO'`,
+    AND scc.Estado='PAGADO'
+    AND es.Carrera=@Carrera`,
 
     UpdateDictamenCambioCentro:"update solicitud_cambiocentro set Dictamen=@Dictamen where NumCuenta=@NumCuenta AND Dictamen ='EN ESPERA'",
 

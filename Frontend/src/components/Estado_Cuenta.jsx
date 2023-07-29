@@ -54,20 +54,25 @@ const EstadoCuenta = () => {
     {
       name: "Tipo de pago",
       selector: (row) => row.TipoPago,
+      width: "35%",
+      
     },
 
     {
       name: "Periodo",
       selector: (row) => row.Periodo,
+      width:"20%",
     },
 
     {
       name: "Monto",
       selector: (row) => row.Monto,
+      width:"15%",
     },
     {
       name: "Estado",
       selector: (row) => row.Estado,
+      width:"30%",
     },
   ];
 
@@ -77,7 +82,10 @@ const EstadoCuenta = () => {
 
   return (
 
-        <div onClick={toggleModal} className="grid grid-cols-1">
+
+
+         <div onClick={toggleModal} className="grid grid-cols-1">
+
         <a>
           <a className="rounded grid grid-cols-1 group relative focus:outline-none focus:ring">
             <span
@@ -90,8 +98,9 @@ const EstadoCuenta = () => {
             </span>
           </a>
         </a>
+
       <Modal isOpen={modal} toggle={toggleModal}>
-        <ModalHeader toggle={toggleModal}>Estado Cuenta</ModalHeader>
+        <ModalHeader >Estado Cuenta </ModalHeader>
         <ModalBody>
           <DataTable
             columns={columns}
@@ -111,112 +120,3 @@ const EstadoCuenta = () => {
 
 export default EstadoCuenta;
 
-
-
-
-
-
-
-
-
-
-
-
-{/*
-const EstadoCuenta = () => {
-  const [modal, setModal] = useState(false);
-  const [data, setData] = useState([]);
-  const [numeroCuenta, setNumeroCuenta] = useState('');
-
-  useEffect(() => {
-    const storedNumeroCuenta = localStorage.getItem('userData');
-    if (storedNumeroCuenta) {
-      setNumeroCuenta(storedNumeroCuenta);
-    }
-  }, []);
-
-  const toggleModal = () => {
-    if (!modal) {
-      handleEnviarData();
-    }
-    setModal(!modal);
-  };
-
-  const handleEnviarData = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/estadoCuenta", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ numCuenta: numeroCuenta }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch data");
-      }
-
-      const data = await response.json();
-      setData(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleSubmit = event => {
-    event.preventDefault();
-    localStorage.setItem('userData', numeroCuenta);
-    toggleModal();
-  };
-
-  return (
-    <div>
-      <div>
-        <input
-          type="text"
-          value={numeroCuenta}
-          onChange={(e) => setNumeroCuenta(e.target.value)}
-          placeholder="Ingrese el número de cuenta"
-        />
-        <button onClick={toggleModal}>Ver Estado de Cuenta</button>
-      </div>
-      <Modal isOpen={modal} toggle={toggleModal}>
-        <ModalHeader toggle={toggleModal}>Estado de Cuenta</ModalHeader>
-        <ModalBody>
-          <Table>
-            <thead>
-              <tr>
-                <th>Tipo de pago</th>
-                <th>NumCuenta</th>
-                <th>Periodo</th>
-                <th>FechaPago</th>
-                <th>Monto</th>
-                <th>Estado</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map(pago => (
-                <tr key={pago.idPago}>
-                  <td>{pago.TipoPago}</td>
-                  <td>{pago.NumCuenta}</td>
-                  <td>{pago.Periodo}</td>
-                  <td>{pago.FechaPago}</td>
-                  <td>{pago.Monto}</td>
-                  <td>{pago.Estado}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={toggleModal}>
-            Cerrar
-          </Button>
-        </ModalFooter>
-      </Modal>
-    </div>
-  );
-};
-
-export default EstadoCuenta;
-*/}

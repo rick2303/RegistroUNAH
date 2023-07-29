@@ -1,4 +1,3 @@
-import { VarChar } from "mssql";
 import { getConnection, queryEstudiante, sql, querysADMIN} from "../Database"
 
 
@@ -57,6 +56,7 @@ export const existenciaSolicitudReposicion = async (req, res) => {
 /*
 export const existenciaSolicitudMatricula = async (req, res) => {
     const {NumCuenta, Sistema} = req.body;
+
     const TipoPago = 'MATRICULA';
     const pool = await getConnection();
     try {

@@ -48,12 +48,13 @@ export const solicitudCambioCentro = async (req,res) =>{
 
 export const getSolicitudCambioCentroCoordinador = async(req,res) => {
     try {
-        const {CentroRegional}= req.body
+        const {CentroRegional,Carrera}= req.body
         console.log(CentroRegional)
         const pool = await getConnection()
         
         const result = await pool.request()
         .input("CentroRegional",sql.VarChar,CentroRegional)
+        .input("Carrera",sql.VarChar,Carrera)
         .query(queries.getSolicitudesCambioCentro)
         res.status(200).json(result.recordset)
     } catch (error) {
@@ -73,7 +74,7 @@ export const descargarPDFCambioCarrera = async (req, res) => {
 
         //console.log(Justificacion)
 
-      const pdfFilePath = path.join(__dirname, '../UploadsPDF', Justificacion);
+      const pdfFilePath = path.join(__dirname, '../UploadsCambioCentroPDF', Justificacion);
   
       // Verifica si el archivo existe antes de descargarlo
       if (fs.existsSync(pdfFilePath)) {

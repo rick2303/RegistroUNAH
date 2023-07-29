@@ -162,22 +162,8 @@ const tieneSolicitudesEnEspera = () => {
       </h1>
      
         <div className="container ">
-          <br />
-                    
-    <p className="pt-4 pb-3 text-gray-900 sm:text-1xl text-left">
-        Suba el pdf que contenga la justificacion del cambio de centro 
-    </p>
 
-    <div className="d-flex align-items-center">
-        <a
-            className="btn btn-success"
-            data-bs-toggle="modal"
-            data-bs-target="#ModalCANCEL"
-            disabled={!puedeEnviarPDF}
-          >
-            Subir archivo PDF
-          </a>
-    </div>
+   
           <div className="container pt-5">
             <label htmlFor="centroRegional">Seleccione el Centro Regional al que desea trasladarse:</label>
             <br />
@@ -198,7 +184,22 @@ const tieneSolicitudesEnEspera = () => {
             ))}
           </select>
           </div>
-          
+
+          <br />
+            <br />
+         
+
+    <div className="d-flex align-items-center">
+     <label htmlFor="centroRegional">Suba el pdf que contenga la justificacion del cambio de centro   </label>
+        <a
+            className="btn btn-primary ml-5"
+            data-bs-toggle="modal"
+            data-bs-target="#ModalCANCEL"
+            disabled={!puedeEnviarPDF}
+          >
+            Subir archivo PDF
+          </a>
+    </div>
           <div className="pt-4">
           <button type="button" className="btn btn-success" onClick={handleSubmit} disabled={tieneSolicitudesEnEspera()}>
               Enviar Solicitud
@@ -234,5 +235,6 @@ const tieneSolicitudesEnEspera = () => {
 
 
 export default MenuCambioCentro;
+
 
 

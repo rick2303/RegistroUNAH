@@ -11,4 +11,4 @@ const AppEstadoCuenta = () => {
   );
 };
 
-ReactDOM.render(<AppEstadoCuenta />, document.getElementById('estadocuenta'));
+export default AppEstadoCuenta;
