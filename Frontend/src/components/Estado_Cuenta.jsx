@@ -1,41 +1,83 @@
+
 import React, { useState, useEffect } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import DataTable from 'react-data-table-component';
 
 const EstadoCuenta = () => {
+  const [users, setUsers] = useState([]);
   const [modal, setModal] = useState(false);
-  const [Data, setData] = useState([]);
-  const [NumeroCuenta, setNumeroCuenta] = useState('');
-
-  useEffect(() => {
-    const storedNumeroCuenta = localStorage.getItem('userData');
-    if (storedNumeroCuenta) {
-      setNumeroCuenta(storedNumeroCuenta);
-    }
-  }, []);
+  const [NumCuenta, setNumCuenta] = useState("");
 
   const toggleModal = () => {
     setModal(!modal);
-    if (!modal) {
-      fetchTable();
+  };
+
+  const showData = async () => {
+    try {
+      const URL = "http://localhost:5000/estadoCuenta";
+      const response = await fetch(URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ numCuenta: NumCuenta }),
+      });
+
+      if (!response.ok) {
+        throw new Error("error");
+      }
+
+      const data = await response.json();
+      setUsers(data);
+    } catch (error) {
+      console.error(error);
     }
   };
 
-  const fetchTable = () => {
-    fetch(`http://localhost:5000/estadoCuenta`)
-      .then(response => response.json())
-      .then(data => setStudentData(data))
-      .catch(error => console.error('Error en envio de datos:', error));
-  };
+  useEffect(() => {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      const userData = JSON.parse(storedData);
+      const numCuenta = userData.data.NumCuenta;
+      setNumCuenta(numCuenta);
+    }
+  }, []);
 
-  const handleSubmit = event => {
-    event.preventDefault();
-    localStorage.setItem('numCuenta', NumeroCuenta);
-    toggleModal();
+  useEffect(() => {
+    if (NumCuenta) {
+      showData(); 
+    }
+  }, [NumCuenta]);
+
+
+  const columns = [
+    {
+      name: "Tipo de pago",
+      selector: (row) => row.TipoPago,
+    },
+
+    {
+      name: "Periodo",
+      selector: (row) => row.Periodo,
+    },
+
+    {
+      name: "Monto",
+      selector: (row) => row.Monto,
+    },
+    {
+      name: "Estado",
+      selector: (row) => row.Estado,
+    },
+  ];
+
+  const NoDataComponent = () => {
+    return <div>No hay registros para mostrar</div>;
   };
 
   return (
-    <div>
-      <div onClick={toggleModal} className="grid grid-cols-1">
+
+        <div onClick={toggleModal} className="grid grid-cols-1">
         <a>
           <a className="rounded grid grid-cols-1 group relative focus:outline-none focus:ring">
             <span
@@ -48,37 +90,18 @@ const EstadoCuenta = () => {
             </span>
           </a>
         </a>
-      </div>
       <Modal isOpen={modal} toggle={toggleModal}>
-        <ModalHeader toggle={toggleModal}>Estado de Cuenta</ModalHeader>
+        <ModalHeader toggle={toggleModal}>Estado Cuenta</ModalHeader>
         <ModalBody>
-          <form onSubmit={handleSubmit}>
-          </form>
-          <Table>
-            <thead>
-              <tr>
-                <th>Tipo de pago</th>
-                <th>Periodo</th>
-                <th>Monto</th>
-                <th>Estado</th>
-    
-              </tr>
-            </thead>
-            <tbody>
-              {Data.map(pago => (
-                <tr key={pago.idPago}>
-                  <td>{pago.Estado}</td>
-                  <td>{pago.Monto}</td>
-                  <td>{pago.FechaPago}</td>
-                  <td>{pago.FechaPago}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+          <DataTable
+            columns={columns}
+            data={users}
+            noDataComponent={<NoDataComponent />}
+          />
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={toggleModal}>
-            Close
+            Cerrar
           </Button>
         </ModalFooter>
       </Modal>
@@ -86,5 +109,114 @@ const EstadoCuenta = () => {
   );
 };
 
+export default EstadoCuenta;
+
+
+
+
+
+
+
+
+
+
+
+
+{/*
+const EstadoCuenta = () => {
+  const [modal, setModal] = useState(false);
+  const [data, setData] = useState([]);
+  const [numeroCuenta, setNumeroCuenta] = useState('');
+
+  useEffect(() => {
+    const storedNumeroCuenta = localStorage.getItem('userData');
+    if (storedNumeroCuenta) {
+      setNumeroCuenta(storedNumeroCuenta);
+    }
+  }, []);
+
+  const toggleModal = () => {
+    if (!modal) {
+      handleEnviarData();
+    }
+    setModal(!modal);
+  };
+
+  const handleEnviarData = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/estadoCuenta", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ numCuenta: numeroCuenta }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+
+      const data = await response.json();
+      setData(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSubmit = event => {
+    event.preventDefault();
+    localStorage.setItem('userData', numeroCuenta);
+    toggleModal();
+  };
+
+  return (
+    <div>
+      <div>
+        <input
+          type="text"
+          value={numeroCuenta}
+          onChange={(e) => setNumeroCuenta(e.target.value)}
+          placeholder="Ingrese el número de cuenta"
+        />
+        <button onClick={toggleModal}>Ver Estado de Cuenta</button>
+      </div>
+      <Modal isOpen={modal} toggle={toggleModal}>
+        <ModalHeader toggle={toggleModal}>Estado de Cuenta</ModalHeader>
+        <ModalBody>
+          <Table>
+            <thead>
+              <tr>
+                <th>Tipo de pago</th>
+                <th>NumCuenta</th>
+                <th>Periodo</th>
+                <th>FechaPago</th>
+                <th>Monto</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map(pago => (
+                <tr key={pago.idPago}>
+                  <td>{pago.TipoPago}</td>
+                  <td>{pago.NumCuenta}</td>
+                  <td>{pago.Periodo}</td>
+                  <td>{pago.FechaPago}</td>
+                  <td>{pago.Monto}</td>
+                  <td>{pago.Estado}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={toggleModal}>
+            Cerrar
+          </Button>
+        </ModalFooter>
+      </Modal>
+    </div>
+  );
+};
 
 export default EstadoCuenta;
+*/}

@@ -12,7 +12,7 @@ function ModalCargarPDFCancelaciones() {
     <div class="modal-dialog">
         <div class="modal-content">
         <div class="modal-header text-black">
-            <h1 class="modal-title fs-5 " id="staticBackdropLabel">Cargar fotos</h1>
+            <h1 class="modal-title fs-5 " id="staticBackdropLabel">Cargar PDF</h1>
             <button type="button" className="btn bg-blue-800 hover:bg-blue-500 text-white shadow" data-bs-dismiss="modal" aria-label="Close" onClick={() => setModal(false)}>X</button>
         </div>
         <div class="modal-body h-36 pt-10  text-black">
