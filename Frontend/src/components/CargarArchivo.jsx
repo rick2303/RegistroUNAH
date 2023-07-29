@@ -42,8 +42,8 @@ function CargarArchivo() {
 
   return (
     <form className="flex justify-between" onSubmit={handleSubmit}>
-      <input type="file" onChange={handleFileChange} ref={inputFileRef} accept=".csv" />
-      <button className="boton_guardar px-1 py-0 w-20 h-8 text-center p-2" type="submit">Cargar</button>
+    <input type="file" onChange={handleFileChange} ref={inputFileRef} accept=".csv" />
+    <button className="boton_guardar px-1 py-0 w-20 h-8 text-center p-2" type="submit">Cargar</button>
     </form>
   );
 }

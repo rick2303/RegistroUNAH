@@ -10,7 +10,8 @@ import {
   Label,
   Input,
 } from "reactstrap";
-import "../App.css";
+import "../App.css"
+
 
 const ModalDocentes = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -138,7 +139,7 @@ const ModalDocentes = () => {
         </a>
       </div>
       <Modal isOpen={modalOpen} toggle={toggleModal}>
-        <ModalHeader className="text-white bg-blue-800 text-2xl">
+      <ModalHeader className="text-white bg-blue-800 text-2xl">
         <strong>Registrar Docentes</strong> 
         <button className="close boton_cierre" onClick={toggleModal}>
               <span aria-hidden="true">X</span>
@@ -272,10 +273,12 @@ const ModalDocentes = () => {
           </Form>
         </ModalBody>
         <ModalFooter>
-          <button  className="boton_guardar" onClick={AgregarDocente}>
+          <Button color="boton_guardar" onClick={AgregarDocente}>
             Registrar
-          </button>
-          
+          </Button>
+          <Button color="secondary" onClick={toggleModal}>
+            Cancelar
+          </Button>
         </ModalFooter>
       </Modal>
     </div>

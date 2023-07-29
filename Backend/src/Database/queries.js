@@ -49,7 +49,7 @@ export const queries = {
     insertSolicitudCambioCentro:"INSERT INTO solicitud_cambiocentro VALUES (@NumCuenta,@CentroRegional,@CentroNuevo,@Justificacion,@FechaSolicitud,'EN ESPERA','NO PAGADO')",
 
     getSolicitudesCambioCentro:`SELECT DISTINCT es.NumCuenta,es.Nombre, es.Apellido, esp.TipoPago as Solicitud, scc.Justificacion, es.CorreoInstitucional,  
-    es.IndiceGlobal, es.CentroRegional as 'Centro actual', scc.CentroNuevo  as 'Centro Nuevo',esp.Estado, scc.Dictamen 
+    es.IndiceGlobal, es.CentroRegional as 'CentroActual', scc.CentroNuevo  as 'CentroNuevo',esp.Estado, scc.Dictamen 
     FROM estudiantes as es 
     LEFT JOIN solicitud_cambiocentro as scc ON es.NumCuenta = scc.NumCuenta 
     LEFT JOIN estudiantes_pagos as esp ON es.NumCuenta = esp.NumCuenta 
@@ -57,7 +57,8 @@ export const queries = {
     AND esp.Estado = 'PAGADO'
     AND scc.CentroNuevo= @CentroRegional
     AND scc.Dictamen='EN ESPERA'
-    AND scc.Estado='PAGADO'`,
+    AND scc.Estado='PAGADO'
+    AND es.Carrera=@Carrera`,
 
     UpdateDictamenCambioCentro:"update solicitud_cambiocentro set Dictamen=@Dictamen where NumCuenta=@NumCuenta AND Dictamen ='EN ESPERA'",
 
@@ -115,7 +116,12 @@ export const querys = {
     UpdateEstadoCambioCarrera: "UPDATE [dbo].[solicitud_cambiocarrera] SET Dictamen =  '@dictamen', JustificacionCoordi = '@justificacion' WHERE NumCuenta = @numCuenta AND IdSolicitud = @idSolicitud",
     updateCambioCarreraEstudiante:"UPDATE [dbo].[estudiantes] SET Carrera = @CarreraCambio WHERE NumCuenta = @numCuenta",
     UpdateEstadoCambioCarrera: "UPDATE [dbo].[solicitud_cambiocarrera] SET Dictamen =  '@dictamen', JustificacionCoordi = '@justificacion' WHERE NumCuenta = @numCuenta AND IdSolicitud = @idSolicitud",
-    updateCambioCarreraEstudiante:"UPDATE [dbo].[estudiantes] SET Carrera = @CarreraCambio WHERE NumCuenta = @numCuenta",
+
+    getCambioCentroSoli:"select * from [dbo].[solicitud_cambiocentro] where NumCuenta=@NumCuenta",  
+
+    getCentrosRegionales:"select NombreCentro, Centro from [dbo].[centro_regionales]",
+
+    updateCentroNuevo:"update [dbo].[solicitud_cambiocentro] set CentroNuevo='@Centro' where NumCuenta=numCuenta AND IdSolicitud=idSolicitud",
 };
 
 export const queryStudentHistory = {
@@ -138,3 +144,4 @@ export const queryEstudiante= {
     postSolicitudReposicion: 'insert into solicitudes_pagoreposicion (NumCuenta, Justificacion, FechaSolicitud, Periodo) values (@NumCuenta, @Justificacion, GETDATE(), @Periodo)',
     getExistenciaSolicitudReposicion: 'select * from solicitudes_pagoreposicion where NumCuenta = @NumCuenta and Periodo = @Periodo and year(FechaSolicitud) = year(GETDATE())',
 }
+

@@ -10,3 +10,5 @@ const AppEstadoCuenta = () => {
     </div>
   );
 };
+
+export default AppEstadoCuenta;

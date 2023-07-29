@@ -18,7 +18,7 @@ function ModalCargar() {
   <div className="modal-dialog">
     <div className="modal-content">
       <div className="modal-header backdrop-blur min-w-full
-         text-white bg-blue-800 text-2xl">
+          text-white bg-blue-800 text-2xl">
         <h1 className="modal-title fs-5 text-center" id="exampleModalLabel"><strong >Cargar Archivo CSV</strong></h1>
         <button type="button" className="btn boton_cierre" data-bs-dismiss="modal" aria-label="Close">X</button>
       </div>

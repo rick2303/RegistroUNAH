@@ -98,13 +98,12 @@ const AppFechaPeriodo = () => {
         setHistorialData2(data);
         console.log(data);
 
-        // Verificar si hay registros con los valores "1PAC", "2PAC" y "3PAC" en PeriodoAcademico
+        // Verificar si hay registros con los valores "1PAC", "2PAC" en PeriodoAcademico
         const hasPac1 = data.some((row) => row.PeriodoAcademico === "1PAC");
         const hasPac2 = data.some((row) => row.PeriodoAcademico === "2PAC");
-      
+
         setIsPac1Disabled(hasPac1);
         setIsPac2Disabled(hasPac2);
-    
         setIsGuardarDisabled(hasPac1 && hasPac2);
       })
       .catch((error) => {
@@ -152,15 +151,15 @@ const AppFechaPeriodo = () => {
   const NoDataComponent = () => {
     return <div>No hay registros para mostrar</div>;
   };
-    // Función para calcular la fecha máxima permitida en el segundo DatePicker
-    const calcularMaxFechaFinal = () => {
-      return addWeeks(fechaInicioSeleccionada, 23); // Cambiar 13 por 16 para establecer la fecha máxima permitida a 16 semanas después de la fecha de inicio
-    };
-  
-    // Función para calcular la fecha mínima permitida en el segundo DatePicker
-    const calcularMinFechaFinal = () => {
-      return addWeeks(fechaInicioSeleccionada, 20); // Establecer la fecha mínima permitida a 13 semanas después de la fecha de inicio
-    };
+  // Función para calcular la fecha máxima permitida en el segundo DatePicker
+  const calcularMaxFechaFinal = () => {
+    return addWeeks(fechaInicioSeleccionada, 23); // Cambiar 13 por 16 para establecer la fecha máxima permitida a 16 semanas después de la fecha de inicio
+  };
+
+  // Función para calcular la fecha mínima permitida en el segundo DatePicker
+  const calcularMinFechaFinal = () => {
+    return addWeeks(fechaInicioSeleccionada, 20); // Establecer la fecha mínima permitida a 13 semanas después de la fecha de inicio
+  };
   return (
     <>
       <div className="d-flex mt-5">
@@ -171,7 +170,7 @@ const AppFechaPeriodo = () => {
       <div className="contenedor mx-24">
         <div className="container m-4">
           <div className="row m-4">
-             <div className="col-md-4">
+            <div className="col-md-4">
         <label htmlFor="fechaInicio">Inicio de Período</label>
         <DatePicker
           className="form-control"
@@ -199,7 +198,7 @@ const AppFechaPeriodo = () => {
                 cancelLabel="Cancelar" // Establecer texto para el botón Cancelar en español
                 okLabel="Aceptar" // Establecer texto para el botón Aceptar en español
         />
-      </div>
+        </div>
             <div className="col-md-4">
               <label htmlFor="pac" className="mb-3">
                 Seleccione el PAC
@@ -219,7 +218,6 @@ const AppFechaPeriodo = () => {
                 <option value="2PAC" disabled={isPac2Disabled}>
                   2PAC
                 </option>
-                
               </select>
             </div>
           </div>

@@ -16,14 +16,14 @@ ReactDOM.render(
 	
 	<AppFechaCancelaciones />
 	</MuiPickersUtilsProvider>	
-		
+
 	</div>	
 	<div className='mt-14'>
 	<MuiPickersUtilsProvider utils={DateFnUtils} locale={esLocale}>
-	
+
 	<AppFechaCancelacionesSemestrales />
 	</MuiPickersUtilsProvider>	
-		
+
 	</div>	
 	</React.StrictMode>,
 	document.getElementById('FechaCancelaciones')

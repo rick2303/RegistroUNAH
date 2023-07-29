@@ -34,7 +34,9 @@ export default function NavbarEstudiante() {
 
   let redirectTo;
 
-
+  if (currentPath === "/src/html/Estudiante.html") {
+    redirectTo = "../";
+  } 
   if (currentPath === "/src/html/Solicitudes.html") {
     redirectTo = "../html/Estudiante.html";
   }
@@ -56,6 +58,8 @@ export default function NavbarEstudiante() {
   if (currentPath === "/src/html/PagoReposicion.html") {
     redirectTo = "../html/Solicitudes.html";
   }
+
+
   console.log(currentPath);
   const navList = (
     <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
@@ -66,7 +70,7 @@ export default function NavbarEstudiante() {
         className="p-1 font-normal "
         title="Regresar"
       >
-       {currentPath !== "/src/html/Estudiante.html" && (
+        {currentPath !== "/src/html/Estudiante.html" && (
         <a href={redirectTo} style={{ color: 'white' }} className="flex items-center">
           <h1 className="text-5xl cursor-pointer"><TiArrowBackOutline /></h1>
         </a>

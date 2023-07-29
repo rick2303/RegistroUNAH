@@ -50,22 +50,20 @@ Content-Type: application/json
 }
 
 ### ver clases que esta cursando un estudiante
-post http://localhost:5000/enviarSolicitudesRealizadas
+post http://localhost:5000/estadoCuenta
 Content-Type: application/json
 
 {
-    "NumCuenta": "20182001940",
-    "Periodo": "2PAC",
-    "año": 2023
+    "numCuenta": "20182001940"
 }
 
 
 ### ver clases que esta cursando un estudiante
-post http://localhost:5000/enviarInformacionEstudiante
+post http://localhost:5000/estadoCuenta
 Content-Type: application/json
 
 {
-    "NumCuenta": "20182001940"
+    "numCuenta": "20182001940"
 }
 
 

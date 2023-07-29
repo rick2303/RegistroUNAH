@@ -1,42 +1,91 @@
+
 import React, { useState, useEffect } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import DataTable from 'react-data-table-component';
 
 const EstadoCuenta = () => {
+  const [users, setUsers] = useState([]);
   const [modal, setModal] = useState(false);
-  const [Data, setData] = useState([]);
-  const [numCuenta, setnumCuenta] = useState('');
-
-  useEffect(() => {
-    const numCuenta = localStorage.getItem('userData');
-    if (numCuenta) {
-      setnumCuenta(numCuenta);
-    }
-  }, []);
+  const [NumCuenta, setNumCuenta] = useState("");
 
   const toggleModal = () => {
     setModal(!modal);
-    if (!modal) {
-      fetchData();
+  };
+
+  const showData = async () => {
+    try {
+      const URL = "http://localhost:5000/estadoCuenta";
+      const response = await fetch(URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ numCuenta: NumCuenta }),
+      });
+
+      if (!response.ok) {
+        throw new Error("error");
+      }
+
+      const data = await response.json();
+      setUsers(data);
+    } catch (error) {
+      console.error(error);
     }
   };
 
-  const fetchData = () => {
-    fetch(`http://localhost:5000/estadoCuenta`)
-      .then(response => response.json())
-      .then(data => setData(data))
-      .catch(error => console.error('Error al cargar los datos', error));
-  };
+  useEffect(() => {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      const userData = JSON.parse(storedData);
+      const numCuenta = userData.data.NumCuenta;
+      setNumCuenta(numCuenta);
+    }
+  }, []);
 
-  const handleSubmit = event => {
-    event.preventDefault();
-    localStorage.setItem('numCuenta', numCuenta);
-    toggleModal();
+  useEffect(() => {
+    if (NumCuenta) {
+      showData(); 
+    }
+  }, [NumCuenta]);
+
+
+  const columns = [
+    {
+      name: "Tipo de pago",
+      selector: (row) => row.TipoPago,
+      width: "35%",
+      
+    },
+
+    {
+      name: "Periodo",
+      selector: (row) => row.Periodo,
+      width:"20%",
+    },
+
+    {
+      name: "Monto",
+      selector: (row) => row.Monto,
+      width:"15%",
+    },
+    {
+      name: "Estado",
+      selector: (row) => row.Estado,
+      width:"30%",
+    },
+  ];
+
+  const NoDataComponent = () => {
+    return <div>No hay registros para mostrar</div>;
   };
 
   return (
 
-    <div>
+
+
          <div onClick={toggleModal} className="grid grid-cols-1">
+
         <a>
           <a className="rounded grid grid-cols-1 group relative focus:outline-none focus:ring">
             <span
@@ -49,33 +98,15 @@ const EstadoCuenta = () => {
             </span>
           </a>
         </a>
-      </div>
 
       <Modal isOpen={modal} toggle={toggleModal}>
-        <ModalHeader toggle={toggleModal}>Estado de Cuenta</ModalHeader>
+        <ModalHeader >Estado Cuenta </ModalHeader>
         <ModalBody>
-          <Table>
-            <thead>
-              <tr>
-                <th>Tipo de pago</th>
-                <th>Periodo</th>
-                <th>Fecha de Pago</th>
-                <th>Monto</th>
-                <th>Estado</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Data.map(pago => (
-                <tr key={pago.numCuenta}>
-                  <td>{pago.TipoPago}</td>
-                  <td>{pago.Periodo}</td>
-                  <td>{pago.FechaPago}</td>
-                  <td>{pago.Monto}</td>
-                  <td>{pago.Estado}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+          <DataTable
+            columns={columns}
+            data={users}
+            noDataComponent={<NoDataComponent />}
+          />
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={toggleModal}>
@@ -88,3 +119,4 @@ const EstadoCuenta = () => {
 };
 
 export default EstadoCuenta;
+

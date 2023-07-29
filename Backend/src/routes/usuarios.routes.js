@@ -13,31 +13,26 @@ router.post('/enviarPlanificacion', crearNuevaPlanificacion);
 
 router.get('/renderizarPlanificacion', renderizarPlanificacion);
 router.get('/renderizarPlanificacionSemestra', renderizarPlanificacionSemestral);
-
 router.post('/enviarMatricula', crearNuevaMatricula);
-
 router.post('/enviarFechaNotas', crearFechaNotas);
-
 router.get('/renderizarMatricula', renderizarMatricula);
 router.get('/renderizarMatriculaSemestral', renderizarMatriculaSemestral);
-
 router.post('/enviarCancelaciones', crearNuevoProcesoCancelacion);
 
 router.get('/renderizarCancelaciones', renderizarCancelaciones);
 router.get('/renderizarCancelacionesSemestrales', renderizarCancelacionesSemestral);
-
 router.get('/renderizarFechaNota', renderizarFechaNotas);
 router.get('/renderizarFechaNotaSemestral', renderizarFechaNotasSemestral);
-
 router.get('/enviarPlanificacionIPAC', enviarIPAC);
 
 router.get('/enviarPlanificacionIIPAC', enviarIIPAC);
 
 router.get('/enviarPlanificacionIIIPAC', enviarIIIPAC);
+
+router.get('/renderizarPlanificacionSemestral', renderizarPlanificacionSemestral);
 router.get('/enviarPlanificacionIPACSemestral', enviarIPACSemestral);
 
 router.get('/enviarPlanificacionIIPACSemestral', enviarIIPACSemestral);
-
 router.get('/enviarMatriculaIPAC', enviarMatriculaIPAC);
 
 router.get('/enviarMatriculaIIPAC', enviarMatriculaIIPAC);

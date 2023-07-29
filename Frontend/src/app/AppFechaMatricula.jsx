@@ -255,10 +255,11 @@ console.log(a);
                 maxDate={fechaMaxima}
                 maxDateMessage="La fecha no debe ser posterior a la fecha máxima"
                 minDateMessage="La fecha no debe ser anterior a la fecha mínima"
-                renderInput={(props) => <input {...props} readOnly />}
-                cancelLabel="Cancelar" // Establecer texto para el botón Cancelar en español
-                okLabel="Aceptar" // Establecer texto para el botón Aceptar en español
+                renderInput={(props) => <input {...props} readOnly />
+              } cancelLabel="Cancelar" // Establecer texto para el botón Cancelar en español
+              okLabel="Aceptar" // Establecer texto para el botón Aceptar en español
               />
+              
             </div>
             <div className="col-md-4">
               <label htmlFor="fechaFinal">Finalización de Matricula</label>
@@ -271,8 +272,7 @@ console.log(a);
                 maxDate={fechaMaxima}
                 maxDateMessage="La fecha no debe ser posterior a la fecha máxima"
                 minDateMessage="La fecha no debe ser anterior a la fecha mínima"
-                renderInput={(props) => <input {...props} readOnly />}
-                cancelLabel="Cancelar" // Establecer texto para el botón Cancelar en español
+                renderInput={(props) => <input {...props} readOnly />} cancelLabel="Cancelar" // Establecer texto para el botón Cancelar en español
                 okLabel="Aceptar" // Establecer texto para el botón Aceptar en español
               />
             </div>

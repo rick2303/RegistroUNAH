@@ -78,7 +78,6 @@ export const crearNuevaMatricula = async (req, res) => {
     }
 
 }
-
 export const crearFechaNotas = async (req, res) => {
     const {FechaInicio, FechaFinal, HoraInicio, HoraFinal, PeriodoAcademico, Sistema } = req.body;
 
@@ -86,7 +85,7 @@ export const crearFechaNotas = async (req, res) => {
     if (FechaInicio == null || FechaFinal == null || HoraInicio == null || HoraFinal == null || PeriodoAcademico == null ) {
         return res.status(400).json({ msg: "Peticion denegada. Por favor, llenar todos los espacios" });
     }
-    
+
     try {
         const pool = await getConnection();
 
@@ -107,7 +106,6 @@ export const crearFechaNotas = async (req, res) => {
     }
 
 }
-
 
 export const renderizarMatricula = async (req, res) => {
     try {
@@ -132,8 +130,6 @@ export const renderizarMatriculaSemestral = async (req, res) => {
         }  
 
 }
-
-
 export const crearNuevoProcesoCancelacion = async (req, res) => {
     const {FechaInicio, FechaFinal, HoraInicio, HoraFinal, PeriodoAcademico, Sistema } = req.body;
 
@@ -166,6 +162,19 @@ export const renderizarCancelaciones = async (req, res) => {
     try {
         const pool = await getConnection();
         const result = await pool.request().query(querys.getCancelacion);
+        res.json(result.recordset);
+        } catch (error) {
+        res.status(500);
+        res.send(error.message);
+        }  
+
+}
+
+
+export const enviarIPAC = async (req, res) => {
+    try {
+        const pool = await getConnection();
+        const result = await pool.request().query(querys.getIPACPlanificacion);
         res.json(result.recordset);
         } catch (error) {
         res.status(500);
@@ -207,18 +216,6 @@ export const renderizarFechaNotasSemestral = async (req, res) => {
         res.send(error.message);
         }  
     }
-export const enviarIPAC = async (req, res) => {
-    try {
-        const pool = await getConnection();
-        const result = await pool.request().query(querys.getIPACPlanificacion);
-        res.json(result.recordset);
-        } catch (error) {
-        res.status(500);
-        res.send(error.message);
-        }  
-
-}
-
 export const enviarIIPAC = async (req, res) => {
     try {
         const pool = await getConnection();
@@ -263,7 +260,6 @@ export const enviarIIPACSemestral = async (req, res) => {
         res.send(error.message);
         }  
 }
-
 export const enviarMatriculaIPAC = async (req, res) => {
     try {
         const pool = await getConnection();

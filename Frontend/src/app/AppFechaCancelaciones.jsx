@@ -237,7 +237,7 @@ console.log(a);
     
     <div className="d-flex mt-5">
   <h1 className="text-2xl mb-4 text-center font-bold pt-2 text-gray-900 sm:text-3xl col-12">
-    Cancelaciones Excepcionales-Trimestrales
+  Cancelaciones Excepcionales-Trimestrales
   </h1>
   
 </div>

@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import { EliminarCancelacionesExcepcionales, EliminarFechaNotas, EliminarMatricula, EliminarPlanificacion } from '../controllers/admin.controllers';
+import { EliminarCancelacionesExcepcionales, EliminarMatricula, EliminarPlanificacion, EliminarFechaNotas } from '../controllers/admin.controllers';
 
 const routerAdmin = Router();
 

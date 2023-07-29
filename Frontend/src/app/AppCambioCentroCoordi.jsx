@@ -6,7 +6,7 @@ function AppCambioCentroCoordi() {
 
 return (
     <>
-    <Navbar /> 
+    <Navbar/> 
     <MenuCambioCentroCoordi/> 
     </>
 )
