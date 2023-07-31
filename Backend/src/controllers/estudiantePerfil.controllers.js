@@ -183,3 +183,16 @@ export const EliminarClaseExep = async (req, res) => {
     .query(querys.EliminarClaseExcep);
     res.json(result.recordset);
 }
+
+
+export const EliminarClaseMatriculada = async (req, res) => {
+    const { numCuenta, periodo, idClase, año } = req.body;
+    const pool = await getConnection();
+    const result = await pool.request()
+    .input("NumCuenta", sql.VarChar, numCuenta)
+    .input("Periodo", sql.VarChar, periodo)
+    .input("IdClase", sql.VarChar, idClase)
+    .input("Año", sql.Int, año)
+    .query(querys.EliminarClaseExcep);
+    res.json(result.recordset);
+}
