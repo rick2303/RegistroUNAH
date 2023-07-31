@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { FcFinePrint } from "react-icons/fc";
 import { Input, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import "../Perfil_estudiante.css";
 
 import "styled-components";
 import { format, parseISO, set } from "date-fns";
@@ -15,6 +16,14 @@ const Notas = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const año = fechaActual.getFullYear();
+  const [nombre, setNombre] = useState("");
+  const [centroRegional, setCentroRegional] = useState("");
+  const [correoInstitucional, setCorreoInstitucional] = useState("");
+  const [correoPersonal, setCorreoPersonal] = useState("");
+  const [carrera, setCarrera] = useState("");
+  const [imagen, setImagen] = useState("");
+  const [descripcion, setDescripcion] = useState("");
+  const [video, setVideo] = useState("");
   useEffect(() => {
     const storedData = localStorage.getItem("userData");
     if (storedData) {
@@ -147,6 +156,38 @@ const Notas = () => {
     setSelectedRow(row);
     console.log(row);
     toggleModal();
+    //Aqui debe ir el fetch para obtener la información del docente
+ 
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      const userData = JSON.parse(storedData);
+      
+      const nombre = userData.data.Nombre + " " + userData.data.Apellido;
+      setNombre(nombre);
+      const centroRegional = userData.data.CentroRegional;
+      setCentroRegional(centroRegional);
+      const correoInstitucional = userData.data.CorreoInstitucional;
+      setCorreoInstitucional(correoInstitucional);
+      const correoPersonal = userData.data.CorreoPersonal;
+      setCorreoPersonal(correoPersonal);
+      const carrera = userData.data.Carrera;
+      setCarrera(carrera);
+      const descripcion = userData.perfil.Descripcion;
+      setDescripcion(descripcion);
+     
+      
+      if(!userData.perfil ){
+        const imagen = '../1688323336413-804346209-64572.png';
+        setImagen(imagen);
+        const video = '../Video docente.mp4';
+        setVideo(video);
+      }else{
+        const imagen = userData.perfil.Imagen1;
+        setImagen(imagen);
+        const video = userData.perfil.Video;
+        setVideo(video);
+      }
+    }
   };
   const toggleModal = () => {
     setModalOpen(!modalOpen);
@@ -168,15 +209,145 @@ const Notas = () => {
           noDataComponent={<NoDataComponent />}></DataTable>
       </div>
       {selectedRow && (
-        <Modal isOpen={modalOpen} toggle={toggleModal}>
+        <Modal isOpen={modalOpen} toggle={toggleModal} className="modal-fullscreen"> {/* Agregar la clase 'modal-fullscreen' */}
           <ModalHeader className="text-white bg-blue-800 text-2xl">
-            <strong>Información del Docente</strong>
+            <strong>Perfil de docente</strong>
             <button className="close boton_cierre" onClick={toggleModal}>
               <span aria-hidden="true">X</span>
             </button>
           </ModalHeader>
           <ModalBody>
-            
+          <>
+      <div class="page-content page-container" id="page-content">
+        <div class="padding">
+          <div class=" d-flex justify-content-center">
+            <div class=" col-md-12">
+              <div class="card user-card-full h-full">
+                <div class="row m-l-0 m-r-0">
+                  <div class="col-sm-6 col-md-2  bg-c-lite-green user-profile">
+                    <div class="card-block text-center text-white">
+                      <div
+                        id="myCarousel"
+                        class="carousel slide"
+                        data-ride="carousel"
+                      >
+                        {/*   <!-- Slides --> */}
+                        <div
+                          id="carouselExampleInterval"
+                          class="carousel slide"
+                          data-bs-ride="carousel"
+                        >
+                          <div class="carousel-inner ">
+                            <div
+                              class="carousel-item active rounded-photo"
+                              data-bs-interval="10000"
+                            >
+                              <img
+                                src={`../img/uploads/${imagen}`}
+                                class=" d-block-docente w-100"
+                                alt="Sin foto de perfil"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <h4 class="f-w-600 text-xl">Descripción:</h4>
+                      <div>
+                      <h6>{descripcion}</h6> 
+                      </div>
+{/* 
+                      <div class="d-flex justify-content-center align-items-center">
+                        <a data-bs-toggle="modal" data-bs-target="#example">
+                          <h2 class="m-2">
+                            <MdAddAPhoto
+                              className="text-2xl fas fa-pencil-alt cursor-pointer"
+                              title="foto de perfil"
+                            />
+                          </h2>
+                        </a>
+                        <ModalCargarFotos />
+                      </div> */}
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-10">
+                    <div class="card-block">
+                      <h5 className="m-b-20 p-b-5 b-b-default f-w-600 row">
+                      <label className="col-12">Información general</label>
+                        {/* <div class="d-flex justify-content-end col-6">
+                          <a
+                            href="../html/Docente.html"
+                            className="text-end fas fa-pencil-alt"
+                            title="Regresar"
+                          ><label>
+                            <TiArrowBackOutline className="cursor-pointer" />
+                            </label>
+                          </a>
+                        </div> */}
+                      </h5>
+
+                      <div class="row mb-4">
+                        <div class="col-sm-6">
+                          <hatch class="m-b-10 f-w-600">Nombre:</hatch>
+                          <h6 class="text-muted f-w-400">{nombre}</h6>
+                        </div>
+                        <div class="col-sm-6">
+                          <hatch class="m-b-10 f-w-600">Correo Institucional:</hatch>
+                          <h6 class="text-muted f-w-400">
+                            {correoInstitucional}
+                          </h6>
+                        </div>
+                      </div>
+                      <div class="row mb-4">
+                        <div class="col-sm-6">
+                          <hatch class="m-b-10 f-w-600">Centro regional:</hatch>
+                          <h6 class="text-muted f-w-400">{centroRegional}</h6>
+                        </div>
+                        <div class="col-sm-6">
+                          <hatch class="m-b-10 f-w-600">Carrera:</hatch>
+                          <h6 class="text-muted f-w-400">{carrera}</h6>
+                        </div>
+                      </div>
+                      <div class="row mb-4">
+                      <div class="col-sm-6">
+                          <hatch class="m-b-10 f-w-600">Correo Personal:</hatch>
+                          <h6 class="text-muted f-w-400">
+                            {correoPersonal}
+                          </h6>
+                        </div>
+                      </div>
+                      <h5 className="m-b-20 mt-9 p-b-5 b-b-default f-w-600 row">
+                        <label className="col-12">Video descriptivo</label>
+                        {/* <div class="d-flex justify-content-end col-6">
+                          <a
+                            data-bs-toggle="modal"
+                            data-bs-target="#docente"
+                            className="text-end fas fa-pencil-alt"
+                            title="Cargar video"
+                          >
+                            <label><AiOutlineVideoCameraAdd className="cursor-pointer" /></label>
+                          </a>
+                          <ModalCargarVideo />
+                        </div> */}
+                      </h5>
+
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <video src={`../img/uploads/${video}`} controls width="47%" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
           </ModalBody>
         </Modal>
       )}
