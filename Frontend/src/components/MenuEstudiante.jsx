@@ -1,6 +1,6 @@
 //import React from "react";
 import React, { useEffect, useState } from "react";
-import { FcOk, FcUpload} from "react-icons/fc";
+import { FcBarChart, FcInspection, FcOk, FcOpenedFolder, FcOvertime, FcUpload} from "react-icons/fc";
 import { FcCalendar } from "react-icons/fc";
 import { FcBusinessman } from "react-icons/fc";
 import {
@@ -40,15 +40,13 @@ function MenuEstudiante() {
               </p>
               <div className="row">
                 <h1>
-                  <FcUpload className="mx-auto m-2" />
+                  <FcOvertime className="mx-auto m-2" />
                 </h1>
               </div>
-
               <div className="grid grid-cols-1">
-                <a data-bs-toggle="modal" data-bs-target="#exampleModal">
                   <a
                     className=" grid grid-cols-1 group relative focus:outline-none focus:ring"
-                    href="/download"
+                    href="/#"
                   >
                     <span className=" rounded-[25px] grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"
                     style={{ backgroundColor: '#145eb9' }}
@@ -58,7 +56,6 @@ function MenuEstudiante() {
                       Ir
                     </span>
                   </a>
-                </a>
               </div>
             </div>
           </article>
@@ -69,7 +66,7 @@ function MenuEstudiante() {
               </p>
               <div className="row">
                 <h1>
-                  <FcBusinessman className="mx-auto m-2" />
+                  <FcOpenedFolder className="mx-auto m-2" />
                 </h1>
               </div>
 
@@ -129,7 +126,7 @@ function MenuEstudiante() {
               </p>
               <div className="row">
                 <h1>
-                  <FcDiploma1 className="mx-auto m-2" />
+                  <FcBarChart className="mx-auto m-2" />
                 </h1>
               </div>
 
@@ -206,7 +203,7 @@ function MenuEstudiante() {
               </p>
               <div className="row">
                 <h1>
-                  <FcDiploma2 className="mx-auto m-2" />
+                  <FcInspection className="mx-auto m-2" />
                 </h1>
               </div>
 
