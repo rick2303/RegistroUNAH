@@ -2,6 +2,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from "react";
 import "styled-components";
+import { format, parseISO, set } from "date-fns";
 
 const MenuCambioCentroCoordi = () => {
     const [NumCuenta, setNumCuenta] = useState("");
@@ -120,13 +121,7 @@ const MenuCambioCentroCoordi = () => {
             .then((data) => {
               
                 setUsers(data);
-                
                 console.log(data)
-                for (const i of data)
-                {
-                    console.log(i);
-                    
-                }
         });
     } catch (error) {
         console.error("Error al obtener los datos:", error);
