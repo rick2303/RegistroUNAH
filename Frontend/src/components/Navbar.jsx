@@ -48,9 +48,24 @@ export default function Navbar() {
   if (currentPath === "/src/html/Coordinacion.html" ){
     redirectTo="../html/Coordinacion_menu.html"
   }
- 
+  if( currentPath === "/src/html/CancelacionExcepCoordi.html"){
+    redirectTo = "../html/SolicitudesCoordinador.html"
+  }
+    if( currentPath === "/src/html/CambioCentroCoordi.html"){
+    redirectTo = "../html/SolicitudesCoordinador.html"
+  }
+    if( currentPath === "/src/html/CambioCarreraCoordi.html"){
+    redirectTo = "../html/SolicitudesCoordinador.html"
+  }
+    if( currentPath === "/src/html/SolicitudesCoordinador.html"){
+    redirectTo = "../html/Coordinacion.html"
+  }
 
-  if(currentPath === "/src/html/EstuFiltradosMatriculados.html"){
+
+  if(currentPath === "/src/html/EstuFiltradosMatriculados.html" && subrol ==="COORDINADOR"){
+    redirectTo="../html/Coordinacion.html"
+  }
+  if(currentPath === "/src/html/EstuFiltradosMatriculados.html" && subrol ==="JEFE DEPARTAMENTO"){
     redirectTo="../html/Jefatura.html"
   }
 
@@ -81,8 +96,7 @@ export default function Navbar() {
         title="Regresar"
       >
        {currentPath !== "/src/html/Administracion.html" &&
-      currentPath !== "/src/html/Jefatura.html" &&
-      currentPath !== "/src/html/Coordinacion.html" && (
+ (
         <a href={redirectTo} style={{ color: "white" }} className="flex items-center">
           <h1 className="text-5xl cursor-pointer">
             <TiArrowBackOutline />
