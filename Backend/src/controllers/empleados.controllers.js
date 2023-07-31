@@ -1,4 +1,5 @@
-import { getConnection, sql, queries } from "../Database"
+import { Connection } from "tedious";
+import { getConnection, sql, queries, queryDocente } from "../Database"
 import { generateUniqueEmail, generateRandomPassword, enviarEmail } from "./creacioncorreo.controllers";
 
 
@@ -125,4 +126,37 @@ export const actualizarDocente = async (req, res) => {
         res.status(500);
         res.send(error.message);
     }
+}
+
+export const clasesAsignadas = async (req, res) => {
+    const {NumEmpleado, Sistema} = req.body;
+    const pool = await getConnection();
+    try {
+        const PeriodoAcademico = await pool.request().input('Sistema', sql.VarChar, Sistema).query(`select PeriodoAcademico from planificacion_academica where GETDATE() BETWEEN FechaInicio and FechaFinal and Sistema = '${Sistema}'`);
+        const Periodo = PeriodoAcademico.recordset[0].PeriodoAcademico;
+        
+        const result = await pool.request()
+            .input('NumEmpleado', sql.VarChar, NumEmpleado)
+            .input('Periodo', sql.VarChar, Periodo)
+            .query(queryDocente.getClasesAsignadas);
+        res.status(200).json(result.recordset);
+    } catch (error) {
+        
+    res.status(500).send(error.message);
+}
+}
+
+
+export const mostrarPerfilSeccion = async (req, res) => {
+    const {IdSeccion} = req.body;
+    const pool = await getConnection();
+    try {
+        const result = await pool.request()
+            .input('IdSeccion', sql.VarChar, IdSeccion)
+            .query(queryDocente.getPerfilSeccion);
+        res.status(200).json(result.recordset[0]);
+    } catch (error) {
+        
+    res.status(500).send(error.message);
+}
 }
