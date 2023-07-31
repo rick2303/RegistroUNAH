@@ -2,7 +2,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from "react";
 import "styled-components";
-import { format, parseISO, set } from "date-fns";
 
 const MenuCambioCentroCoordi = () => {
     const [NumCuenta, setNumCuenta] = useState("");
@@ -11,73 +10,41 @@ const MenuCambioCentroCoordi = () => {
     const fechaActual = new Date();
     const año = fechaActual.getFullYear();
     const [centroRegional, setCentroRegional] = useState("");
-    
+    const [carrera, setCarreraUsuario] = useState("");
+
+    const showData = async () => {
+        //OBTENER LOS PERIFLES DE LOS ESTUDIANTES
+    try {
+        const URL = "http://localhost:5000/CambioCentroCoordi";
+        const response = await fetch(URL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify({CentroRegional:centroRegional, Carrera:carrera}),
+            
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                setUsers(data);
+        });
+    } catch (error) {
+        console.error("Error al obtener los datos:", error);
+    }
+    };
+
     useEffect(() => {
         const storedData = localStorage.getItem("userData");
         if (storedData) {
             const userData = JSON.parse(storedData);
             const CentroRegional = userData.data.CentroRegional;
+            const Carrera = userData.data.Carrera
+            setCarreraUsuario(Carrera)
             setCentroRegional(CentroRegional);
         }
         showData();
-    }, []);
+    }, [centroRegional,carrera]);
     
-    const obtenerFechasMinMaxIPAC = async () => {
-    try {
-        const response = await fetch(
-        "http://localhost:5000/enviarPlanificacionIPAC"
-        );
-        const data = await response.json();
-        const fechamin = parseISO(data[0].FechaInicio);
-        const fechamax = parseISO(data[0].FechaFinal);
-    
-        if (fechaActual >= fechamin && fechaActual <= fechamax) {
-        setPeriodoAcademicoActualPAC("1PAC");
-        }
-    } catch (error) {
-        console.error("Error al obtener las fechas mínima y máxima:", error);
-    }
-    };
-    
-    const obtenerFechasMinMaxIIPAC = async () => {
-    try {
-        const response = await fetch(
-        "http://localhost:5000/enviarPlanificacionIIPAC"
-        );
-        const data = await response.json();
-        const fechamin = parseISO(data[0].FechaInicio);
-        const fechamax = parseISO(data[0].FechaFinal);
-    
-        if (fechaActual >= fechamin && fechaActual <= fechamax) {
-        setPeriodoAcademicoActualPAC("2PAC");
-        }
-    } catch (error) {
-        console.error("Error al obtener las fechas mínima y máxima:", error);
-    }
-    };
-    
-    const obtenerFechasMinMaxIIIPAC = async () => {
-    try {
-        const response = await fetch(
-        "http://localhost:5000/enviarPlanificacionIIIPAC"
-        );
-        const data = await response.json();
-        const fechamin = parseISO(data[0].FechaInicio);
-        const fechamax = parseISO(data[0].FechaFinal);
-    
-        if (fechaActual >= fechamin && fechaActual <= fechamax) {
-        setPeriodoAcademicoActualPAC("3PAC");
-        }
-    } catch (error) {
-        console.error("Error al obtener las fechas mínima y máxima:", error);
-    }
-    };
-    
-    obtenerFechasMinMaxIPAC();
-    obtenerFechasMinMaxIIPAC();
-    obtenerFechasMinMaxIIIPAC();
-
-
     const descargarJustificacion = async (cuenta) => {
         const URL = `http://localhost:5000/descargarPDFCambioCarrera/${cuenta}`;
         const response = await fetch(URL, {
@@ -98,40 +65,36 @@ const MenuCambioCentroCoordi = () => {
       
         window.URL.revokeObjectURL(url);
       };
-    
-      
-  const DescargarPdf = () => {
-    descargarJustificacion();
-  };
-    
-    
-    const showData = async () => {
-        //OBTENER LOS PERIFLES DE LOS ESTUDIANTES
-    try {
-        const URL = "http://localhost:5000/CambioCentroCoordi";
-        const response = await fetch(URL, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            },
-            body: JSON.stringify({CentroRegional:"VS"}),
-            
-        })
-            .then((res) => res.json())
-            .then((data) => {
-              
-                setUsers(data);
-                console.log(data)
-        });
-    } catch (error) {
-        console.error("Error al obtener los datos:", error);
-    }
-    };
 
-    const handleSubmit = (event) => {
-    event.preventDefault(); // Evitar la recarga de la página al enviar el formulario
-    };
-   
+      const Dictamen = (cuenta, dictamen) => {
+        const URL = `http://localhost:5000/DictamenCambioCentro/${cuenta}`;
+        fetch(URL, {
+          method: "PUT",
+          
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ Dictamen: dictamen }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Algo crashea");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            alert(JSON.stringify(data.message));
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.error("Error al hacer la solicitud:", error);
+          });
+          showData(); 
+      };
+
+    
+
+
     
     function CarruselUsuarios({ users }) {
         const [activeIndex, setActiveIndex] = useState(0);
@@ -155,6 +118,17 @@ const MenuCambioCentroCoordi = () => {
             key={index}
             className={index === activeIndex ? "carousel-item active" : "carousel-item"}
             >
+                    <img
+            src={"../img/uploads/" + user.Imagen1}
+            alt="No tiene imagen de perfil"
+            style={{
+            width: "100px",
+            height: "100px",
+            borderRadius: "20%",
+            objectFit: "cover",
+            margin: "auto",
+            }}
+        />
             <ul>
                 <li>
                 <p className="text-xl font-normal p-3 sm:text-1xl text-center">
@@ -171,12 +145,17 @@ const MenuCambioCentroCoordi = () => {
                     Indice Global: {user.IndiceGlobal}
                 </p>
                 </li>
+                <li>
+                <p className="pb-1 text-center">
+                    Centro regional actual: {user.CentroActual}
+                </p>
+                </li>
             </ul>
     
             <div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <a 
-                    onClick={()=>DescargarPdf(user.NumCuenta)}
+                    onClick={()=>descargarJustificacion(user.NumCuenta)}
                     style={{
                     marginRight: "10px",
                     backgroundColor: "#ffba42",
@@ -194,7 +173,7 @@ const MenuCambioCentroCoordi = () => {
     
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     <a 
-                   
+                   onClick={()=>Dictamen(user.NumCuenta,'RECHAZADO')}
                     style={{ 
                     backgroundColor: "#eb5656",
                     borderRadius: "10%",
@@ -209,6 +188,7 @@ const MenuCambioCentroCoordi = () => {
                 <a 
                     
                     type="button"
+                    onClick={()=>Dictamen(user.NumCuenta,'APROBADO')}
                     style={{ 
                         marginLeft: "10px",
                         backgroundColor: "#69c825",
@@ -265,4 +245,4 @@ const MenuCambioCentroCoordi = () => {
     );
     };
 
-export default MenuCambioCentroCoordi;
+    export default MenuCambioCentroCoordi;
