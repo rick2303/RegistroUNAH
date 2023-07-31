@@ -45,9 +45,8 @@ try {
         .then((data) => {
             setUsers(data);
             setNumeroSolicitud(data[0].IdSolicitud);
-            console.log("la soli es: ",data.IdSolicitud)
-            SetCarreraCambioEstudiante(data.CarreraDeCambio);
-            console.log("CAMBIO DE CARRERA DEL ESTUDIANTE:", data.CarreraDeCambio);
+            SetCarreraCambioEstudiante(data[0].CarreraDeCambio);
+            console.log("CAMBIO DE CARRERA DEL ESTUDIANTE:", data[0].CarreraDeCambio);
             console.log(data);
     });
 } catch (error) {
@@ -332,4 +331,4 @@ return (
     </div>
 );
 };
-export default MenuCambioCarreraCoordi
+export default MenuCambioCarreraCoordi;
