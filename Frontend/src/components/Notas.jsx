@@ -154,43 +154,70 @@ const Notas = () => {
   ];
   const mostrarInformacion = (row) => {
     setSelectedRow(row);
-    console.log(row);
+    console.log(JSON.stringify({ IdSeccion: String(row.IDSECCION) })
+    );
     toggleModal();
     //Aqui debe ir el fetch para obtener la información del docente
- 
-    const storedData = localStorage.getItem("userData");
-    if (storedData) {
-      const userData = JSON.parse(storedData);
-      
-      const nombre = userData.data.Nombre + " " + userData.data.Apellido;
-      setNombre(nombre);
-      const centroRegional = userData.data.CentroRegional;
-      setCentroRegional(centroRegional);
-      const correoInstitucional = userData.data.CorreoInstitucional;
-      setCorreoInstitucional(correoInstitucional);
-      const correoPersonal = userData.data.CorreoPersonal;
-      setCorreoPersonal(correoPersonal);
-      const carrera = userData.data.Carrera;
-      setCarrera(carrera);
-      const descripcion = userData.perfil.Descripcion;
-      setDescripcion(descripcion);
-     
-      
-      if(!userData.perfil ){
-        const imagen = '../1688323336413-804346209-64572.png';
-        setImagen(imagen);
-        const video = '../Video docente.mp4';
-        setVideo(video);
-      }else{
-        const imagen = userData.perfil.Imagen1;
-        setImagen(imagen);
-        const video = userData.perfil.Video;
-        setVideo(video);
-      }
-    }
+    fetch(`http://localhost:5000/mostrarPerfilDocente`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ IdSeccion: String(row.IDSECCION) }),	
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Respuesta del servidor:", data);
+        if (data) {
+          const userData = data;
+          console.log(userData);
+          console.log(userData.nombre);
+          const nombre = userData.nombre + " " + userData.apellido;
+          setNombre(nombre);
+          const centroRegional = userData.centroregional;
+          setCentroRegional(centroRegional);
+          const correoInstitucional = userData.correoinstitucional;
+          setCorreoInstitucional(correoInstitucional);
+          const correoPersonal = userData.correopersonal;
+          setCorreoPersonal(correoPersonal);
+          const carrera = userData.carrera;
+          setCarrera(carrera);
+          const descripcion = userData.descripcion;
+          setDescripcion(descripcion);
+         
+          
+          if(!userData.imagen1 || !userData.video ){
+            const imagen = '../1688323336413-804346209-64572.png';
+            setImagen(imagen);
+            const video = '../Video docente.mp4';
+            setVideo(video);
+          }else{
+            const imagen = userData.imagen1;
+            setImagen(imagen);
+            const video = userData.video;
+            setVideo(video);
+          }
+        }
+      })
+      .catch((error) => {
+        console.error("Error al obtener los datos:", error);
+      });
+    /* const storedData = localStorage.getItem("userData"); */
+    
   };
   const toggleModal = () => {
     setModalOpen(!modalOpen);
+    setNombre("");
+    setCentroRegional("");
+    setCorreoInstitucional("");
+    setCorreoPersonal("");
+    setCarrera("");
+    setDescripcion("");
+    const imagen = '../1688323336413-804346209-64572.png';
+    setImagen(imagen);
+    const video = '../Video docente.mp4';
+    setVideo(video);
+
   };
 
   const NoDataComponent = () => {
