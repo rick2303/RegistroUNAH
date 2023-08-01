@@ -91,7 +91,9 @@ export const querys = {
     getIPACPlanificacionSemestral: "select * from [dbo].[planificacion_academica] where PeriodoAcademico = '1PAC' AND Sistema='Semestral'",
     getIIPACPlanificacionSemestral: "select * from [dbo].[planificacion_academica] where PeriodoAcademico = '2PAC' AND Sistema='Semestral'",
     
-    getClasesCursando: "select cs.IdClase as CODIGO, cs.Nombre as ASIGNATURA, cs.uv as UV, s.seccion AS SECCION,s.Edificio AS EDIFICIO,s.Aula AS AULA,s.HI AS HORA_INICIO,s.HF AS HORA_FINAL,s.obs AS OBS, year(re.Fecha) AS Año, Periodo AS PERIODO from registro_estudiante_clases re INNER JOIN estudiantes e on IdEstudiante = NumCuenta INNER join secciones s on re.IdSeccion = s.IdSeccion INNER join clases cs on cs.IdClase = s.IdClase where e.numCuenta=@NumCuenta and Periodo = @Periodo and year(re.Fecha) = @año",
+     getClasesCursando: "select s.IdSeccion as IDSECCION, cs.IdClase as CODIGO, cs.Nombre as ASIGNATURA, cs.uv as UV, s.seccion AS SECCION,s.Edificio AS EDIFICIO,s.Aula AS AULA,s.HI AS HORA_INICIO,s.HF AS HORA_FINAL,s.obs AS OBS, year(re.Fecha) AS Año, Periodo AS PERIODO, s.Dias from registro_estudiante_clases re INNER JOIN estudiantes e on IdEstudiante = NumCuenta INNER join secciones s on re.IdSeccion = s.IdSeccion INNER join clases cs on cs.IdClase = s.IdClase where e.numCuenta=@NumCuenta and Periodo = @Periodo and year(re.Fecha) = @año and EstadoMatricula='MATRICULADO'",
+
+    getClasesEnListaDeEspera: "select  cs.IdClase as CODIGO, cs.Nombre as ASIGNATURA, cs.uv as UV, s.seccion AS SECCION,s.Edificio AS EDIFICIO,s.Aula AS AULA,s.HI AS HORA_INICIO,s.HF AS HORA_FINAL,s.obs AS OBS, year(re.Fecha) AS Año, Periodo AS PERIODO, s.Dias from registro_estudiante_clases re INNER JOIN estudiantes e on IdEstudiante = NumCuenta INNER join secciones s on re.IdSeccion = s.IdSeccion INNER join clases cs on cs.IdClase = s.IdClase where e.numCuenta=@NumCuenta and Periodo = @Periodo and year(re.Fecha) = @año and EstadoMatricula='EN ESPERA'",
 
     insertPDF: "update [dbo].[registro_cancelaciones_excepcionales] set Documento=@pdfPath where NumCuenta=@Id",
     insertSoliCancel: "Insert into [dbo].[registro_cancelaciones_excepcionales] (IdClase, Asignatura, UV, Seccion, Año, Periodo, Estado, Descripcion, NumCuenta) values(@idClase, @asignatura, @uv,  @seccion,@año, @periodo, @estado, @descripcion, @Id)",
@@ -145,3 +147,11 @@ export const queryEstudiante= {
     getExistenciaSolicitudReposicion: 'select * from solicitudes_pagoreposicion where NumCuenta = @NumCuenta and Periodo = @Periodo and year(FechaSolicitud) = year(GETDATE())',
 }
 
+export const queryDocente = {
+    getClasesAsignadas: `select 
+    c.IdClase, c.Nombre, Seccion, HI, HF, IdDocente, Dias, Periodo, year(Fecha) Año
+    from secciones s inner join clases c on c.IdClase = s.IdClase 
+    where cast(IdDocente as varchar) = @NumEmpleado AND periodo = @Periodo`,
+    getPerfilSeccion: `select s.idseccion, e.numempleado, e.nombre, e.apellido, numerotelefono, e.correoinstitucional, e.centroregional, e.carrera, e.correopersonal, pe.imagen1, pe.video, pe.descripcion from secciones s inner join empleados e on e.NumEmpleado = s.IdDocente inner join perfil_empleados pe on pe.idperfil = s.iddocente 
+    where s.idseccion = @IdSeccion`
+}

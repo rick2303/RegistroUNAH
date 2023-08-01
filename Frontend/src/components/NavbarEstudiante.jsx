@@ -58,6 +58,9 @@ export default function NavbarEstudiante() {
   if (currentPath === "/src/html/PagoReposicion.html") {
     redirectTo = "../html/Solicitudes.html";
   }
+  if (currentPath === "/src/html/NotasActuales.html") {
+    redirectTo = "../html/Estudiante.html";
+  }
 
 
   console.log(currentPath);

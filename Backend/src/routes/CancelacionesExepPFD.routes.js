@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import multer from 'multer';
 import path from 'path';
-import { insertPdfEstudiante, insertSolicitudCancel, enviarSoliCancelion, enviarSoliCancelCoordi, downloadPdfCancelacion, enviarSoliCancelCount, enviarClasesdeSolicitudes, DictamenSolicitud, EliminarClaseExep} from '../controllers/estudiantePerfil.controllers';
+import { insertPdfEstudiante, insertSolicitudCancel, enviarSoliCancelion, enviarSoliCancelCoordi, downloadPdfCancelacion, enviarSoliCancelCount, enviarClasesdeSolicitudes, DictamenSolicitud, EliminarClaseExep, EliminarClaseMatriculada} from '../controllers/estudiantePerfil.controllers';
 import router from './usuarios.routes';
 import { ro } from 'date-fns/locale';
 
@@ -41,5 +41,6 @@ routerCancelacionesExep.put('/dictamenSolicitudEnviar', DictamenSolicitud);
 
 routerCancelacionesExep.delete('/eliminarClase', EliminarClaseExep);
 
+routerCancelacionesExep.delete('/eliminarClaseMatriculada', EliminarClaseMatriculada);
 
 export default routerCancelacionesExep;
