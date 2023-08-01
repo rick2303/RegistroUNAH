@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "styled-components";
 
 const MenuPagoReposicion = () => {
@@ -7,25 +7,28 @@ const MenuPagoReposicion = () => {
   const [Sistema, setsistema] = useState("");
   const [inputValue, setInputValue] = useState("");
 
-  const enviarSolicitud = async () => {
+  useEffect(() => {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      const userData = JSON.parse(storedData);
+      const numCuenta = userData.data.NumCuenta;
+      const sistema = userData.data.Sistema;
+      setNumCuenta(numCuenta);
+      setsistema(sistema);
+      console.log(sistema);
+    }
+  }, []);
+
+const enviarSolicitud = async () => {
     const motivo = document.getElementById("solicitud").value;
     console.log(motivo);
 
-    useEffect(() => {
-      const storedData = localStorage.getItem("userData");
-      if (storedData) {
-        const userData = JSON.parse(storedData);
-        const numCuenta = userData.data.NumCuenta;
-        const sistema = userData.data.Sistema;
-        setNumCuenta(numCuenta);
-        setsistema(sistema);
-      }
-    }, [NumCuenta]);
+
   
     // Enviar solicitud al backend
     fetch("http://localhost:5000/subirSolicitud", {
       method: "POST",
-      body: JSON.stringify({NumCuenta:NumCuenta,Justificacion:motivo, Sistema: Sistema}),
+      body: JSON.stringify({NumCuenta:NumCuenta,Justificacion:inputValue, Sistema: Sistema}),
       headers: {
         "Content-Type": "application/json",
       },
