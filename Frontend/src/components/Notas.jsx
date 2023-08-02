@@ -1,12 +1,11 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
-import { FcFinePrint } from "react-icons/fc";
-import { Input, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-import "../Perfil_estudiante.css";
-
+import { FcFinePrint} from "react-icons/fc";
+import {Modal, ModalHeader, ModalBody } from "reactstrap";
+import ModalEvaluarDocentes from "./ModalEvaluarDocentes";
 import "styled-components";
-import { format, parseISO, set } from "date-fns";
+import {parseISO} from "date-fns";
 import "../App.css";
 const Notas = () => {
   const [NumCuenta, setNumCuenta] = useState("");
@@ -132,8 +131,12 @@ const Notas = () => {
     },
     
     {
-      name: "EVALUACIÓN DOCENTE",
-      selector: (row) => row.OBS,
+      name: "EVALUAR DOCENTES",
+      cell: (row) => (
+        <h1 className="cursor-pointer" onClick={() => ModalEvaluarDocentes(row)}>
+          <ModalEvaluarDocentes></ModalEvaluarDocentes>
+        </h1>
+      ),
       center: true,
     },
     {
@@ -152,12 +155,14 @@ const Notas = () => {
       center: true,
     },
   ];
+
   const mostrarInformacion = (row) => {
     setSelectedRow(row);
     console.log(row);
     toggleModal();
+  
     //Aqui debe ir el fetch para obtener la información del docente
- 
+    
     const storedData = localStorage.getItem("userData");
     if (storedData) {
       const userData = JSON.parse(storedData);
@@ -192,6 +197,9 @@ const Notas = () => {
   const toggleModal = () => {
     setModalOpen(!modalOpen);
   };
+
+  
+  
 
   const NoDataComponent = () => {
     return <div>No hay registros para mostrar</div>;
@@ -351,7 +359,6 @@ const Notas = () => {
           </ModalBody>
         </Modal>
       )}
-
     </div>
   );
 };
