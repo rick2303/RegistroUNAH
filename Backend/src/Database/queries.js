@@ -152,6 +152,6 @@ export const queryDocente = {
     c.IdClase, c.Nombre, Seccion, HI, HF, IdDocente, Dias, Periodo, year(Fecha) Año
     from secciones s inner join clases c on c.IdClase = s.IdClase 
     where cast(IdDocente as varchar) = @NumEmpleado AND periodo = @Periodo`,
-    getPerfilSeccion: `select s.idseccion, e.numempleado, e.nombre, e.apellido, numerotelefono, e.correoinstitucional, e.centroregional, e.carrera, e.correopersonal, pe.imagen1, pe.video, pe.descripcion from secciones s inner join empleados e on e.NumEmpleado = s.IdDocente inner join perfil_empleados pe on pe.idperfil = s.iddocente 
+    getPerfilSeccion: `select s.idseccion, e.numempleado, e.nombre, e.apellido, numerotelefono, e.correoinstitucional, e.centroregional, e.carrera, e.correopersonal, pe.imagen1, pe.video, pe.descripcion from secciones s inner join empleados e on e.NumEmpleado = s.IdDocente left join perfil_empleados pe on pe.idperfil = s.iddocente 
     where s.idseccion = @IdSeccion`
 }
