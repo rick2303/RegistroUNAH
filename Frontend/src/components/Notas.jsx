@@ -165,7 +165,7 @@ const Notas = () => {
       },
       body: JSON.stringify({ IdSeccion: String(row.IDSECCION) }),	
     })
-      .then((response) => response.json())
+    .then((response) => response.json())
       .then((data) => {
         console.log("Respuesta del servidor:", data);
         if (data) {
