@@ -161,10 +161,11 @@ export const queryDocente = {
 
 export const queryJefe = {
     getEvaluaciones: `select
-    s.idseccion, s.periodo, s.iddocente, e.nombre, e.apellido, e.correoinstitucional,    ed.IdEstudiante, ed.pregunta1, ed.pregunta2, ed.pregunta3, ed.pregunta4, ed.pregunta5, ed.observacion
+    s.idseccion, c.nombre 'Asignatura', s.Periodo, s.IdDocente, e.Nombre, e.Apellido, e.CorreoInstitucional,    ed.IdEstudiante, ed.Pregunta1, ed.Pregunta2, ed.Pregunta3, ed.Pregunta4, ed.Pregunta5, ed.Observacion
     from evaluaciones_docentes ed
         inner join empleados e on ed.iddocente = e.numempleado
         inner join secciones s on s.idseccion = ed.idseccion
         inner join clases c on c.idclase = s.idclase
-    where s.iddocente = @IdDocente and s.periodo = @Periodo`
+    where s.iddocente = @IdDocente and s.periodo = @Periodo`,
+    getDocenteDepartamento: `select NumEmpleado, DNI, Nombre, Apellido, NumeroTelefono, CorreoInstitucional, Carrera, Sistema from empleados where rol = 'Docente' and carrera = @Carrera and centroregional = @CentroRegional`
 }

@@ -178,3 +178,18 @@ export const mostrarEvaluacionesDocentes = async (req, res) => {
     res.status(500).send(error.message);
 }
 }
+
+export const mostrarDocentePorDepartamento = async (req, res) => {
+    const {Carrera, CentroRegional} = req.body;
+    const pool = await getConnection();
+    try {
+        const result = await pool.request()
+            .input('Carrera', sql.VarChar, Carrera)
+            .input('CentroRegional', sql.VarChar, CentroRegional)
+            .query(queryJefe.getDocenteDepartamento);
+        res.status(200).json(result.recordset);
+    } catch (error) {
+        
+    res.status(500).send(error.message);
+}
+}
