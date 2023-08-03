@@ -1,5 +1,5 @@
 import { Connection } from "tedious";
-import { getConnection, sql, queries, queryDocente } from "../Database"
+import { getConnection, sql, queries, queryDocente, queryJefe } from "../Database"
 import { generateUniqueEmail, generateRandomPassword, enviarEmail } from "./creacioncorreo.controllers";
 
 
@@ -155,6 +155,24 @@ export const mostrarPerfilSeccion = async (req, res) => {
             .input('IdSeccion', sql.VarChar, IdSeccion)
             .query(queryDocente.getPerfilSeccion);
         res.status(200).json(result.recordset[0]);
+    } catch (error) {
+        
+    res.status(500).send(error.message);
+}
+}
+
+
+export const mostrarEvaluacionesDocentes = async (req, res) => {
+    const {IdDocente, Sistema} = req.body;
+    const pool = await getConnection();
+    try {
+        /*const PeriodoAcademico = await pool.request().input('Sistema', sql.VarChar, Sistema).query(`select PeriodoAcademico from planificacion_academica where GETDATE() BETWEEN FechaInicio and FechaFinal and Sistema = '${Sistema}'`); */
+        const Periodo = '2PAC' // PeriodoAcademico.recordset[0].PeriodoAcademico;
+        const result = await pool.request()
+            .input('IdDocente', sql.Int, IdDocente)
+            .input('Periodo', sql.VarChar, Periodo)
+            .query(queryJefe.getEvaluaciones);
+        res.status(200).json(result.recordset);
     } catch (error) {
         
     res.status(500).send(error.message);

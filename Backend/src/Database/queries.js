@@ -166,5 +166,5 @@ export const queryJefe = {
         inner join empleados e on ed.iddocente = e.numempleado
         inner join secciones s on s.idseccion = ed.idseccion
         inner join clases c on c.idclase = s.idclase
-    where e.carrera = 'Ingenieria industrial' and s.periodo = '2PAC'`
+    where s.iddocente = @IdDocente and s.periodo = @Periodo`
 }
