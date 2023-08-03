@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { FcFinePrint } from "react-icons/fc";
-import { FaUserEdit } from "react-icons/fa";
+import { FcAbout } from "react-icons/fc";
 import { Input, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { format, parseISO } from "date-fns";
 import "../App.css";
@@ -52,8 +52,7 @@ const EvaluacionDocenteJefe = () => {
     setCarrera(carrera);
     const centroRegional = userData.data.CentroRegional;
     setCentroRegional(centroRegional);
-    console.log(JSON.stringify({ Carrera: carrera, CentroRegional: centroRegional }));
-    console.log(JSON.stringify({ Carrera: "Ingenieria en Sistemas", CentroRegional: "CU" }));
+
   
     // Guarda los valores de carrera y centroRegional en variables locales
     const carreraActual = carrera;
@@ -68,7 +67,21 @@ const EvaluacionDocenteJefe = () => {
     // Fetch data whenever the inputValue changes
     if (inputValue.trim() === "") {
       // Si el inputValue está vacío, llamamos a fetchData con los valores actuales de carrera y centroRegional
-      fetchDataGeneral(carrera, centroRegional);
+      const storedData = localStorage.getItem("userData");
+      const userData = JSON.parse(storedData);
+      console.log(userData);
+      const carrera = userData.data.Carrera;
+      setCarrera(carrera);
+      const centroRegional = userData.data.CentroRegional;
+      setCentroRegional(centroRegional);
+  
+    
+      // Guarda los valores de carrera y centroRegional en variables locales
+      const carreraActual = carrera;
+      const centroRegionalActual = centroRegional;
+    
+      // Llama a la función fetchData para obtener los datos usando las variables locales
+      fetchDataGeneral(carreraActual, centroRegionalActual);
     } else {
       // Si el inputValue no está vacío, llamamos a fetchData con el inputValue
       fetchData();
@@ -109,7 +122,7 @@ const EvaluacionDocenteJefe = () => {
       name: "Editar",
       cell: (row) => (
         <h1 className="cursor-pointer" onClick={() => editarInformacion(row)}>
-          <FaUserEdit style={{ color: "#1e40af "}} />
+          <FcAbout style={{ color: "#1e40af "}} />
         </h1>
       ),
     },

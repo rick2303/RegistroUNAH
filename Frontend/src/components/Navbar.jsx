@@ -68,6 +68,9 @@ export default function Navbar() {
   if(currentPath === "/src/html/EstuFiltradosMatriculados.html" && subrol ==="JEFE DEPARTAMENTO"){
     redirectTo="../html/Jefatura.html"
   }
+  if(currentPath === "/src/html/EvaluacionDocenteJefe.html" && subrol ==="JEFE DEPARTAMENTO"){
+    redirectTo="../html/Jefatura.html"
+  }
 
   if((currentPath === "/src/html/EstudiantesMatriculados.html" && subrol==="COORDINADOR")||(currentPath==="/src/html/HistorialAdmin.html" && subrol==="COORDINADOR")){
     redirectTo="../html/Coordinacion.html"
