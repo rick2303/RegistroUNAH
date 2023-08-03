@@ -156,6 +156,9 @@ export const queryEstudiante= {
     getState: 'select * from estudiantes_pagos where NumCuenta = @numCuenta',
     postSolicitudReposicion: 'insert into solicitudes_pagoreposicion (NumCuenta, Justificacion, FechaSolicitud, Periodo) values (@NumCuenta, @Justificacion, GETDATE(), @Periodo)',
     getExistenciaSolicitudReposicion: 'select * from solicitudes_pagoreposicion where NumCuenta = @NumCuenta and Periodo = @Periodo and year(FechaSolicitud) = year(GETDATE())',
+    insertEvaluaciones: ` insert into evaluaciones_docentes (idseccion, FechaEvaluacion, iddocente, IdEstudiante, pregunta1, pregunta2, pregunta3, pregunta4, pregunta5, Observacion) values (
+        @IdSeccion, getdate(), @IdDocente, @IdEstudiante, @Pregunta1, @Pregunta2, @Pregunta3, @Pregunta4, @Pregunta5, @Observacion
+    )`
 }
 
 export const queryDocente = {
@@ -164,5 +167,16 @@ export const queryDocente = {
     from secciones s inner join clases c on c.IdClase = s.IdClase 
     where cast(IdDocente as varchar) = @NumEmpleado AND periodo = @Periodo`,
     getPerfilSeccion: `select s.idseccion, e.numempleado, e.nombre, e.apellido, numerotelefono, e.correoinstitucional, e.centroregional, e.carrera, e.correopersonal, pe.imagen1, pe.video, pe.descripcion from secciones s inner join empleados e on e.NumEmpleado = s.IdDocente left join perfil_empleados pe on pe.idperfil = s.iddocente 
-    where s.idseccion = @IdSeccion`
+    where s.idseccion = @IdSeccion`,
+}
+
+export const queryJefe = {
+    getEvaluaciones: `select
+    s.idseccion, c.nombre 'Asignatura', s.Periodo, s.IdDocente, e.Nombre, e.Apellido, e.CorreoInstitucional,    ed.IdEstudiante, ed.Pregunta1, ed.Pregunta2, ed.Pregunta3, ed.Pregunta4, ed.Pregunta5, ed.Observacion
+    from evaluaciones_docentes ed
+        inner join empleados e on ed.iddocente = e.numempleado
+        inner join secciones s on s.idseccion = ed.idseccion
+        inner join clases c on c.idclase = s.idclase
+    where s.iddocente = @IdDocente and s.periodo = @Periodo`,
+    getDocenteDepartamento: `select NumEmpleado, DNI, Nombre, Apellido, NumeroTelefono, CorreoInstitucional, Carrera, Sistema from empleados where rol = 'Docente' and carrera = @Carrera and centroregional = @CentroRegional`
 }
