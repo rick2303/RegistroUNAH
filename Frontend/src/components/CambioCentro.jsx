@@ -4,7 +4,7 @@ import DataTable from "react-data-table-component";
 import "styled-components";
 import { FcCancel, FcFinePrint } from "react-icons/fc";
 import { Input, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-import ModalCargarPDFCambioCentro from "./modalCargarPDFCancelaciones";
+import ModalCargarPDFCambioCentro from "./modalCargarPDFCambioCentro";
 
 const MenuCambioCentro = () => {
   const [NumCuenta, setNumCuenta] = useState("");

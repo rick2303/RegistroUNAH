@@ -50,11 +50,20 @@ Content-Type: application/json
 }
 
 ### ver clases que esta cursando un estudiante
-post http://localhost:5000/estadoCuenta
+post http://localhost:5000/subirEvaluacionDocente
 Content-Type: application/json
 
 {
-    "numCuenta": "20182001940"
+    "IdSeccion": "21",
+    "IdDocente": 15000,
+    "IdEstudiante":"20182001940",
+    "Pregunta1":5,
+    "Pregunta2":5,
+    "Pregunta3":2,
+    "Pregunta4":"SI",
+    "Pregunta5":"NO",
+    "Observacion":"Ninguna"
+
 }
 
 

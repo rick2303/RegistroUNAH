@@ -5,7 +5,7 @@ export const queries = {
     insert_Docentes: "INSERT INTO dbo.empleados (DNI, Nombre, Apellido, NumeroTelefono, CorreoInstitucional, CorreoPersonal, Contrasena,FechaNacimiento ,FechaContratacion, Carrera, Direccion, Foto, CentroRegional, Rol,SubRol) VALUES ( @DNI, @Nombre, @Apellido, @NumeroTelefono,@CorreoInstitucional, @CorreoPersonal, @Contrasena, @FechaNacimiento, @FechaContratacion, @Carrera, @Direccion, @Foto, @CentroRegional, @Rol , @SubRol )",
     accessLogin: "SELECT Contrasena, CAST(NumEmpleado AS varchar) AS Codigo, Rol, SubRol, estado FROM dbo.empleados WHERE CAST(NumEmpleado AS varchar) = @Id UNION ALL SELECT Contrasena, CAST(NumCuenta AS varchar) AS NumCuenta, NULL AS rol, NULL AS subrol, NULL as estado FROM dbo.estudiantes WHERE NumCuenta = @Id  ",
     updateEmpleado: "UPDATE dbo.empleados SET DNI = @DNI, Nombre = @Nombre, Apellido = @Apellido, NumeroTelefono = @NumeroTelefono, CorreoPersonal = @CorreoPersonal,  FechaNacimiento = @FechaNacimiento, Carrera = @Carrera, Direccion = @Direccion, CentroRegional = @CentroRegional, SubRol = @SubRol, Estado = @Estado where NumEmpleado = @NumEmpleado",
-    getEstudiantes: "SELECT Nombre, apellido, NumCuenta,CorreoInstitucional,CorreoPersonal,Carrera, IndiceGlobal from dbo.estudiantes WHERE NumCuenta= @Id",
+    getEstudiantes: "SELECT Nombre, apellido, NumCuenta,Sistema, CorreoInstitucional,CorreoPersonal,Carrera, IndiceGlobal from dbo.estudiantes WHERE NumCuenta= @Id",
     getEmpleado: "select CAST(NumEmpleado AS varchar) 'NumEmpleado', Nombre,Apellido,CorreoInstitucional,CorreoPersonal,Carrera,Foto,CentroRegional,Rol,Subrol from empleados WHERE CAST(NumEmpleado AS varchar) = @Id ",
     getPerfilEmpleado: "select * from perfil_empleados where CAST(idPerfil AS varchar) = @Id ",
     getPerfilestudiante: "select * from perfil_estudiante where IdPerfil= @Id ",
@@ -145,6 +145,9 @@ export const queryEstudiante= {
     getState: 'select * from estudiantes_pagos where NumCuenta = @numCuenta',
     postSolicitudReposicion: 'insert into solicitudes_pagoreposicion (NumCuenta, Justificacion, FechaSolicitud, Periodo) values (@NumCuenta, @Justificacion, GETDATE(), @Periodo)',
     getExistenciaSolicitudReposicion: 'select * from solicitudes_pagoreposicion where NumCuenta = @NumCuenta and Periodo = @Periodo and year(FechaSolicitud) = year(GETDATE())',
+    insertEvaluaciones: ` insert into evaluaciones_docentes (idseccion, FechaEvaluacion, iddocente, IdEstudiante, pregunta1, pregunta2, pregunta3, pregunta4, pregunta5, Observacion) values (
+        @IdSeccion, getdate(), @IdDocente, @IdEstudiante, @Pregunta1, @Pregunta2, @Pregunta3, @Pregunta4, @Pregunta5, @Observacion
+    )`
 }
 
 export const queryDocente = {
@@ -152,6 +155,16 @@ export const queryDocente = {
     c.IdClase, c.Nombre, Seccion, HI, HF, IdDocente, Dias, Periodo, year(Fecha) Año
     from secciones s inner join clases c on c.IdClase = s.IdClase 
     where cast(IdDocente as varchar) = @NumEmpleado AND periodo = @Periodo`,
-    getPerfilSeccion: `select s.idseccion, e.numempleado, e.nombre, e.apellido, numerotelefono, e.correoinstitucional, e.centroregional, e.carrera, e.correopersonal, pe.imagen1, pe.video, pe.descripcion from secciones s inner join empleados e on e.NumEmpleado = s.IdDocente inner join perfil_empleados pe on pe.idperfil = s.iddocente 
-    where s.idseccion = @IdSeccion`
+    getPerfilSeccion: `select s.idseccion, e.numempleado, e.nombre, e.apellido, numerotelefono, e.correoinstitucional, e.centroregional, e.carrera, e.correopersonal, pe.imagen1, pe.video, pe.descripcion from secciones s inner join empleados e on e.NumEmpleado = s.IdDocente left join perfil_empleados pe on pe.idperfil = s.iddocente 
+    where s.idseccion = @IdSeccion`,
+}
+
+export const queryJefe = {
+    getEvaluaciones: `select
+    s.idseccion, s.periodo, s.iddocente, e.nombre, e.apellido, e.correoinstitucional,    ed.IdEstudiante, ed.pregunta1, ed.pregunta2, ed.pregunta3, ed.pregunta4, ed.pregunta5, ed.observacion
+    from evaluaciones_docentes ed
+        inner join empleados e on ed.iddocente = e.numempleado
+        inner join secciones s on s.idseccion = ed.idseccion
+        inner join clases c on c.idclase = s.idclase
+    where e.carrera = 'Ingenieria industrial' and s.periodo = '2PAC'`
 }

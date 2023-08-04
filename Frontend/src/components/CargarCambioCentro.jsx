@@ -45,10 +45,10 @@ const handleSubmit = (event) => {
       .then((data) => {
         if(data.ok) {
         alert(JSON.stringify(data.message));
-        window.location.reload();
+        
         }else{
             alert(JSON.stringify(data.message));
-            window.location.reload();
+            
         }
       })
         .finally(() => {

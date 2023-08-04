@@ -1,25 +1,40 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "styled-components";
 
 const MenuPagoReposicion = () => {
+  const [NumCuenta, setNumCuenta] = useState("");
+  const [Sistema, setsistema] = useState("");
   const [inputValue, setInputValue] = useState("");
 
-  const enviarSolicitud = async () => {
+  useEffect(() => {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      const userData = JSON.parse(storedData);
+      const numCuenta = userData.data.NumCuenta;
+      const sistema = userData.data.Sistema;
+      setNumCuenta(numCuenta);
+      setsistema(sistema);
+      console.log(sistema);
+    }
+  }, []);
+
+const enviarSolicitud = async () => {
     const motivo = document.getElementById("solicitud").value;
     console.log(motivo);
 
     // Enviar solicitud al backend
     fetch("http://localhost:5000/subirSolicitud", {
       method: "POST",
-      body: JSON.stringify(motivo),
+      body: JSON.stringify({NumCuenta:NumCuenta,Justificacion:inputValue, Sistema: Sistema}),
       headers: {
         "Content-Type": "application/json",
       },
     })
       .then((res) => res.json())
       .then((data) => {
-        alert("Solicitud procesada exitosamente, ahora suba el archivo PDF");
+        alert("Solicitud procesada exitosamente");
+        window.location.reload();
       });
   };
 
