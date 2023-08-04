@@ -1,7 +1,7 @@
 import {Router} from 'express';
 const multer = require('multer');
 import path from 'path';
-import {getDocentes,registrarDocente,actualizarDocente,getCarreras, getDocenteById, clasesAsignadas, mostrarPerfilSeccion} from '../controllers/empleados.controllers';
+import {getDocentes,registrarDocente,actualizarDocente,getCarreras, getDocenteById, clasesAsignadas, mostrarPerfilSeccion, mostrarEvaluacionesDocentes, mostrarDocentePorDepartamento, subirNotaEstudiante} from '../controllers/empleados.controllers';
 
 const routerEmpleados = Router();
 
@@ -31,5 +31,11 @@ routerEmpleados.get('/carreras',getCarreras)
 routerEmpleados.post('/seccionesAsignadas', clasesAsignadas)
 
 routerEmpleados.post('/mostrarPerfilDocente', mostrarPerfilSeccion)
+
+routerEmpleados.post('/mostrarEvaluacionesDocente', mostrarEvaluacionesDocentes)
+
+routerEmpleados.post('/docentesDepartamento', mostrarDocentePorDepartamento )
+
+routerEmpleados.post('/subirNota', subirNotaEstudiante)
 
 export default routerEmpleados;

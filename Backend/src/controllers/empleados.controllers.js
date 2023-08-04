@@ -1,5 +1,5 @@
 import { Connection } from "tedious";
-import { getConnection, sql, queries, queryDocente } from "../Database"
+import { getConnection, sql, queries, queryDocente, queryJefe } from "../Database"
 import { generateUniqueEmail, generateRandomPassword, enviarEmail } from "./creacioncorreo.controllers";
 
 
@@ -159,4 +159,53 @@ export const mostrarPerfilSeccion = async (req, res) => {
         
     res.status(500).send(error.message);
 }
+}
+
+
+export const mostrarEvaluacionesDocentes = async (req, res) => {
+    const {IdDocente, Sistema} = req.body;
+    const pool = await getConnection();
+    try {
+        /*const PeriodoAcademico = await pool.request().input('Sistema', sql.VarChar, Sistema).query(`select PeriodoAcademico from planificacion_academica where GETDATE() BETWEEN FechaInicio and FechaFinal and Sistema = '${Sistema}'`); */
+        const Periodo = '2PAC' // PeriodoAcademico.recordset[0].PeriodoAcademico;
+        const result = await pool.request()
+            .input('IdDocente', sql.Int, IdDocente)
+            .input('Periodo', sql.VarChar, Periodo)
+            .query(queryJefe.getEvaluaciones);
+        res.status(200).json(result.recordset);
+    } catch (error) {
+        
+    res.status(500).send(error.message);
+}
+}
+
+export const mostrarDocentePorDepartamento = async (req, res) => {
+    const {Carrera, CentroRegional} = req.body;
+    const pool = await getConnection();
+    try {
+        const result = await pool.request()
+            .input('Carrera', sql.VarChar, Carrera)
+            .input('CentroRegional', sql.VarChar, CentroRegional)
+            .query(queryJefe.getDocenteDepartamento);
+        res.status(200).json(result.recordset);
+    } catch (error) {
+        
+    res.status(500).send(error.message);
+}
+}
+
+export const subirNotaEstudiante = async (req, res) => {
+    const {IdEstudiante, IdSeccion, Nota, EstadoClase} = req.body
+    const pool = await getConnection();
+    try{
+        const result = await pool.request()
+        .input("IdEstudiante",sql.VarChar, IdEstudiante)
+        .input("IdSeccion", sql.Int, IdSeccion)
+        .input("Nota",sql.Int, Nota)
+        .input("EstadoClase",sql.VarChar, EstadoClase)
+        .query(queryDocente.updateNotaEstudiante)
+        res.status(200).json({message: 'Exitoso'})
+    }catch(error){
+        res.status(500).send(error.message)
+    }
 }

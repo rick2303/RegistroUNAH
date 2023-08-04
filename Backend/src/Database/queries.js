@@ -6,7 +6,7 @@ export const queries = {
     accessLogin: "SELECT Contrasena, CAST(NumEmpleado AS varchar) AS Codigo, Rol, SubRol, estado FROM dbo.empleados WHERE CAST(NumEmpleado AS varchar) = @Id UNION ALL SELECT Contrasena, CAST(NumCuenta AS varchar) AS NumCuenta, NULL AS rol, NULL AS subrol, NULL as estado FROM dbo.estudiantes WHERE NumCuenta = @Id  ",
     updateEmpleado: "UPDATE dbo.empleados SET DNI = @DNI, Nombre = @Nombre, Apellido = @Apellido, NumeroTelefono = @NumeroTelefono, CorreoPersonal = @CorreoPersonal,  FechaNacimiento = @FechaNacimiento, Carrera = @Carrera, Direccion = @Direccion, CentroRegional = @CentroRegional, SubRol = @SubRol, Estado = @Estado where NumEmpleado = @NumEmpleado",
     getEstudiantes: "SELECT Nombre, apellido, NumCuenta,Sistema, CorreoInstitucional,CorreoPersonal,Carrera, IndiceGlobal from dbo.estudiantes WHERE NumCuenta= @Id",
-    getEmpleado: "select CAST(NumEmpleado AS varchar) 'NumEmpleado', Nombre,Apellido,CorreoInstitucional,CorreoPersonal,Carrera,Foto,CentroRegional,Rol,Subrol from empleados WHERE CAST(NumEmpleado AS varchar) = @Id ",
+    getEmpleado: "select CAST(NumEmpleado AS varchar) 'NumEmpleado', Nombre,Apellido,CorreoInstitucional,CorreoPersonal,Carrera,Foto,CentroRegional,Rol,Subrol, Sistema from empleados WHERE CAST(NumEmpleado AS varchar) = @Id ",
     getPerfilEmpleado: "select * from perfil_empleados where CAST(idPerfil AS varchar) = @Id ",
     getPerfilestudiante: "select * from perfil_estudiante where IdPerfil= @Id ",
 
@@ -63,6 +63,17 @@ export const queries = {
     UpdateDictamenCambioCentro:"update solicitud_cambiocentro set Dictamen=@Dictamen where NumCuenta=@NumCuenta AND Dictamen ='EN ESPERA'",
 
     UpdateCambioCentro:"update dbo.estudiantes set CentroRegional=@CentroRegional where NumCuenta=@NumCuenta",
+
+    CargaAcademica:`select sc.IdClase,cl.Nombre,Edificio,sc.Aula,sc.CantidadAlumnos,sc.HI,sc.HF,sc.Seccion,sc.IdDocente, sc.CentroRegional, concat(emp.Nombre,' ', emp.Apellido) as NombreDocente, sc.Dias
+    from secciones as sc
+    right join clases as cl on sc.IdClase=cl.IdClase
+    right join empleados as emp on sc.IdDocente=NumEmpleado 
+    where Departamento=@Departamento And sc.CentroRegional=@CentroRegional`,
+
+    PeriodoSeccionesCarga:`SELECT CONCAT(CAST(CAST(SUBSTRING(PeriodoAcademico, 1, CHARINDEX('PAC', PeriodoAcademico) - 1) AS INT) + 1 AS NVARCHAR(10)), 'PAC') AS NuevoPeriodoAcademico, year(FechaFinal) as Anio
+    FROM planificacion_academica
+    WHERE GETDATE() BETWEEN FechaInicio AND FechaFinal AND Sistema = @Sistema`
+
 
 }
 
@@ -157,14 +168,16 @@ export const queryDocente = {
     where cast(IdDocente as varchar) = @NumEmpleado AND periodo = @Periodo`,
     getPerfilSeccion: `select s.idseccion, e.numempleado, e.nombre, e.apellido, numerotelefono, e.correoinstitucional, e.centroregional, e.carrera, e.correopersonal, pe.imagen1, pe.video, pe.descripcion from secciones s inner join empleados e on e.NumEmpleado = s.IdDocente left join perfil_empleados pe on pe.idperfil = s.iddocente 
     where s.idseccion = @IdSeccion`,
+    updateNotaEstudiante: `update registro_estudiante_clases set Nota = round(@Nota, 0), EstadoClase = @EstadoClase where IdSeccion = @IdSeccion and IdEstudiante = @IdEstudiante `,
 }
 
 export const queryJefe = {
     getEvaluaciones: `select
-    s.idseccion, s.periodo, s.iddocente, e.nombre, e.apellido, e.correoinstitucional,    ed.IdEstudiante, ed.pregunta1, ed.pregunta2, ed.pregunta3, ed.pregunta4, ed.pregunta5, ed.observacion
+    s.idseccion, c.nombre 'Asignatura', s.Periodo, s.IdDocente, e.Nombre, e.Apellido, e.CorreoInstitucional,    ed.IdEstudiante, ed.Pregunta1, ed.Pregunta2, ed.Pregunta3, ed.Pregunta4, ed.Pregunta5, ed.Observacion
     from evaluaciones_docentes ed
         inner join empleados e on ed.iddocente = e.numempleado
         inner join secciones s on s.idseccion = ed.idseccion
         inner join clases c on c.idclase = s.idclase
-    where e.carrera = 'Ingenieria industrial' and s.periodo = '2PAC'`
+    where s.iddocente = @IdDocente and s.periodo = @Periodo`,
+    getDocenteDepartamento: `select NumEmpleado, DNI, Nombre, Apellido, NumeroTelefono, CorreoInstitucional, Carrera, Sistema from empleados where rol = 'Docente' and carrera = @Carrera and centroregional = @CentroRegional`
 }
