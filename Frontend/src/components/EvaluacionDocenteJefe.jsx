@@ -397,7 +397,7 @@ const EvaluacionDocenteJefe = () => {
       </div>
 
       {selectedRow && (
-        <Modal isOpen={modalOpen} toggle={toggleModal} className="modal-xl">
+        <Modal isOpen={modalOpen} toggle={toggleModal} className="modal-lg">
           <ModalHeader className="text-white bg-blue-800 text-2xl">
             <strong>Evaluación Docente</strong>
             <button className="close boton_cierre" onClick={toggleModal}>
@@ -488,8 +488,9 @@ const EvaluacionDocenteJefe = () => {
                       data-bs-slide="prev"
                       onClick={() => handleCarouselSlide((carouselIndex + observacionesPorClase[asignatura].length - 1) % observacionesPorClase[asignatura].length)}
                     >
+                      Anterior
                       <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                      <span className="visually-hidden">Previous</span>
+                      <span className="visually-hidden">Anterior</span>
                     </button>
                     <button
                       className="carousel-control-next"
@@ -498,8 +499,9 @@ const EvaluacionDocenteJefe = () => {
                       data-bs-slide="next"
                       onClick={() => handleCarouselSlide((carouselIndex + 1) % observacionesPorClase[asignatura].length)}
                     >
+                      Siguiente
                       <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                      <span className="visually-hidden">Next</span>
+                      <span className="visually-hidden">Siguiente</span>
                     </button>
                   </div>
                   {/* Fin Carrusel */}
