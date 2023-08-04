@@ -1,6 +1,7 @@
 export const queries = {
     get_Docentes: "SELECT Top 10 * from dbo.empleados where rol='Docente' ORDER BY NumEmpleado DESC",
     get_Docente_By_Id: "SELECT * from dbo.empleados where rol='Docente' and DNI = @DNI",
+    get_Docente_By_Id_Dep: "SELECT * from dbo.empleados where rol='Docente' and DNI = @DNI and Carrera = @Carrera and CentroRegional = @CentroRegional",
     getNumEmpleado: "SELECT numEmpleado from dbo.empleados where DNI = @dni",
     insert_Docentes: "INSERT INTO dbo.empleados (DNI, Nombre, Apellido, NumeroTelefono, CorreoInstitucional, CorreoPersonal, Contrasena,FechaNacimiento ,FechaContratacion, Carrera, Direccion, Foto, CentroRegional, Rol,SubRol) VALUES ( @DNI, @Nombre, @Apellido, @NumeroTelefono,@CorreoInstitucional, @CorreoPersonal, @Contrasena, @FechaNacimiento, @FechaContratacion, @Carrera, @Direccion, @Foto, @CentroRegional, @Rol , @SubRol )",
     accessLogin: "SELECT Contrasena, CAST(NumEmpleado AS varchar) AS Codigo, Rol, SubRol, estado FROM dbo.empleados WHERE CAST(NumEmpleado AS varchar) = @Id UNION ALL SELECT Contrasena, CAST(NumCuenta AS varchar) AS NumCuenta, NULL AS rol, NULL AS subrol, NULL as estado FROM dbo.estudiantes WHERE NumCuenta = @Id  ",
@@ -179,5 +180,15 @@ export const queryJefe = {
         inner join secciones s on s.idseccion = ed.idseccion
         inner join clases c on c.idclase = s.idclase
     where s.iddocente = @IdDocente and s.periodo = @Periodo`,
-    getDocenteDepartamento: `select NumEmpleado, DNI, Nombre, Apellido, NumeroTelefono, CorreoInstitucional, Carrera, Sistema from empleados where rol = 'Docente' and carrera = @Carrera and centroregional = @CentroRegional`
+    getDocenteDepartamento: `select NumEmpleado, DNI, Nombre, Apellido, NumeroTelefono, CorreoInstitucional, Carrera, Sistema from empleados where rol = 'Docente' and carrera = @Carrera and centroregional = @CentroRegional and Estado = 'ACTIVO'`,
+    getNotas: `select
+    c.IdClase, c.Nombre 'Asignatura', s.Seccion, s.Periodo,
+    es.NumCuenta, es.Nombre + ' ' + es.Apellido 'Estudiante', res.nota, res.EstadoClase, res.IdSeccion
+    from registro_estudiante_clases res
+    inner join secciones s on s.IdSeccion = res.IdSeccion
+    inner join clases c on c.IdClase = s.IdClase
+    inner join empleados e on s.IdDocente = e.NumEmpleado
+    inner join estudiantes es on es.NumCuenta = res.IdEstudiante
+    inner join planificacion_academica pa on pa.PeriodoAcademico = s.Periodo
+    where GETDATE() BETWEEN pa.FechaInicio and pa.FechaFinal and e.carrera = @Carrera and pa.Sistema = @Sistema and s.IdDocente = @IdDocente and s.IdSeccion = @IdSeccion`
 }
