@@ -193,3 +193,19 @@ export const mostrarDocentePorDepartamento = async (req, res) => {
     res.status(500).send(error.message);
 }
 }
+
+export const subirNotaEstudiante = async (req, res) => {
+    const {IdEstudiante, IdSeccion, Nota, EstadoClase} = req.body
+    const pool = await getConnection();
+    try{
+        const result = await pool.request()
+        .input("IdEstudiante",sql.VarChar, IdEstudiante)
+        .input("IdSeccion", sql.Int, IdSeccion)
+        .input("Nota",sql.Int, Nota)
+        .input("EstadoClase",sql.VarChar, EstadoClase)
+        .query(queryDocente.updateNotaEstudiante)
+        res.status(200).json({message: 'Exitoso'})
+    }catch(error){
+        res.status(500).send(error.message)
+    }
+}
