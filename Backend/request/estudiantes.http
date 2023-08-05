@@ -55,24 +55,24 @@ Content-Type: application/json
 
 {
     "IdSeccion": "21",
-    "IdDocente": 15000,
+    "IdDocente": 15198,
     "IdEstudiante":"20182001940",
     "Pregunta1":5,
     "Pregunta2":5,
     "Pregunta3":2,
     "Pregunta4":"SI",
     "Pregunta5":"NO",
-    "Observacion":"Ninguna"
+    "Observacion":"Ningunac"
 
 }
 
-
 ### ver clases que esta cursando un estudiante
-post http://localhost:5000/estadoCuenta
+post "http://localhost:5000/enviarClasesQueEstaCursando"
 Content-Type: application/json
 
 {
     "numCuenta": "20182001940"
+    
 }
 
 

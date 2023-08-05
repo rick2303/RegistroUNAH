@@ -5,6 +5,8 @@ import { FcInfo } from 'react-icons/fc';
 const ModalEvaluarDocentes = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [NumCuenta, setNumCuenta] = useState("");
+  const [IdSeccion,setIdSeccion] = useState("");
+  const [IdDocente,setIdDocente] = useState("");
   const [evaluationData, setEvaluationData] = useState({
     pregunta1: '',
     pregunta2: '',
@@ -12,10 +14,10 @@ const ModalEvaluarDocentes = () => {
     pregunta4: null,
     pregunta5: null,
     Observacion: '',
-    IdSeccion: '21', 
-    IdDocente: 15198  
+    IdSeccion: '', 
+    IdDocente: ''  
   });
-
+  console.log(Notas.IdDocente)
   useEffect(() => {
     const storedData = localStorage.getItem("userData");
     if (storedData) {
@@ -44,6 +46,7 @@ const ModalEvaluarDocentes = () => {
       return;
     }
 
+
     try {
       const response = await fetch('http://localhost:5000/subirEvaluacionDocente', {
         method: 'POST',
@@ -51,8 +54,8 @@ const ModalEvaluarDocentes = () => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          IdSeccion: evaluationData.IdSeccion,
-          IdDocente: evaluationData.IdDocente,
+          IdSeccion:Notas.IdSeccion,
+          IdDocente:Notas.IdDocente,
           IdEstudiante: NumCuenta,
           Pregunta1: evaluationData.pregunta1,
           Pregunta2: evaluationData.pregunta2,
@@ -77,6 +80,7 @@ const ModalEvaluarDocentes = () => {
     }
   };
 
+
   const PreguntasContestadas = () => {
     return (
       evaluationData.pregunta1 !== '' &&
@@ -96,9 +100,40 @@ const ModalEvaluarDocentes = () => {
       pregunta4: null,
       pregunta5: null,
       Observacion: '',
-      IdSeccion: '21',   
-      IdDocente: 15198   
+      IdSeccion: '',   
+      IdDocente: ''   
     });
+  };
+
+  const mostrarInformacion2 = (row) => {
+    setSelectedRow(row);
+    console.log(JSON.stringify({ IdSeccion: String(row.IDSECCION) })
+    );
+    toggleModal()
+
+    //Aqui debe ir el fetch para obtener la información del docente
+    fetch(`http://localhost:5000/mostrarPerfilDocente`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ IdSeccion: String(row.IDSECCION) }),	
+    })
+    .then((response) => response.json())
+      .then((data) => {
+        console.log("Respuesta del servidor:", data);
+        if (data) {
+          const userData = data;
+  
+          const IdSeccion = userData.idseccion
+          setIdSeccion(IdSeccion)
+          const IdDocente = userData.numempleado
+          setIdDocente(IdDocente)
+        }
+      })
+      .catch((error) => {
+        console.error("Error al obtener los datos:", error);
+      });
   };
 
   return (
@@ -231,7 +266,7 @@ const ModalEvaluarDocentes = () => {
           </FormGroup>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={handleSubmit} disabled={!PreguntasContestadas()}>
+          <Button color="primary" onClick={handleSubmit} disabled={!PreguntasContestadas()} >
             Enviar
           </Button>
         </ModalFooter>
