@@ -212,7 +212,7 @@ function MenuJefatura() {
               </p>
               <div className="row">
                 <h1>
-                  <FcOk className="mx-auto m-2" />
+                  <FcBusinessman className="mx-auto m-2" />
                 </h1>
               </div>
 

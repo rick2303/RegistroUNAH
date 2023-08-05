@@ -10,7 +10,25 @@
 .cursor-pointer {
   cursor: pointer;
 }
+/* App.css (or your custom CSS file) */
+.custom-table {
+  background-color: #007bff; /* Blue color */
+  color: #fff; /* White text color */
+}
+/* Estilo personalizado para el separador */
+hr {
+  border: 1px solid blue;
+}
 
+
+
+
+
+
+label {
+  font-size: 30px;
+  color: #1e3a8a;
+}
 .card {
   padding: 2em;
 }
