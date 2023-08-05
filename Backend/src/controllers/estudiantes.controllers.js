@@ -5,7 +5,7 @@ export const ingresarEvaluacionesDocentes = async (req, res) => {
     const pool = await getConnection();
     try {
         const result = await pool.request()
-            .input('IdSeccion', sql.VarChar, IdSeccion)
+            .input('IdSeccion', sql.Int, IdSeccion)
             .input('IdDocente', sql.Int, IdDocente)
             .input('IdEstudiante', sql.VarChar, IdEstudiante)
             .input('Pregunta1', sql.Int, Pregunta1)
