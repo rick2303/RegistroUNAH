@@ -355,7 +355,7 @@ const EvaluacionDocenteJefe = () => {
                       <thead>
                         <tr>
                           <th className="d-flex align-items-center justify-content-center">
-                            Pregunta
+                            Evaluación parte 1
                           </th>
                           <th className="text-center">Promedio</th>
                         </tr>
@@ -368,9 +368,8 @@ const EvaluacionDocenteJefe = () => {
                             la normativa pedagógica y curricular.
                           </td>
                           <td className="text-center">
-                            {Math.round(
-                              promedioPorClase[asignatura].promedioPregunta1
-                            )}
+                           {promedioPorClase[asignatura].promedioPregunta1.toFixed(2)}
+
                             /5
                           </td>
                         </tr>
@@ -380,9 +379,8 @@ const EvaluacionDocenteJefe = () => {
                             entrega de resultados de las evaluaciones.
                           </td>
                           <td className="text-center">
-                            {Math.round(
-                              promedioPorClase[asignatura].promedioPregunta2
-                            )}
+                            {promedioPorClase[asignatura].promedioPregunta2.toFixed(2)}
+
                             /5
                           </td>
                         </tr>
@@ -392,9 +390,8 @@ const EvaluacionDocenteJefe = () => {
                             ética moral y profesional.
                           </td>
                           <td className="text-center">
-                            {Math.round(
-                              promedioPorClase[asignatura].promedioPregunta3
-                            )}
+                            {promedioPorClase[asignatura].promedioPregunta3.toFixed(2)}
+
                             /5
                           </td>
                         </tr>
@@ -411,7 +408,7 @@ const EvaluacionDocenteJefe = () => {
                     >
                       <thead>
                         <tr>
-                          <th className="text-center">Pregunta</th>
+                          <th className="text-center"> Evaluación parte 2</th>
                           <th className="text-center"> "SI"</th>
                           <th className="text-center"> "NO"</th>
                         </tr>
@@ -446,6 +443,7 @@ const EvaluacionDocenteJefe = () => {
                     {/* </div> */}
                   </div>
                   {/* Carrusel */}
+                  <div className="d-flex align-items-center justify-content-center text-lg ">Observaciones</div>
                   <div
                     id={`carouselExampleControls-${index}`}
                     className="carousel slide"
@@ -507,6 +505,9 @@ const EvaluacionDocenteJefe = () => {
                     </button>
                   </div>
                   {/* Fin Carrusel */}
+                  <div className="divider mt-3" style={{ height: '2px', width: '100%', backgroundColor: '#1e40af' }}></div>
+
+
                 </div>
               ))}
               
