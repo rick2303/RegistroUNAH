@@ -41,41 +41,38 @@ const Notas = () => {
   });
 
 
-  
+
   const mostrarInformacion2 = (row) => {
     setSelectedRow(row);
-    console.log(JSON.stringify({ IdSeccion: String(row.IDSECCION) })
-    );
     toggleModal2();
-    //Aqui debe ir el fetch para obtener la información del docente
     fetch(`http://localhost:5000/mostrarPerfilDocente`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ IdSeccion: String(row.IDSECCION) }),	
+      body: JSON.stringify({ IdSeccion: String(row.IDSECCION) }),
     })
     .then((response) => response.json())
-      .then((data) => {
-        console.log("Respuesta del servidor:", data);
-        if (data) {
-          const userData = data;
-          const idSeccion = userData.idseccion
-          setIdSeccion(idSeccion)
-          const idDocente = userData.numempleado
-          setIdDocente(idDocente)
-       
-          console.log(idDocente)
-          console.log(idSeccion)
-        }
-      })
-      .catch((error) => {
-        console.error("Error al obtener los datos:", error);
-      });
-    }
+    .then((data) => {
+      console.log("Respuesta del servidor:", data);
+      if (data) {
+        const userData = data;
+        console.log("UserData:", userData);
+        const IdSeccion = userData.idseccion;
+        console.log("IdSeccion:", IdSeccion);
+        setIdSeccion(IdSeccion);
+        const IdDocente = userData.numempleado;
+        console.log("IdDocente:", IdDocente);
+        setIdDocente(IdDocente);
+      }
+    })
+    .catch((error) => {
+      console.error("Error al obtener los datos:", error);
+    });
+  };
   
-    console.log(IdDocente)
-    console.log(IdSeccion)
+
+
 
   useEffect(() => {
     const storedData = localStorage.getItem("userData");
@@ -104,8 +101,9 @@ const Notas = () => {
     if (!PreguntasContestadas()) {
       return;
     }
-
+  
     try {
+  
       const response = await fetch('http://localhost:5000/subirEvaluacionDocente', {
         method: 'POST',
         headers: {
@@ -123,20 +121,22 @@ const Notas = () => {
           Observacion: evaluationData.Observacion,
         })
       });
-
+  
+      console.log('Response:', response);
+  
       if (response.ok) {
         console.log('Evaluación enviada con éxito');
-        alert("Evaluacion enviada Correctamente")
+        alert("Evaluacion enviada Correctamente");
         resetForm();
         toggleModal2();
       } else {
         console.error('Error al enviar la evaluación');
-
       }
     } catch (error) {
       console.error('Error:', error);
     }
   };
+  
 
   const PreguntasContestadas = () => {
     return (
@@ -260,7 +260,7 @@ const Notas = () => {
       selector: (row) => row.PERIODO,
       center: true,
     },
-    
+
     {
       name: "EVALUACIÓN DOCENTE",
       cell: (row) => (
@@ -318,8 +318,8 @@ const Notas = () => {
           setCarrera(carrera);
           const descripcion = userData.descripcion;
           setDescripcion(descripcion);
-         
-          
+
+
           if(!userData.imagen1 || !userData.video ){
             const imagen = '../1688323336413-804346209-64572.png';
             setImagen(imagen);
@@ -445,7 +445,6 @@ const Notas = () => {
                           </a>
                         </div> */}
                       </h5>
-
                       <div class="row mb-4">
                         <div class="col-sm-6">
                           <hatch class="m-b-10 f-w-600">Nombre:</hatch>
@@ -490,7 +489,6 @@ const Notas = () => {
                           <ModalCargarVideo />
                         </div> */}
                       </h5>
-
                       <div
                         style={{
                           display: "flex",
@@ -643,7 +641,6 @@ const Notas = () => {
       </Modal>
     </div>
     </div>
-    
   );
 };
 export default Notas;

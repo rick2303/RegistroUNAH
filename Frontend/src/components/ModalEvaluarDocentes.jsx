@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input, Button } from 'reactstrap';
 import { FcInfo } from 'react-icons/fc';
-
 const ModalEvaluarDocentes = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [NumCuenta, setNumCuenta] = useState("");
@@ -26,20 +25,16 @@ const ModalEvaluarDocentes = () => {
       setNumCuenta(numCuenta);
     }
   }, []);
-
   const toggleModal = () => {
     setIsModalOpen(prevState => !prevState);
   };
-
   const handleInputChange = e => {
     const { name, value, type } = e.target;
-
     setEvaluationData(prevData => ({
       ...prevData,
       [name]: type === 'radio' ? value === prevData[name] ? null : value : value
     }));
   };
-
   const handleSubmit = async e => {
     e.preventDefault();
     if (!PreguntasContestadas()) {
@@ -65,7 +60,6 @@ const ModalEvaluarDocentes = () => {
           Observacion: evaluationData.Observacion,
         })
       });
-
       if (response.ok) {
         console.log('Evaluación enviada con éxito');
         alert("Evaluacion enviada Correctamente")
@@ -73,7 +67,6 @@ const ModalEvaluarDocentes = () => {
         toggleModal();
       } else {
         console.error('Error al enviar la evaluación');
-
       }
     } catch (error) {
       console.error('Error:', error);
@@ -91,7 +84,6 @@ const ModalEvaluarDocentes = () => {
       evaluationData.Observacion !== ''
     );
   };
-
   const resetForm = () => {
     setEvaluationData({
       pregunta1: '',
@@ -124,7 +116,6 @@ const ModalEvaluarDocentes = () => {
         console.log("Respuesta del servidor:", data);
         if (data) {
           const userData = data;
-  
           const IdSeccion = userData.idseccion
           setIdSeccion(IdSeccion)
           const IdDocente = userData.numempleado
@@ -143,7 +134,6 @@ const ModalEvaluarDocentes = () => {
           <FcInfo />
         </div>
       </div>
-
       <Modal isOpen={isModalOpen} toggle={toggleModal}>
         <ModalHeader>Ingrese los datos</ModalHeader>
         <ModalHeader>
@@ -267,13 +257,11 @@ const ModalEvaluarDocentes = () => {
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={handleSubmit} disabled={!PreguntasContestadas()} >
-            Enviar
+          Enviar
           </Button>
         </ModalFooter>
       </Modal>
     </div>
   );
 };
-
 export default ModalEvaluarDocentes;
-

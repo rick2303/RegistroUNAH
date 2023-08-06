@@ -47,8 +47,4 @@ console.log(config.port);
 
 app.use(empleadosRoute,loginRoute,perfilEstudiante,perfilEmpleado,routerCargaAcademica);
 app.use(usuariosRoute, historialAcademico, routerCancelacionesExep,routerSolicitudes);
-<<<<<<< HEAD
 app.use(routerSecciones, routerAdmin, routerEstado, routerCambioCarrera,routerEstudiante);
-=======
-app.use(routerSecciones, routerAdmin, routerEstado, routerCambioCarrera, routerEstudiante);
->>>>>>> a608ea9b1ef53e861e9456304954b22130d7290d

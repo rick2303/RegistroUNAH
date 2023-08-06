@@ -67,12 +67,14 @@ Content-Type: application/json
 }
 
 ### ver clases que esta cursando un estudiante
-post "http://localhost:5000/enviarClasesQueEstaCursando"
+post http://localhost:5000/verNotasSeccion
 Content-Type: application/json
 
 {
-    "numCuenta": "20182001940"
-    
+    "Carrera":"Ingenieria industrial",
+    "Sistema":"Trimestral",
+    "IdDocente":15209,
+    "IdSeccion":24
 }
 
 
