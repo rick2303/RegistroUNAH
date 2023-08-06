@@ -282,9 +282,47 @@ export const notasSecciones = async (req, res) => {
         const result = await pool.request()
         .input("Periodo", sql.VarChar, Periodo)
         .input("IdDocente", sql.Int, IdDocente)
-        .query(queryJefe.getSeccionesNotas)
+        .query(queryJefe.getSeccionEstudiantes)
         res.status(200).json(result.recordset)
     } catch (error) {
         res.status(500).send(error.message)
     }
 }
+
+export const estudiantesSecciones = async (req, res) => {
+    const { Sistema, IdDocente } = req.body;
+    const pool = await getConnection();
+    try {
+      const PeriodoAcademico = await pool
+        .request()
+        .input('Sistema', sql.VarChar, Sistema)
+        .query(
+          `select PeriodoAcademico from planificacion_academica where GETDATE() BETWEEN FechaInicio and FechaFinal and Sistema = '${Sistema}'`
+        );
+      const Periodo = PeriodoAcademico.recordset[0].PeriodoAcademico;
+      const result = await pool
+        .request()
+        .input('Periodo', sql.VarChar, Periodo)
+        .input('IdDocente', sql.Int, IdDocente)
+        .query(queryJefe.getSeccionEstudiantes);
+  
+      // Agrupar registros por Seccion e IdClase
+      const groupedResult = {};
+      result.recordset.forEach((estudiante) => {
+        const { Seccion, IdClase } = estudiante;
+        const key = `${Seccion}-${IdClase}`;
+        if (!groupedResult[key]) {
+          groupedResult[key] = [];
+        }
+        groupedResult[key].push(estudiante);
+      });
+  
+      // Convertir el objeto a un array de arrays
+      const finalResult = Object.values(groupedResult);
+  
+      res.status(200).json(finalResult);
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  };
+  
