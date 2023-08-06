@@ -23,7 +23,7 @@ const EvaluacionDocenteJefe = () => {
   const [modalEditarOpen, setModalEditarOpen] = useState(false);
   const [carrera, setCarrera] = useState("");
   const [centroRegional, setCentroRegional] = useState("");
-  const [editedData, setEditedData] = useState({});
+  const [dataObtenida, setDataObtenida] = useState([]);
   const [promedioPorClase, setPromedioPorClase] = useState({});
   const [cantidadSiNoPorClase, setCantidadSiNoPorClase] = useState({});
   const [observacionesPorClase, setObservacionesPorClase] = useState({});
@@ -112,131 +112,43 @@ const EvaluacionDocenteJefe = () => {
       ),
     },
   ];
-
+ 
+   
   const mostrarInformacion = (row) => {
     setSelectedRow(row);
-    const data = [
-      [
-        {
-          "idseccion": 21,
-          "Asignatura": "Programación Aplicada",
-          "Periodo": "2PAC",
-          "IdDocente": 15198,
-          "Nombre": "Enrique Jesus",
-          "Apellido": "Ruiz Alvarez",
-          "CorreoInstitucional": "juruizjesus@unah.edu.hn",
-          "IdEstudiante": "20182001940",
-          "Pregunta1": 1,
-          "Pregunta2": 1,
-          "Pregunta3": 1,
-          "Pregunta4": "NO",
-          "Pregunta5": "NO",
-          "Observacion": "Es Barco"
-        },
-        {
-          "idseccion": 22,
-          "Asignatura": "Programación Aplicada",
-          "Periodo": "2PAC",
-          "IdDocente": 15198,
-          "Nombre": "Enrique Jesus",
-          "Apellido": "Ruiz Alvarez",
-          "CorreoInstitucional": "juruizjesus@unah.edu.hn",
-          "IdEstudiante": "20182001890",
-          "Pregunta1": 2,
-          "Pregunta2": 2,
-          "Pregunta3": 2,
-          "Pregunta4": "SI",
-          "Pregunta5": "NO",
-          "Observacion": "Excelente docente"
-        }
-      ],
-      [
-        {
-          "idseccion": 23,
-          "Asignatura": "Introducción a la Ingeniería",
-          "Periodo": "2PAC",
-          "IdDocente": 15198,
-          "Nombre": "Enrique Jesus",
-          "Apellido": "Ruiz Alvarez",
-          "CorreoInstitucional": "juruizjesus@unah.edu.hn",
-          "IdEstudiante": "20182002135",
-          "Pregunta1": 3,
-          "Pregunta2": 3,
-          "Pregunta3": 3,
-          "Pregunta4": "SI",
-          "Pregunta5": "SI",
-          "Observacion": "Muy paciente con los estudiantes"
-        },
-        {
-          "idseccion": 24,
-          "Asignatura": "Introducción a la Ingeniería",
-          "Periodo": "2PAC",
-          "IdDocente": 15198,
-          "Nombre": "Enrique Jesus",
-          "Apellido": "Ruiz Alvarez",
-          "CorreoInstitucional": "juruizjesus@unah.edu.hn",
-          "IdEstudiante": "20182001780",
-          "Pregunta1": 4,
-          "Pregunta2": 4,
-          "Pregunta3": 4,
-          "Pregunta4": "NO",
-          "Pregunta5": "SI",
-          "Observacion": "Hace que las clases de inglés sean divertidas"
-        }
-      ],
-      [
-        {
-          "idseccion": 25,
-          "Asignatura": "Inteligencia Artificial",
-          "Periodo": "2PAC",
-          "IdDocente": 15198,
-          "Nombre": "Enrique Jesus",
-          "Apellido": "Ruiz Alvarez",
-          "CorreoInstitucional": "juruizjesus@unah.edu.hn",
-          "IdEstudiante": "20182002257",
-          "Pregunta1": 4,
-          "Pregunta2": 5,
-          "Pregunta3": 5,
-          "Pregunta4": "SI",
-          "Pregunta5": "SI",
-          "Observacion": "Explica muy bien los conceptos de física"
-        },
-        {
-          "idseccion": 26,
-          "Asignatura": "Inteligencia Artificial",
-          "Periodo": "2PAC",
-          "IdDocente": 15198,
-          "Nombre": "Enrique Jesus",
-          "Apellido": "Ruiz Alvarez",
-          "CorreoInstitucional": "juruizjesus@unah.edu.hn",
-          "IdEstudiante": "20182002399",
-          "Pregunta1": 2,
-          "Pregunta2": 2,
-          "Pregunta3": 3,
-          "Pregunta4": "NO",
-          "Pregunta5": "SI",
-          "Observacion": "Tiene mucho conocimiento "
-        },
-        {
-          "idseccion": 26,
-          "Asignatura": "Inteligencia Artificial",
-          "Periodo": "2PAC",
-          "IdDocente": 15198,
-          "Nombre": "Enrique Jesus",
-          "Apellido": "Ruiz Alvarez",
-          "CorreoInstitucional": "juruizjesus@unah.edu.hn",
-          "IdEstudiante": "20182002399",
-          "Pregunta1": 2,
-          "Pregunta2": 2,
-          "Pregunta3": 3,
-          "Pregunta4": "NO",
-          "Pregunta5": "SI",
-          "Observacion": "Tiene mucho conocimiento "
-        }
-      ]
-      
-    ];
-
+    console.log(JSON.stringify({ IdDocente: row.NumEmpleado, Sistema: row.Sistema }));
+    // Function to fetch data based on the input value
+  
+    console.log(JSON.stringify({ IdDocente: row.NumEmpleado, Sistema: row.Sistema }))
+    fetch("http://localhost:5000/mostrarEvaluacionesDocente", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ IdDocente: row.NumEmpleado, Sistema: row.Sistema }),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+    console.log("data recibido del backend:", data); // Imprime el array recibido en la consola
+    setDataObtenida(data)
+    
+    toggleModal();
+  
+    })
+    .catch((error) => {
+      console.error("Error al obtener los datos de evaluación:", error);
+    });
+   
+    
+  };
+  useEffect(() => {
+    if (dataObtenida) {
+      pintardata(dataObtenida);
+   
+    }
+  }, [dataObtenida]);
+  const pintardata = (data) => {
+   
     //Organizar los datos en un objeto con clave "Asignatura" que contiene los registros de cada clase
     const dataPorClase = data.reduce((result, arregloClases) => {
       arregloClases.forEach((evaluacion) => {
@@ -285,21 +197,8 @@ const EvaluacionDocenteJefe = () => {
       }, {});
   
       setObservacionesPorClase(observacionesPorClase);
-  
-      //Organizar los datos en un objeto con clave "Asignatura" que contiene los registros de cada clase
-     /*  const dataPorClase = data.reduce((result, arregloClases) => {
-        arregloClases.forEach((evaluacion) => {
-          const asignatura = evaluacion.Asignatura;
-          if (!result[asignatura]) {
-            result[asignatura] = [];
-          }
-          result[asignatura].push(evaluacion);
-        });
-        return result;
-      }, {}); */
-    toggleModal();
-  };
-
+  }
+ 
   const calcularCantidadSiNoPorClase = (data) => {
     const cantidadSiNoPorClase = {};
   
@@ -351,6 +250,7 @@ const EvaluacionDocenteJefe = () => {
 
   const toggleModal = () => {
     setModalOpen(!modalOpen);
+   
   };
 
   return (
@@ -416,7 +316,7 @@ const EvaluacionDocenteJefe = () => {
                   </div>
 
                   <div className="row">
-      <div className="col-12 col-lg-6">
+      {/* <div className="col-12 col-lg-6"> */}
       <Table striped bordered hover responsive className="table-sm" >
           <thead>
             <tr>
@@ -426,21 +326,21 @@ const EvaluacionDocenteJefe = () => {
           </thead>
           <tbody>
             <tr>
-              <td >Pregunta 1</td>
+              <td >Ha entregado la planificación de contenido y rubricas para el desarrollo de la clase, siguiendo la normativa pedagógica y curricular.</td>
               <td className="text-center">{Math.round(promedioPorClase[asignatura].promedioPregunta1)}/5</td>
             </tr>
             <tr>
-              <td>Pregunta 2</td>
+              <td>Ha cumplido con los tiempos estipulados para la entrega de resultados de las evaluaciones.</td>
               <td className="text-center">{Math.round(promedioPorClase[asignatura].promedioPregunta2)}/5</td>
             </tr>
             <tr>
-              <td>Pregunta 3</td>
+              <td>El docente se ha comportado bajo el marco de la ética moral y profesional.</td>
               <td className="text-center">{Math.round(promedioPorClase[asignatura].promedioPregunta3)}/5</td>
             </tr>
           </tbody>
         </Table>
-      </div>
-      <div className="col-12 col-lg-6">
+     {/*  </div> */}
+   {/*    <div className="col-12 col-lg-6"> */}
         <Table striped bordered hover responsive className="table-sm">
           <thead>
             <tr>
@@ -451,18 +351,18 @@ const EvaluacionDocenteJefe = () => {
           </thead>
           <tbody>
             <tr>
-              <td>Proporiona retroalimentación sobre las evaluaciones realizadas:</td>
+              <td>¿El docente da retroalimentación sobre las evaluaciones realizadas?</td>
               <td className="text-center">{cantidadSiNoPorClase[asignatura]?.Pregunta4?.SI}</td>
               <td className="text-center">{cantidadSiNoPorClase[asignatura]?.Pregunta4?.NO}</td>
             </tr>
             <tr>
-              <td>Pregunta 5</td>
+              <td>¿El docente proporciona la pauta de los examenes realizados?</td>
               <td className="text-center">{cantidadSiNoPorClase[asignatura]?.Pregunta5?.SI}</td>
               <td className="text-center">{cantidadSiNoPorClase[asignatura]?.Pregunta5?.NO}</td>
             </tr>
           </tbody>
         </Table>
-      </div>
+      {/* </div> */}
     </div>
                   {/* Carrusel */}
                   <div
