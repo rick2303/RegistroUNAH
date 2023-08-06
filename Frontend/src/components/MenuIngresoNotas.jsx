@@ -1,8 +1,14 @@
-import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from "react";
+import {
+  Input,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+} from "reactstrap";
 import DataTable from "react-data-table-component";
 import { FcShare } from "react-icons/fc";
-import { Input, Modal, ModalHeader, ModalBody, ModalFooter, Table } from "reactstrap";
 import "../App.css";
 
 const paginationComponentOptions = {
@@ -13,11 +19,14 @@ const paginationComponentOptions = {
 };
 
 const MenuIngresoNotas = () => {
-  const [inputValue, setInputValue] = useState("");
-  const [historialData, setHistorialData] = useState([]);
-  const [selectedRow, setSelectedRow] = useState(null);
-  const [carrera, setCarrera] = useState("");
-  const [centroRegional, setCentroRegional] = useState("");
+    const [inputValue, setInputValue] = useState("");
+    const [historialData, setHistorialData] = useState([]);
+    const [selectedRow, setSelectedRow] = useState(null);
+    const [carrera, setCarrera] = useState("");
+    const [centroRegional, setCentroRegional] = useState("");
+    const [Sistema, setSistema] = useState("");
+    const [dataObtenida, setDataObtenida] = useState([]);
+    const [modalOpen, setModalOpen] = useState(false)
 
   
 
@@ -44,16 +53,19 @@ const MenuIngresoNotas = () => {
     const userData = JSON.parse(storedData);
     console.log(userData);
     const carrera = userData.data.Carrera;
-    setCarrera(carrera);
-    const centroRegional = userData.data.CentroRegional;
-    setCentroRegional(centroRegional);
+      setCarrera(carrera);
+      const centroRegional = userData.data.CentroRegional;
+      setCentroRegional(centroRegional);
+    const sistema = userData.data.Sistema;
+    setSistema(sistema);
 
     // Guarda los valores de carrera y centroRegional en variables locales
     const carreraActual = carrera;
     const centroRegionalActual = centroRegional;
+    const Sistema = sistema;
 
     // Llama a la función fetchData para obtener los datos usando las variables locales
-    fetchDataGeneral(carreraActual, centroRegionalActual);
+    fetchDataGeneral(carreraActual, centroRegionalActual,Sistema);
   }, []);
 
   useEffect(() => {
@@ -96,7 +108,7 @@ const MenuIngresoNotas = () => {
       width: "300px",
     },
     {
-      name: "SECCIONES ASIGNADAS",
+      name: "VER NOTAS",
       cell: (row) => (
         <h1 className="cursor-pointer" onClick={() => mostrarInformacion(row)}>
           <FcShare style={{ color: "#1e40af "}} />
@@ -104,7 +116,33 @@ const MenuIngresoNotas = () => {
       ),
     },
   ];
-  
+
+
+  const mostrarInformacion = (row) => {
+    setSelectedRow(row);
+    console.log(
+        JSON.stringify({ IdDocente: row.NumEmpleado, Sistema: row.Sistema })
+      );
+    fetch('http://localhost:5000/verNotas', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        IdDocente: row.NumEmpleado,
+        Sistema: row.Sistema,
+      }),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Datos obtenidos:", data);  // Imprime los datos en la consola
+      setDataObtenida(data);
+      setModalOpen(true); // Abre el modal
+    })
+      .catch((error) => {
+        console.error("Error al obtener los datos de evaluación:", error);
+      });
+  };
   // Function to fetch data based on the input value
   const fetchData = () => {
     console.log(JSON.stringify({ DNI: inputValue }))
@@ -163,7 +201,6 @@ const MenuIngresoNotas = () => {
           pagination
           paginationComponentOptions={paginationComponentOptions}
           noHeader
-          // Para poner las filas no encontradas en español
           noDataComponent={<NoDataComponent />}
           conditionalRowStyles={[
             {
@@ -176,124 +213,26 @@ const MenuIngresoNotas = () => {
         />
       </div>
 
-{/* 
-      {selectedRow && (
-        <Modal isOpen={modalOpen} toggle={toggleModal} className="modal-lg">
-          <ModalHeader className="text-white bg-blue-800 text-2xl">
-            <strong>Evaluación Docente</strong>
-            <button className="close boton_cierre" onClick={toggleModal}>
-              <span aria-hidden="true">X</span>
-            </button>
-          </ModalHeader>
-          <ModalBody>
-           <label className="col-12 d-flex align-items-center justify-content-center"><strong>{ selectedRow.Nombre+ " "+ selectedRow.Apellido}</strong></label>
-            
-           <div>
-              {Object.keys(promedioPorClase).map((asignatura, index) => (
-                <div key={asignatura}>
-                 <div className="d-flex align-items-center justify-content-center text-lg my-3">
-                
-                     <strong>{asignatura}</strong>
-                  </div>
-
-                  <div className="row">
-      <div className="col-12 col-lg-6">
-      <Table striped bordered hover responsive className="table-sm" >
-          <thead>
-            <tr>
-              <th  className="d-flex align-items-center justify-content-center">Pregunta</th>
-              <th  className="text-center">Promedio</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td >Pregunta 1</td>
-              <td className="text-center">{Math.round(promedioPorClase[asignatura].promedioPregunta1)}/5</td>
-            </tr>
-            <tr>
-              <td>Pregunta 2</td>
-              <td className="text-center">{Math.round(promedioPorClase[asignatura].promedioPregunta2)}/5</td>
-            </tr>
-            <tr>
-              <td>Pregunta 3</td>
-              <td className="text-center">{Math.round(promedioPorClase[asignatura].promedioPregunta3)}/5</td>
-            </tr>
-          </tbody>
-        </Table>
-      </div>
-      <div className="col-12 col-lg-6">
-        <Table striped bordered hover responsive className="table-sm">
-          <thead>
-            <tr>
-              <th  className="text-center">Pregunta</th>
-              <th className="text-center"> "SI"</th>
-              <th className="text-center"> "NO"</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Proporiona retroalimentación sobre las evaluaciones realizadas:</td>
-              <td className="text-center">{cantidadSiNoPorClase[asignatura]?.Pregunta4?.SI}</td>
-              <td className="text-center">{cantidadSiNoPorClase[asignatura]?.Pregunta4?.NO}</td>
-            </tr>
-            <tr>
-              <td>Pregunta 5</td>
-              <td className="text-center">{cantidadSiNoPorClase[asignatura]?.Pregunta5?.SI}</td>
-              <td className="text-center">{cantidadSiNoPorClase[asignatura]?.Pregunta5?.NO}</td>
-            </tr>
-          </tbody>
-        </Table>
-      </div>
-    </div>
-                  <div
-                    id={`carouselExampleControls-${index}`}
-                    className="carousel slide"
-                    data-bs-ride="carousel"
-                  >
-                    <div className="carousel-inner">
-                      {observacionesPorClase[asignatura].map((observacion, observacionIndex) => (
-                        <div
-                        key={observacionIndex}
-                        className={`carousel-item ${observacionIndex === 0 ? 'active' : ''}  text-center`}
-                      >
-                        {observacion}
-                      </div>
-                      
-                      ))}
-                    </div>
-                    <button
-                      className="carousel-control-prev"
-                      type="button"
-                      data-bs-target={`#carouselExampleControls-${index}`}
-                      data-bs-slide="prev"
-                      onClick={() => handleCarouselSlide((carouselIndex + observacionesPorClase[asignatura].length - 1) % observacionesPorClase[asignatura].length)}
-                    >
-                      Anterior
-                      <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                      <span className="visually-hidden">Anterior</span>
-                    </button>
-                    <button
-                      className="carousel-control-next"
-                      type="button"
-                      data-bs-target={`#carouselExampleControls-${index}`}
-                      data-bs-slide="next"
-                      onClick={() => handleCarouselSlide((carouselIndex + 1) % observacionesPorClase[asignatura].length)}
-                    >
-                      Siguiente
-                      <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                      <span className="visually-hidden">Siguiente</span>
-                    </button>
-                  </div>
-               
-                </div>
-              ))}
+      <Modal isOpen={modalOpen} toggle={() => setModalOpen(false)}>
+        <ModalHeader toggle={() => setModalOpen(false)}>Detalles de Notas</ModalHeader>
+        <ModalBody>
+          {dataObtenida.map((nota, index) => (
+            <div key={index}>
+              <p>Asignatura: {nota.Asignatura}</p>
+              <p>Sección: {nota.Seccion}</p>
+              <p>Periodo: {nota.Periodo}</p>
+              <p>Estudiante: {nota.IdEstudiante}</p>
+              <p>Nota: {nota.Nota}</p>
+              <p>Estado de Clase: {nota.EstadoClase}</p>
             </div>
-          
-  
-</ModalBody>
-        </Modal>
-                      )}
-                      */}
+          ))}
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={() => setModalOpen(false)}>
+            Cerrar
+          </Button>
+        </ModalFooter>
+      </Modal>
     </div>
   );
 };

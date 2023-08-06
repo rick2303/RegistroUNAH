@@ -31,3 +31,4 @@ export const enviarInfoEstuForma03= async (req, res) => {
         .query(querys.getPerfilEstudianteFormaAdmin);
     res.json(result.recordset);
 };
+

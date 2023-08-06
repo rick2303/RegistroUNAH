@@ -14,7 +14,8 @@ import routerAdmin from "./routes/admin.planificaciones.routes";
 import routerEstado from "./routes/estudianteEstadoCuenta.routes";
 import routerSolicitudes from "./routes/solicitudes.routes"
 import routerCargaAcademica from "./routes/cargaAcademica.routes";
-import routerEstudiante from "./routes/estudiantes.routes"
+import routerEstudiante from "./routes/estudiantes.routes";
+import routerMatricula from "./routes/matricula.routes";
 //import {} from "./csv/csv";
 const app= express();
 const cors = require('cors');
@@ -47,4 +48,4 @@ console.log(config.port);
 
 app.use(empleadosRoute,loginRoute,perfilEstudiante,perfilEmpleado,routerCargaAcademica);
 app.use(usuariosRoute, historialAcademico, routerCancelacionesExep,routerSolicitudes);
-app.use(routerSecciones, routerAdmin, routerEstado, routerCambioCarrera,routerEstudiante);
+app.use(routerSecciones, routerAdmin, routerEstado, routerCambioCarrera, routerEstudiante, routerMatricula);

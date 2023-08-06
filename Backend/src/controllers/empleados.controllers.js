@@ -271,3 +271,20 @@ export const notasEstudiantes = async (req, res) => {
         res.status(500).send(error.message)
     }
 }
+
+//Trae todas las notas de todas las secciones por id de docente
+export const notasSecciones = async (req, res) => {
+    const {Sistema, IdDocente} = req.body
+    const pool = await getConnection();
+    try {
+        const PeriodoAcademico = await pool.request().input('Sistema', sql.VarChar, Sistema).query(`select PeriodoAcademico from planificacion_academica where GETDATE() BETWEEN FechaInicio and FechaFinal and Sistema = '${Sistema}'`);
+        const Periodo = PeriodoAcademico.recordset[0].PeriodoAcademico;
+        const result = await pool.request()
+        .input("Periodo", sql.VarChar, Periodo)
+        .input("IdDocente", sql.Int, IdDocente)
+        .query(queryJefe.getSeccionesNotas)
+        res.status(200).json(result.recordset)
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+}
