@@ -784,7 +784,10 @@ return (
 
     </div>
     <Modal isOpen={showModal} toggle={cancelarEliminacion}>
-        <ModalHeader toggle={cancelarEliminacion}>Confirmar eliminación</ModalHeader>
+        <div className="d-flex justify-content-between align-items-center border-bottom p-3">
+            <p className="m-0" style={{ marginLeft: "10px" }}>Confirmar cancelación</p>
+            <Button onClick={cancelarEliminacion} >X</Button>
+        </div>
         <ModalBody>
             {modalType === "matriculada"
             ? "¿Estás seguro de que deseas eliminar esta clase matriculada?"
@@ -793,7 +796,7 @@ return (
             : ""}
     </ModalBody>
     <ModalFooter>
-        <button className="btn btn-danger" onClick={() => confirmarEliminacion(classToDelete)}>
+        <button className="btn btn-secondary" onClick={() => confirmarEliminacion(classToDelete)}>
             Aceptar
         </button>
 
@@ -854,11 +857,6 @@ return (
 
     </ModalFooter>
     </Modal>
-
-
-
-
-
 
 
 </div>
