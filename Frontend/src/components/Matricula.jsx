@@ -398,6 +398,7 @@ const handleRowClickAsingatura = async (row) => {
             const data = await response.json();
             const nombresAsignaturas = data.map((asignatura) => asignatura.Nombre);
             setAsignaturas(nombresAsignaturas);
+            setSecciones([]);
             console.log(nombresAsignaturas);
         } catch (error) {
             console.error("Error al obtener los datos:", error);
@@ -783,7 +784,10 @@ return (
 
     </div>
     <Modal isOpen={showModal} toggle={cancelarEliminacion}>
-        <ModalHeader toggle={cancelarEliminacion}>Confirmar eliminación</ModalHeader>
+        <div className="d-flex justify-content-between align-items-center border-bottom p-3">
+            <p className="m-0" style={{ marginLeft: "10px" }}>Confirmar cancelación</p>
+            <Button onClick={cancelarEliminacion} >X</Button>
+        </div>
         <ModalBody>
             {modalType === "matriculada"
             ? "¿Estás seguro de que deseas eliminar esta clase matriculada?"
@@ -792,7 +796,7 @@ return (
             : ""}
     </ModalBody>
     <ModalFooter>
-        <button className="btn btn-danger" onClick={() => confirmarEliminacion(classToDelete)}>
+        <button className="btn btn-secondary" onClick={() => confirmarEliminacion(classToDelete)}>
             Aceptar
         </button>
 
@@ -805,7 +809,10 @@ return (
 
     {/* Modal con la lista dependiente */}
     <Modal isOpen={showDependentListModal} toggle={handleCloseDependentListModal} style={{ maxWidth: "1600px", width: "100%", margin: "0 auto", paddingTop: "270px" }}>
-    <ModalHeader toggle={handleCloseDependentListModal}>Detalle de asignaturas</ModalHeader>
+    <div className="d-flex justify-content-between align-items-center border-bottom p-3">
+        <p className="m-0" style={{ marginLeft: "10px" }}>Detalle de asignaturas</p>
+        <Button onClick={handleCloseDependentListModal} >X</Button>
+    </div>
     <ModalBody>
     <div className="container">
     <div className="row no-gutters">
@@ -847,13 +854,9 @@ return (
     SISTEMA DE MATRICULA - Dirección Ejecutiva de Ingenieria del Software (DEIS)</p>
     </div>
     </div>
+
     </ModalFooter>
     </Modal>
-
-
-
-
-
 
 
 </div>
