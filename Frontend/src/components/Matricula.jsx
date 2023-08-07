@@ -530,7 +530,7 @@ const handleRowClickObtenerClase = async (row) => {
 
         if (verificarClaseSiEstaMatriculada == 0) {
 
-        if (conflictosHorariosEspera > 0) {
+        if (conflictosHorariosEspera > 1) {
             // Hay conflictos de horarios para la clase en espera
             alert("No puedes matricular la clase en espera. Existen conflictos de horarios.");
         } else if (cuposDisponibles === 0) {
@@ -562,7 +562,7 @@ const handleRowClickObtenerClase = async (row) => {
                 periodoAcademicoActual
             );
 
-            if (conflictosHorarios > 0) {
+            if (conflictosHorarios > 1) {
                 // Hay conflictos de horarios para la matrícula
                 alert("No puedes matricular la clase. Existen conflictos de horarios.");
             } else {
