@@ -34,17 +34,43 @@ export async function verificarConflictosHorarios(IdEstudiante, Dias, HI, HF, Pe
 
         const query = `
             SELECT COUNT(*) AS Total
-            FROM [dbo].[registro_estudiante_clases] rec
-            INNER JOIN [dbo].[secciones] s ON rec.IdSeccion = s.IdSeccion
-            WHERE rec.IdEstudiante = @IdEstudiante
-            AND s.Dias = @Dias
+        FROM [dbo].[registro_estudiante_clases] rec
+        INNER JOIN [dbo].[secciones] s ON rec.IdSeccion = s.IdSeccion
+        WHERE rec.IdEstudiante = @IdEstudiante
+        AND s.Periodo = @Periodo
+        AND (
+            (@HI BETWEEN s.HI AND s.HF OR @HF BETWEEN s.HI AND s.HF OR s.HI BETWEEN @HI AND @HF OR s.HF BETWEEN @HI AND @HF)
             AND (
-                (@HI BETWEEN s.HI AND s.HF)
-                OR (@HF BETWEEN s.HI AND s.HF)
-                OR (s.HI BETWEEN @HI AND @HF)
-                OR (s.HF BETWEEN @HI AND @HF)
+                s.Dias LIKE '%Lu%' AND CHARINDEX('Lu', @Dias) > 0
+                OR s.Dias LIKE '%Ma%' AND CHARINDEX('Ma', @Dias) > 0
+                OR s.Dias LIKE '%Mi%' AND CHARINDEX('Mi', @Dias) > 0
+                OR s.Dias LIKE '%Ju%' AND CHARINDEX('Ju', @Dias) > 0
+                OR s.Dias LIKE '%Vi%' AND CHARINDEX('Vi', @Dias) > 0
+                OR s.Dias LIKE '%Sa%' AND CHARINDEX('Sa', @Dias) > 0
+                -- Añade aquí otras combinaciones de días si es necesario (por ejemplo, Jueves, Viernes, etc.)
             )
-            AND s.Periodo = @Periodo;
+            AND EXISTS (
+                SELECT 1
+                FROM [dbo].[registro_estudiante_clases] rec2
+                INNER JOIN [dbo].[secciones] s2 ON rec2.IdSeccion = s2.IdSeccion
+                WHERE rec2.IdEstudiante = @IdEstudiante
+                AND s2.Periodo = @Periodo
+                AND (
+                    (@HI BETWEEN s2.HI AND s2.HF OR @HF BETWEEN s2.HI AND s2.HF OR s2.HI BETWEEN @HI AND @HF OR s2.HF BETWEEN @HI AND @HF)
+                    AND (
+                        s2.Dias LIKE '%Lu%' AND CHARINDEX('Lu', @Dias) > 0
+                        OR s2.Dias LIKE '%Ma%' AND CHARINDEX('Ma', @Dias) > 0
+                        OR s2.Dias LIKE '%Mi%' AND CHARINDEX('Mi', @Dias) > 0
+                        OR s2.Dias LIKE '%Ju%' AND CHARINDEX('Ju', @Dias) > 0
+                        OR s2.Dias LIKE '%Vi%' AND CHARINDEX('Vi', @Dias) > 0
+                        OR s2.Dias LIKE '%Sa%' AND CHARINDEX('Sa', @Dias) > 0
+                        -- Añade aquí otras combinaciones de días si es necesario (por ejemplo, Jueves, Viernes, etc.)
+                    )
+                )
+                AND rec2.IdEstudiante = rec.IdEstudiante
+                AND rec2.IdSeccion != rec.IdSeccion
+            )
+        );
         `;
 
         const result = await pool.request()
