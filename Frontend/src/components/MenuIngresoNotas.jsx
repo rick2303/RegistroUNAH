@@ -5,11 +5,13 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Table,
   Button,
 } from "reactstrap";
 import DataTable from "react-data-table-component";
 import { FcShare } from "react-icons/fc";
 import "../App.css";
+import "../Evaluacionmodal.css"
 
 const paginationComponentOptions = {
   rowsPerPageText: 'Filas por página',
@@ -17,6 +19,8 @@ const paginationComponentOptions = {
   selectAllRowsItem: true,
   selectAllRowsItemText: 'Todos',
 };
+
+
 
 const MenuIngresoNotas = () => {
     const [inputValue, setInputValue] = useState("");
@@ -28,7 +32,7 @@ const MenuIngresoNotas = () => {
     const [dataObtenida, setDataObtenida] = useState([]);
     const [modalOpen, setModalOpen] = useState(false)
 
-  
+
 
   const fetchDataGeneral = (carrera, centroRegional) => {
     fetch(`http://localhost:5000/docentesDepartamento`, {
@@ -213,25 +217,47 @@ const MenuIngresoNotas = () => {
         />
       </div>
 
-      <Modal isOpen={modalOpen} toggle={() => setModalOpen(false)}>
-        <ModalHeader toggle={() => setModalOpen(false)}>Detalles de Notas</ModalHeader>
-        <ModalBody>
-          {dataObtenida.map((nota, index) => (
-            <div key={index}>
-              <p>Asignatura: {nota.Asignatura}</p>
-              <p>Sección: {nota.Seccion}</p>
-              <p>Periodo: {nota.Periodo}</p>
-              <p>Estudiante: {nota.IdEstudiante}</p>
-              <p>Nota: {nota.Nota}</p>
-              <p>Estado de Clase: {nota.EstadoClase}</p>
+      <Modal isOpen={modalOpen} toggle={() => setModalOpen(false)} className="evaluacionmodal">
+        <ModalHeader className="modal-header">
+          <div className="modal-title">Detalles de Notas</div>
+          <button className="close boton_cierre" onClick={() => setModalOpen(false)}>
+            <span aria-hidden="true">X</span>
+          </button>
+        </ModalHeader>
+        <ModalBody className="modal-content">
+          {/* Agrupa la información por sección y muestra una tabla por sección */}
+          {Object.entries(dataObtenida.reduce((sections, nota) => {
+            if (!sections[nota.Seccion]) {
+              sections[nota.Seccion] = [];
+            }
+            sections[nota.Seccion].push(nota);
+            return sections;
+          }, {})).map(([seccion, notasPorSeccion]) => (
+            <div key={seccion}>
+              <h4>Sección: {seccion}</h4>
+              <Table>
+                <thead>
+                  <tr>
+                    <th>Estudiante</th>
+                    <th>Asignatura</th>
+                    <th>Nota</th>
+                    <th>Estado de Clase</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {notasPorSeccion.map((nota, index) => (
+                    <tr key={index}>
+                      <td>{nota.Estudiante} {nota.Apellido}</td>
+                      <td>{nota.Asignatura}</td>
+                      <td>{nota.Nota}</td>
+                      <td>{nota.EstadoClase}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
             </div>
           ))}
         </ModalBody>
-        <ModalFooter>
-          <Button color="secondary" onClick={() => setModalOpen(false)}>
-            Cerrar
-          </Button>
-        </ModalFooter>
       </Modal>
     </div>
   );
