@@ -100,6 +100,15 @@ const SeccionesAsignadas = () => {
         textAlign: "center",
       },
     },
+    {
+      name: "CORREO INSTITUCIONAL",
+      selector: (row) => row.CorreoInstitucional,
+      
+      // Estilos personalizados solo para el título
+      style: {
+        textAlign: "center",
+      },
+    },
     
   ];
 
