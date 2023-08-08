@@ -198,7 +198,7 @@ export const queryJefe = {
     s.IdSeccion, s.IdDocente, c.IdClase, c.Nombre 'Asignatura', s.Seccion, s.Periodo, res.IdEstudiante, res.Nota, res.EstadoClase  from registro_estudiante_clases res inner join secciones s on s.IdSeccion = res.IdSeccion inner join clases c on c.idclase = s.IdClase where s.Periodo = @Periodo and YEAR(s.Fecha) = YEAR(GETDATE()) and s.iddocente =  @IdDocente`,
     getSeccionEstudiantes: `select 
     s.IdSeccion, s.IdDocente, c.IdClase, c.Nombre 'Asignatura',
-    s.Seccion, s.Periodo, res.IdEstudiante, e.nombre 'Estudiante', e.Apellido, res.Nota, res.EstadoClase  
+    s.Seccion, s.Periodo, res.IdEstudiante, e.nombre 'Estudiante', e.Apellido, e.CorreoInstitucional, res.Nota, res.EstadoClase  
 from registro_estudiante_clases res 
 inner join secciones s on s.IdSeccion = res.IdSeccion 
 inner join clases c on c.idclase = s.IdClase 
