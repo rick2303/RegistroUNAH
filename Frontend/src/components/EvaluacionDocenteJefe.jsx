@@ -360,7 +360,8 @@ const EvaluacionDocenteJefe = () => {
                           <th className="d-flex align-items-center justify-content-center">
                             Evaluación parte 1
                           </th>
-                          <th className="text-center">Promedio</th>
+                          <th className=" text-center" style={{ width: '120px' }}>Promedio</th>
+
                         </tr>
                       </thead>
                       <tbody>
@@ -371,7 +372,7 @@ const EvaluacionDocenteJefe = () => {
                             la normativa pedagógica y curricular.
                           </td>
                           <td className="text-center">
-                           {promedioPorClase[asignatura].promedioPregunta1.toFixed(2)}
+                           {promedioPorClase[asignatura].promedioPregunta1.toFixed(1)}
 
                             /5
                           </td>
@@ -382,7 +383,7 @@ const EvaluacionDocenteJefe = () => {
                             entrega de resultados de las evaluaciones.
                           </td>
                           <td className="text-center">
-                            {promedioPorClase[asignatura].promedioPregunta2.toFixed(2)}
+                            {promedioPorClase[asignatura].promedioPregunta2.toFixed(1)}
 
                             /5
                           </td>
@@ -393,7 +394,7 @@ const EvaluacionDocenteJefe = () => {
                             ética moral y profesional.
                           </td>
                           <td className="text-center">
-                            {promedioPorClase[asignatura].promedioPregunta3.toFixed(2)}
+                            {promedioPorClase[asignatura].promedioPregunta3.toFixed(1)}
 
                             /5
                           </td>
