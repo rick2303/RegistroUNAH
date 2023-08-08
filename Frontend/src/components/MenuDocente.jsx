@@ -69,7 +69,7 @@ function MenuDocente() {
                 <a href="#">
                   <a
                     className=" grid grid-cols-1 group relative focus:outline-none focus:ring"
-                    href="/download"
+                    href="/src/html/SeccionesAsignadas.html"
                   >
                     <span className=" rounded-[25px] grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"
                     style={{ backgroundColor: '#145eb9' }}

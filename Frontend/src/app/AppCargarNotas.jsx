@@ -2,7 +2,7 @@ import '../App.css'
 import NavbarDocente from "../components/NavbarDocente";
 import CargarNotas from "../components/CargarNotas.jsx";
 
-function AppListadoDocentes() {
+function AppCargarNotas() {
 
 return (
     <>
@@ -12,4 +12,4 @@ return (
 )
 }
 
-export default AppListadoDocentes
+export default AppCargarNotas
