@@ -89,11 +89,13 @@ const CargarNotas = () => {
     {
       name: "CUENTA",
       selector: (row) => row.IdEstudiante,
+      sortable: true,
     },
     {
       name: "NOMBRE",
       selector: (row) => row.Estudiante + " " + row.Apellido,
       width: "300px",
+      sortable: true,
       // Estilos personalizados solo para el título
       style: {
         textAlign: "center",
@@ -102,13 +104,13 @@ const CargarNotas = () => {
     {
       name: "NOTA",
       selector: (row) => row.Nota,
-
+      sortable: true,
       center: true, // Centrar el título
     },
     {
       name: "ESTADO",
       selector: (row) => row.EstadoClase,
-
+      sortable: true,
       center: true, // Centrar el título
     },
     {

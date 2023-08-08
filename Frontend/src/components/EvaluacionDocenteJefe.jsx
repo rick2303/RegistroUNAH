@@ -92,7 +92,7 @@ const EvaluacionDocenteJefe = () => {
       fetchDataGeneral(carreraActual, centroRegionalActual);
     } else {
       // Si el inputValue no está vacío, llamamos a fetchData con el inputValue
-      fetchData();
+      fetchData(carrera, centroRegional);
     }
   }, [inputValue]);
 
@@ -101,14 +101,26 @@ const EvaluacionDocenteJefe = () => {
     {
       name: "N° DE EMPLEADO",
       selector: (row) => row.NumEmpleado,
+      sortable: true,
+      width: "150px",
+      center: true,
     },
     {
       name: "DNI",
       selector: (row) => row.DNI,
+      sortable: true,
+      center: true,
+      
     },
     {
       name: "NOMBRE",
       selector: (row) => row.Nombre + " " + row.Apellido,
+      width: "300px",
+      sortable: true,
+    },
+    {
+      name: "CORREO INSTITUCIONAL",
+      selector: (row) => row.CorreoInstitucional,
       width: "300px",
     },
     {
@@ -246,14 +258,16 @@ const EvaluacionDocenteJefe = () => {
   };
 
   // Function to fetch data based on the input value
-  const fetchData = () => {
-    console.log(JSON.stringify({ DNI: inputValue }));
-    fetch("http://localhost:5000/docentesDNI", {
+  const fetchData = (carrera, centroRegional) => {
+    console.log(JSON.stringify({ DNI: inputValue, Carrera: carrera,
+      CentroRegional: centroRegional, }));
+    fetch("http://localhost:5000/docentesDNIDep", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ DNI: inputValue }), // Send input value as JSON
+      body: JSON.stringify({ DNI: inputValue, Carrera: carrera,
+        CentroRegional: centroRegional, }), // Send input value as JSON
     })
       .then((response) => response.json())
       .then((data) => {
