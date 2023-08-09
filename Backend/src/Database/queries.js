@@ -173,6 +173,7 @@ export const queryDocente = {
     getPerfilSeccion: `select s.idseccion, e.numempleado, e.nombre, e.apellido, numerotelefono, e.correoinstitucional, e.centroregional, e.carrera, e.correopersonal, pe.imagen1, pe.video, pe.descripcion from secciones s inner join empleados e on e.NumEmpleado = s.IdDocente left join perfil_empleados pe on pe.idperfil = s.iddocente 
     where s.idseccion = @IdSeccion`,
     updateNotaEstudiante: `update registro_estudiante_clases set Nota = round(@Nota, 0), EstadoClase = @EstadoClase where IdSeccion = @IdSeccion and IdEstudiante = @IdEstudiante `,
+    getIngresoNotas: `select * from planificacion_ingresonotas where Sistema = @Sistema and GETDATE() BETWEEN FechaInicio and FechaFinal`
 }
 
 export const queryJefe = {
@@ -198,10 +199,5 @@ export const queryJefe = {
     s.IdSeccion, s.IdDocente, c.IdClase, c.Nombre 'Asignatura', s.Seccion, s.Periodo, res.IdEstudiante, res.Nota, res.EstadoClase  from registro_estudiante_clases res inner join secciones s on s.IdSeccion = res.IdSeccion inner join clases c on c.idclase = s.IdClase where s.Periodo = @Periodo and YEAR(s.Fecha) = YEAR(GETDATE()) and s.iddocente =  @IdDocente`,
     getSeccionEstudiantes: `select 
     s.IdSeccion, s.IdDocente, c.IdClase, c.Nombre 'Asignatura',
-    s.Seccion, s.Periodo, res.IdEstudiante, e.nombre 'Estudiante', e.Apellido, e.CorreoInstitucional, res.Nota, res.EstadoClase  
-from registro_estudiante_clases res 
-inner join secciones s on s.IdSeccion = res.IdSeccion 
-inner join clases c on c.idclase = s.IdClase 
-inner join estudiantes e on e.numcuenta = res.IdEstudiante
-where s.Periodo = @Periodo and YEAR(s.Fecha) = YEAR(GETDATE()) and s.iddocente =  @IdDocente`
+    s.Seccion, s.Periodo, res.IdEstudiante, e.nombre 'Estudiante', e.Apellido, e.CorreoInstitucional, res.Nota, res.EstadoClase from registro_estudiante_clases res inner join secciones s on s.IdSeccion = res.IdSeccion inner join clases c on c.idclase = s.IdClase  inner join estudiantes e on e.numcuenta = res.IdEstudiante where s.Periodo = @Periodo and YEAR(s.Fecha) = YEAR(GETDATE()) and s.iddocente =  @IdDocente`
 }
