@@ -249,3 +249,43 @@ export const updateUVS = async (req, res) => {
             res.status(500).json({ message: "Error al procesar la solicitud" });
         } 
 };
+
+
+export async function obtenerFechasMatricula(req, res) {
+    const { PeriodoAcademico, Sistema } = req.body;
+    try {
+        const pool = await getConnection();
+
+        const query = `
+        SELECT
+        pm.*,
+        p.PeriodoAcademico,
+        p.Sistema,
+        DATEADD(DAY, n.Number - 1, p.FechaInicio) AS IntermediateDate,
+        DAY(DATEADD(DAY, n.Number - 1, p.FechaInicio)) AS IntermediateDay,
+        MONTH(DATEADD(DAY, n.Number - 1, p.FechaInicio)) AS IntermediateMonth,
+        YEAR(DATEADD(DAY, n.Number - 1, p.FechaInicio)) AS IntermediateYear
+    FROM
+        [dbo].[planificacion_matricula] pm
+    JOIN
+        Numbers n ON DATEADD(DAY, n.Number - 1, pm.FechaInicio) BETWEEN pm.FechaInicio AND pm.FechaFinal
+    JOIN
+        (
+            SELECT DISTINCT PeriodoAcademico, Sistema, FechaInicio
+            FROM [dbo].[planificacion_matricula]
+            WHERE Sistema = @Sistema AND PeriodoAcademico = @PeriodoAcademico
+        ) p ON pm.PeriodoAcademico = p.PeriodoAcademico AND pm.Sistema = p.Sistema
+    WHERE
+        DATEADD(DAY, n.Number - 1, pm.FechaInicio) <= pm.FechaFinal; 
+        `;
+
+        const result = await pool.request()
+        .input('PeriodoAcademico', sql.VarChar, PeriodoAcademico)
+        .input('Sistema', sql.VarChar, Sistema)
+        .query(query);
+
+        res.json(result.recordset);  
+    } catch (error) {
+        throw error;
+    }
+}
