@@ -1,20 +1,28 @@
 //import React from "react";
 import React, { useEffect, useState } from "react";
-import { FcBarChart, FcInspection, FcOk, FcOpenedFolder, FcOvertime, FcUpload} from "react-icons/fc";
-import { FcCalendar } from "react-icons/fc";
-import { FcBusinessman } from "react-icons/fc";
+import { FcBarChart, FcInspection, FcOk, FcOpenedFolder, FcOvertime} from "react-icons/fc";
 import {
   FcConferenceCall,
-  FcDiploma2,
   FcTimeline,
   FcDiploma1,
 } from "react-icons/fc";
 import "bootstrap/dist/css/bootstrap.min.css";
 import EstadoCuenta from "./Estado_Cuenta";
+import { format, parseISO, set } from "date-fns";
 
 function MenuEstudiante() {
   const [nombreUsuario, setNombreUsuario] = useState("");
   const [apellidoUsuario, setApellidoUsuario] = useState("");
+  const [Sistema, setSistema] = useState("");
+  const [indiceGlobal, setIndiceGlobal] = useState(0);
+  const fechaActual = new Date();
+  const [periodoAcademicoActual, setPeriodoAcademicoActualPAC] = useState("");
+  const añoActual = fechaActual.getFullYear();
+  const year = fechaActual.getFullYear();
+  const month = String(fechaActual.getMonth() + 1).padStart(2, "0");
+  const day = String(fechaActual.getDate()).padStart(2, "0");
+  const fechaActualString = `${year}-${month}-${day}`;
+  const [DataFechas, setDatasFechas] = useState([]);
 
   useEffect(() => {
     const storedData = localStorage.getItem("userData");
@@ -24,8 +32,155 @@ function MenuEstudiante() {
       const apellido = userData.data.apellido;
       setApellidoUsuario(apellido);
       setNombreUsuario(nombre);
+      setIndiceGlobal(userData.data.IndiceGlobal);
+      setSistema(userData.data.Sistema)
+      console.log(userData.data.IndiceGlobal);
     }
   }, []);
+
+  
+const obtenerFechasMinMaxIPAC = async () => {
+  try {
+      const response = await fetch(
+      "http://localhost:5000/enviarPlanificacionIPAC"
+      );
+      const data = await response.json();
+      const fechamin = parseISO(data[0].FechaInicio);
+      const fechamax = parseISO(data[0].FechaFinal);
+  
+      if (fechaActual >= fechamin && fechaActual <= fechamax) {
+      setPeriodoAcademicoActualPAC("1PAC");
+      }
+  } catch (error) {
+      console.error("Error al obtener las fechas mínima y máxima:", error);
+  }
+  };
+  
+  const obtenerFechasMinMaxIIPAC = async () => {
+  try {
+      const response = await fetch(
+      "http://localhost:5000/enviarPlanificacionIIPAC"
+      );
+      const data = await response.json();
+      const fechamin = parseISO(data[0].FechaInicio);
+      const fechamax = parseISO(data[0].FechaFinal);
+  
+      if (fechaActual >= fechamin && fechaActual <= fechamax) {
+      setPeriodoAcademicoActualPAC("2PAC");
+      }
+  } catch (error) {
+      console.error("Error al obtener las fechas mínima y máxima:", error);
+  }
+  };
+  
+  const obtenerFechasMinMaxIIIPAC = async () => {
+  try {
+      const response = await fetch(
+      "http://localhost:5000/enviarPlanificacionIIIPAC"
+      );
+      const data = await response.json();
+      const fechamin = parseISO(data[0].FechaInicio);
+      const fechamax = parseISO(data[0].FechaFinal);
+  
+      if (fechaActual >= fechamin && fechaActual <= fechamax) {
+      setPeriodoAcademicoActualPAC("3PAC");
+      }
+  } catch (error) {
+      console.error("Error al obtener las fechas mínima y máxima:", error);
+  }
+  };
+  obtenerFechasMinMaxIPAC();
+  obtenerFechasMinMaxIIPAC();
+  obtenerFechasMinMaxIIIPAC();
+  
+  useEffect(() => {
+    if (periodoAcademicoActual && añoActual) {
+      FechasMatricula();
+    }
+    console.log(periodoAcademicoActual);
+}, [periodoAcademicoActual, añoActual]);
+
+const FechasMatricula = async ()=> {
+    try {
+        const URL = "http://localhost:5000/ObtenerFechasMatricula";
+        const response = await fetch(URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                Sistema: Sistema,
+                PeriodoAcademico: periodoAcademicoActual,
+            }),
+            });
+            const data = await response.json();
+            setDatasFechas(data);
+            console.log(data);
+        } catch (error) {
+            console.error("Error al obtener los datos:", error);
+        }
+};
+
+  
+const matricularPorIndice = async () => {
+
+  if(!indiceGlobal){
+    if(day==DataFechas[0].IntermediateDay){
+      window.location.href = "/src/html/Matricula.html";
+      }else{
+        alert("Su fecha de matricula es: "+DataFechas[0].IntermediateDay+" de "+ numeroAMes(DataFechas[0].IntermediateMonth)+" del "+DataFechas[0].IntermediateYear+"\n\n Comienza a las 9:00 am y termina a las 11:59 pm");
+    }
+  }else{
+    switch (true) {
+      case indiceGlobal >= 90:
+        if(day==DataFechas[0].IntermediateDay){
+          window.location.href = "/src/html/Matricula.html";
+          }else{
+            alert("Su fecha de matricula es: "+DataFechas[0].IntermediateDay+" de "+ numeroAMes(DataFechas[0].IntermediateMonth)+" del "+DataFechas[0].IntermediateYear+"\n\n Comienza a las 9:00 am y termina a las 11:59 pm");
+        }
+        break;
+      case indiceGlobal >= 80:
+        if(day==DataFechas[1].IntermediateDay){
+          window.location.href = "/src/html/Matricula.html";
+          }else{
+            alert("Su fecha de matricula es: "+DataFechas[1].IntermediateDay+" de "+ numeroAMes(DataFechas[1].IntermediateMonth)+" del "+DataFechas[1].IntermediateYear+"\n\n Comienza a las 9:00 am y termina a las 11:59 pm");
+        }
+        break;
+      case indiceGlobal >= 65:
+        if(day==DataFechas[2].IntermediateDay){
+          window.location.href = "/src/html/Matricula.html";
+          }else{
+            alert("Su fecha de matricula es: "+DataFechas[2].IntermediateDay+" de "+ numeroAMes(DataFechas[2].IntermediateMonth)+" del "+DataFechas[2].IntermediateYear+"\n\n Comienza a las 9:00 am y termina a las 11:59 pm");
+        }
+        break;
+      case indiceGlobal < 65:
+        if(day==DataFechas[3].IntermediateDay){
+          window.location.href = "/src/html/Matricula.html";
+          }else{
+            alert("Su fecha de matricula es: "+DataFechas[3].IntermediateDay+" de "+ numeroAMes(DataFechas[3].IntermediateMonth)+" del "+DataFechas[3].IntermediateYear+"\n\n Comienza a las 9:00 am y termina a las 11:59 pm");
+        }
+        break;
+      default:
+        alert("Proceso de matricula no disponible");
+        break;
+    }
+  }
+
+  function numeroAMes(numero) {
+    const meses = [
+      "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+      "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ];
+  
+    if (numero >= 1 && numero <= 12) {
+      return meses[numero - 1];
+    } else {
+      return "Mes inválido";
+    }
+  }
+
+};
+
   return (
     <section className="bg-white md:mt-5">
       <h1 className="text-2xl  text-center font-bold pt-2 text-gray-900 sm:text-3xl">
@@ -44,9 +199,8 @@ function MenuEstudiante() {
                 </h1>
               </div>
               <div className="grid grid-cols-1">
-                  <a
+                  <a onClick={matricularPorIndice}
                     className=" grid grid-cols-1 group relative focus:outline-none focus:ring"
-                    href="/src/html/Matricula.html"
                   >
                     <span className=" rounded-[25px] grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"
                     style={{ backgroundColor: '#145eb9' }}
