@@ -172,7 +172,7 @@ function Fotos_estudiante() {
         max="3"
       />
       <button
-        className=" rounded-lg bg-blue-800 hover:bg-blue-500 text-white shadow h-8 w-14"
+        className=" rounded-lg bg-blue-800  text-white shadow h-8 w-14"
         type="submit"
       >
         Cargar
