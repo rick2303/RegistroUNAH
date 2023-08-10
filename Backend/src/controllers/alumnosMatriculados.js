@@ -13,7 +13,7 @@ export const listadoAlumnosEXCEL = async (req, res) => {
 
     // Crear el Excel
     const workbook = new Excel.Workbook();
-    const worksheet = workbook.addWorksheet(`Listado estudiantes ${listado.recordset[0].Asignatura}`);
+    const worksheet = workbook.addWorksheet(`${listado.recordset[0].Asignatura}`);
 
 
     worksheet.getCell('A1').value = '**************************************************************';
