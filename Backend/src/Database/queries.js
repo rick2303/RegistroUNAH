@@ -162,7 +162,11 @@ export const queryEstudiante= {
     getExistenciaSolicitudReposicion: 'select * from solicitudes_pagoreposicion where NumCuenta = @NumCuenta and Periodo = @Periodo and year(FechaSolicitud) = year(GETDATE())',
     insertEvaluaciones: ` insert into evaluaciones_docentes (idseccion, FechaEvaluacion, iddocente, IdEstudiante, pregunta1, pregunta2, pregunta3, pregunta4, pregunta5, Observacion) values (
         @IdSeccion, getdate(), @IdDocente, @IdEstudiante, @Pregunta1, @Pregunta2, @Pregunta3, @Pregunta4, @Pregunta5, @Observacion
-    )`
+    )`,
+    getNotas: `select res.nota, res.EstadoClase
+    from registro_estudiante_clases res
+    inner join secciones s on s.idseccion = res.idseccion
+    where res.IdEstudiante = @IdEstudiante and s.idseccion = @IdSeccion`
 }
 
 export const queryDocente = {
@@ -173,7 +177,14 @@ export const queryDocente = {
     getPerfilSeccion: `select s.idseccion, e.numempleado, e.nombre, e.apellido, numerotelefono, e.correoinstitucional, e.centroregional, e.carrera, e.correopersonal, pe.imagen1, pe.video, pe.descripcion from secciones s inner join empleados e on e.NumEmpleado = s.IdDocente left join perfil_empleados pe on pe.idperfil = s.iddocente 
     where s.idseccion = @IdSeccion`,
     updateNotaEstudiante: `update registro_estudiante_clases set Nota = round(@Nota, 0), EstadoClase = @EstadoClase where IdSeccion = @IdSeccion and IdEstudiante = @IdEstudiante `,
-    getIngresoNotas: `select * from planificacion_ingresonotas where Sistema = @Sistema and GETDATE() BETWEEN FechaInicio and FechaFinal`
+    getIngresoNotas: `select * from planificacion_ingresonotas where Sistema = @Sistema and GETDATE() BETWEEN FechaInicio and FechaFinal`,
+    getEstudiantesSeccion: `select 
+    s.idseccion, s.seccion 'Seccion', c.idclase 'Codigo', c.nombre 'Asignatura', e.NumCuenta, e.Nombre + ' ' + e.apellido 'Estudiante', e.CorreoInstitucional, e.CorreoPersonal,s.periodo 'Periodo', year(s.fecha) 'Año' 
+    from secciones s 
+    inner join clases c on c.IdClase = s.IdClase
+    inner join registro_estudiante_clases res on res.idseccion = s.IdSeccion 
+    inner join estudiantes e on e.numcuenta = res.IdEstudiante
+    where s.IdSeccion = @IdSeccion and res.EstadoMatricula = 'MATRICULADO'`
 }
 
 export const queryJefe = {
