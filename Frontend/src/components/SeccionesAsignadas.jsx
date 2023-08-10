@@ -57,6 +57,7 @@ const SeccionesAsignadas = () => {
     const storedData = localStorage.getItem("userData");
     const userData = JSON.parse(storedData);
     console.log(userData.data.NumEmpleado);
+    
     console.log(
       JSON.stringify({
         Sistema: userData.data.Sistema,
@@ -82,8 +83,33 @@ const SeccionesAsignadas = () => {
         console.error("Error al obtener los datos:", error);
       });
   };
-  const DescargarExcel = () => {
-    alert("Funcion para descargar Excel");
+  const DescargarExcel = (IdSeccion) => {
+    console.log(IdSeccion);
+    const storedData = localStorage.getItem("userData");
+    const userData = JSON.parse(storedData);
+    console.log( JSON.stringify({
+      IdSeccion: IdSeccion,
+      Departamento: userData.data.Carrera,
+    }));
+    fetch(`http://localhost:5000/descargarListado`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        IdSeccion: IdSeccion,
+        Departamento: userData.data.Carrera,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("hola");
+        
+      })
+      .catch((error) => {
+        console.error("Error al descagar:", error);
+      }); 
+
   };
   const columnas1 = [
     {
@@ -155,7 +181,7 @@ const SeccionesAsignadas = () => {
                 title="Enviar correo a estudiantes"
                 style={{ color: '#145eb9 !important' }}
                   className="px-1 py-0 w-36 h-8 text-center p-2 "
-                  onClick={DescargarExcel}
+                  onClick={() => DescargarExcel(data[0].IdSeccion)}
                 >
                   Descargar Excel
                 </button>
