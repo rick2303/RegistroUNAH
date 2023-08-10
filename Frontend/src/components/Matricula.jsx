@@ -22,12 +22,14 @@ const [classToDelete, setClassToDelete] = useState(null);
 const fechaActual = new Date();
 const [ContadorUVS, setContadorUVS] =  useState(24);
 const [modalType, setModalType] = useState("");
+const [centroRegional, setCentroRegional] = useState("");
 const [carreras, setCarreras] = useState([]);
 const [asignaturas, setAsignaturas] = useState([]);
 const [secciones, setSecciones] = useState([]);
 const year = fechaActual.getFullYear();
 const month = String(fechaActual.getMonth() + 1).padStart(2, "0");
 const day = String(fechaActual.getDate()).padStart(2, "0");
+
 
 const fechaActualString = `${year}-${month}-${day}`;
 
@@ -109,6 +111,7 @@ useEffect(() => {
         setNumCuenta(numCuenta);
         setCarrera(carrera);
         setSistema(Sistema);
+        setCentroRegional(userData.data.CentroRegional);
     }
     obtenerUVS();
 
@@ -421,6 +424,7 @@ const handleRowClickSecciones = async (row) => {
             body: JSON.stringify({
                 asignatura: row,
                 Periodo: periodoAcademicoActual,
+                CentroRegional: centroRegional,
             }),
             });
             const data = await response.json();
