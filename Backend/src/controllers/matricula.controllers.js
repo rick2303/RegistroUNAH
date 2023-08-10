@@ -166,7 +166,7 @@ res.json(result.recordset);
 
 
 export const mostrarSeccionesMatricula = async (req, res) => {
-    const { asignatura , Periodo} = req.body;
+    const { asignatura , Periodo, CentroRegional} = req.body;
     const pool = await getConnection();
 
     const query = `
@@ -176,11 +176,12 @@ export const mostrarSeccionesMatricula = async (req, res) => {
     on e.NumEmpleado = s.IdDocente
     inner JOIN clases c
     on c.IdClase = s.IdClase
-    where c.Nombre=@asignatura AND Periodo=@Periodo`;
+    where c.Nombre=@asignatura AND s.Periodo=@Periodo AND s.CentroRegional=@CentroRegional`;
 
     const result = await pool.request()
         .input("asignatura", sql.VarChar, asignatura)
         .input("Periodo", sql.VarChar, Periodo)
+        .input("CentroRegional", sql.VarChar, CentroRegional)
         .query(query);
 
     res.json(result.recordset);
