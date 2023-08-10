@@ -345,7 +345,8 @@ const EvaluacionDocenteJefe = () => {
             </button>
           </ModalHeader>
           <ModalBody>
-            <label className="col-12 d-flex align-items-center justify-content-center">
+            <label style={{ fontSize: '30px', color: '#1e3a8a' }}
+            className="col-12 d-flex align-items-center justify-content-center">
               <strong>{selectedRow.Nombre + " " + selectedRow.Apellido}</strong>
             </label>
            
