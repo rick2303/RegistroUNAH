@@ -83,34 +83,40 @@ const SeccionesAsignadas = () => {
         console.error("Error al obtener los datos:", error);
       });
   };
-  const DescargarExcel = (IdSeccion) => {
-    console.log(IdSeccion);
-    const storedData = localStorage.getItem("userData");
+ 
+    const DescargarExcel = async (IdSeccion, Clase, Periodo) => {
+      const storedData = localStorage.getItem("userData");
     const userData = JSON.parse(storedData);
     console.log( JSON.stringify({
       IdSeccion: IdSeccion,
       Departamento: userData.data.Carrera,
     }));
-    fetch(`http://localhost:5000/descargarListado`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        IdSeccion: IdSeccion,
-        Departamento: userData.data.Carrera,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("hola");
-        
-      })
-      .catch((error) => {
-        console.error("Error al descagar:", error);
-      }); 
+      const URL = `http://localhost:5000/descargarListado`;
+      const response = await fetch(URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          IdSeccion: IdSeccion,
+          Departamento: userData.data.Carrera,
+        }),
+      });
+      const buffer = await response.arrayBuffer();
+      const blob = new Blob([buffer], { type: "application/xlsx" });
+    
+      const url = window.URL.createObjectURL(blob);
+    
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Listado_${Periodo}_${Clase}.xlsx` // Nombre del archivo PDF que se descargará
+      a.click();
+    
+      // Limpia la URL y elimina el objeto Blob
+      window.URL.revokeObjectURL(url);
+    };
 
-  };
+  
   const columnas1 = [
     {
       name: "CUENTA",
@@ -181,7 +187,7 @@ const SeccionesAsignadas = () => {
                 title="Enviar correo a estudiantes"
                 style={{ color: '#145eb9 !important' }}
                   className="px-1 py-0 w-36 h-8 text-center p-2 "
-                  onClick={() => DescargarExcel(data[0].IdSeccion)}
+                  onClick={() => DescargarExcel(data[0].IdSeccion, data[0].Asignatura, data[0].Periodo)}
                 >
                   Descargar Excel
                 </button>
