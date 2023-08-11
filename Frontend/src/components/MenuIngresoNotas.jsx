@@ -10,8 +10,10 @@ import {
 } from "reactstrap";
 import DataTable from "react-data-table-component";
 import { FcShare } from "react-icons/fc";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "../App.css";
-import "../Evaluacionmodal.css"
+import "../horizontal-columns.css"
 
 const paginationComponentOptions = {
   rowsPerPageText: 'Filas por página',
@@ -19,6 +21,7 @@ const paginationComponentOptions = {
   selectAllRowsItem: true,
   selectAllRowsItemText: 'Todos',
 };
+
 
 
 
@@ -31,7 +34,7 @@ const MenuIngresoNotas = () => {
     const [Sistema, setSistema] = useState("");
     const [dataObtenida, setDataObtenida] = useState([]);
     const [modalOpen, setModalOpen] = useState(false)
-
+    const [rowsPerPage, setRowsPerPage] = useState(5);
 
 
   const fetchDataGeneral = (carrera, centroRegional) => {
@@ -121,6 +124,51 @@ const MenuIngresoNotas = () => {
     },
   ];
 
+  const dataEstatica = [
+
+    ...Array.from({ length: 30 }).map((_, index) => ({
+      IdSeccion: 24,
+      IdDocente: 15209,
+      IdClase: "II-222",
+      Asignatura: "Estadistica Aplicada",
+      Seccion: 1101,
+      Periodo: "2PAC",
+      IdEstudiante: `2019200363${index + 1}`,
+      Estudiante: `Estudiante${index + 1}`,
+      Apellido: `Apellido${index + 1}`,
+      Nota: 82,
+      EstadoClase: "APR"
+    })),
+
+    ...Array.from({ length: 30 }).map((_, index) => ({
+      IdSeccion: 24,
+      IdDocente: 15209,
+      IdClase: "II-321",
+      Asignatura: "Investigación de Operaciones I",
+      Seccion: 1201,
+      Periodo: "2PAC",
+      IdEstudiante: `2021200322${index + 1}`,
+      Estudiante: `Estudiante${index + 31}`,
+      Apellido: `Apellido${index + 31}`,
+      Nota: 82,
+      EstadoClase: "APR"
+    })),
+    ...Array.from({ length: 30 }).map((_, index) => ({
+      IdSeccion: 24,
+      IdDocente: 15209,
+      IdClase: "II-321",
+      Asignatura: "Investigación de Operaciones I",
+      Seccion: 1300,
+      Periodo: "2PAC",
+      IdEstudiante: `2022101575${index + 1}`,
+      Estudiante: `Estudiante${index + 61}`,
+      Apellido: `Apellido${index + 61}`,
+      Nota: 82,
+      EstadoClase: "APR"
+    })),
+  ];
+
+
 
   const mostrarInformacion = (row) => {
     setSelectedRow(row);
@@ -139,7 +187,7 @@ const MenuIngresoNotas = () => {
     })
     .then((response) => response.json())
     .then((data) => {
-      console.log("Datos obtenidos:", data);  // Imprime los datos en la consola
+      console.log("Datos obtenidos:", data);  
       setDataObtenida(data);
       setModalOpen(true); // Abre el modal
     })
@@ -217,47 +265,65 @@ const MenuIngresoNotas = () => {
         />
       </div>
 
-      <Modal isOpen={modalOpen} toggle={() => setModalOpen(false)} className="evaluacionmodal">
-        <ModalHeader className="modal-header">
-          <div className="modal-title">Detalles de Notas</div>
-          <button className="close boton_cierre" onClick={() => setModalOpen(false)}>
-            <span aria-hidden="true">X</span>
-          </button>
-        </ModalHeader>
-        <ModalBody className="modal-content">
-          {/* Agrupa la información por sección y muestra una tabla por sección */}
-          {Object.entries(dataObtenida.reduce((sections, nota) => {
-            if (!sections[nota.Seccion]) {
-              sections[nota.Seccion] = [];
-            }
-            sections[nota.Seccion].push(nota);
-            return sections;
-          }, {})).map(([seccion, notasPorSeccion]) => (
-            <div key={seccion}>
-              <h4>Sección: {seccion}</h4>
-              <Table>
-                <thead>
-                  <tr>
-                    <th>Estudiante</th>
-                    <th>Asignatura</th>
-                    <th>Nota</th>
-                    <th>Estado de Clase</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {notasPorSeccion.map((nota, index) => (
-                    <tr key={index}>
-                      <td>{nota.Estudiante} {nota.Apellido}</td>
-                      <td>{nota.Asignatura}</td>
-                      <td>{nota.Nota}</td>
-                      <td>{nota.EstadoClase}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
+
+      <Modal isOpen={modalOpen} toggle={() => setModalOpen(false)} className="modal-dialog-centered modal-fullscreen">
+          <ModalHeader className="modal-header">
+          <div className="d-flex justify-content-center align-items-center">
+            <strong className="modal-header flex-grow-1">DETALLE DE NOTAS</strong>
+            <div className="modal-header btn">
+            <button
+              onClick={() => setModalOpen(false)} aria-label="Cerrar">
+              <span aria-hidden="true">X</span>
+            </button>
             </div>
-          ))}
+          </div>
+          </ModalHeader>
+        <ModalBody className="modal-content">
+          <div className="horizontal-columns">
+            <Carousel showThumbs={false} showStatus={false} dynamicHeight={true} emulateTouch={true}>
+              {Object.entries(
+                dataObtenida.reduce((sections, nota) => {
+                  const seccionKey = `${nota.Seccion}-${nota.Asignatura}`;
+                  if (!sections[seccionKey]) {
+                    sections[seccionKey] = { seccion: nota.Seccion, asignatura: nota.Asignatura, notas: [] };
+                  }
+                  sections[seccionKey].notas.push(nota);
+                  return sections;
+                }, {})
+              ).map(([seccionKey, { seccion, asignatura, notas }]) => (
+                <div key={seccionKey} className="column">
+                  <h4 style={{ fontWeight: "bold" }}>Sección: {seccion} - Asignatura: {asignatura}</h4>
+                  <br>
+                    
+                  </br>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>ID Estudiante</th>
+                        <th>Estudiante</th>
+                        <th>Apellido</th>
+                        <th>Nota</th>
+                        <th>Estado Clase</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {notas.map((nota, index) => (
+                        <tr key={nota.IdEstudiante + "-" + index}>
+                          <td>{nota.IdEstudiante}</td>
+                          <td>{nota.Estudiante}</td>
+                          <td>{nota.Apellido}</td>
+                          <td>{nota.Nota}</td>
+                          <td>{nota.EstadoClase}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ))}
+            </Carousel>
+          </div>
         </ModalBody>
+       
       </Modal>
     </div>
   );

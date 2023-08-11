@@ -90,11 +90,12 @@ const SeccionesAsignadas = () => {
       name: "CUENTA",
       width: "300px",
       selector: (row) => row.IdEstudiante,
+      sortable: true,
     },
     {
       name: "NOMBRE",
       selector: (row) => row.Estudiante + " " + row.Apellido,
-      
+      sortable: true,
       // Estilos personalizados solo para el título
       style: {
         textAlign: "center",

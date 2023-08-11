@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import {seccionesMatricula, asignturaClase, mostrarSeccionesMatricula, obtenerCupos, verificarConflictosHorarios, verificarSiYaTieneLaClaseMatriculada, matricularClase, obtenerUVS, updateUVS} from "../controllers/matricula.controllers"
+import {seccionesMatricula, asignturaClase, mostrarSeccionesMatricula, obtenerCupos, verificarConflictosHorarios, verificarSiYaTieneLaClaseMatriculada, matricularClase, obtenerUVS, updateUVS, obtenerFechasMatricula} from "../controllers/matricula.controllers"
 
 const routerMatricula = Router();
 
@@ -40,6 +40,8 @@ routerMatricula.post('/MatricularClase',matricularClase);
 routerMatricula.post('/ObtenerUVS',obtenerUVS);
 
 routerMatricula.post('/actualizarUVS', updateUVS)
+
+routerMatricula.post('/ObtenerFechasMatricula',obtenerFechasMatricula);
 
 
 export default routerMatricula;

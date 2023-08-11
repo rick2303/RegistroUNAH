@@ -6,7 +6,7 @@ export const queries = {
     insert_Docentes: "INSERT INTO dbo.empleados (DNI, Nombre, Apellido, NumeroTelefono, CorreoInstitucional, CorreoPersonal, Contrasena,FechaNacimiento ,FechaContratacion, Carrera, Direccion, Foto, CentroRegional, Rol,SubRol) VALUES ( @DNI, @Nombre, @Apellido, @NumeroTelefono,@CorreoInstitucional, @CorreoPersonal, @Contrasena, @FechaNacimiento, @FechaContratacion, @Carrera, @Direccion, @Foto, @CentroRegional, @Rol , @SubRol )",
     accessLogin: "SELECT Contrasena, CAST(NumEmpleado AS varchar) AS Codigo, Rol, SubRol, estado FROM dbo.empleados WHERE CAST(NumEmpleado AS varchar) = @Id UNION ALL SELECT Contrasena, CAST(NumCuenta AS varchar) AS NumCuenta, NULL AS rol, NULL AS subrol, NULL as estado FROM dbo.estudiantes WHERE NumCuenta = @Id  ",
     updateEmpleado: "UPDATE dbo.empleados SET DNI = @DNI, Nombre = @Nombre, Apellido = @Apellido, NumeroTelefono = @NumeroTelefono, CorreoPersonal = @CorreoPersonal,  FechaNacimiento = @FechaNacimiento, Carrera = @Carrera, Direccion = @Direccion, CentroRegional = @CentroRegional, SubRol = @SubRol, Estado = @Estado where NumEmpleado = @NumEmpleado",
-    getEstudiantes: "SELECT Nombre, apellido, NumCuenta,Sistema, CorreoInstitucional,CorreoPersonal,Carrera, IndiceGlobal from dbo.estudiantes WHERE NumCuenta= @Id",
+    getEstudiantes: "SELECT Nombre, apellido, NumCuenta,Sistema, CorreoInstitucional,CorreoPersonal,Carrera,CentroRegional,IndiceGlobal from dbo.estudiantes WHERE NumCuenta= @Id",
     getEmpleado: "select CAST(NumEmpleado AS varchar) 'NumEmpleado', Nombre,Apellido,CorreoInstitucional,CorreoPersonal,Carrera,Foto,CentroRegional,Rol,Subrol, Sistema from empleados WHERE CAST(NumEmpleado AS varchar) = @Id ",
     getPerfilEmpleado: "select * from perfil_empleados where CAST(idPerfil AS varchar) = @Id ",
     getPerfilestudiante: "select * from perfil_estudiante where IdPerfil= @Id ",
@@ -173,6 +173,7 @@ export const queryDocente = {
     getPerfilSeccion: `select s.idseccion, e.numempleado, e.nombre, e.apellido, numerotelefono, e.correoinstitucional, e.centroregional, e.carrera, e.correopersonal, pe.imagen1, pe.video, pe.descripcion from secciones s inner join empleados e on e.NumEmpleado = s.IdDocente left join perfil_empleados pe on pe.idperfil = s.iddocente 
     where s.idseccion = @IdSeccion`,
     updateNotaEstudiante: `update registro_estudiante_clases set Nota = round(@Nota, 0), EstadoClase = @EstadoClase where IdSeccion = @IdSeccion and IdEstudiante = @IdEstudiante `,
+    getIngresoNotas: `select * from planificacion_ingresonotas where Sistema = @Sistema and GETDATE() BETWEEN FechaInicio and FechaFinal`
 }
 
 export const queryJefe = {
@@ -198,10 +199,5 @@ export const queryJefe = {
     s.IdSeccion, s.IdDocente, c.IdClase, c.Nombre 'Asignatura', s.Seccion, s.Periodo, res.IdEstudiante, res.Nota, res.EstadoClase  from registro_estudiante_clases res inner join secciones s on s.IdSeccion = res.IdSeccion inner join clases c on c.idclase = s.IdClase where s.Periodo = @Periodo and YEAR(s.Fecha) = YEAR(GETDATE()) and s.iddocente =  @IdDocente`,
     getSeccionEstudiantes: `select 
     s.IdSeccion, s.IdDocente, c.IdClase, c.Nombre 'Asignatura',
-    s.Seccion, s.Periodo, res.IdEstudiante, e.nombre 'Estudiante', e.Apellido, e.CorreoInstitucional, res.Nota, res.EstadoClase  
-from registro_estudiante_clases res 
-inner join secciones s on s.IdSeccion = res.IdSeccion 
-inner join clases c on c.idclase = s.IdClase 
-inner join estudiantes e on e.numcuenta = res.IdEstudiante
-where s.Periodo = @Periodo and YEAR(s.Fecha) = YEAR(GETDATE()) and s.iddocente =  @IdDocente`
+    s.Seccion, s.Periodo, res.IdEstudiante, e.nombre 'Estudiante', e.Apellido, e.CorreoInstitucional, res.Nota, res.EstadoClase from registro_estudiante_clases res inner join secciones s on s.IdSeccion = res.IdSeccion inner join clases c on c.idclase = s.IdClase  inner join estudiantes e on e.numcuenta = res.IdEstudiante where s.Periodo = @Periodo and YEAR(s.Fecha) = YEAR(GETDATE()) and s.iddocente =  @IdDocente`
 }

@@ -71,4 +71,7 @@
         color: black; 
         }
 
-    
+        .carousel .control-dots {
+          display: none;
+        }  
+  

@@ -325,4 +325,17 @@ export const estudiantesSecciones = async (req, res) => {
       res.status(500).send(error.message);
     }
   };
+
+  export const ingresoNotas = async (req, res) => {
+    const {Sistema} = req.body
+    const pool = await getConnection();
+    try {
+        const result = await pool.request()
+        .input("Sistema", sql.VarChar, Sistema)
+        .query(queryDocente.getIngresoNotas)
+        res.status(200).json(result.recordset[0])
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+}
   

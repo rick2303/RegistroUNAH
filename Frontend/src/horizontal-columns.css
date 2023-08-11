@@ -1,0 +1,54 @@
+/* Estilos para el contenido dentro del modal */
+.modal-content {
+    background-color: #fff;
+    border-radius: 8px;
+    width: 100%; /* Ajusta el ancho del contenido */
+    height: 90%; /* Ajusta la altura del contenido */
+    overflow-y: auto; /* Agrega desplazamiento vertical si es necesario */
+    padding: 20px;
+
+  }
+  
+  /* Estilos para las tablas dentro del carrusel */
+.modal-content table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+}
+  
+  /* Estilos para las celdas de la tabla */
+  .modal-content table td,
+  .modal-content table th {
+    padding: 1px;
+    border: 1px solid #000000;
+    
+  }
+
+  .modal-header {
+    font-size: 27px; 
+    background-color: #1e40af; 
+    color: white; 
+    padding: 1rem;
+    padding-left:33% ; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: none;
+    
+  }
+  
+
+.modal-header .btn {
+
+    background-color: #1e40af; 
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size:25px;
+    padding: 0;
+    padding-left: 163%;
+    
+  }
+

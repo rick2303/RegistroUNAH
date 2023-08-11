@@ -29,6 +29,8 @@ const Notas = () => {
   const [imagen, setImagen] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [video, setVideo] = useState("");
+  const [Nota, setNota] = useState("");
+  
   const [evaluationData, setEvaluationData] = useState({
     pregunta1: '',
     pregunta2: '',
@@ -64,6 +66,7 @@ const Notas = () => {
         const IdDocente = userData.numempleado;
         console.log("IdDocente:", IdDocente);
         setIdDocente(IdDocente);
+        const Nota = userData.Notas
       }
     })
     .catch((error) => {
@@ -80,8 +83,14 @@ const Notas = () => {
       const userData = JSON.parse(storedData);
       const numCuenta = userData.data.NumCuenta;
       setNumCuenta(numCuenta);
+      const Notas = userData.data.Nota
+      setNota(Notas)
+      console.log(Notas)
     }
-  }, []);
+  }, [Nota ,NumCuenta]);
+
+  console.log(NumCuenta)
+  console.log(Nota)
 
   const toggleModal2 = () => {
     setIsModalOpen2(prevState => !prevState);

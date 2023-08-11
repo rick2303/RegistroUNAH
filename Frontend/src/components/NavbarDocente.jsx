@@ -77,9 +77,15 @@ export default function NavbarDocente() {
         className="p-1 font-normal "
         title="Regresar"
       >
-        <a href={redirectTo} style={{ color: 'white' }}  className="flex items-center">
-          <h1 className="text-5xl"><TiArrowBackOutline /></h1>
+        {subrol !== "DOCENTE" &&
+ (
+        <a href={redirectTo} style={{ color: "white" }} className="flex items-center">
+          <h1 className="text-5xl cursor-pointer">
+            <TiArrowBackOutline />
+          </h1>
         </a>
+      )}
+    
       </Typography>
       <Typography
         as="li"
