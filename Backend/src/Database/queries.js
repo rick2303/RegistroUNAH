@@ -103,7 +103,7 @@ export const querys = {
     getIPACPlanificacionSemestral: "select * from [dbo].[planificacion_academica] where PeriodoAcademico = '1PAC' AND Sistema='Semestral'",
     getIIPACPlanificacionSemestral: "select * from [dbo].[planificacion_academica] where PeriodoAcademico = '2PAC' AND Sistema='Semestral'",
     
-    getClasesCursando: "select cs.IdClase as CODIGO, cs.Nombre as ASIGNATURA, cs.uv as UV, s.seccion AS SECCION,s.Edificio AS EDIFICIO,s.Aula AS AULA,s.HI AS HORA_INICIO,s.HF AS HORA_FINAL,s.obs AS OBS, year(re.Fecha) AS Año, Periodo AS PERIODO, s.Dias, s.IdSeccion AS IDSECCION from registro_estudiante_clases re INNER JOIN estudiantes e on IdEstudiante = NumCuenta INNER join secciones s on re.IdSeccion = s.IdSeccion INNER join clases cs on cs.IdClase = s.IdClase where e.numCuenta=@NumCuenta and Periodo = @Periodo and year(re.Fecha) = @año and EstadoMatricula='MATRICULADO'",
+    getClasesCursando: "select cs.IdClase as CODIGO, cs.Nombre as ASIGNATURA, cs.uv as UV, s.seccion AS SECCION,s.Edificio AS EDIFICIO,s.Aula AS AULA,s.HI AS HORA_INICIO,s.HF AS HORA_FINAL,s.obs AS OBS, year(re.Fecha) AS Año, Periodo AS PERIODO, s.Dias, s.IdSeccion AS IDSECCION, re.Nota from registro_estudiante_clases re INNER JOIN estudiantes e on IdEstudiante = NumCuenta INNER join secciones s on re.IdSeccion = s.IdSeccion INNER join clases cs on cs.IdClase = s.IdClase where e.numCuenta=@NumCuenta and Periodo = @Periodo and year(re.Fecha) = @año and EstadoMatricula='MATRICULADO'",
 
     getClasesEnListaDeEspera: "select cs.IdClase as CODIGO, cs.Nombre as ASIGNATURA, cs.uv as UV, s.seccion AS SECCION,s.Edificio AS EDIFICIO,s.Aula AS AULA,s.HI AS HORA_INICIO,s.HF AS HORA_FINAL,s.obs AS OBS, year(re.Fecha) AS Año, Periodo AS PERIODO, s.Dias from registro_estudiante_clases re INNER JOIN estudiantes e on IdEstudiante = NumCuenta INNER join secciones s on re.IdSeccion = s.IdSeccion INNER join clases cs on cs.IdClase = s.IdClase where e.numCuenta=@NumCuenta and Periodo = @Periodo and year(re.Fecha) = @año and EstadoMatricula='EN ESPERA'",
 
@@ -152,7 +152,11 @@ export const querysADMIN = {
     DeleteMatricula: 'delete planificacion_matricula where idPlanificacion = @idPlanificacion',
     DeleteFechaNotas: 'delete planificacion_ingresonotas where idPlanificacion = @idPlanificacion',
     DeleteCancelacionesExcepcionales: 'delete planificacion_cancelacionesexcepcionales where idPlanificacion = @idPlanificacion',
-    getPeriodoActual: 'select PeriodoAcademico from planificacion_academica where GETDATE() BETWEEN FechaInicio and FechaFinal and Sistema = @Sistema'
+    getPeriodoActual: 'select PeriodoAcademico from planificacion_academica where GETDATE() BETWEEN FechaInicio and FechaFinal and Sistema = @Sistema',
+    sendEmail: `select 
+    s.IdSeccion, e.NumCuenta, e.Nombre + ' ' + e.Apellido 'Estudiante', e.CorreoInstitucional, c.idclase, c.nombre 'Asignatura', s.Seccion, s.Periodo from secciones s inner join registro_estudiante_clases res
+    on res.IdSeccion = s.IdSeccion inner join estudiantes e on e.NumCuenta = res.IdEstudiante inner join clases c on c.IdClase = s.IdClase
+    where s.IdSeccion = @IdSeccion`
 
 }
 
@@ -162,7 +166,11 @@ export const queryEstudiante= {
     getExistenciaSolicitudReposicion: 'select * from solicitudes_pagoreposicion where NumCuenta = @NumCuenta and Periodo = @Periodo and year(FechaSolicitud) = year(GETDATE())',
     insertEvaluaciones: ` insert into evaluaciones_docentes (idseccion, FechaEvaluacion, iddocente, IdEstudiante, pregunta1, pregunta2, pregunta3, pregunta4, pregunta5, Observacion) values (
         @IdSeccion, getdate(), @IdDocente, @IdEstudiante, @Pregunta1, @Pregunta2, @Pregunta3, @Pregunta4, @Pregunta5, @Observacion
-    )`
+    )`,
+    getNotas: `select res.nota, res.EstadoClase
+    from registro_estudiante_clases res
+    inner join secciones s on s.idseccion = res.idseccion
+    where res.IdEstudiante = @IdEstudiante and s.idseccion = @IdSeccion`
 }
 
 export const queryDocente = {
@@ -173,7 +181,14 @@ export const queryDocente = {
     getPerfilSeccion: `select s.idseccion, e.numempleado, e.nombre, e.apellido, numerotelefono, e.correoinstitucional, e.centroregional, e.carrera, e.correopersonal, pe.imagen1, pe.video, pe.descripcion from secciones s inner join empleados e on e.NumEmpleado = s.IdDocente left join perfil_empleados pe on pe.idperfil = s.iddocente 
     where s.idseccion = @IdSeccion`,
     updateNotaEstudiante: `update registro_estudiante_clases set Nota = round(@Nota, 0), EstadoClase = @EstadoClase where IdSeccion = @IdSeccion and IdEstudiante = @IdEstudiante `,
-    getIngresoNotas: `select * from planificacion_ingresonotas where Sistema = @Sistema and GETDATE() BETWEEN FechaInicio and FechaFinal`
+    getIngresoNotas: `select * from planificacion_ingresonotas where Sistema = @Sistema and GETDATE() BETWEEN FechaInicio and FechaFinal`,
+    getEstudiantesSeccion: `select 
+    s.idseccion, s.seccion 'Seccion', c.idclase 'Codigo', c.nombre 'Asignatura', e.NumCuenta, e.Nombre + ' ' + e.apellido 'Estudiante', e.CorreoInstitucional, e.CorreoPersonal,s.periodo 'Periodo', year(s.fecha) 'Año' 
+    from secciones s 
+    inner join clases c on c.IdClase = s.IdClase
+    inner join registro_estudiante_clases res on res.idseccion = s.IdSeccion 
+    inner join estudiantes e on e.numcuenta = res.IdEstudiante
+    where s.IdSeccion = @IdSeccion and res.EstadoMatricula = 'MATRICULADO'`
 }
 
 export const queryJefe = {
@@ -199,5 +214,5 @@ export const queryJefe = {
     s.IdSeccion, s.IdDocente, c.IdClase, c.Nombre 'Asignatura', s.Seccion, s.Periodo, res.IdEstudiante, res.Nota, res.EstadoClase  from registro_estudiante_clases res inner join secciones s on s.IdSeccion = res.IdSeccion inner join clases c on c.idclase = s.IdClase where s.Periodo = @Periodo and YEAR(s.Fecha) = YEAR(GETDATE()) and s.iddocente =  @IdDocente`,
     getSeccionEstudiantes: `select 
     s.IdSeccion, s.IdDocente, c.IdClase, c.Nombre 'Asignatura',
-    s.Seccion, s.Periodo, res.IdEstudiante, e.nombre 'Estudiante', e.Apellido, e.CorreoInstitucional, res.Nota, res.EstadoClase from registro_estudiante_clases res inner join secciones s on s.IdSeccion = res.IdSeccion inner join clases c on c.idclase = s.IdClase  inner join estudiantes e on e.numcuenta = res.IdEstudiante where s.Periodo = @Periodo and YEAR(s.Fecha) = YEAR(GETDATE()) and s.iddocente =  @IdDocente`
+    s.Seccion, s.Periodo, res.IdEstudiante, e.nombre 'Estudiante', e.Apellido, e.CorreoInstitucional, res.Nota, res.EstadoClase from registro_estudiante_clases res inner join secciones s on s.IdSeccion = res.IdSeccion inner join clases c on c.idclase = s.IdClase  inner join estudiantes e on e.numcuenta = res.IdEstudiante where s.Periodo = @Periodo and YEAR(s.Fecha) = YEAR(GETDATE()) and s.iddocente =  @IdDocente and EstadoMatricula = 'MATRICULADO'`
 }

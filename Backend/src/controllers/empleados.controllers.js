@@ -336,6 +336,8 @@ export const estudiantesSecciones = async (req, res) => {
         res.status(200).json(result.recordset[0])
     } catch (error) {
         res.status(500).send(error.message)
+    } finally {
+        pool.close();
     }
 }
   

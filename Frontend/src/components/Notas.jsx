@@ -239,7 +239,7 @@ const Notas = () => {
           año: year,
         }),
       });
-      const data = await response.json();
+      const data = await response.json();3
       console.log(data);
       setHistorialData(data);
     } catch (error) {
