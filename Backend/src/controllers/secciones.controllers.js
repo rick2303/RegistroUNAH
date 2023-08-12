@@ -31,7 +31,7 @@ FROM [dbo].[secciones] s
 INNER JOIN [dbo].[empleados] e ON e.NumEmpleado = s.IdDocente
 INNER JOIN [dbo].[clases] c ON s.IdClase = c.IdClase
 INNER JOIN [dbo].[registro_estudiante_clases] rec ON rec.IdSeccion = s.IdSeccion
-WHERE c.Departamento = 'Ingenieria industrial' AND s.CentroRegional = 'VS' --and s.Periodo = '2PAC'
+WHERE c.Departamento = @Departamento AND s.CentroRegional = @CentroRegional --and s.Periodo = '2PAC'
 ORDER BY s.IdSeccion DESC;
         `);
 
