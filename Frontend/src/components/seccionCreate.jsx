@@ -278,34 +278,42 @@ const columnas = [
     name:'ASIGNATURA',
     selector : row => row.Asignatura,
     width: "240px"
+    
     },
     {
     name:'EDIFICIO',
-    selector : row => row.Edificio
+    selector : row => row.Edificio,
+    center: true,
     },
     {
     name:'AULA',
-    selector : row => row.Aula
+    selector : row => row.Aula,
+    center: true,
     },
     {
     name:'DIAS',
-    selector : row => row.Dias
+    selector : row => row.Dias,
+    center: true,
     },
     {
     name:'HI',
-    selector : row => row.HI
+    selector : row => row.HI,
+    center: true,
     },
     {
     name:'HF',
     selector : row => row.HF
+    , center: true,
     },
     {
     name:'CUPOS',
-    selector : row => row.Cupos
+    selector : row => row.Cupos,
+    center: true,
     },
     {
       name:'ESPERA',
-      selector : row => row.cuentaListaDeEspera
+      selector : row => row.cuentaListaDeEspera,
+      center: true,
     },
     {
     name:'DOCENTE',
@@ -314,7 +322,8 @@ const columnas = [
     },
     {
     name:'SECCION',
-    selector :row => row.Seccion
+    selector :row => row.Seccion,
+    center: true,
     },
     // {
     // name:'PERIODO',
@@ -327,6 +336,7 @@ const columnas = [
             <FcDeleteRow />
           </h1>
         ),
+        center: true,
       },
       {
         name: "EDITAR CUPOS",
@@ -335,6 +345,7 @@ const columnas = [
             <FaPlusCircle style={{ color: "#1e40af "}} />
           </h1>
         ),
+        center: true,
       },
     ]
     const filteredData = sections.filter((row) => row.Asignatura.includes(inputValue));
