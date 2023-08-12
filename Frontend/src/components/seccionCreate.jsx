@@ -174,6 +174,7 @@ const showData = async () => {
         .then((res) => res.json())
         .then((data) => {
             setSections(data);
+            console.log("estas son las secciones",data);
         })
         .catch((error) => {
             console.error("Error al obtener los datos:", error);
@@ -286,10 +287,6 @@ const columnas = [
     name:'AULA',
     selector : row => row.Aula
     },
-    // {
-    // name:'MATRICULADOS',
-    // selector : row => row.CantidadAlumnos
-    // },
     {
     name:'DIAS',
     selector : row => row.Dias
@@ -307,6 +304,10 @@ const columnas = [
     selector : row => row.Cupos
     },
     {
+      name:'ESPERA',
+      selector : row => row.cuentaListaDeEspera
+    },
+    {
     name:'DOCENTE',
     selector : row => row.Nombre,
     width: "240px"
@@ -315,10 +316,10 @@ const columnas = [
     name:'SECCION',
     selector :row => row.Seccion
     },
-    {
-    name:'PERIODO',
-    selector :row => row.Periodo
-    },
+    // {
+    // name:'PERIODO',
+    // selector :row => row.Periodo
+    // },
     {
         name: "ELIMINAR",
         cell: (row) => (
@@ -337,6 +338,7 @@ const columnas = [
       },
     ]
     const filteredData = sections.filter((row) => row.Asignatura.includes(inputValue));
+    console.log("estas son las secciones filtradas",filteredData);
 //Mostramos la data en DataTable
 const NoDataComponent = () => {
   return <div>No hay registros para mostrar</div>;
@@ -584,12 +586,12 @@ const NoDataComponent = () => {
       </div>
       <br />
       <br />
-        <DataTable
-        noDataComponent={<NoDataComponent />}
-        columns={columnas}
-        data={filteredData}
-        pagination paginationComponentOptions={paginationComponentOptions}
-        ></DataTable>
+      <DataTable
+      noDataComponent={<NoDataComponent />}
+      columns={columnas}
+      data={sections} // Aquí usa todas las secciones sin filtrar
+      paginationComponentOptions={paginationComponentOptions}
+    ></DataTable>
     </div>
 </div>
     </div>
