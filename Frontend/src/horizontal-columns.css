@@ -26,29 +26,28 @@
     
   }
 
-  .modal-header {
-    font-size: 27px; 
-    background-color: #1e40af; 
-    color: white; 
-    padding: 1rem;
-    padding-left:33% ; 
+
+
+  .modal-header-custom {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center; /* Centrar horizontalmente */
+    padding: 1rem; /* Ajusta el espaciado según tus preferencias */
     border-bottom: none;
-    
+    border-radius: 0;
+    background-color: #007bff;
   }
   
-
-.modal-header .btn {
-
-    background-color: #1e40af; 
-    border: none;
+  /* Estilo para el botón de cierre */
+  .modal-header-custom .close {
+    font-size: 1.2rem;
+    font-weight: 700;
     color: white;
-    cursor: pointer;
-    font-size:25px;
-    padding: 0;
-    padding-left: 163%;
-    
+    opacity: 1;
+    margin-top: 18px;
+    margin-right: 25px;
   }
-
+  
+  .modal-header-custom .close:hover {
+    opacity: 1;
+  }

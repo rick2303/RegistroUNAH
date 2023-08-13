@@ -14,6 +14,7 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "../App.css";
 import "../horizontal-columns.css"
+import "../Perfil_estudiante.css"
 
 const paginationComponentOptions = {
   rowsPerPageText: 'Filas por página',
@@ -270,18 +271,22 @@ const MenuIngresoNotas = () => {
       </div>
 
 
-      <Modal isOpen={modalOpen} toggle={() => setModalOpen(false)} className="modal-dialog-centered modal-fullscreen">
-          <ModalHeader className="modal-header">
-          <div className="d-flex justify-content-center align-items-center">
-            <strong className="modal-header flex-grow-1">DETALLE DE NOTAS</strong>
-            <div className="modal-header btn">
-            <button
-              onClick={() => setModalOpen(false)} aria-label="Cerrar">
-              <span aria-hidden="true">X</span>
-            </button>
-            </div>
-          </div>
-          </ModalHeader>
+      <Modal
+  isOpen={modalOpen}
+  toggle={() => setModalOpen(false)}
+  className="modal-fullscreen"
+>
+  <ModalHeader
+    className="text-white bg-blue-800 text-2xl modal-header-custom"
+  >
+    <strong>DETALLE DE NOTAS</strong>
+    <button
+      className="close boton_cierre"
+      onClick={() => setModalOpen(false)}
+    >
+      <span aria-hidden="true">X</span>
+    </button>
+  </ModalHeader>
         <ModalBody className="modal-content">
           <div className="horizontal-columns">
             <Carousel showThumbs={false} showStatus={false} dynamicHeight={true} emulateTouch={true}>

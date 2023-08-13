@@ -1,13 +1,14 @@
-import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from "react";
-import DataTable from "react-data-table-component";
-import { FcFinePrint,FcInfo} from "react-icons/fc";
 import { Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input, Button } from 'reactstrap';
+import { FcFinePrint, FcInfo } from "react-icons/fc";
+import DataTable from "react-data-table-component";
+import { parseISO } from "date-fns";
+
+import "bootstrap/dist/css/bootstrap.min.css";
 import "../Perfil_estudiante.css";
-import "styled-components";
-import { format, parseISO, set } from "date-fns";
 import "../App.css";
-import "../Evaluacionmodal.css"
+import "../Evaluacionmodal.css";
+import "styled-components";
 
 
 const Notas = () => {
@@ -31,12 +32,9 @@ const Notas = () => {
   const [video, setVideo] = useState("");
   const [Nota, setNota] = useState("");
   const [evaluationSubmitted, setEvaluationSubmitted] = useState(false);
-  const [formSubmitted, setFormSubmitted] = useState(false);
   const [submittedForm, setSubmittedForm] = useState({});
   const [allFormsSubmitted, setAllFormsSubmitted] = useState(false);
   const [evaluationFormsSubmitted, setEvaluationFormsSubmitted] = useState({});
-  
-
   
   const [evaluationData, setEvaluationData] = useState({
     pregunta1: '',
@@ -49,7 +47,18 @@ const Notas = () => {
     IdDocente: ''
   });
 
+  useEffect(() => {
+    const storedData = localStorage.getItem(`submittedForm_${NumCuenta}`);
+    if (storedData) {
+      setSubmittedForm(JSON.parse(storedData));
+    }
+  }, []);
 
+  useEffect(() => {
+    localStorage.setItem(`submittedForm_${NumCuenta}`, JSON.stringify(submittedForm));
+  }, [submittedForm]);
+
+  
 
   const mostrarInformacion2 = (row) => {
     setSelectedRow(row);
@@ -95,10 +104,12 @@ const Notas = () => {
       const userData = JSON.parse(storedData);
       const numCuenta = userData.data.NumCuenta;
       setNumCuenta(numCuenta);
-      const submittedFormsData = JSON.parse(localStorage.getItem("submittedForm")) || {};
+
+      // Cargar el estado de los formularios enviados desde el Local Storage
+      const submittedFormsData = JSON.parse(localStorage.getItem(`submittedForm_${numCuenta}`)) || {};
       setSubmittedForm(submittedFormsData);
     }
-  }, [NumCuenta]);
+  }, []);
 
   const toggleModal2 = () => {
     setIsModalOpen2(prevState => !prevState);
@@ -161,6 +172,7 @@ const Notas = () => {
           ...prevForms,
           [formKey]: true,
         }));
+        localStorage.setItem(`submittedForm_${NumCuenta}`, JSON.stringify(submittedForm));
         const updatedFormsSubmitted = {
           ...evaluationFormsSubmitted,
           [IdDocente]: true,
@@ -270,14 +282,18 @@ const Notas = () => {
           Periodo: periodo,
           año: year,
         }),
+        
       });
-      const data = await response.json();3
+      
+      const data = await response.json();
       console.log(data);
       setHistorialData(data);
+      
     } catch (error) {
       console.error("Error al obtener los datos:", error);
     }
   };
+
 
 
   // Configuramos las columnas para DataTable
