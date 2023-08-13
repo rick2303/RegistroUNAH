@@ -34,6 +34,7 @@ const EvaluacionDocenteJefe = () => {
   const [cantidadSiNoPorClase, setCantidadSiNoPorClase] = useState({});
   const [observacionesPorClase, setObservacionesPorClase] = useState({});
 
+
   const fetchDataGeneral = (carrera, centroRegional) => {
     fetch(`http://localhost:5000/docentesDepartamento`, {
       method: "POST",
@@ -63,14 +64,16 @@ const EvaluacionDocenteJefe = () => {
     setCarrera(carrera);
     const centroRegional = userData.data.CentroRegional;
     setCentroRegional(centroRegional);
-
+   
     // Guarda los valores de carrera y centroRegional en variables locales
     const carreraActual = carrera;
     const centroRegionalActual = centroRegional;
+ 
 
     // Llama a la función fetchData para obtener los datos usando las variables locales
     fetchDataGeneral(carreraActual, centroRegionalActual);
   }, []);
+
 
   useEffect(() => {
     // Fetch data whenever the inputValue changes
