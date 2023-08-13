@@ -174,6 +174,7 @@ const showData = async () => {
         .then((res) => res.json())
         .then((data) => {
             setSections(data);
+            console.log("estas son las secciones",data);
         })
         .catch((error) => {
             console.error("Error al obtener los datos:", error);
@@ -277,34 +278,42 @@ const columnas = [
     name:'ASIGNATURA',
     selector : row => row.Asignatura,
     width: "240px"
+    
     },
     {
     name:'EDIFICIO',
-    selector : row => row.Edificio
+    selector : row => row.Edificio,
+    center: true,
     },
     {
     name:'AULA',
-    selector : row => row.Aula
+    selector : row => row.Aula,
+    center: true,
     },
-    // {
-    // name:'MATRICULADOS',
-    // selector : row => row.CantidadAlumnos
-    // },
     {
     name:'DIAS',
-    selector : row => row.Dias
+    selector : row => row.Dias,
+    center: true,
     },
     {
     name:'HI',
-    selector : row => row.HI
+    selector : row => row.HI,
+    center: true,
     },
     {
     name:'HF',
     selector : row => row.HF
+    , center: true,
     },
     {
     name:'CUPOS',
-    selector : row => row.Cupos
+    selector : row => row.Cupos,
+    center: true,
+    },
+    {
+      name:'ESPERA',
+      selector : row => row.cuentaListaDeEspera,
+      center: true,
     },
     {
     name:'DOCENTE',
@@ -313,12 +322,13 @@ const columnas = [
     },
     {
     name:'SECCION',
-    selector :row => row.Seccion
+    selector :row => row.Seccion,
+    center: true,
     },
-    {
-    name:'PERIODO',
-    selector :row => row.Periodo
-    },
+    // {
+    // name:'PERIODO',
+    // selector :row => row.Periodo
+    // },
     {
         name: "ELIMINAR",
         cell: (row) => (
@@ -326,6 +336,7 @@ const columnas = [
             <FcDeleteRow />
           </h1>
         ),
+        center: true,
       },
       {
         name: "EDITAR CUPOS",
@@ -334,9 +345,11 @@ const columnas = [
             <FaPlusCircle style={{ color: "#1e40af "}} />
           </h1>
         ),
+        center: true,
       },
     ]
     const filteredData = sections.filter((row) => row.Asignatura.includes(inputValue));
+    console.log("estas son las secciones filtradas",filteredData);
 //Mostramos la data en DataTable
 const NoDataComponent = () => {
   return <div>No hay registros para mostrar</div>;
@@ -584,12 +597,12 @@ const NoDataComponent = () => {
       </div>
       <br />
       <br />
-        <DataTable
-        noDataComponent={<NoDataComponent />}
-        columns={columnas}
-        data={filteredData}
-        pagination paginationComponentOptions={paginationComponentOptions}
-        ></DataTable>
+      <DataTable
+      noDataComponent={<NoDataComponent />}
+      columns={columnas}
+      data={sections} // Aquí usa todas las secciones sin filtrar
+      paginationComponentOptions={paginationComponentOptions}
+    ></DataTable>
     </div>
 </div>
     </div>

@@ -82,8 +82,26 @@ const CargarNotas = () => {
         console.error("Error al obtener los datos:", error);
       });
   };
-  const EnviarCorreo = () => {
-    alert("Correo enviado a los estudiantes");
+  const EnviarCorreo = (IdSeccion) => {
+    console.log(IdSeccion);
+    fetch("http://localhost:5000/informarNotas", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ IdSeccion: IdSeccion }), // Send input value as JSON
+    })
+    .then((response) => response.json())
+      .then((data) => {
+        
+        console.log( data); // Imprime el array recibido en la consola
+        alert(data.message);
+    
+      })
+      .catch((error) => {
+        console.error("Error al enviar correos:", error);
+        alert("Error al enviar correos");
+      });
   };
   const columnas1 = [
     {
@@ -328,10 +346,10 @@ const CargarNotas = () => {
                 <button
                 title="Enviar correo a estudiantes"
                 style={{ color: '#145eb9 !important' }}
-                  className="boton_guardar px-1 py-0 w-20 h-8 text-center p-2"
-                  onClick={EnviarCorreo}
+                  className="boton_guardar px-1 py-0 w-36 h-8 text-center p-2"
+                  onClick={() =>EnviarCorreo(data[0].IdSeccion)}
                 >
-                  Enviar
+                  Enviar correos
                 </button>
               </div>
             </div>
