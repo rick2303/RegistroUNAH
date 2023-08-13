@@ -23,8 +23,6 @@ const enviarSolicitud = async () => {
     const motivo = document.getElementById("solicitud").value;
     console.log(motivo);
 
-
-  
     // Enviar solicitud al backend
     fetch("http://localhost:5000/subirSolicitud", {
       method: "POST",

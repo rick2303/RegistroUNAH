@@ -44,26 +44,35 @@ post http://localhost:5000/enviarClasesQueEstaCursando
 Content-Type: application/json
 
 {
-    "NumCuenta": "20182001940",
+    "NumCuenta": "20192003632",
     "Periodo": "2PAC",
     "año": 2023
 }
 
 ### ver clases que esta cursando un estudiante
-post http://localhost:5000/estadoCuenta
+post http://localhost:5000/subirEvaluacionDocente
 Content-Type: application/json
 
 {
-    "numCuenta": "20182001940"
+    "IdSeccion": "21",
+    "IdDocente": 15198,
+    "IdEstudiante":"20182001940",
+    "Pregunta1":5,
+    "Pregunta2":5,
+    "Pregunta3":2,
+    "Pregunta4":"SI",
+    "Pregunta5":"NO",
+    "Observacion":"Ningunac"
+
 }
 
-
 ### ver clases que esta cursando un estudiante
-post http://localhost:5000/estadoCuenta
+post http://localhost:5000/verNotas
 Content-Type: application/json
 
 {
-    "numCuenta": "20182001940"
+    "Sistema":"Trimestral",
+    "IdDocente": 15209
 }
 
 

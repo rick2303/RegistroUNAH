@@ -1,13 +1,14 @@
-import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from "react";
-import DataTable from "react-data-table-component";
-import { FcFinePrint,FcInfo} from "react-icons/fc";
 import { Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input, Button } from 'reactstrap';
+import { FcFinePrint, FcInfo } from "react-icons/fc";
+import DataTable from "react-data-table-component";
+import { parseISO } from "date-fns";
+
+import "bootstrap/dist/css/bootstrap.min.css";
 import "../Perfil_estudiante.css";
-import "styled-components";
-import { format, parseISO, set } from "date-fns";
 import "../App.css";
-import "../Evaluacionmodal.css"
+import "../Evaluacionmodal.css";
+import "styled-components";
 
 
 const Notas = () => {
@@ -29,6 +30,12 @@ const Notas = () => {
   const [imagen, setImagen] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [video, setVideo] = useState("");
+  const [Nota, setNota] = useState("");
+  const [evaluationSubmitted, setEvaluationSubmitted] = useState(false);
+  const [submittedForm, setSubmittedForm] = useState({});
+  const [allFormsSubmitted, setAllFormsSubmitted] = useState(false);
+  const [evaluationFormsSubmitted, setEvaluationFormsSubmitted] = useState({});
+  
   const [evaluationData, setEvaluationData] = useState({
     pregunta1: '',
     pregunta2: '',
@@ -40,10 +47,28 @@ const Notas = () => {
     IdDocente: ''
   });
 
+  useEffect(() => {
+    const storedData = localStorage.getItem(`submittedForm_${NumCuenta}`);
+    if (storedData) {
+      setSubmittedForm(JSON.parse(storedData));
+    }
+  }, []);
 
+  useEffect(() => {
+    localStorage.setItem(`submittedForm_${NumCuenta}`, JSON.stringify(submittedForm));
+  }, [submittedForm]);
+
+  
 
   const mostrarInformacion2 = (row) => {
     setSelectedRow(row);
+    const formKey = `${row.IDSECCION}`;
+    if (submittedForm[formKey]) {
+      alert("El formulario ya ha sido enviado para este docente.");
+      return;
+    }
+
+
     toggleModal2();
     fetch(`http://localhost:5000/mostrarPerfilDocente`, {
       method: "POST",
@@ -73,13 +98,16 @@ const Notas = () => {
   
 
 
-
   useEffect(() => {
     const storedData = localStorage.getItem("userData");
     if (storedData) {
       const userData = JSON.parse(storedData);
       const numCuenta = userData.data.NumCuenta;
       setNumCuenta(numCuenta);
+
+      // Cargar el estado de los formularios enviados desde el Local Storage
+      const submittedFormsData = JSON.parse(localStorage.getItem(`submittedForm_${numCuenta}`)) || {};
+      setSubmittedForm(submittedFormsData);
     }
   }, []);
 
@@ -98,12 +126,21 @@ const Notas = () => {
 
   const handleSubmit2 = async e => {
     e.preventDefault();
+  
     if (!PreguntasContestadas()) {
+      return;
+    }
+
+    const formKey = `${selectedRow.IDSECCION}`;
+
+    if (submittedForm[formKey]) { 
+      alert("El formulario ya ha sido enviado para este docente.");
+      resetForm();
+      toggleModal2();
       return;
     }
   
     try {
-  
       const response = await fetch('http://localhost:5000/subirEvaluacionDocente', {
         method: 'POST',
         headers: {
@@ -126,9 +163,25 @@ const Notas = () => {
   
       if (response.ok) {
         console.log('Evaluación enviada con éxito');
-        alert("Evaluacion enviada Correctamente");
+        alert("Evaluación enviada correctamente");
         resetForm();
         toggleModal2();
+        setEvaluationSubmitted(true);
+        
+        setSubmittedForm((prevForms) => ({
+          ...prevForms,
+          [formKey]: true,
+        }));
+        localStorage.setItem(`submittedForm_${NumCuenta}`, JSON.stringify(submittedForm));
+        const updatedFormsSubmitted = {
+          ...evaluationFormsSubmitted,
+          [IdDocente]: true,
+        };
+        setEvaluationFormsSubmitted(updatedFormsSubmitted);
+        // Verificar si todos los formularios han sido enviados
+        const allFormsSubmitted = Object.values(submittedForm).every((value) => value === true);
+        setAllFormsSubmitted(allFormsSubmitted);
+  
       } else {
         console.error('Error al enviar la evaluación');
       }
@@ -229,14 +282,20 @@ const Notas = () => {
           Periodo: periodo,
           año: year,
         }),
+        
       });
-      const data = await response.json();3
+      
+      const data = await response.json();
       console.log(data);
       setHistorialData(data);
+      
     } catch (error) {
       console.error("Error al obtener los datos:", error);
     }
   };
+
+
+
   // Configuramos las columnas para DataTable
   const columnas1 = [
     {
@@ -264,16 +323,24 @@ const Notas = () => {
     {
       name: "EVALUACIÓN DOCENTE",
       cell: (row) => (
-        <h1 className="cursor-pointer" onClick={() => mostrarInformacion2(row)}>
-          <FcInfo />
+        <h1 className="cursor-pointer">
+          <FcInfo
+            onClick={() => mostrarInformacion2(row)}
+            disabled={evaluationFormsSubmitted[row.IdDocente]}
+          />
         </h1>
       ),
       center: true,
     },
     {
       name: "NOTA FINAL",
-      selector: (row) => row.OBS,
+      selector: (row) => row.Nota,
       center: true,
+      cell: (row) => (
+        submittedForm[`${row.IDSECCION}`]
+          ? <span>{row.Nota}</span>
+          : null
+      ),
     },
     
     {
@@ -641,7 +708,6 @@ const Notas = () => {
       </Modal>
     </div>
     </div>
-
   );
 };
 export default Notas;
