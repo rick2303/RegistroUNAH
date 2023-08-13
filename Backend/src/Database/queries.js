@@ -65,7 +65,10 @@ export const queries = {
 
     UpdateCambioCentro:"update dbo.estudiantes set CentroRegional=@CentroRegional where NumCuenta=@NumCuenta",
 
-    CargaAcademica:`select sc.IdClase,cl.Nombre,Edificio,sc.Aula,sc.CantidadAlumnos,sc.HI,sc.HF,sc.Seccion,sc.IdDocente, sc.CentroRegional, concat(emp.Nombre,' ', emp.Apellido) as NombreDocente, sc.Dias
+    CargaAcademica:`
+    select 
+    sc.IdClase,cl.Nombre,Edificio,sc.Aula,sc.CantidadAlumnos,sc.HI,sc.HF,sc.Seccion,sc.IdDocente, sc.CentroRegional, 
+    concat(emp.Nombre,' ', emp.Apellido) as NombreDocente, sc.Dias
     from secciones as sc
     right join clases as cl on sc.IdClase=cl.IdClase
     right join empleados as emp on sc.IdDocente=NumEmpleado 

@@ -386,13 +386,18 @@ const Notas = () => {
           const descripcion = userData.descripcion;
           setDescripcion(descripcion);
 
-
-          if(!userData.imagen1 || !userData.video ){
+          if(!userData.imagen1){
             const imagen = '../1688323336413-804346209-64572.png';
             setImagen(imagen);
+            const video = userData.video;
+            setVideo(video);
+          }else if (!userData.video ){
             const video = '../Video docente.mp4';
             setVideo(video);
-          }else{
+            const imagen = userData.imagen1;
+            setImagen(imagen);
+          }
+          else{
             const imagen = userData.imagen1;
             setImagen(imagen);
             const video = userData.video;
