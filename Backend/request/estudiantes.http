@@ -44,7 +44,7 @@ post http://localhost:5000/enviarClasesQueEstaCursando
 Content-Type: application/json
 
 {
-    "NumCuenta": "20182001940",
+    "NumCuenta": "20192003632",
     "Periodo": "2PAC",
     "año": 2023
 }

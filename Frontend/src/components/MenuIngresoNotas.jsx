@@ -35,7 +35,8 @@ const MenuIngresoNotas = () => {
     const [dataObtenida, setDataObtenida] = useState([]);
     const [modalOpen, setModalOpen] = useState(false)
     const [rowsPerPage, setRowsPerPage] = useState(5);
-
+    
+    
 
   const fetchDataGeneral = (carrera, centroRegional) => {
     fetch(`http://localhost:5000/docentesDepartamento`, {
@@ -131,6 +132,7 @@ const MenuIngresoNotas = () => {
       IdDocente: 15209,
       IdClase: "II-222",
       Asignatura: "Estadistica Aplicada",
+      CorreoInstitucional: "nicolas.lovo@unah.hn",
       Seccion: 1101,
       Periodo: "2PAC",
       IdEstudiante: `2019200363${index + 1}`,
@@ -144,6 +146,7 @@ const MenuIngresoNotas = () => {
       IdSeccion: 24,
       IdDocente: 15209,
       IdClase: "II-321",
+      CorreoInstitucional: "nicolas.lovo@unah.hn",
       Asignatura: "Investigación de Operaciones I",
       Seccion: 1201,
       Periodo: "2PAC",
@@ -157,6 +160,7 @@ const MenuIngresoNotas = () => {
       IdSeccion: 24,
       IdDocente: 15209,
       IdClase: "II-321",
+      CorreoInstitucional: "nicolas.lovo@unah.hn",
       Asignatura: "Investigación de Operaciones I",
       Seccion: 1300,
       Periodo: "2PAC",
@@ -281,39 +285,41 @@ const MenuIngresoNotas = () => {
         <ModalBody className="modal-content">
           <div className="horizontal-columns">
             <Carousel showThumbs={false} showStatus={false} dynamicHeight={true} emulateTouch={true}>
-              {Object.entries(
-                dataObtenida.reduce((sections, nota) => {
+            {Object.entries(
+                  dataObtenida.reduce((sections, nota) => {
                   const seccionKey = `${nota.Seccion}-${nota.Asignatura}`;
                   if (!sections[seccionKey]) {
-                    sections[seccionKey] = { seccion: nota.Seccion, asignatura: nota.Asignatura, notas: [] };
-                  }
-                  sections[seccionKey].notas.push(nota);
-                  return sections;
+                  sections[seccionKey] = { seccion: nota.Seccion, asignatura: nota.Asignatura, notas: [] };
+                   }
+                    sections[seccionKey].notas.push(nota);
+                    return sections;
                 }, {})
               ).map(([seccionKey, { seccion, asignatura, notas }]) => (
-                <div key={seccionKey} className="column">
-                  <h4 style={{ fontWeight: "bold" }}>Sección: {seccion} - Asignatura: {asignatura}</h4>
-                  <br>
-                    
-                  </br>
-                  <table>
+                    <div key={seccionKey} className="column">
+                    <h4 style={{ fontWeight: "bold", fontSize: "1.5rem", textTransform: "uppercase" }}>Sección: {seccion} - Asignatura: {asignatura}</h4>
+                      <br></br>
+                      <table>
                     <thead>
                       <tr>
-                        <th>ID Estudiante</th>
-                        <th>Estudiante</th>
-                        <th>Apellido</th>
-                        <th>Nota</th>
-                        <th>Estado Clase</th>
+                        <th>Nº</th> 
+                        <th>NUMERO CUENTA</th>
+                        <th>NOMBRE</th>
+                        <th>APELLIDO</th>
+                        <th>CORREO INSTITUCIONAL</th>
+                        <th>NOTA</th>
+                        <th>ESTADO</th>
                       </tr>
                     </thead>
                     <tbody>
                       {notas.map((nota, index) => (
                         <tr key={nota.IdEstudiante + "-" + index}>
-                          <td>{nota.IdEstudiante}</td>
-                          <td>{nota.Estudiante}</td>
-                          <td>{nota.Apellido}</td>
-                          <td>{nota.Nota}</td>
-                          <td>{nota.EstadoClase}</td>
+                        <td>{index + 1}</td> {/* Conteo de filas */}
+                        <td>{nota.IdEstudiante}</td>
+                        <td>{nota.Estudiante}</td>
+                        <td>{nota.Apellido}</td>
+                        <td>{nota.CorreoInstitucional}</td>
+                        <td>{nota.Nota}</td>
+                        <td>{nota.EstadoClase}</td>
                         </tr>
                       ))}
                     </tbody>

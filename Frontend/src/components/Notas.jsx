@@ -30,6 +30,13 @@ const Notas = () => {
   const [descripcion, setDescripcion] = useState("");
   const [video, setVideo] = useState("");
   const [Nota, setNota] = useState("");
+  const [evaluationSubmitted, setEvaluationSubmitted] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [submittedForm, setSubmittedForm] = useState({});
+  const [allFormsSubmitted, setAllFormsSubmitted] = useState(false);
+  const [evaluationFormsSubmitted, setEvaluationFormsSubmitted] = useState({});
+  
+
   
   const [evaluationData, setEvaluationData] = useState({
     pregunta1: '',
@@ -46,6 +53,13 @@ const Notas = () => {
 
   const mostrarInformacion2 = (row) => {
     setSelectedRow(row);
+    const formKey = `${row.IDSECCION}`;
+    if (submittedForm[formKey]) {
+      alert("El formulario ya ha sido enviado para este docente.");
+      return;
+    }
+
+
     toggleModal2();
     fetch(`http://localhost:5000/mostrarPerfilDocente`, {
       method: "POST",
@@ -66,7 +80,6 @@ const Notas = () => {
         const IdDocente = userData.numempleado;
         console.log("IdDocente:", IdDocente);
         setIdDocente(IdDocente);
-        const Nota = userData.Notas
       }
     })
     .catch((error) => {
@@ -76,21 +89,16 @@ const Notas = () => {
   
 
 
-
   useEffect(() => {
     const storedData = localStorage.getItem("userData");
     if (storedData) {
       const userData = JSON.parse(storedData);
       const numCuenta = userData.data.NumCuenta;
       setNumCuenta(numCuenta);
-      const Notas = userData.data.Nota
-      setNota(Notas)
-      console.log(Notas)
+      const submittedFormsData = JSON.parse(localStorage.getItem("submittedForm")) || {};
+      setSubmittedForm(submittedFormsData);
     }
-  }, [Nota ,NumCuenta]);
-
-  console.log(NumCuenta)
-  console.log(Nota)
+  }, [NumCuenta]);
 
   const toggleModal2 = () => {
     setIsModalOpen2(prevState => !prevState);
@@ -107,12 +115,21 @@ const Notas = () => {
 
   const handleSubmit2 = async e => {
     e.preventDefault();
+  
     if (!PreguntasContestadas()) {
+      return;
+    }
+
+    const formKey = `${selectedRow.IDSECCION}`;
+
+    if (submittedForm[formKey]) { 
+      alert("El formulario ya ha sido enviado para este docente.");
+      resetForm();
+      toggleModal2();
       return;
     }
   
     try {
-  
       const response = await fetch('http://localhost:5000/subirEvaluacionDocente', {
         method: 'POST',
         headers: {
@@ -135,9 +152,24 @@ const Notas = () => {
   
       if (response.ok) {
         console.log('Evaluación enviada con éxito');
-        alert("Evaluacion enviada Correctamente");
+        alert("Evaluación enviada correctamente");
         resetForm();
         toggleModal2();
+        setEvaluationSubmitted(true);
+        
+        setSubmittedForm((prevForms) => ({
+          ...prevForms,
+          [formKey]: true,
+        }));
+        const updatedFormsSubmitted = {
+          ...evaluationFormsSubmitted,
+          [IdDocente]: true,
+        };
+        setEvaluationFormsSubmitted(updatedFormsSubmitted);
+        // Verificar si todos los formularios han sido enviados
+        const allFormsSubmitted = Object.values(submittedForm).every((value) => value === true);
+        setAllFormsSubmitted(allFormsSubmitted);
+  
       } else {
         console.error('Error al enviar la evaluación');
       }
@@ -246,6 +278,8 @@ const Notas = () => {
       console.error("Error al obtener los datos:", error);
     }
   };
+
+
   // Configuramos las columnas para DataTable
   const columnas1 = [
     {
@@ -273,16 +307,24 @@ const Notas = () => {
     {
       name: "EVALUACIÓN DOCENTE",
       cell: (row) => (
-        <h1 className="cursor-pointer" onClick={() => mostrarInformacion2(row)}>
-          <FcInfo />
+        <h1 className="cursor-pointer">
+          <FcInfo
+            onClick={() => mostrarInformacion2(row)}
+            disabled={evaluationFormsSubmitted[row.IdDocente]}
+          />
         </h1>
       ),
       center: true,
     },
     {
       name: "NOTA FINAL",
-      selector: (row) => row.OBS,
+      selector: (row) => row.Nota,
       center: true,
+      cell: (row) => (
+        submittedForm[`${row.IDSECCION}`]
+          ? <span>{row.Nota}</span>
+          : null
+      ),
     },
     
     {
