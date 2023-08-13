@@ -46,23 +46,28 @@ const ListadoDocentes = () => {
     {
       name: "N° DE EMPLEADO",
       selector: (row) => row.NumEmpleado,
+      sortable: true,
     },
     {
       name: "DNI",
       selector: (row) => row.DNI,
+      sortable: true,
     },
     {
       name: "NOMBRE",
       selector: (row) => row.Nombre + " " + row.Apellido,
       width: "300px",
+      sortable: true,
     },
     {
       name: "ROL",
       selector: (row) => row.SubRol,
+      sortable: true,
     },
     {
       name: "Estado",
       selector: (row) => row.Estado.toUpperCase(),
+      sortable: true,
     },
     {
       name: "Ver",

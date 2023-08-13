@@ -1,17 +1,22 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
-import { FcFinePrint } from "react-icons/fc";
-import { Input, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { FcFinePrint,FcInfo} from "react-icons/fc";
+import { Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input, Button } from 'reactstrap';
 import "../Perfil_estudiante.css";
-
 import "styled-components";
 import { format, parseISO, set } from "date-fns";
 import "../App.css";
+import "../Evaluacionmodal.css"
+
+
 const Notas = () => {
-  const [NumCuenta, setNumCuenta] = useState("");
+  const [IdSeccion,setIdSeccion] = useState('');
+  const [IdDocente,setIdDocente] = useState('');
+  const [NumCuenta, setNumCuenta] = useState('');
   const [historialData, setHistorialData] = useState([]);
   const [periodoAcademicoActual, setPeriodoAcademicoActualPAC] = useState("");
+  const [isModalOpen2, setIsModalOpen2] = useState(false);
   const fechaActual = new Date();
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -24,6 +29,51 @@ const Notas = () => {
   const [imagen, setImagen] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [video, setVideo] = useState("");
+  const [evaluationData, setEvaluationData] = useState({
+    pregunta1: '',
+    pregunta2: '',
+    pregunta3: '',
+    pregunta4: null,
+    pregunta5: null,
+    Observacion: '',
+    IdSeccion: '', 
+    IdDocente: ''
+  });
+
+
+
+  const mostrarInformacion2 = (row) => {
+    setSelectedRow(row);
+    toggleModal2();
+    fetch(`http://localhost:5000/mostrarPerfilDocente`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ IdSeccion: String(row.IDSECCION) }),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Respuesta del servidor:", data);
+      if (data) {
+        const userData = data;
+        console.log("UserData:", userData);
+        const IdSeccion = userData.idseccion;
+        console.log("IdSeccion:", IdSeccion);
+        setIdSeccion(IdSeccion);
+        const IdDocente = userData.numempleado;
+        console.log("IdDocente:", IdDocente);
+        setIdDocente(IdDocente);
+      }
+    })
+    .catch((error) => {
+      console.error("Error al obtener los datos:", error);
+    });
+  };
+  
+
+
+
   useEffect(() => {
     const storedData = localStorage.getItem("userData");
     if (storedData) {
@@ -32,6 +82,85 @@ const Notas = () => {
       setNumCuenta(numCuenta);
     }
   }, []);
+
+  const toggleModal2 = () => {
+    setIsModalOpen2(prevState => !prevState);
+  };
+
+  const handleInputChange2 = e => {
+    const { name, value, type } = e.target;
+
+    setEvaluationData(prevData => ({
+      ...prevData,
+      [name]: type === 'radio' ? value === prevData[name] ? null : value : value
+    }));
+  };
+
+  const handleSubmit2 = async e => {
+    e.preventDefault();
+    if (!PreguntasContestadas()) {
+      return;
+    }
+  
+    try {
+  
+      const response = await fetch('http://localhost:5000/subirEvaluacionDocente', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          IdSeccion: IdSeccion,
+          IdDocente: IdDocente,
+          IdEstudiante: NumCuenta,
+          Pregunta1: evaluationData.pregunta1,
+          Pregunta2: evaluationData.pregunta2,
+          Pregunta3: evaluationData.pregunta3,
+          Pregunta4: evaluationData.pregunta4,
+          Pregunta5: evaluationData.pregunta5,
+          Observacion: evaluationData.Observacion,
+        })
+      });
+  
+      console.log('Response:', response);
+  
+      if (response.ok) {
+        console.log('Evaluación enviada con éxito');
+        alert("Evaluacion enviada Correctamente");
+        resetForm();
+        toggleModal2();
+      } else {
+        console.error('Error al enviar la evaluación');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  
+
+  const PreguntasContestadas = () => {
+    return (
+      evaluationData.pregunta1 !== '' &&
+      evaluationData.pregunta2 !== '' &&
+      evaluationData.pregunta3 !== '' &&
+      evaluationData.pregunta4 !== null &&
+      evaluationData.pregunta5 !== null &&
+      evaluationData.Observacion !== ''
+    );
+  };
+
+  const resetForm = () => {
+    setEvaluationData({
+      pregunta1: '',
+      pregunta2: '',
+      pregunta3: '',
+      pregunta4: null,
+      pregunta5: null,
+      Observacion: ''
+    });
+  };
+
+
   const obtenerFechasMinMaxIPAC = async () => {
     try {
       const response = await fetch(
@@ -80,6 +209,7 @@ const Notas = () => {
   obtenerFechasMinMaxIPAC();
   obtenerFechasMinMaxIIPAC();
   obtenerFechasMinMaxIIIPAC();
+
   useEffect(() => {
     if (NumCuenta && periodoAcademicoActual && año) {
       showData(NumCuenta, periodoAcademicoActual, año);
@@ -100,7 +230,7 @@ const Notas = () => {
           año: year,
         }),
       });
-      const data = await response.json();
+      const data = await response.json();3
       console.log(data);
       setHistorialData(data);
     } catch (error) {
@@ -130,10 +260,14 @@ const Notas = () => {
       selector: (row) => row.PERIODO,
       center: true,
     },
-    
+
     {
       name: "EVALUACIÓN DOCENTE",
-      selector: (row) => row.OBS,
+      cell: (row) => (
+        <h1 className="cursor-pointer" onClick={() => mostrarInformacion2(row)}>
+          <FcInfo />
+        </h1>
+      ),
       center: true,
     },
     {
@@ -154,43 +288,70 @@ const Notas = () => {
   ];
   const mostrarInformacion = (row) => {
     setSelectedRow(row);
-    console.log(row);
+    console.log(JSON.stringify({ IdSeccion: String(row.IDSECCION) })
+    );
     toggleModal();
     //Aqui debe ir el fetch para obtener la información del docente
- 
-    const storedData = localStorage.getItem("userData");
-    if (storedData) {
-      const userData = JSON.parse(storedData);
-      
-      const nombre = userData.data.Nombre + " " + userData.data.Apellido;
-      setNombre(nombre);
-      const centroRegional = userData.data.CentroRegional;
-      setCentroRegional(centroRegional);
-      const correoInstitucional = userData.data.CorreoInstitucional;
-      setCorreoInstitucional(correoInstitucional);
-      const correoPersonal = userData.data.CorreoPersonal;
-      setCorreoPersonal(correoPersonal);
-      const carrera = userData.data.Carrera;
-      setCarrera(carrera);
-      const descripcion = userData.perfil.Descripcion;
-      setDescripcion(descripcion);
-     
-      
-      if(!userData.perfil ){
-        const imagen = '../1688323336413-804346209-64572.png';
-        setImagen(imagen);
-        const video = '../Video docente.mp4';
-        setVideo(video);
-      }else{
-        const imagen = userData.perfil.Imagen1;
-        setImagen(imagen);
-        const video = userData.perfil.Video;
-        setVideo(video);
-      }
+    fetch(`http://localhost:5000/mostrarPerfilDocente`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ IdSeccion: String(row.IDSECCION) }),	
+    })
+    .then((response) => response.json())
+      .then((data) => {
+        console.log("Respuesta del servidor:", data);
+        if (data) {
+          const userData = data;
+          console.log(userData);
+          console.log(userData.nombre);
+          const nombre = userData.nombre + " " + userData.apellido;
+          setNombre(nombre);
+          const centroRegional = userData.centroregional;
+          setCentroRegional(centroRegional);
+          const correoInstitucional = userData.correoinstitucional;
+          setCorreoInstitucional(correoInstitucional);
+          const correoPersonal = userData.correopersonal;
+          setCorreoPersonal(correoPersonal);
+          const carrera = userData.carrera;
+          setCarrera(carrera);
+          const descripcion = userData.descripcion;
+          setDescripcion(descripcion);
+
+
+          if(!userData.imagen1 || !userData.video ){
+            const imagen = '../1688323336413-804346209-64572.png';
+            setImagen(imagen);
+            const video = '../Video docente.mp4';
+            setVideo(video);
+          }else{
+            const imagen = userData.imagen1;
+            setImagen(imagen);
+            const video = userData.video;
+            setVideo(video);
+          }
+        }
+      })
+      .catch((error) => {
+        console.error("Error al obtener los datos:", error);
+      });
+    /* const storedData = localStorage.getItem("userData"); */
     }
-  };
+
   const toggleModal = () => {
     setModalOpen(!modalOpen);
+    setNombre("");
+    setCentroRegional("");
+    setCorreoInstitucional("");
+    setCorreoPersonal("");
+    setCarrera("");
+    setDescripcion("");
+    const imagen = '../1688323336413-804346209-64572.png';
+    setImagen(imagen);
+    const video = '../Video docente.mp4';
+    setVideo(video);
+
   };
 
   const NoDataComponent = () => {
@@ -284,7 +445,6 @@ const Notas = () => {
                           </a>
                         </div> */}
                       </h5>
-
                       <div class="row mb-4">
                         <div class="col-sm-6">
                           <hatch class="m-b-10 f-w-600">Nombre:</hatch>
@@ -329,7 +489,6 @@ const Notas = () => {
                           <ModalCargarVideo />
                         </div> */}
                       </h5>
-
                       <div
                         style={{
                           display: "flex",
@@ -351,8 +510,138 @@ const Notas = () => {
           </ModalBody>
         </Modal>
       )}
+      <div>
 
+      <Modal isOpen={isModalOpen2} toggle={mostrarInformacion2} className="evaluacionmodal">
+        <ModalHeader>EVALUACION DOCENTES</ModalHeader>
+        <ModalHeader>
+          <button className="close boton_cierre" onClick={mostrarInformacion2}>
+            <span aria-hidden="true">X</span>
+          </button>
+        </ModalHeader>
+        <ModalBody>
+          <FormGroup>
+            <Label>El docente ha entregado la planificación 
+            de contenido y rubricas para el desarrollo de la clase, 
+            siguiendo la normativa pedagógica y curricular. </Label>
+            <Input
+              type="select"
+              name="pregunta1"
+              value={evaluationData.pregunta1}
+              onChange={handleInputChange2}
+              className={evaluationData.pregunta1 === '' ? '' : ''}
+            >
+              <option value="">Seleccione una opción</option>
+              {[1, 2, 3, 4, 5].map(value => (
+                <option key={value} value={value}>{value}</option>
+              ))}
+            </Input>
+          </FormGroup>
+          <FormGroup>
+            <Label>El docente ha cumplido con los tiempos estipulados para la entrega de resultados 
+            de las evaluaciones.</Label>
+            <Input
+              type="select"
+              name="pregunta2"
+              value={evaluationData.pregunta2}
+              onChange={handleInputChange2}
+              className={evaluationData.pregunta2 === '' ? '' : ''}
+            >
+              <option value="">Seleccione una opción</option>
+              {[1, 2, 3, 4, 5].map(value => (
+                <option key={value} value={value}>{value}</option>
+              ))}
+            </Input>
+          </FormGroup>
+          <FormGroup>
+            <Label>El docente se ha comportado bajo el 
+            marco de la ética moral y profesional</Label>
+            <Input
+              type="select"
+              name="pregunta3"
+              value={evaluationData.pregunta3}
+              onChange={handleInputChange2}
+              className={evaluationData.pregunta3 === '' ? '' : ''}
+            >
+              <option value="">Seleccione una opción</option>
+              {[1, 2, 3, 4, 5].map(value => (
+                <option key={value} value={value}>{value}</option>
+              ))}
+            </Input>
+          </FormGroup>
+          <FormGroup>
+            <Label>Proporciona retroalimentación sobre las evaluaciones realizadas:</Label>
+            <FormGroup check>
+              <Label check>
+                <Input
+                  type="radio"
+                  name="pregunta4"
+                  value="SI"
+                  checked={evaluationData.pregunta4 === 'SI'}
+                  onChange={handleInputChange2}
+                />{' '}
+                Sí
+              </Label>
+            </FormGroup>
+            <FormGroup check>
+              <Label check>
+                <Input
+                  type="radio"
+                  name="pregunta4"
+                  value="NO"
+                  checked={evaluationData.pregunta4 === 'NO'}
+                  onChange={handleInputChange2}
+                />{' '}
+                No
+              </Label>
+            </FormGroup>
+          </FormGroup>
+          <FormGroup>
+            <Label>El docente proporciona la pauta de los exámenes realizados:</Label>
+            <FormGroup check>
+              <Label check>
+                <Input
+                  type="radio"
+                  name="pregunta5"
+                  value="SI"
+                  checked={evaluationData.pregunta5 === 'SI'}
+                  onChange={handleInputChange2}
+                />{' '}
+                Sí
+              </Label>
+            </FormGroup>
+            <FormGroup check>
+              <Label check>
+                <Input
+                  type="radio"
+                  name="pregunta5"
+                  value="NO"
+                  checked={evaluationData.pregunta5 === 'NO'}
+                  onChange={handleInputChange2}
+                />{' '}
+                No
+              </Label>
+            </FormGroup>
+          </FormGroup>
+          <FormGroup>
+            <Label>Observacion:</Label>
+            <Input
+              type="textarea"
+              name="Observacion" 
+              value={evaluationData.Observacion} 
+              onChange={handleInputChange2}
+            />
+          </FormGroup>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={handleSubmit2} disabled={!PreguntasContestadas()} style={{ backgroundColor: '#1e40af', borderColor: '#1e40af' }}>
+            Enviar
+          </Button>
+        </ModalFooter>
+      </Modal>
     </div>
+    </div>
+
   );
 };
 export default Notas;

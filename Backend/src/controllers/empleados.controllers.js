@@ -1,5 +1,5 @@
 import { Connection } from "tedious";
-import { getConnection, sql, queries, queryDocente } from "../Database"
+import { getConnection, sql, queries, queryDocente, queryJefe } from "../Database"
 import { generateUniqueEmail, generateRandomPassword, enviarEmail } from "./creacioncorreo.controllers";
 
 
@@ -25,7 +25,7 @@ export const getCarreras = async (req, res) => {
     res.json(carreras);
 
 }
-
+//Busca entre todos los docentes por el DNI
 export const getDocenteById = async (req, res) => {
     const {DNI} = req.body
     try {
@@ -33,6 +33,23 @@ export const getDocenteById = async (req, res) => {
         const result = await pool.request()
         .input('DNI', sql.VarChar, DNI)
         .query(queries.get_Docente_By_Id);
+        res.json(result.recordset[0]);
+        res.status(200)
+    } catch (error) {
+        res.status(500);
+        res.send(error.message);
+    }
+}
+//Busca entre los docentes del departamento por el DNI
+export const getDocenteByIdDep = async (req, res) => {
+    const {DNI, Carrera, CentroRegional} = req.body
+    try {
+        const pool = await getConnection();
+        const result = await pool.request()
+        .input('DNI', sql.VarChar, DNI)
+        .input('Carrera', sql.VarChar, Carrera)
+        .input('CentroRegional', sql.VarChar, CentroRegional)
+        .query(queries.get_Docente_By_Id_Dep);
         res.json(result.recordset[0]);
         res.status(200)
     } catch (error) {
@@ -160,3 +177,167 @@ export const mostrarPerfilSeccion = async (req, res) => {
     res.status(500).send(error.message);
 }
 }
+
+
+export const mostrarEvaluacionesDocentes = async (req, res) => {
+    const { IdDocente, Sistema } = req.body;
+    const pool = await getConnection();
+    try {
+      /*const PeriodoAcademico = await pool.request().input('Sistema', sql.VarChar, Sistema).query(`select PeriodoAcademico from planificacion_academica where GETDATE() BETWEEN FechaInicio and FechaFinal and Sistema = '${Sistema}'`); */
+      const Periodo = '2PAC'; // PeriodoAcademico.recordset[0].PeriodoAcademico;
+      const result = await pool.request()
+        .input('IdDocente', sql.Int, IdDocente)
+        .input('Periodo', sql.VarChar, Periodo)
+        .query(queryJefe.getEvaluaciones);
+  
+      // Agrupar los filas por asignatura
+      const clases = {};
+      result.recordset.forEach((filas) => {
+        const { Asignatura, Periodo, IdDocente, Nombre, Apellido, CorreoInstitucional } = filas;
+        const claveAsignatura = `${Asignatura}_${Periodo}`;
+        if (!clases[claveAsignatura]) {
+          clases[claveAsignatura] = [];
+        }
+        clases[claveAsignatura].push({
+          idseccion: filas.idseccion,
+          Asignatura,
+          Periodo,
+          IdDocente,
+          Nombre,
+          Apellido,
+          CorreoInstitucional,
+          IdEstudiante: filas.IdEstudiante,
+          Pregunta1: filas.Pregunta1,
+          Pregunta2: filas.Pregunta2,
+          Pregunta3: filas.Pregunta3,
+          Pregunta4: filas.Pregunta4,
+          Pregunta5: filas.Pregunta5,
+          Observacion: filas.Observacion
+        });
+      });
+  
+      const clasesArray = Object.values(clases);
+      res.status(200).json(clasesArray);
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  };
+  
+  
+
+export const mostrarDocentePorDepartamento = async (req, res) => {
+    const {Carrera, CentroRegional} = req.body;
+    const pool = await getConnection();
+    try {
+        const result = await pool.request()
+            .input('Carrera', sql.VarChar, Carrera)
+            .input('CentroRegional', sql.VarChar, CentroRegional)
+            .query(queryJefe.getDocenteDepartamento);
+        res.status(200).json(result.recordset);
+    } catch (error) {
+        
+    res.status(500).send(error.message);
+}
+}
+
+export const subirNotaEstudiante = async (req, res) => {
+    const {IdEstudiante, IdSeccion, Nota, EstadoClase} = req.body
+    const pool = await getConnection();
+    try{
+        const result = await pool.request()
+        .input("IdEstudiante",sql.VarChar, IdEstudiante)
+        .input("IdSeccion", sql.Int, IdSeccion)
+        .input("Nota",sql.Int, Nota)
+        .input("EstadoClase",sql.VarChar, EstadoClase)
+        .query(queryDocente.updateNotaEstudiante)
+        res.status(200).json({message: 'Exitoso'})
+    }catch(error){
+        res.status(500).send(error.message)
+    }
+}
+
+export const notasEstudiantes = async (req, res) => {
+    const {Carrera, Sistema, IdDocente, IdSeccion} = req.body
+    const pool = await getConnection();
+    try {
+        const result = await pool.request()
+        .input("Carrera", sql.VarChar, Carrera)
+        .input("Sistema", sql.VarChar, Sistema)
+        .input("IdDocente", sql.Int, IdDocente)
+        .input("IdSeccion", sql.Int, IdSeccion)
+        .query(queryJefe.getNotas)
+        res.status(200).json(result.recordset)
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+}
+
+//Trae todas las notas de todas las secciones por id de docente
+export const notasSecciones = async (req, res) => {
+    const {Sistema, IdDocente} = req.body
+    const pool = await getConnection();
+    try {
+        const PeriodoAcademico = await pool.request().input('Sistema', sql.VarChar, Sistema).query(`select PeriodoAcademico from planificacion_academica where GETDATE() BETWEEN FechaInicio and FechaFinal and Sistema = '${Sistema}'`);
+        const Periodo = PeriodoAcademico.recordset[0].PeriodoAcademico;
+        const result = await pool.request()
+        .input("Periodo", sql.VarChar, Periodo)
+        .input("IdDocente", sql.Int, IdDocente)
+        .query(queryJefe.getSeccionEstudiantes)
+        res.status(200).json(result.recordset)
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+}
+
+export const estudiantesSecciones = async (req, res) => {
+    const { Sistema, IdDocente } = req.body;
+    const pool = await getConnection();
+    try {
+      const PeriodoAcademico = await pool
+        .request()
+        .input('Sistema', sql.VarChar, Sistema)
+        .query(
+          `select PeriodoAcademico from planificacion_academica where GETDATE() BETWEEN FechaInicio and FechaFinal and Sistema = '${Sistema}'`
+        );
+      const Periodo = PeriodoAcademico.recordset[0].PeriodoAcademico;
+      const result = await pool
+        .request()
+        .input('Periodo', sql.VarChar, Periodo)
+        .input('IdDocente', sql.Int, IdDocente)
+        .query(queryJefe.getSeccionEstudiantes);
+  
+      // Agrupar registros por Seccion e IdClase
+      const groupedResult = {};
+      result.recordset.forEach((estudiante) => {
+        const { Seccion, IdClase } = estudiante;
+        const key = `${Seccion}-${IdClase}`;
+        if (!groupedResult[key]) {
+          groupedResult[key] = [];
+        }
+        groupedResult[key].push(estudiante);
+      });
+  
+      // Convertir el objeto a un array de arrays
+      const finalResult = Object.values(groupedResult);
+  
+      res.status(200).json(finalResult);
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  };
+
+  export const ingresoNotas = async (req, res) => {
+    const {Sistema} = req.body
+    const pool = await getConnection();
+    try {
+        const result = await pool.request()
+        .input("Sistema", sql.VarChar, Sistema)
+        .query(queryDocente.getIngresoNotas)
+        res.status(200).json(result.recordset[0])
+    } catch (error) {
+        res.status(500).send(error.message)
+    } finally {
+        pool.close();
+    }
+}
+  

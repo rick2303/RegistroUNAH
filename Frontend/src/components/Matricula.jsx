@@ -1,11 +1,11 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
+import '../matricula.css'
 import "styled-components";
 import { FcCancel, FcFinePrint } from "react-icons/fc";
 import { format, parseISO, set } from "date-fns";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
-
 
 
 const MenuMatricula = () => {
@@ -15,37 +15,86 @@ const [Apellido, setApellido] = useState("");
 const [Carrera, setCarrera] = useState("");
 const [historialData, setHistorialData] = useState([]);
 const [historialDataListaEspera, setHistorialDataListaEspera] = useState([]);
-const [InfoEstudiante, setInfoEstudiante] = useState([]);
+const [sistema, setSistema] = useState([]);
 const [periodoAcademicoActual, setPeriodoAcademicoActualPAC] = useState("");
 const [showModal, setShowModal] = useState(false);
 const [classToDelete, setClassToDelete] = useState(null);
 const fechaActual = new Date();
 const [ContadorUVS, setContadorUVS] =  useState(24);
 const [modalType, setModalType] = useState("");
+const [centroRegional, setCentroRegional] = useState("");
 const [carreras, setCarreras] = useState([]);
+const [asignaturas, setAsignaturas] = useState([]);
+const [secciones, setSecciones] = useState([]);
+const year = fechaActual.getFullYear();
+const month = String(fechaActual.getMonth() + 1).padStart(2, "0");
+const day = String(fechaActual.getDate()).padStart(2, "0");
+
+
+const fechaActualString = `${year}-${month}-${day}`;
 
 
 const añoActual = fechaActual.getFullYear();
-  // Función para decrementar contador y guardar en localStorage
-const decrementarContador = () => {
-if (classToDelete) {
-    // Resto del código para eliminar la clase...
-    setContadorUVS(prevContadorUVS => prevContadorUVS - classToDelete.UV);
 
-    // Guardar en localStorage
-    localStorage.setItem("contadorUVS", ContadorUVS - classToDelete.UV);
+
+
+const SubirContador = async (row) => {
+    console.log(row);
+
+
+    // Check if row is defined before accessing its properties
+    if (row && row.UV) {
+
+        const UV = ContadorUVS + row.UV;
+
+        try {
+            const URL = "http://localhost:5000/actualizarUVS";
+            const response = await fetch(URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    NumCuenta: NumCuenta,
+                    UVactualizadas: UV,
+                }),
+                });
+                const data = await response.json();
+                setContadorUVS(UV);
+        } catch (error) {
+            console.error("Error al obtener los datos:", error);
+        }
+    }
+};
+
+
+const DecrementarContador = async (row) => {
+    console.log(row);
+
+    // Check if row is defined before accessing its properties
+    if (row && row.UV) {
+    const UV = ContadorUVS - row.UV;
+
+    try {
+        const URL = "http://localhost:5000/actualizarUVS";
+        const response = await fetch(URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                NumCuenta: NumCuenta,
+                UVactualizadas: UV,
+            }),
+            });
+            const data = await response.json();
+            setContadorUVS(UV);
+    } catch (error) {
+        console.error("Error al obtener los datos:", error);
+    }
 }
 };
 
-// localStorage.setItem("contadorUVS", 24);
-
-// UseEffect para leer el valor del contador almacenado en localStorage
-useEffect(() => {
-const contadorGuardado = localStorage.getItem("contadorUVS");
-if (contadorGuardado) {
-    setContadorUVS(parseInt(contadorGuardado));
-}
-}, []);
 
 useEffect(() => {
     const storedData = localStorage.getItem("userData");
@@ -55,12 +104,37 @@ useEffect(() => {
         const nombre = userData.data.Nombre;
         const apellido = userData.data.apellido; 
         const carrera = userData.data.Carrera;
+        const Sistema = userData.data.Sistema;
+        console.log(Sistema);
         setNombre(nombre);
         setApellido(apellido);
         setNumCuenta(numCuenta);
         setCarrera(carrera);
+        setSistema(Sistema);
+        setCentroRegional(userData.data.CentroRegional);
     }
+    obtenerUVS();
+
 }, [NumCuenta]);
+
+const obtenerUVS = async () => {
+    try {
+        const URL = "http://localhost:5000/ObtenerUVS";
+        const response = await fetch(URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                NumCuenta: NumCuenta,
+            }),
+            });
+            const data = await response.json();
+            setContadorUVS(data[0].UVDisponibles);
+        } catch (error) {
+            console.error("Error al obtener los datos:", error);
+        }
+};
 
 
 const obtenerFechasMinMaxIPAC = async () => {
@@ -163,16 +237,25 @@ const fechINFO = async (cuenta, periodo, year)=> {
             console.error("Error al obtener los datos:", error);
         }
     try {
-        const URL = "http://localhost:5000/carreras";
+        const URL = "http://localhost:5000/ClasesParaMatricula";
         const response = await fetch(URL, {
-            method: "GET",
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                carrera: Carrera,
+            }),
             });
             const data = await response.json();
-            setCarreras(data);
-            console.log(data);
+            const nombresClases = data.map((carrera) => carrera.NombreCarrera);
+
+            setCarreras(nombresClases);
+            console.log(nombresClases);
         } catch (error) {
             console.error("Error al obtener los datos:", error);
         }
+    
 };
 
 const columnas1 = [
@@ -210,11 +293,6 @@ const columnas1 = [
     name: "AULA",
     selector: (row) => row.AULA,
     },
-
-    {
-    name: "PERIODO",
-    selector: (row) => row.PERIODO,
-    },
     {
         name: "UV",
         selector: (row) => row.UV,
@@ -229,7 +307,7 @@ const columnas1 = [
     },
 ];
 const NoDataComponent = () => {
-    return <div>No hay registros para mostrar</div>;
+    return <div>No hay clases matriculadas para mostrar</div>;
 };
 
 
@@ -268,11 +346,6 @@ const columnas2 = [
     name: "AULA",
     selector: (row) => row.AULA,
     },
-
-    {
-    name: "PERIODO",
-    selector: (row) => row.PERIODO,
-    },
     {
         name: "UV",
         selector: (row) => row.UV,
@@ -287,7 +360,7 @@ const columnas2 = [
     },
 ];
 const NoDataComponent2 = () => {
-    return <div>No hay registros para mostrar</div>;
+    return <div>No hay clases en espera para mostrar</div>;
 };
 
 const columnas3 = [
@@ -298,36 +371,269 @@ const columnas3 = [
         fontSize: "15px",
         cursor: "pointer",
     },
+    
 },
 ];
 const NoDataComponent3 = () => {
-    return <div>No hay registros para mostrar</div>;
+    return <div>No hay departamentos para mostrar</div>;
 };
 
 
-const handleRowClick = (row) => {
+
+const handleRowClickAsingatura = async (row) => {
     // Aquí puedes realizar la acción que desees con la fila clickeada, por ejemplo:
     console.log("Fila clickeada:", row);
+
+    try {
+        const URL = "http://localhost:5000/AsignaturaParaMatricula";
+        const response = await fetch(URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                NumCuenta: NumCuenta,
+                Departamento: row,
+                carrera: Carrera,
+
+            }),
+            });
+            const data = await response.json();
+            const nombresAsignaturas = data.map((asignatura) => asignatura.Nombre);
+            setAsignaturas(nombresAsignaturas);
+            setSecciones([]);
+            console.log(nombresAsignaturas);
+        } catch (error) {
+            console.error("Error al obtener los datos:", error);
+        }
+
 };
+
+
+const handleRowClickSecciones = async (row) => {
+    // Aquí puedes realizar la acción que desees con la fila clickeada, por ejemplo:
+    console.log("asignatura:", row);
+
+    try {
+        const URL = "http://localhost:5000/MostrarSeccionesMatricula";
+        const response = await fetch(URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                asignatura: row,
+                Periodo: periodoAcademicoActual,
+                CentroRegional: centroRegional,
+            }),
+            });
+            const data = await response.json();
+            setSecciones(data);
+            console.log(data);
+        } catch (error) {
+            console.error("Error al obtener los datos:", error);
+        }
+
+};
+
+// Función para verificar los cupos de una clase
+const verificarCupos = async (claseId) => {
+    try {
+    const response = await fetch("http://localhost:5000/verificarCupos", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+        claseId,
+    }),
+    });
+    const data = await response.json();
+    console.log("La respuesta de la API para cupos es:", data);
+    return data[0].Cupos;
+} catch (error) {
+    console.error("Error al obtener los cupos:", error);
+    throw error;
+}
+};
+
+// Función para verificar conflictos de horarios
+const verificarConflictosHorarios = async (IdEstudiante, Dias, HI, HF, Periodo) => {
+    try {
+    const response = await fetch("http://localhost:5000/verificarConflicto", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+        IdEstudiante,
+        Dias,
+        HI,
+        HF,
+        Periodo,
+    }),
+    });
+    const data = await response.json();
+    console.log("La respuesta de la API para conflictos de horarios es:", data);
+    return data.totalConflicts;
+} catch (error) {
+    console.error("Error al verificar conflictos de horarios:", error);
+    throw error;
+}
+};
+
+
+// Función para verificar conflictos de horarios
+const verificarClaseSiEstaMatriculadaYa = async (IdEstudiante, IdClase) => {
+    try {
+    const response = await fetch("http://localhost:5000/verificarClaseMatriculaONo", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+        IdEstudiante,
+        IdClase,
+    }),
+    });
+    const data = await response.json();
+    console.log("La respuesta de la API para verificar si la clase esta matriculada es: ", data);
+    return data.totalConflicts;
+} catch (error) {
+    console.error("Error al verificar conflictos de horarios:", error);
+    throw error;
+}
+};
+
+const handleRowClickObtenerClase = async (row) => {
+    try {
+        console.log("el row es:", row);
+        console.log("la clase es:", row.IdSeccion);
+        console.log("el IDclase es: ", row.IdClase[0]);
+
+
+        const cuposDisponibles = await verificarCupos(row.IdSeccion);
+        console.log("Cupos disponibles:", cuposDisponibles);
+
+        // Verificar conflictos de horarios antes de matricular en la lista de espera
+        const conflictosHorariosEspera = await verificarConflictosHorarios(
+            NumCuenta,
+            row.Dias,
+            row.HI,
+            row.HF,
+            periodoAcademicoActual
+        );
+
+        // Verificar si la clase ya esta matriculada 
+        const verificarClaseSiEstaMatriculada= await verificarClaseSiEstaMatriculadaYa(
+            NumCuenta,
+            row.IdClase[0]
+        );
+        
+        if(row.UV <= ContadorUVS){
+
+        if (verificarClaseSiEstaMatriculada == 0) {
+
+        if (conflictosHorariosEspera > 1) {
+            // Hay conflictos de horarios para la clase en espera
+            alert("No puedes matricular la clase en espera. Existen conflictos de horarios.");
+        } else if (cuposDisponibles === 0) {
+            // Los cupos están agotados
+            const confirmacion = window.confirm("No puedes matricular la clase. Los cupos están agotados. ¿Deseas poner la clase en lista de espera?");
+            if (confirmacion) {
+                // Aquí puedes realizar la acción para poner la clase en lista de espera
+                const Estado = "EN ESPERA";
+                const response = await fetch("http://localhost:5000/MatricularClase", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ NumCuenta: NumCuenta, IdSeccion: row.IdSeccion, fecha: fechaActualString, estado: Estado }),
+                });
+                DecrementarContador(row);
+                window.location.reload();
+                alert("La clase ha sido añadida a la lista de espera.");
+                
+
+            }
+        } else {
+            // Verificar conflictos de horarios antes de matricular
+            const conflictosHorarios = await verificarConflictosHorarios(
+                NumCuenta,
+                row.Dias,
+                row.HI,
+                row.HF,
+                periodoAcademicoActual
+            );
+
+            if (conflictosHorarios > 1) {
+                // Hay conflictos de horarios para la matrícula
+                alert("No puedes matricular la clase. Existen conflictos de horarios.");
+            } else {
+                const confirmacion = window.confirm("¿Deseas Matricular esta clase?");
+                if (confirmacion) {
+                    // Puedes matricular la clase
+                    const Estado = "MATRICULADO";
+                    const response = await fetch("http://localhost:5000/MatricularClase", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ NumCuenta: NumCuenta, IdSeccion: row.IdSeccion, fecha: fechaActualString, estado: Estado }),
+                    });
+                    DecrementarContador(row);
+                    window.location.reload();
+                    alert("Clase matriculada exitosamente.");
+                    
+                    
+                }
+            }
+        }
+    } else {
+        alert("La clase ya está matriculada o ya esta en lista de espera.");
+    }
+}
+else {
+    alert("Ya no puedes matricular más clases. Has alcanzado el límite de UVs.");
+}
+    } catch (error) {
+        console.error("Error al obtener los datos:", error);
+    }
+};
+
+
+
 
 const columnas4 = [
     {
     name: "ASIGNATURA",
-    selector: (row) => row.CODIGO,
+    selector: (row) => row,
+    style: {
+        fontSize: "15px",
+        cursor: "pointer",
+    },
     },
 ];
 const NoDataComponent4 = () => {
-    return <div>No hay registros para mostrar</div>;
+    return <div style={{backgroundColor:"#fe5e5e", color:"white"}}>No tiene clases en este departamento</div>;
 };
 
 const columnas5 = [
     {
     name: "SECCIONES",
-    selector: (row) => row.CODIGO,
+    selector: (row) => (
+        <div>
+            <p>Sección: {row.Seccion}, Dias: {row.Dias}, Cupos: {row.Cupos}, Prof: {row.Nombre[0]} {row.Apellido}</p>
+        </div>
+    ),
+    style: {
+        fontSize: "15px",
+        cursor: "pointer",
+    },
     },
 ];
 const NoDataComponent5 = () => {
-    return <div>No hay registros para mostrar</div>;
+    return <div style={{backgroundColor:"#fe5e5e", color:"white"}} >No hay secciones para mostrar</div>;
 };
 
 
@@ -346,12 +652,13 @@ const eliminarClaseMatriculada = (row) => {
 const eliminarClaseEnEspera = (row) => {
     // Guarda la clase que se va a eliminar en el estado
     setClassToDelete(row);
+    
     setModalType("en espera");
     // Abre el modal de confirmación
     setShowModal(true);
 };
 
-const confirmarEliminacion = () => {
+const confirmarEliminacion = (classToDelete) => {
     // Cierra el modal de confirmación
     setShowModal(false);
     // Realiza la eliminación de la clase
@@ -372,7 +679,7 @@ const confirmarEliminacion = () => {
         .then((data) => {
             console.log("Clase eliminada exitosamente");
             alert("Clase eliminada exitosamente");
-            decrementarContador();
+            SubirContador(classToDelete);
             window.location.reload();
         })
         .catch((error) => {
@@ -394,7 +701,7 @@ const confirmarEliminacion = () => {
             .then((data) => {
                 console.log("Clase eliminada exitosamente");
                 alert("Clase eliminada exitosamente");
-                decrementarContador();
+                SubirContador(classToDelete);
                 window.location.reload();
             })
             .catch((error) => {
@@ -439,7 +746,7 @@ return (
     <p className="pt-2 pb-1 text-center">Nombre:  &nbsp;{Nombre} {Apellido}</p>
     <p className="pt-2 pb-1 text-center">Año: {añoActual} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Periodo: {periodoAcademicoActual}</p>
     </div>
-    <div className="col-md-6 border" style={{ borderRadius: "5px", padding: "10px" }}>
+    <div className="col-md-6 border" style={{ borderRadius: "5px", padding: "10px"}}>
     <p className="pt-2 pb-1 text-center">Carrera: &nbsp; {Carrera}</p>
     
     <p className="pt-2 pb-1 text-center">UV Disponibles: &nbsp; {ContadorUVS}</p>
@@ -481,7 +788,10 @@ return (
 
     </div>
     <Modal isOpen={showModal} toggle={cancelarEliminacion}>
-        <ModalHeader toggle={cancelarEliminacion}>Confirmar eliminación</ModalHeader>
+        <div className="d-flex justify-content-between align-items-center border-bottom p-3">
+            <p className="m-0" style={{ marginLeft: "10px" }}>Confirmar cancelación</p>
+            <Button onClick={cancelarEliminacion} >X</Button>
+        </div>
         <ModalBody>
             {modalType === "matriculada"
             ? "¿Estás seguro de que deseas eliminar esta clase matriculada?"
@@ -490,9 +800,10 @@ return (
             : ""}
     </ModalBody>
     <ModalFooter>
-        <button className="btn btn-danger" onClick={confirmarEliminacion}>
-        Aceptar
+        <button className="btn btn-secondary" onClick={() => confirmarEliminacion(classToDelete)}>
+            Aceptar
         </button>
+
         <button className="btn btn-secondary" onClick={cancelarEliminacion}>
         Cancelar
         </button>
@@ -501,54 +812,55 @@ return (
 
 
     {/* Modal con la lista dependiente */}
-    <Modal isOpen={showDependentListModal} toggle={handleCloseDependentListModal} style={{ maxWidth: "1450px", width: "100%", margin: "0 auto", paddingTop: "270px" }}>
-    <ModalHeader toggle={handleCloseDependentListModal}>Detalle de asignaturas</ModalHeader>
+    <Modal isOpen={showDependentListModal} toggle={handleCloseDependentListModal} style={{ maxWidth: "1600px", width: "100%", margin: "0 auto", paddingTop: "270px" }}>
+    <div className="d-flex justify-content-between align-items-center border-bottom p-3">
+        <p className="m-0" style={{ marginLeft: "10px" }}>Detalle de asignaturas</p>
+        <Button onClick={handleCloseDependentListModal} >X</Button>
+    </div>
     <ModalBody>
     <div className="container">
     <div className="row no-gutters">
-        <div className="col-4 p-1" style={{ maxHeight: "400px", overflowY: "auto" }}>
+        <div className="col-4 p-1" style={{ maxHeight: "400px", overflowY: "auto"}}>
         <DataTable
             columns={columnas3}
             className="mi-tabla"
             data={carreras}
             noDataComponent={<NoDataComponent3 />}
-            onRowClicked={handleRowClick} 
+            onRowClicked={handleRowClickAsingatura} 
         />
         </div>
-        <div className="col-4 p-1">
+        <div className="col-4 p-1" style={{ maxHeight: "400px", overflowY: "auto" }}>
         <DataTable
             columns={columnas4}
             className="mi-tabla"
-            data={historialData}
+            data={asignaturas}
             noDataComponent={<NoDataComponent4 />}
+            onRowClicked={handleRowClickSecciones} 
         />
         </div>
-        <div className="col-4 p-1">
+        <div className="col-4 p-1" style={{ maxHeight: "450px", overflowY: "auto" }}>
         <DataTable
             columns={columnas5}
             className="mi-tabla"
-            data={historialData}
+            data={secciones}
             noDataComponent={<NoDataComponent5 />}
+            onRowClicked={handleRowClickObtenerClase}
         />
         </div>
     </div>
     </div>
 
-
-
     </ModalBody>
     <ModalFooter>
-        <Button variant="secondary" onClick={handleCloseDependentListModal}>
-        Matricular asignatura
-        </Button>
-        {/* Si necesitas algún botón de acción en la lista dependiente, puedes agregarlo aquí */}
+    <div className="container ">
+    <div className="row">
+    <p className="pt-2 pb-1 text-center">
+    SISTEMA DE MATRICULA - Dirección Ejecutiva de Ingenieria del Software (DEIS)</p>
+    </div>
+    </div>
+
     </ModalFooter>
     </Modal>
-
-
-
-
-
 
 
 </div>

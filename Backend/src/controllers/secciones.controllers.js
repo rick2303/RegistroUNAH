@@ -9,11 +9,30 @@ export const secciones =  async (req, res) => {
         .input('departamento', sql.VarChar, Departamento)
         .input('centroRegional', sql.VarChar, CentroRegional)
         .query(`
-            select s.IdSeccion, c.Nombre as 'Asignatura', s.Edificio, s.Aula, s.CantidadAlumnos, s.HI, s.HF, s.Seccion, s.Periodo, s.Obs, s.Dias, s.Cupos, c.Departamento, s.CentroRegional, (e.Nombre + ' ' + e.Apellido) as Nombre, c.Nombre AS Clase, c.UV
-            from [dbo].[secciones] s
-            INNER join [dbo].[empleados] e on e.NumEmpleado = s.IdDocente
-            INNER JOIN [dbo].[clases] c on s.IdClase = c.IdClase
-            where c.Departamento = @departamento and s.CentroRegional = @centroRegional order by s.IdSeccion desc 
+        SELECT distinct 
+    s.IdSeccion, 
+    c.Nombre AS 'Asignatura', 
+    s.Edificio, 
+    s.Aula, 
+    s.CantidadAlumnos, 
+    s.HI, 
+    s.HF, 
+    s.Seccion, 
+    s.Periodo, 
+    s.Obs, 
+    s.Dias, 
+    s.Cupos, 
+    c.Departamento, 
+    s.CentroRegional, 
+    (e.Nombre + ' ' + e.Apellido) AS Nombre, 
+    c.UV,
+    (SELECT COUNT(*) FROM [dbo].[registro_estudiante_clases] WHERE IdSeccion = s.IdSeccion AND EstadoMatricula = 'EN ESPERA') AS cuentaListaDeEspera
+FROM [dbo].[secciones] s
+INNER JOIN [dbo].[empleados] e ON e.NumEmpleado = s.IdDocente
+INNER JOIN [dbo].[clases] c ON s.IdClase = c.IdClase
+left JOIN [dbo].[registro_estudiante_clases] rec ON rec.IdSeccion = s.IdSeccion
+WHERE c.Departamento = @Departamento AND s.CentroRegional = @CentroRegional --and s.Periodo = '2PAC'
+ORDER BY s.IdSeccion DESC;
         `);
 
     res.json(result.recordset);

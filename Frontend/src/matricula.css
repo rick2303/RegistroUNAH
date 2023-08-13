@@ -1,0 +1,7 @@
+.row-hover:hover {
+    background-color: #d1d1d1; /* Cambia este color al que desees */
+}
+
+.row-clicked:active {
+    background-color: #3f51b5; /* Cambia este color al que desees */
+}

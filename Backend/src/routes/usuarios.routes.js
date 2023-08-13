@@ -2,7 +2,7 @@ import {Router} from 'express';
 import { getConnection } from '../Database';
 import {crearNuevaPlanificacion, renderizarPlanificacion, renderizarPlanificacionSemestral,crearNuevaMatricula, renderizarMatricula, crearNuevoProcesoCancelacion, renderizarCancelaciones, enviarMatriculaIPAC, enviarMatriculaIIPAC, enviarMatriculaIIIPAC, enviarIPAC, enviarIIPAC, enviarIIIPAC, renderizarMatriculaSemestral, enviarIPACSemestral, enviarIIPACSemestral, renderizarCancelacionesSemestral, renderizarFechaNotas, renderizarFechaNotasSemestral, crearFechaNotas} from '../controllers/admin.controllers';
 import {getEstudiantes, createNewStudent, updatePassword, getEstudiantesMatriculados} from '../controllers/usuarios.controllers';
-import {enviarClasesCursando,enviarInfoEstuForma03} from '../controllers/cancelacionesExcepcionales.controllers';
+import {enviarClasesCursando,enviarInfoEstuForma03, enviarClasesListaEspera} from '../controllers/cancelacionesExcepcionales.controllers';
 import {sendEmail} from '../controllers/recuperacionContra.controllers';
 import {procesarArchivo} from '../csv/csv'
 const router = Router();
@@ -42,6 +42,8 @@ router.get('/enviarMatriculaIIIPAC', enviarMatriculaIIIPAC);
 // RUTAS PARA ADMINISTRAR LAS CANCELACIONES EXCEPCIONALES
 
 router.post('/enviarClasesQueEstaCursando', enviarClasesCursando);
+
+router.post('/enviarClasesEnListaDeEspera', enviarClasesListaEspera);
 
 // RUTA PARA MOSTRAR LA FORMA DEL ESTUDIANTE EN JEFATURA Y COORDINACIÓN
 

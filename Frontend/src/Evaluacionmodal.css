@@ -1,0 +1,68 @@
+.evaluacionmodal {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+
+.evaluacionmodal .modal-content {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+
+.evaluacionmodal .modal-header {
+    background-color: #1e40af;
+    color: white;
+    border-bottom: none;
+    text-align: center;
+    padding: 15px;
+    border-radius: 0;
+}
+
+
+
+.evaluacionmodal .modal-title {
+    font-size: 30px;
+    margin: 0 auto;
+}
+
+
+
+.evaluacionmodal .modal-footer {
+    border-top: none;
+    justify-content: center;
+}
+
+
+.evaluacionmodal {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+
+.evaluacionmodal .form-group {
+    margin-bottom: 15px;
+}
+
+
+.evaluacionmodal .form-control {
+    border-radius: 5px;
+}
+
+
+.evaluacionmodal label {
+    font-weight: bold;
+}
+
+
+.evaluacionmodal textarea.form-control {
+    resize: vertical;
+}
+
+
+.evaluacionmodal label {
+    font-weight: bold;
+    font-size: 14px;
+    color: black;
+}
