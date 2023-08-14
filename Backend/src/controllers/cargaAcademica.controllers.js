@@ -79,7 +79,7 @@ const docDefinition = {
       '\n',
       {
         table: {
-          widths: ['7%', '18%', '*', '*', '*', '7%', '7%','*','7%',  '20%'],
+          widths: ['7%', '18%', '*', '*', '*', '7%', '7%','*','7%', '7%', '20%'],
           body: [
             // Encabezados de la  tabla
             [
@@ -92,6 +92,7 @@ const docDefinition = {
               { text: 'Hora final', style: 'tableHeader', alignment: 'center' },
               { text: 'Sección', style: 'tableHeader', alignment: 'center' },
               { text: 'Días', style: 'tableHeader', alignment: 'center' },
+              { text: 'Número empleado', style: 'tableHeader', alignment: 'center' },
               { text: 'Docente', style: 'tableHeader', alignment: 'center' },
             ],
             // Datos de la tabla 
@@ -105,6 +106,7 @@ const docDefinition = {
               { text: item.HF, alignment: 'center' },
               { text: item.Seccion, alignment: 'center' },
               { text: item.Dias, alignment: 'center' },
+              { text: item.IdDocente, alignment: 'center' },
               { text: item.NombreDocente, alignment: 'center' },
             ]),
 
@@ -215,7 +217,8 @@ export const cargaAcademicaEXCEL = async (req, res) => {
     worksheet.getCell('G6').value = 'Hora Final';
     worksheet.getCell('H6').value = 'Sección';
     worksheet.getCell('I6').value = 'Días';
-    worksheet.getCell('J6').value = 'Docente';
+    worksheet.getCell('J6').value = 'Nùmero empleado';
+    worksheet.getCell('K6').value = 'Docente';
 
     // Definir los encabezados de columna
     worksheet.columns= [
@@ -228,6 +231,7 @@ export const cargaAcademicaEXCEL = async (req, res) => {
       { header: 'Hora Final', key: 'HoraFinal', width: 15 },
       { header: 'Sección', key: 'Seccion', width: 10 },
       { header: 'Días', key: 'Dias', width: 15 },
+      { header: '', key: 'NumeroEmpleado', width: 20 },
       { header: '', key: 'Docente', width: 30 },
     ];
     // Agregar los datos a partir de la fila 7
@@ -243,6 +247,7 @@ export const cargaAcademicaEXCEL = async (req, res) => {
         HoraFinal: item.HF,
         Seccion: item.Seccion,
         Dias: item.Dias,
+        NumeroEmpleado:item.IdDocente,
         Docente: item.NombreDocente,
       });
 

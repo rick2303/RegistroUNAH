@@ -16,6 +16,7 @@ import routerSolicitudes from "./routes/solicitudes.routes"
 import routerCargaAcademica from "./routes/cargaAcademica.routes";
 import routerEstudiante from "./routes/estudiantes.routes";
 import routerMatricula from "./routes/matricula.routes";
+import routerChat from "./routes/chat.routes"
 //import {} from "./csv/csv";
 const app= express();
 const cors = require('cors');
@@ -46,6 +47,6 @@ app.get('/download-PDF', (req, res) => {
 
 console.log(config.port);
 
-app.use(empleadosRoute,loginRoute,perfilEstudiante,perfilEmpleado,routerCargaAcademica);
+app.use(empleadosRoute,loginRoute,perfilEstudiante,perfilEmpleado,routerCargaAcademica,routerChat);
 app.use(usuariosRoute, historialAcademico, routerCancelacionesExep,routerSolicitudes);
 app.use(routerSecciones, routerAdmin, routerEstado, routerCambioCarrera, routerEstudiante, routerMatricula);
