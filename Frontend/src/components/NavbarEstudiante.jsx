@@ -61,7 +61,7 @@ export default function NavbarEstudiante() {
   if (currentPath === "/src/html/NotasActuales.html") {
     redirectTo = "../html/Estudiante.html";
   }
-  if (currentPath === "/src/html/chat.html") {
+  if (currentPath === "/src/html/Matricula.html") {
     redirectTo = "../html/Estudiante.html";
   }
 

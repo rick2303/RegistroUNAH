@@ -201,6 +201,7 @@ const matricularPorIndice = async () => {
               <div className="grid grid-cols-1">
                   <a onClick={matricularPorIndice}
                     className=" grid grid-cols-1 group relative focus:outline-none focus:ring"
+                    style={{ cursor: 'pointer' }}
                   >
                     <span className=" rounded-[25px] grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"
                     style={{ backgroundColor: '#145eb9' }}
@@ -252,12 +253,10 @@ const matricularPorIndice = async () => {
                   <FcConferenceCall className="mx-auto m-2" />
                 </h1>
               </div>
-
               <div className="grid grid-cols-1">
-                <a href="#">
                   <a
                     className=" grid grid-cols-1 group relative focus:outline-none focus:ring"
-                    href="../html/chat.html"
+                    href="/download.html"
                   >
                     <span className=" rounded-[25px] grid grid-cols-1 absolute inset-0 translate-x-1.5 translate-y-1.5 transition-transform group-hover:translate-y-0 group-hover:translate-x-0"
                     style={{ backgroundColor: '#145eb9' }}
@@ -267,7 +266,6 @@ const matricularPorIndice = async () => {
                       Ir
                     </span>
                   </a>
-                </a>
               </div>
             </div>
           </article>
@@ -306,7 +304,7 @@ const matricularPorIndice = async () => {
             <div className="rounded-[10px] bg-white p-4 !pb-14 !pt-15 sm:p-6 row">
               <p className="featured-block-text text-center">
                 <strong className="text-xl text-center">
-                  Estado de cuenta
+                  Estado de Cuenta
                 </strong>
               </p>
               <div className="row">
@@ -315,7 +313,8 @@ const matricularPorIndice = async () => {
                 </h1>
               </div>
 
-              <div className="grid grid-cols-1">
+              <div className="grid grid-cols-1"
+              style={{ cursor: 'pointer' }}>
                 <EstadoCuenta></EstadoCuenta>
               </div>
             </div>

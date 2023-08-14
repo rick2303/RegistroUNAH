@@ -1,7 +1,8 @@
 import {Router} from 'express';
 const multer = require('multer');
 import path from 'path';
-import {getDocentes,registrarDocente,actualizarDocente,getCarreras, getDocenteById, clasesAsignadas, mostrarPerfilSeccion, mostrarEvaluacionesDocentes, mostrarDocentePorDepartamento, subirNotaEstudiante, notasEstudiantes, getDocenteByIdDep, notasSecciones, estudiantesSecciones} from '../controllers/empleados.controllers';
+import {getDocentes,registrarDocente,actualizarDocente,getCarreras, getDocenteById, clasesAsignadas, mostrarPerfilSeccion, mostrarEvaluacionesDocentes, mostrarDocentePorDepartamento, subirNotaEstudiante, notasEstudiantes, getDocenteByIdDep, notasSecciones, estudiantesSecciones, ingresoNotas} from '../controllers/empleados.controllers';
+import { listadoAlumnosEXCEL } from '../controllers/alumnosMatriculados';
 
 const routerEmpleados = Router();
 
@@ -46,6 +47,9 @@ routerEmpleados.post('/verNotas', notasSecciones);
 
 routerEmpleados.post('/estudianteSeccion', estudiantesSecciones);
 
+routerEmpleados.post('/accesoIngresoNotas', ingresoNotas);
+
+routerEmpleados.post('/descargarListado', listadoAlumnosEXCEL)
 
 
 

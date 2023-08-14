@@ -1,0 +1,53 @@
+/* Estilos para el contenido dentro del modal */
+.modal-content {
+    background-color: #fff;
+    border-radius: 8px;
+    width: 100%; /* Ajusta el ancho del contenido */
+    height: 90%; /* Ajusta la altura del contenido */
+    overflow-y: auto; /* Agrega desplazamiento vertical si es necesario */
+    padding: 20px;
+
+  }
+  
+  /* Estilos para las tablas dentro del carrusel */
+.modal-content table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+}
+  
+  /* Estilos para las celdas de la tabla */
+  .modal-content table td,
+  .modal-content table th {
+    padding: 1px;
+    border: 1px solid #000000;
+    
+  }
+
+
+
+  .modal-header-custom {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centrar horizontalmente */
+    padding: 1rem; /* Ajusta el espaciado según tus preferencias */
+    border-bottom: none;
+    border-radius: 0;
+    background-color: #007bff;
+  }
+  
+  /* Estilo para el botón de cierre */
+  .modal-header-custom .close {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: white;
+    opacity: 1;
+    margin-top: 18px;
+    margin-right: 25px;
+  }
+  
+  .modal-header-custom .close:hover {
+    opacity: 1;
+  }

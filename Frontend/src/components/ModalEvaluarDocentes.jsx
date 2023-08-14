@@ -116,7 +116,6 @@ const ModalEvaluarDocentes = () => {
         console.log("Respuesta del servidor:", data);
         if (data) {
           const userData = data;
-
           const IdSeccion = userData.idseccion
           setIdSeccion(IdSeccion)
           const IdDocente = userData.numempleado
