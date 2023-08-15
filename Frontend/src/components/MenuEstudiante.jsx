@@ -304,7 +304,7 @@ const matricularPorIndice = async () => {
             <div className="rounded-[10px] bg-white p-4 !pb-14 !pt-15 sm:p-6 row">
               <p className="featured-block-text text-center">
                 <strong className="text-xl text-center">
-                  Estado de cuenta
+                  Estado de Cuenta
                 </strong>
               </p>
               <div className="row">
@@ -313,7 +313,8 @@ const matricularPorIndice = async () => {
                 </h1>
               </div>
 
-              <div className="grid grid-cols-1">
+              <div className="grid grid-cols-1"
+              style={{ cursor: 'pointer' }}>
                 <EstadoCuenta></EstadoCuenta>
               </div>
             </div>

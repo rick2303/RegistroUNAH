@@ -72,7 +72,7 @@ function ModalCargaAcademica({ isOpen, onClose }) {
         <>
           {/* <!-- Modal --> */}
           <Modal isOpen={isOpen} toggle={onClose} className="modal-dialog">
-            <ModalHeader toggle={onClose} className="text-black">
+            <ModalHeader className="text-black">
               <h1 className="modal-title fs-5 text-center" id="exampleModalLabel">
                 <strong>Descargar carga académica</strong>
               </h1>
