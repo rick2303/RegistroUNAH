@@ -325,10 +325,12 @@ const columnas = [
     selector :row => row.Seccion,
     center: true,
     },
-    // {
-    // name:'PERIODO',
-    // selector :row => row.Periodo
-    // },
+    {
+    name:'PERIODO',
+    selector :row => row.Periodo,
+    center: true,
+
+    },
     {
         name: "ELIMINAR",
         cell: (row) => (
