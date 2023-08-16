@@ -76,7 +76,15 @@ export const queries = {
 
     PeriodoSeccionesCarga:`SELECT CONCAT(CAST(CAST(SUBSTRING(PeriodoAcademico, 1, CHARINDEX('PAC', PeriodoAcademico) - 1) AS INT) + 1 AS NVARCHAR(10)), 'PAC') AS NuevoPeriodoAcademico, year(FechaFinal) as Anio
     FROM planificacion_academica
-    WHERE GETDATE() BETWEEN FechaInicio AND FechaFinal AND Sistema = @Sistema`
+    WHERE GETDATE() BETWEEN FechaInicio AND FechaFinal AND Sistema = @Sistema`,
+
+    getContactos:`select c.IdEstudiantePropietario, c.IdEstudianteAgregado,pe.Imagen1,es.Nombre,es.Apellido  from contactos as c 
+    left join perfil_estudiante as pe 
+    on c.IdEstudianteAgregado = pe.IdPerfil
+    left join estudiantes as es
+    on c.IdEstudianteAgregado = es.NumCuenta
+    where c.IdEstudiantePropietario= @NumCuenta
+    `
 
 
 }
