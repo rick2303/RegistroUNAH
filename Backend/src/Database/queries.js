@@ -167,7 +167,8 @@ export const querysADMIN = {
     sendEmail: `select 
     s.IdSeccion, e.NumCuenta, e.Nombre + ' ' + e.Apellido 'Estudiante', e.CorreoInstitucional, c.idclase, c.nombre 'Asignatura', s.Seccion, s.Periodo from secciones s inner join registro_estudiante_clases res
     on res.IdSeccion = s.IdSeccion inner join estudiantes e on e.NumCuenta = res.IdEstudiante inner join clases c on c.IdClase = s.IdClase
-    where s.IdSeccion = @IdSeccion`
+    where s.IdSeccion = @IdSeccion`,
+    pagoSimulado: `update estudiantes_pagos set estado = 'PAGADO'`
 
 }
 
