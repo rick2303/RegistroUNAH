@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { getConnection, querys, sql } from "../Database";
+import { getConnection, queries, sql } from "../Database";
 
 export async function enviarEmailAmistad(correo,Solicitante,idP,idS) {
   const config = {
@@ -390,4 +390,35 @@ export const rechazarSolicitud = async (req, res) => {
         }
 }
 
-  
+export const Contactos = async (req,res)=>{
+    const {NumCuenta}= req.body
+
+    const pool = await getConnection();
+    const contactos = await pool.request()
+    .input('NumCuenta',sql.VarChar,NumCuenta)
+    .query(queries.getContactos)
+
+    console.log(contactos.recordset)
+
+    res.json(contactos.recordset)
+
+}
+
+export const buscarEstudiante = async (req,res)=>{
+
+    try {
+        const {NumCuenta}= req.body
+
+    const pool = await getConnection();
+
+    const estudiante = await pool.request()
+    .input('NumCuenta',sql.VarChar,NumCuenta)
+    .query(`SELECT NumCuenta,Nombre, Apellido, CorreoInstitucional,Carrera FROM estudiantes WHERE NumCuenta=${NumCuenta}`)
+
+    res.status(200).json(estudiante.recordset[0])
+    } catch (error) {
+        res.status(500).json("No se encontro estudiante")
+    }
+    
+
+}
