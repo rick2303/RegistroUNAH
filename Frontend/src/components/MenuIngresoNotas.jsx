@@ -287,9 +287,17 @@ const MenuIngresoNotas = () => {
       <span aria-hidden="true">X</span>
     </button>
   </ModalHeader>
-        <ModalBody className="modal-content">
-          <div className="horizontal-columns">
-            <Carousel showThumbs={false} showStatus={false} dynamicHeight={true} emulateTouch={true}>
+  <ModalBody className="modal-content">
+          {dataObtenida.length === 0 ? (
+            <div className="text-center">El docente no ha subido notas</div>
+          ) : (
+            <div className="horizontal-columns">
+              <Carousel
+                showThumbs={false}
+                showStatus={false}
+                dynamicHeight={true}
+                emulateTouch={true}
+              >
             {Object.entries(
                   dataObtenida.reduce((sections, nota) => {
                   const seccionKey = `${nota.Seccion}-${nota.Asignatura}`;
@@ -329,12 +337,12 @@ const MenuIngresoNotas = () => {
                       ))}
                     </tbody>
                   </table>
-                </div>
-              ))}
-            </Carousel>
-          </div>
+                  </div>
+                ))}
+              </Carousel>
+            </div>
+          )}
         </ModalBody>
-       
       </Modal>
     </div>
   );
