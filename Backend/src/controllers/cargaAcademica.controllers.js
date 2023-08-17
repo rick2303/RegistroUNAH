@@ -7,188 +7,203 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 const bwipjs = require('bwip-js');
 
 export const cargaAcademicaPDF = async (req, res) => {
-    const { Departamento, CentroRegional, Sistema } = req.body;
+  const { Departamento, CentroRegional, Sistema } = req.body;
 
-    try {
-        const pool = await getConnection();
+  try {
+    const pool = await getConnection();
+    const sistema = await pool.request()
+      .input("Sistema", sql.VarChar, Sistema)
+      .query(queries.PeriodoSeccionesCarga)
 
-        const carga = await pool.request()
-            .input("Departamento", sql.VarChar, Departamento)
-            .input("CentroRegional", sql.VarChar, CentroRegional)
-            .query(queries.CargaAcademica);
+    const sistema2 = sistema.recordset
 
-            console.log(Sistema);
-        const sistema = await pool.request()
-        .input("Sistema", sql.VarChar,Sistema)
-        .query(queries.PeriodoSeccionesCarga)
+    console.log(sistema.recordset)
 
-        const sistema2 = sistema.recordset
 
-        console.log(sistema.recordset)
 
-        const data = carga.recordset;
+    const nuevoPeriodoAcademicoValue = sistema2[0]?.NuevoPeriodoAcademico;
 
-        const nuevoPeriodoAcademicoValue = sistema2[0]?.NuevoPeriodoAcademico;
+    const carga = await pool.request()
+      .input("Departamento", sql.VarChar, Departamento)
+      .input("CentroRegional", sql.VarChar, CentroRegional)
+      .query(`select 
+            sc.IdClase,cl.Nombre,Edificio,sc.Aula,sc.CantidadAlumnos,sc.HI,sc.HF,sc.Seccion,sc.IdDocente, sc.CentroRegional, 
+            concat(emp.Nombre,' ', emp.Apellido) as NombreDocente, sc.Dias
+            from secciones as sc
+            right join clases as cl on sc.IdClase=cl.IdClase
+            right join empleados as emp on sc.IdDocente=NumEmpleado 
+            where Departamento=@Departamento And sc.CentroRegional=@CentroRegional and periodo = '${sistema2[0].NuevoPeriodoAcademico}'`);
 
-        const combinedData = data.map((item) => ({
-          ...item,
-          NuevoPeriodoAcademico: nuevoPeriodoAcademicoValue, 
-        }));
+    console.log(Sistema);
+    const data = carga.recordset;
+    const combinedData = data.map((item) => ({
+      ...item,
+      NuevoPeriodoAcademico: nuevoPeriodoAcademicoValue,
+    }));
 
-        const imagePath = path.join(__dirname, '../img/UNAH-escudo.png');
+    const imagePath = path.join(__dirname, '../img/UNAH-escudo.png');
 
-        // Lee la imagen como un archivo de bytes
-        const imageBytes = fs.readFileSync(imagePath);
-        
-        // Convierte los bytes de la imagen a base64
-        const base64Image = imageBytes.toString('base64');
+    // Lee la imagen como un archivo de bytes
+    const imageBytes = fs.readFileSync(imagePath);
 
-const docDefinition = {
-    pageOrientation: 'landscape',
-  
-    footer: function (currentPage, pageCount) {
-      return {
-        columns: [
-          {
-            text: 'Página ' + currentPage.toString() + ' de ' + pageCount + '  ',
-            alignment: 'center',
-          },
-        ],
-      };
-    },
-    content: [
-      {
-        columns: [
-          {
-            image: `data:image/png;base64,${base64Image}`,
-            width: 45,
-            height: 65,
-            alignment: 'left',
-          },
-          {
-            stack: [
-              { text: 'UNIVERSIDAD NACIONAL AUTÓNOMA DE HONDURAS', style: 'header', alignment: 'center' },
-              { text: `DEPARTAMENTO DE ${Departamento.toUpperCase()}`, style: 'subheader', alignment: 'center' },
-              { text: `CARGA ACADÉMICA ${sistema2[0]?.NuevoPeriodoAcademico} ${sistema2[0].Anio}`, style: 'subheader', alignment: 'center' },
-            ],
-            alignment: 'center',
-            width: '*',
-          },
-        ],
-      },
-      '\n',
-      {
-        table: {
-          widths: ['7%', '18%', '*', '*', '*', '7%', '7%','*','7%',  '20%'],
-          body: [
-            // Encabezados de la  tabla
-            [
-              { text: 'Código clase', style: 'tableHeader', alignment: 'center' },
-              { text: 'Nombre clase', style: 'tableHeader', alignment: 'center' },
-              { text: 'Edificio', style: 'tableHeader', alignment: 'center' },
-              { text: 'Aula', style: 'tableHeader', alignment: 'center' },
-              { text: 'Cupos', style: 'tableHeader', alignment: 'center' },
-              { text: 'Hora inicial', style: 'tableHeader', alignment: 'center' },
-              { text: 'Hora final', style: 'tableHeader', alignment: 'center' },
-              { text: 'Sección', style: 'tableHeader', alignment: 'center' },
-              { text: 'Días', style: 'tableHeader', alignment: 'center' },
-              { text: 'Docente', style: 'tableHeader', alignment: 'center' },
-            ],
-            // Datos de la tabla 
-            ...combinedData.map((item) => [
-              { text: item.IdClase, alignment: 'center' },
-              { text: item.Nombre, alignment: 'center' },
-              { text: item.Edificio, alignment: 'center' },
-              { text: item.Aula, alignment: 'center' },
-              { text: item.CantidadAlumnos ?? 'N/A', alignment: 'center' },
-              { text: item.HI, alignment: 'center' },
-              { text: item.HF, alignment: 'center' },
-              { text: item.Seccion, alignment: 'center' },
-              { text: item.Dias, alignment: 'center' },
-              { text: item.NombreDocente, alignment: 'center' },
-            ]),
+    // Convierte los bytes de la imagen a base64
+    const base64Image = imageBytes.toString('base64');
 
+    const docDefinition = {
+      pageOrientation: 'landscape',
+
+      footer: function (currentPage, pageCount) {
+        return {
+          columns: [
+            {
+              text: 'Página ' + currentPage.toString() + ' de ' + pageCount + '  ',
+              alignment: 'center',
+            },
           ],
-          pageBreak: 'auto'
+        };
+      },
+      content: [
+        {
+          columns: [
+            {
+              image: `data:image/png;base64,${base64Image}`,
+              width: 45,
+              height: 65,
+              alignment: 'left',
+            },
+            {
+              stack: [
+                { text: 'UNIVERSIDAD NACIONAL AUTÓNOMA DE HONDURAS', style: 'header', alignment: 'center' },
+                { text: `DEPARTAMENTO DE ${Departamento.toUpperCase()}`, style: 'subheader', alignment: 'center' },
+                { text: `CARGA ACADÉMICA ${sistema2[0]?.NuevoPeriodoAcademico} ${sistema2[0].Anio}`, style: 'subheader', alignment: 'center' },
+              ],
+              alignment: 'center',
+              width: '*',
+            },
+          ],
         },
-        layout: {
+        '\n',
+        {
+          table: {
+            widths: ['7%', '18%', '*', '*', '*', '7%', '7%', '*', '7%', '7%', '20%'],
+            body: [
+              // Encabezados de la  tabla
+              [
+                { text: 'Código clase', style: 'tableHeader', alignment: 'center' },
+                { text: 'Nombre clase', style: 'tableHeader', alignment: 'center' },
+                { text: 'Edificio', style: 'tableHeader', alignment: 'center' },
+                { text: 'Aula', style: 'tableHeader', alignment: 'center' },
+                { text: 'Cupos', style: 'tableHeader', alignment: 'center' },
+                { text: 'Hora inicial', style: 'tableHeader', alignment: 'center' },
+                { text: 'Hora final', style: 'tableHeader', alignment: 'center' },
+                { text: 'Sección', style: 'tableHeader', alignment: 'center' },
+                { text: 'Días', style: 'tableHeader', alignment: 'center' },
+                { text: 'Número empleado', style: 'tableHeader', alignment: 'center' },
+                { text: 'Docente', style: 'tableHeader', alignment: 'center' },
+              ],
+              // Datos de la tabla 
+              ...combinedData.map((item) => [
+                { text: item.IdClase, alignment: 'center' },
+                { text: item.Nombre, alignment: 'center' },
+                { text: item.Edificio, alignment: 'center' },
+                { text: item.Aula, alignment: 'center' },
+                { text: item.CantidadAlumnos ?? 'N/A', alignment: 'center' },
+                { text: item.HI, alignment: 'center' },
+                { text: item.HF, alignment: 'center' },
+                { text: item.Seccion, alignment: 'center' },
+                { text: item.Dias, alignment: 'center' },
+                { text: item.IdDocente, alignment: 'center' },
+                { text: item.NombreDocente, alignment: 'center' },
+              ]),
+
+            ],
+            pageBreak: 'auto'
+          },
+          layout: {
+            alignment: 'center',
+          },
+        },
+
+      ],
+      styles: {
+        header: {
+          fontSize: 18,
+          bold: true,
           alignment: 'center',
+          margin: [0, 0, 0, 10],
+        },
+        subheader: {
+          fontSize: 14,
+          bold: true,
+          margin: [0, 5, 0, 0],
         },
       },
-      
-    ],
-    styles: {
-      header: {
-        fontSize: 18,
-        bold: true,
-        alignment: 'center',
-        margin: [0, 0, 0, 10],
-      },
-      subheader: {
-        fontSize: 14,
-        bold: true,
-        margin: [0, 5, 0, 0],
-      },
-    },
-  };      
-  const pdfDoc = pdfMake.createPdf(docDefinition);
+    };
+    const pdfDoc = pdfMake.createPdf(docDefinition);
 
-  const pdfBuffer = await new Promise((resolve, reject) => {
-    pdfDoc.getBuffer((buffer) => {
-      resolve(buffer);
+    const pdfBuffer = await new Promise((resolve, reject) => {
+      pdfDoc.getBuffer((buffer) => {
+        resolve(buffer);
+      });
     });
-  });
 
-  // Definir el nombre y la ruta del archivo
-  const fileName = `Carga_académica_${Departamento}.pdf`;
-  const filePath = path.join(__dirname, "../pdfs", fileName);
+    // Definir el nombre y la ruta del archivo
+    const fileName = `Carga_académica_${Departamento}.pdf`;
+    const filePath = path.join(__dirname, "../pdfs", fileName);
 
-  // Guardar el PDF en el sistema de archivos
-  fs.writeFileSync(filePath, pdfBuffer);
+    // Guardar el PDF en el sistema de archivos
+    fs.writeFileSync(filePath, pdfBuffer);
 
-  // Descargar el PDF
-  res.download(filePath, fileName, (err) => {
-    if (err) {
-      console.error("Error al descargar el PDF:", err);
-    }
+    // Descargar el PDF
+    res.download(filePath, fileName, (err) => {
+      if (err) {
+        console.error("Error al descargar el PDF:", err);
+      }
 
-    // Eliminar el archivo del sistema de archivos después de descargarlo
-    fs.unlinkSync(filePath);
-  });
-            
-    } catch (error) {
-        console.error('Error al generar el PDF:', error);
-        res.status(500).json({ message: 'Error al generar el PDF.' });
-    }
+      // Eliminar el archivo del sistema de archivos después de descargarlo
+      fs.unlinkSync(filePath);
+    });
+
+  } catch (error) {
+    console.error('Error al generar el PDF:', error);
+    res.status(500).json({ message: 'Error al generar el PDF.' });
+  }
 };
 
 
 
 export const cargaAcademicaEXCEL = async (req, res) => {
-  const { Departamento, CentroRegional,Sistema } = req.body;
+  const { Departamento, CentroRegional, Sistema } = req.body;
 
   try {
     const pool = await getConnection();
+    const sistema = await pool.request()
+      .input("Sistema", sql.VarChar, Sistema)
+      .query(queries.PeriodoSeccionesCarga)
+
+    const sistema2 = sistema.recordset
 
     const carga = await pool
       .request()
       .input('Departamento', sql.VarChar, Departamento)
       .input('CentroRegional', sql.VarChar, CentroRegional)
-      .query(queries.CargaAcademica);
+      .query(`select 
+      sc.IdClase,cl.Nombre,Edificio,sc.Aula,sc.CantidadAlumnos,sc.HI,sc.HF,sc.Seccion,sc.IdDocente, sc.CentroRegional, 
+      concat(emp.Nombre,' ', emp.Apellido) as NombreDocente, sc.Dias
+      from secciones as sc
+      right join clases as cl on sc.IdClase=cl.IdClase
+      right join empleados as emp on sc.IdDocente=NumEmpleado 
+      where Departamento=@Departamento And sc.CentroRegional=@CentroRegional and periodo = '${sistema2[0].NuevoPeriodoAcademico}'`);
 
     const data = carga.recordset;
 
-    const sistema = await pool.request()
-    .input("Sistema", sql.VarChar,Sistema)
-    .query(queries.PeriodoSeccionesCarga)
 
-    const sistema2 = sistema.recordset
 
     // Crear el Excel
     const workbook = new Excel.Workbook();
     const worksheet = workbook.addWorksheet('Carga Académica');
 
-    
+
     worksheet.getCell('A1').value = '**************************************************************';
     worksheet.getCell('A1').alignment = { horizontal: 'center' };
     worksheet.mergeCells('A1:J1');
@@ -215,10 +230,11 @@ export const cargaAcademicaEXCEL = async (req, res) => {
     worksheet.getCell('G6').value = 'Hora Final';
     worksheet.getCell('H6').value = 'Sección';
     worksheet.getCell('I6').value = 'Días';
-    worksheet.getCell('J6').value = 'Docente';
+    worksheet.getCell('J6').value = 'Nùmero empleado';
+    worksheet.getCell('K6').value = 'Docente';
 
     // Definir los encabezados de columna
-    worksheet.columns= [
+    worksheet.columns = [
       { header: 'Código Clase', key: 'CodigoClase', width: 15 },
       { header: 'Nombre Clase', key: 'NombreClase', width: 40 },
       { header: 'Edificio', key: 'Edificio', width: 15 },
@@ -228,6 +244,7 @@ export const cargaAcademicaEXCEL = async (req, res) => {
       { header: 'Hora Final', key: 'HoraFinal', width: 15 },
       { header: 'Sección', key: 'Seccion', width: 10 },
       { header: 'Días', key: 'Dias', width: 15 },
+      { header: '', key: 'NumeroEmpleado', width: 20 },
       { header: '', key: 'Docente', width: 30 },
     ];
     // Agregar los datos a partir de la fila 7
@@ -243,6 +260,7 @@ export const cargaAcademicaEXCEL = async (req, res) => {
         HoraFinal: item.HF,
         Seccion: item.Seccion,
         Dias: item.Dias,
+        NumeroEmpleado: item.IdDocente,
         Docente: item.NombreDocente,
       });
 

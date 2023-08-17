@@ -1,21 +1,25 @@
 
 const existingEmails = new Set();
-
 export function generateUniqueEmail(firstNameOnly, lastNameOnly) {
-    const cleanedFirstName = firstNameOnly.replace(/\s/g, "");
-    const cleanedLastName = lastNameOnly.replace(/\s/g, "");
-    const baseEmail = `${cleanedFirstName.toLowerCase()}.${cleanedLastName.toLowerCase()}`;
-    let email = `${baseEmail}@unah.edu.hn`;
-    let count = 1;
+  const removeAccents = (str) => {
+      return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  };
 
-    while (isEmailAlreadyTaken(email)) {
-        email = generateRandomString(cleanedFirstName, cleanedLastName);
-        count++;
-    }
-    
-    existingEmails.add(email); // Agrega el correo al conjunto de correos existentes
-    return email;
+  const cleanedFirstName = removeAccents(firstNameOnly.replace(/\s/g, ""));
+  const cleanedLastName = removeAccents(lastNameOnly.replace(/\s/g, ""));
+  const baseEmail = `${cleanedFirstName.toLowerCase()}.${cleanedLastName.toLowerCase()}`;
+  let email = `${baseEmail}@unah.edu.hn`;
+  let count = 1;
+
+  while (isEmailAlreadyTaken(email)) {
+      email = generateRandomString(cleanedFirstName, cleanedLastName);
+      count++;
+  }
+  
+  existingEmails.add(email); // Agrega el correo al conjunto de correos existentes
+  return email;
 }
+
 
  function isEmailAlreadyTaken(email) {
   return existingEmails.has(email); // Verifica si el correo ya existe en el conjunto

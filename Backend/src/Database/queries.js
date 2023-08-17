@@ -65,7 +65,10 @@ export const queries = {
 
     UpdateCambioCentro:"update dbo.estudiantes set CentroRegional=@CentroRegional where NumCuenta=@NumCuenta",
 
-    CargaAcademica:`select sc.IdClase,cl.Nombre,Edificio,sc.Aula,sc.CantidadAlumnos,sc.HI,sc.HF,sc.Seccion,sc.IdDocente, sc.CentroRegional, concat(emp.Nombre,' ', emp.Apellido) as NombreDocente, sc.Dias
+    CargaAcademica:`
+    select 
+    sc.IdClase,cl.Nombre,Edificio,sc.Aula,sc.CantidadAlumnos,sc.HI,sc.HF,sc.Seccion,sc.IdDocente, sc.CentroRegional, 
+    concat(emp.Nombre,' ', emp.Apellido) as NombreDocente, sc.Dias
     from secciones as sc
     right join clases as cl on sc.IdClase=cl.IdClase
     right join empleados as emp on sc.IdDocente=NumEmpleado 
@@ -73,7 +76,15 @@ export const queries = {
 
     PeriodoSeccionesCarga:`SELECT CONCAT(CAST(CAST(SUBSTRING(PeriodoAcademico, 1, CHARINDEX('PAC', PeriodoAcademico) - 1) AS INT) + 1 AS NVARCHAR(10)), 'PAC') AS NuevoPeriodoAcademico, year(FechaFinal) as Anio
     FROM planificacion_academica
-    WHERE GETDATE() BETWEEN FechaInicio AND FechaFinal AND Sistema = @Sistema`
+    WHERE GETDATE() BETWEEN FechaInicio AND FechaFinal AND Sistema = @Sistema`,
+
+    getContactos:`select c.IdEstudiantePropietario, c.IdEstudianteAgregado,pe.Imagen1,es.Nombre,es.Apellido  from contactos as c 
+    left join perfil_estudiante as pe 
+    on c.IdEstudianteAgregado = pe.IdPerfil
+    left join estudiantes as es
+    on c.IdEstudianteAgregado = es.NumCuenta
+    where c.IdEstudiantePropietario= @NumCuenta
+    `
 
 
 }
@@ -156,7 +167,8 @@ export const querysADMIN = {
     sendEmail: `select 
     s.IdSeccion, e.NumCuenta, e.Nombre + ' ' + e.Apellido 'Estudiante', e.CorreoInstitucional, c.idclase, c.nombre 'Asignatura', s.Seccion, s.Periodo from secciones s inner join registro_estudiante_clases res
     on res.IdSeccion = s.IdSeccion inner join estudiantes e on e.NumCuenta = res.IdEstudiante inner join clases c on c.IdClase = s.IdClase
-    where s.IdSeccion = @IdSeccion`
+    where s.IdSeccion = @IdSeccion`,
+    pagoSimulado: `update estudiantes_pagos set estado = 'PAGADO'`
 
 }
 

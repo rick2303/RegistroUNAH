@@ -87,6 +87,10 @@ export default function Navbar() {
     redirectTo="../html/Jefatura.html"
   }
 
+  if((currentPath === "/src/html/IngresoNotas.html" && subrol==="JEFE DEPARTAMENTO")){
+    redirectTo="../html/Jefatura.html"
+  }
+
 
   console.log(currentPath)
   const navList = (
