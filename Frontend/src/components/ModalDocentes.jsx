@@ -13,6 +13,8 @@ import {
 import "../App.css"
 
 
+
+
 const ModalDocentes = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [Nombre, setNombre] = useState("");
@@ -20,17 +22,24 @@ const ModalDocentes = () => {
   const [DNI, setDNI] = useState("");
   const [CorreoPersonal, setCorreoPersonal] = useState("");
   const [NumeroTelefono, setNumeroTelefono] = useState("");
-  const [FechaNacimiento, setFechaNacimiento] = useState("");
+  const [FechaNacimiento, setFechaNacimiento] = useState(new Date());
   const [Direccion, setDireccion] = useState("");
   const [CentroRegional, setCentroRegional] = useState("");
   const [Foto, setFoto] = useState("");
   const [Carrera, setCarrera] = useState([]);
   const [carreraSeleccionada, setCarreraSeleccionada] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
 
   const toggleModal = () => {
     setModalOpen(!modalOpen);
   };
 
+  const isDateInRange = (date) => {
+    const minDate = new Date("1920-01-01");
+    const maxDate = new Date("2005-12-31");
+    return date >= minDate && date <= maxDate;
+  };
+  
   const handleCarreraChange = (event) => {
     setCarreraSeleccionada(event.target.value);
   };
@@ -51,6 +60,17 @@ const ModalDocentes = () => {
     setFoto("");
     setCarreraSeleccionada("");
   };
+
+  const handleDNIChange = (e) => {
+    const inputDNI = e.target.value;
+    
+    // Limit input to 13 characters
+    if (inputDNI.length <= 13) {
+      setDNI(inputDNI);
+    }
+  };
+
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -88,6 +108,13 @@ const ModalDocentes = () => {
   const AgregarDocente = (event) => {
     event.preventDefault();
 
+    const dateObject = new Date(selectedDate);
+
+    if (!isDateInRange(dateObject)) {
+      alert("El año de nacimiento de el docente tiene que ser menor a el año 2003");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("DNI", DNI);
     formData.append("Nombre", Nombre);
@@ -97,7 +124,7 @@ const ModalDocentes = () => {
     formData.append("FechaNacimiento", FechaNacimiento);
     formData.append("Carrera", carreraSeleccionada);
     formData.append("Direccion", Direccion);
-    formData.append("files", Foto);
+    formData.append("files", document.getElementById("foto").files[0]);
     formData.append("CentroRegional", CentroRegional);
 
     toggleModal();
@@ -169,17 +196,16 @@ const ModalDocentes = () => {
             <FormGroup>
               <Label for="DNI">DNI</Label>
               <Input
-                type="text"
-                
+                type="number"
                 id="DNI"
                 value={DNI}
-                onChange={(e) => setDNI(e.target.value)}
-                onKeyPress={(event) => {
-            const charCode = event.which ? event.which : event.keyCode;
-            if (charCode < 48 || charCode > 57) {
-            event.preventDefault();
-            }
-        }}
+                onChange={handleDNIChange}
+                onKeyDown={(event) => {
+                 
+                  if (event.target.value.length >= 13 && event.key !== "Backspace") {
+                    event.preventDefault();
+                  }
+                }}
               />
             </FormGroup>
             <FormGroup>
@@ -208,12 +234,13 @@ const ModalDocentes = () => {
               />
             </FormGroup>
             <FormGroup>
-              <Label for="fechaNacimiento">Fecha De Nacimiento</Label>
+            <Label for="fechaNacimiento">Fecha De Nacimiento</Label>
               <Input
                 type="date"
                 id="fechaNacimiento"
-                value={FechaNacimiento}
-                onChange={(e) => setFechaNacimiento(e.target.value)}
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                max="2003-01-01" 
               />
             </FormGroup>
             <FormGroup>
@@ -275,9 +302,6 @@ const ModalDocentes = () => {
         <ModalFooter>
           <Button color="boton_guardar" onClick={AgregarDocente}>
             Registrar
-          </Button>
-          <Button color="secondary" onClick={toggleModal}>
-            Cancelar
           </Button>
         </ModalFooter>
       </Modal>
