@@ -82,13 +82,12 @@ function ModalAgregarContacto({ isOpen, onClose }) {
           NumCuentaPropietario: NumCuentaPropio 
         })
       });
-  
-      if (response.ok) {
-        const data = await response.json();
+      const data = await response.json();
+      if (data.status === 200) {
         console.log(data);
-        alert(data);
+        alert(data.message);
       } else {
-        console.error('Error sending solicitud:', response.statusText);
+        alert(data.message)
       }
     } catch (error) {
       console.error('Error fetching solicitud:', error);

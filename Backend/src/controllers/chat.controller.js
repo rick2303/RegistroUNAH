@@ -49,6 +49,7 @@ export async function enviarEmailAmistad(correo,Solicitante,idP,idS) {
 
 export const SolicitudAmistad = async (req,res)=>{
 
+    
     const {NumCuentaAmigo,NumCuentaPropietario}= req.body;
 
     const pool = await getConnection();
@@ -64,7 +65,7 @@ export const SolicitudAmistad = async (req,res)=>{
             SELECT 1
             FROM contactos AS c2
             WHERE c2.IdEstudianteAgregado = ${NumCuentaAmigo}  -- Valor que deseas verificar
-                AND c2.IdEstudiantePropietario = c1.IdEstudiantePropietario
+                AND c2.IdEstudiantePropietario = c1.IdEstudiantePropietario AND EstadoSolicitud='AGREGADO'
         ))
         OR
         (c1.IdEstudianteAgregado = ${NumCuentaAmigo} -- Valor que deseas verificar
@@ -72,12 +73,12 @@ export const SolicitudAmistad = async (req,res)=>{
             SELECT 1
             FROM contactos AS c3
             WHERE c3.IdEstudiantePropietario = ${NumCuentaPropietario}  -- Reemplaza esto con el valor del propietario
-                AND c3.IdEstudianteAgregado = c1.IdEstudianteAgregado
+                AND c3.IdEstudianteAgregado = c1.IdEstudianteAgregado AND EstadoSolicitud='AGREGADO'
         ));
     ;` )
-
-    if(existencia.recordset[0] !=null){
-        res.status(500).send("Ya tienes agregado este contacto")
+    
+    if(existencia.recordset[0] !=null ){
+        res.status(200).json({message:"Solicitud rechazada, ya tienes este contacto agregado"})
     }else{
 
     const correo = await pool.request()
@@ -96,7 +97,7 @@ export const SolicitudAmistad = async (req,res)=>{
 
     enviarEmailAmistad(correo.recordset[0].CorreoPersonal,solicitante.recordset[0].Nombre,NumCuentaPropietario,NumCuentaAmigo)
 
-    res.status(200).send("Enviada la solicitud")
+    res.status(200).json({message:"Solicitud enviada"})
     }
 
 }
@@ -118,7 +119,7 @@ export const aceptarSolicitud = async (req, res) => {
             SELECT 1
             FROM contactos AS c2
             WHERE c2.IdEstudianteAgregado = ${NumCuentaAmigo}  -- Valor que deseas verificar
-                AND c2.IdEstudiantePropietario = c1.IdEstudiantePropietario
+                AND c2.IdEstudiantePropietario = c1.IdEstudiantePropietario AND EstadoSolicitud='AGREGADO'
         ))
         OR
         (c1.IdEstudianteAgregado = ${NumCuentaAmigo} -- Valor que deseas verificar
@@ -126,10 +127,11 @@ export const aceptarSolicitud = async (req, res) => {
             SELECT 1
             FROM contactos AS c3
             WHERE c3.IdEstudiantePropietario = ${NumCuentaPropietario}  -- Reemplaza esto con el valor del propietario
-                AND c3.IdEstudianteAgregado = c1.IdEstudianteAgregado
+                AND c3.IdEstudianteAgregado = c1.IdEstudianteAgregado AND EstadoSolicitud='AGREGADO'
         ));
     ;` )
 
+            console.log("existencia: "+ existencia.recordset[0])
     if(existencia.recordset[0] !=null){
         const mensaje = `
         <!DOCTYPE html>
@@ -263,7 +265,7 @@ export const rechazarSolicitud = async (req, res) => {
             SELECT 1
             FROM contactos AS c2
             WHERE c2.IdEstudianteAgregado = ${NumCuentaAmigo}  -- Valor que deseas verificar
-                AND c2.IdEstudiantePropietario = c1.IdEstudiantePropietario
+                AND c2.IdEstudiantePropietario = c1.IdEstudiantePropietario AND EstadoSolicitud='AGREGADO'
         ))
         OR
         (c1.IdEstudianteAgregado = ${NumCuentaAmigo} -- Valor que deseas verificar
@@ -271,11 +273,11 @@ export const rechazarSolicitud = async (req, res) => {
             SELECT 1
             FROM contactos AS c3
             WHERE c3.IdEstudiantePropietario = ${NumCuentaPropietario}  -- Reemplaza esto con el valor del propietario
-                AND c3.IdEstudianteAgregado = c1.IdEstudianteAgregado
+                AND c3.IdEstudianteAgregado = c1.IdEstudianteAgregado AND EstadoSolicitud='AGREGADO'
         ));
     ;` )
 
-    if(existencia.recordset[0] !=null){
+    if(existencia.recordset[0] !=null ){
         const mensaje = `
         <!DOCTYPE html>
         <html lang="es">
@@ -413,7 +415,7 @@ export const buscarEstudiante = async (req,res)=>{
 
     const estudiante = await pool.request()
     .input('NumCuenta',sql.VarChar,NumCuenta)
-    .query(`SELECT NumCuenta,Nombre, Apellido, CorreoInstitucional,Carrera FROM estudiantes WHERE NumCuenta=${NumCuenta}`)
+    .query(`SELECT NumCuenta,Nombre, Apellido, CorreoInstitucional,Carrera FROM estudiantes WHERE NumCuenta=${NumCuenta} `)
 
     res.status(200).json(estudiante.recordset[0])
     } catch (error) {
@@ -422,3 +424,53 @@ export const buscarEstudiante = async (req,res)=>{
     
 
 }
+
+export const MensajesChat = async (io, socket) => {
+  socket.on('chat message', async (messageData) => {
+    const emisorId = messageData.emisorId;
+    const receptorId = messageData.receptorId;
+    const mensaje = messageData.mensaje;
+
+    const query = `
+      INSERT INTO historialChat (EmisorId, receptorId, mensaje)
+      VALUES (@emisorId, @receptorId, @mensaje)
+    `;
+    try {
+    const pool = await getConnection()
+    const mensajes= await pool.request()
+        .input('emisorId', sql.VarChar, emisorId)
+        .input('receptorId', sql.VarChar, receptorId)
+        .input('mensaje', sql.VarChar, mensaje)
+        .query(query);
+
+      io.to(messageData.receiverSocketId).emit('chat message', messageData);
+    } catch (error) {
+      console.error('Error al guardar el mensaje en la base de datos:', error);
+    }
+  });
+};
+
+export const getHistorialChat = async (req, res) => {
+  const { emisorId, receptorId } = req.params;
+
+  const query = `
+    SELECT EmisorId, receptorId, mensaje, fecha_Mensaje
+    FROM historialChat
+    WHERE (EmisorId = @emisorId AND receptorId = @receptorId)
+    OR (EmisorId = @receptorId AND receptorId = @emisorId)
+    ORDER BY fecha_Mensaje ASC;
+  `;
+  try {
+    const pool = await getConnection();
+    const result = await pool.request()
+      .input('emisorId', sql.VarChar, emisorId)
+      .input('receptorId', sql.VarChar, receptorId)
+      .query(query);
+
+    const chatHistory = result.recordset;
+    res.json(chatHistory);
+  } catch (error) {
+    console.error('Error al obtener el historial de chat:', error);
+    res.status(500).json({ error: "Error al obtener el historial de chat." });
+  }
+};
