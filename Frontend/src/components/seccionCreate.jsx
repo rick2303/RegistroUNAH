@@ -6,6 +6,7 @@ import 'styled-components'
 import { FaPlusCircle } from "react-icons/fa";
 import {FcDeleteRow} from "react-icons/fc"
 import { Input} from "reactstrap";
+import styled from 'styled-components';
 
 const paginationComponentOptions = {
   rowsPerPageText: 'Filas por página',
@@ -273,6 +274,27 @@ useEffect(() => {
     }
   }, [edificio]);
 //configuramos las columnas para DataTable
+
+const customStyles = {
+  headCells: {
+      style: {
+          backgroundColor: '#145eb9',
+          color: 'white',
+          borderBottom: '1px solid #c6c6c6', 
+      },
+      },
+      rows: {
+      style: {
+          border: '1px solid #c6c6c6', 
+          textAlign: 'center',
+      },
+      },
+  };
+  
+  const TableHeaderCell = styled.div`
+  margin: auto;
+  `;
+
 const columnas = [
     {
     name:'ASIGNATURA',
@@ -291,7 +313,7 @@ const columnas = [
     center: true,
     },
     {
-    name:'DIAS',
+    name:'DÍAS',
     selector : row => row.Dias,
     center: true,
     },
@@ -321,12 +343,12 @@ const columnas = [
     width: "240px"
     },
     {
-    name:'SECCION',
+    name:'SECCIÓN',
     selector :row => row.Seccion,
     center: true,
     },
     {
-    name:'PERIODO',
+    name:'PERÍODO',
     selector :row => row.Periodo,
     center: true,
 
@@ -357,8 +379,6 @@ const NoDataComponent = () => {
   return <div>No hay registros para mostrar</div>;
 };
     return (
-
-
         <div className="App">
         <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
             Crear nuevas secciones
@@ -367,10 +387,11 @@ const NoDataComponent = () => {
         <div className="row">
         <div className="col-md-6 mb-4">
         <select
-            className="form-select border-3"
+            className="form-select border-1"
             aria-label="Default select example"
             value={claseSeleccionada}
             onChange={handleClaseChange}
+            style={{border: "1px solid #c6c6c6 ",borderRadius: "5px"}}
           >
             <option>Clase</option>
             {clases.map((clase) => (
@@ -382,9 +403,10 @@ const NoDataComponent = () => {
         </div>
         <div className="col-md-6 mb-4">
       <select
-        className="form-select border-3"
+        className="form-select border-1"
         aria-label="Default select example"
         value={edificio}
+        style={{border: "1px solid #c6c6c6 ",borderRadius: "5px"}}
         onChange={handleEdificioChange}
       >
         <option value="">Edificio</option>
@@ -410,8 +432,9 @@ const NoDataComponent = () => {
     </div>
         <div className="col-md-6 mb-4">
         <select
-            className="form-select border-3"
+            className="form-select border-1"
             aria-label="Default select example"
+            style={{border: "1px solid #c6c6c6 ",borderRadius: "5px"}}
             value={docenteSeleccionado}
             onChange={handleDocenteChange}
           >
@@ -425,9 +448,10 @@ const NoDataComponent = () => {
         </div>
         <div className="col-md-6 mb-4">
         <select
-          className="form-select border-3"
+          className="form-select border-1"
           aria-label="Default select example"
           value={aulaSeleccionada}
+          style={{border: "1px solid #c6c6c6 ",borderRadius: "5px"}}
           onChange={handleAulaChange}
         >
           <option>Aula</option>
@@ -441,9 +465,10 @@ const NoDataComponent = () => {
         
         <div className="col-md-6 mb-4">
             <select 
-            className="form-select border-3"
+            className="form-select border-1"
             aria-label="Default select example"
             value={hiSeleccionado}
+            style={{border: "1px solid #c6c6c6 ",borderRadius: "5px"}}
             onChange={handleHiChange}>
             <option selected>HI</option>
             <option value="600">600</option>
@@ -465,8 +490,9 @@ const NoDataComponent = () => {
         </div>
         <div className="col-md-6 mb-4">
             <select 
-            className="form-select border-3"
+            className="form-select border-1"
             aria-label="Default select example"
+            style={{border: "1px solid #c6c6c6 ",borderRadius: "5px"}}
             value={hfSeleccionado}
             onChange={handleHfChange}
             >
@@ -490,9 +516,10 @@ const NoDataComponent = () => {
         </div>
         <div className="col-md-6 mb-4">
         <select
-            className="form-select border-3"
+            className="form-select border-1"
             aria-label="Default select example"
             value={periodoSeleccionado}
+            style={{border: "1px solid #c6c6c6 ",borderRadius: "5px"}}
             onChange={handlePeriodoChange}
           >
             <option>Periodo</option>
@@ -508,6 +535,7 @@ const NoDataComponent = () => {
             type="text"
             placeholder="Cantidad de cupos"
             value={cupos}
+            style={{border: "1px solid #c6c6c6 ",borderRadius: "5px"}}
             onChange={handleCuposChange}
             onKeyPress={(event) => {
             const charCode = event.which ? event.which : event.keyCode;
@@ -520,7 +548,9 @@ const NoDataComponent = () => {
         </div>
         
         <div className="col-md-6 mb-4">
-            <select className="form-select border-3" aria-label="Default select example" onChange={handleEsClaseServicioChange}>
+            <select className="form-select border-1" aria-label="Default select example" 
+            style={{border: "1px solid #c6c6c6 ",borderRadius: "5px"}}
+            onChange={handleEsClaseServicioChange}>
             <option value="">¿Es clase de servicio?</option>
             <option value="SI">SI</option>
             <option value="NO">NO</option>
@@ -568,7 +598,9 @@ const NoDataComponent = () => {
             </div>
         </div>
         <div className="col-md-6 mb-4">
-            <input className="form-control border-3" type="text" placeholder="Observaciones" aria-label="default input example" onChange={handleObservacionesChange}/>
+            <input className="form-control border-1" type="text" placeholder="Observaciones" aria-label="default input example" 
+            style={{border: "1px solid #c6c6c6 ",borderRadius: "5px"}}
+            onChange={handleObservacionesChange}/>
         </div>
         <div className="col-md-6 mb-4 align-self-left">
         <a className="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalCANCEL" onClick={handleCrearSeccion} style={{ backgroundColor: '#145eb9' }}>
@@ -586,9 +618,10 @@ const NoDataComponent = () => {
           style={{
             textAlign: "center",
             marginTop: "5px",
-            marginBottom: "30px",
             marginLeft: "80px",
             maxWidth: "300px",
+            border: "2px solid #c6c6c6 ",
+            borderRadius: "5px"
           }}
           id="inputCuenta"
           type="text"
@@ -599,14 +632,17 @@ const NoDataComponent = () => {
       </div>
       <br />
       <br />
+    </div>
+    </div>
+      <div style={{ margin:"40px"}}>
       <DataTable
       noDataComponent={<NoDataComponent />}
       columns={columnas}
+      customStyles={customStyles}
       data={sections} // Aquí usa todas las secciones sin filtrar
       paginationComponentOptions={paginationComponentOptions}
     ></DataTable>
     </div>
-</div>
     </div>
     )
 }

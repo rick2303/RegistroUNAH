@@ -261,7 +261,7 @@ const MenuEstadisticas = () => {
 
         <div style={{ display: "flex", justifyContent: "center", paddingBottom:"25px"}}>
 
-            <div style={{ backgroundColor: "rgba(108, 166, 217, 0.4)", borderRadius: "20px", margin: "0px", display: "flex" }}>
+            <div style={{ backgroundColor: "rgba(20, 94, 185, 0.2)", borderRadius: "20px", margin: "0px", display: "flex" }}>
                 <div style={{ width: "200px", height: "130px", paddingTop: "15px", borderRadius: "20px", margin: "15px", backgroundColor: "#ffff" }}>
                     <h1 style={{ fontSize: "60px", textAlign: "center" }}><b>{docente.NumeroDocentes}</b></h1>
                     <p style={{ fontSize: "15px", textAlign: "center" }}>Docentes Activos</p>
@@ -283,7 +283,7 @@ const MenuEstadisticas = () => {
 
 
         <div style={{ display: "flex", justifyContent: "center", height: "70vh", paddingBottom: "20px" }}>
-            <div style={{ width: "95%", borderRadius: "20px", backgroundColor: "rgba(108, 166, 217, 0.4)", paddingTop:"10px"}}>
+            <div style={{ width: "95%", borderRadius: "20px", backgroundColor: "rgba(20, 94, 185, 0.2)", paddingTop:"10px"}}>
                 <p style={{ fontSize: "25px", textAlign: "center", marginTop:"15px"}}><b>Gráfica: estudiantes en lista de espera y cupos disponibles</b></p>
                 <canvas id="myChart" style={{ width: "20%", height: "15%", marginLeft:"80px", marginRight:"80px"}}></canvas>
             </div>

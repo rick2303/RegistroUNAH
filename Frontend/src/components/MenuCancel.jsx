@@ -4,6 +4,7 @@ import DataTable from "react-data-table-component";
 import "styled-components";
 import { format, parseISO, set } from "date-fns";
 import ModalCargarPDFCancelaciones from "./modalCargarPDFCancelaciones";
+import styled from 'styled-components';
 
 const MenuCancelaciones = () => {
   const [NumCuenta, setNumCuenta] = useState("");
@@ -12,6 +13,7 @@ const MenuCancelaciones = () => {
   const [periodoAcademicoActual, setPeriodoAcademicoActualPAC] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [puedeEnviarPDF, setPuedeEnviarPDF] = useState(true);
+
 
 
   const fechaActual = new Date();
@@ -124,22 +126,45 @@ const MenuCancelaciones = () => {
     }
     setPuedeEnviarPDF(historialData2.length === 0);
   };
+
+
+  const customStyles = {
+    headCells: {
+        style: {
+            backgroundColor: '#145eb9',
+            color: 'white',
+            borderBottom: '1px solid #c6c6c6', 
+        },
+        },
+        rows: {
+        style: {
+            border: '1px solid #c6c6c6', 
+            textAlign: 'center',
+        },
+        },
+    };
+    
+    const TableHeaderCell = styled.div`
+    margin: auto;
+    `;
+
   // Configuramos las columnas para DataTable
   const columnas1 = [
     {
-      name: "CODIGO",
+      name: "CÓDIGO",
       selector: (row) => row.CODIGO,
     },
     {
       name: "ASIGNATURA",
       selector: (row) => row.ASIGNATURA,
+      width: "250px",
     },
     {
       name: "UV",
       selector: (row) => row.UV,
     },
     {
-      name: "SECCION",
+      name: "SECCIÓN",
       selector: (row) => row.SECCION,
     },
     {
@@ -151,19 +176,20 @@ const MenuCancelaciones = () => {
       selector: (row) => row.AULA,
     },
     {
-      name: "HORA DE INICIO",
+      name: "HI",
       selector: (row) => row.HORA_INICIO,
     },
     {
-      name: "HORA FINAL",
+      name: "HF",
       selector: (row) => row.HORA_FINAL,
     },
     {
       name: "OBSERVACIONES",
       selector: (row) => row.OBS,
+      width: "200px",
     },
     {
-      name: "PERIODO",
+      name: "PERÍODO",
       selector: (row) => row.PERIODO,
     },
   ];
@@ -186,11 +212,11 @@ const MenuCancelaciones = () => {
       selector: (row) => row.UV,
     },
     {
-      name: "SECCION",
+      name: "SECCIÓN",
       selector: (row) => row.SECCION,
     },
     {
-      name: "PERIODO",
+      name: "PERÍODO",
       selector: (row) => row.PERIODO,
     },
     {
@@ -257,8 +283,9 @@ const MenuCancelaciones = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        alert("Solicitud procesada exitosamente, ahora suba el archivo PDF");
+        alert("Solicitud procesada exitosamente, ahora suba el archivo PDF.");
         // Después de enviar la solicitud, establecer puedeEnviarSolicitud en false
+        setInputValue("");
         setPuedeEnviarSolicitud(false);
         setPuedeEnviarPDF(false);
         setHistorialData2([...historialData2, ...datosCancelaciones]);
@@ -267,7 +294,7 @@ const MenuCancelaciones = () => {
 
   return (
     <div className="App">
-      <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
+      <h1 className="text-2xl text-center font-bold pt-4 pb-4 text-gray-900 sm:text-3xl">
         Cancelaciones Excepcionales
       </h1>
       <div className="container">
@@ -280,6 +307,7 @@ const MenuCancelaciones = () => {
           data={historialData}
           selectableRows
           noDataComponent={<NoDataComponent />}
+          customStyles={customStyles}
           onSelectedRowsChange={handleSelectedRowsChange} // Callback para obtener las filas seleccionadas
           conditionalRowStyles={[
             {
@@ -294,23 +322,24 @@ const MenuCancelaciones = () => {
         />
         <br />
         <p className="text-xl font-normal pt-4 pb-3 text-gray-900 sm:text-1xl text-left">
-          Explique las razones por las que realiza la cancelación excepcional
+          Explique las razones por las que solicita la cancelación excepcional y luego asegúrese de subir el archivo PDF.
         </p>
 
         <div className="d-flex align-items-center">
           <div className="mb-2 me-2 w-75">
             <textarea
-              className="form-control form-control-sm border border-2 p-4 rounded"
+              className="form-control form-control-sm border-1 p-4 rounded"
               id="exampleFormControlTextarea1"
               value={inputValue}
+              style={{border: "1px solid #c6c6c6 ",borderRadius: "5px"}}
               onChange={(e) => setInputValue(e.target.value)}
             />
           </div>
 
           <div className="grid grid-cols-1">
-            <button
+          <button
               type="button"
-              className="btn btn-success"
+              className="btn btn"
               onClick={enviarCancelaciones}
               disabled={historialData2.length > 0}
             >
@@ -322,14 +351,16 @@ const MenuCancelaciones = () => {
         <hr className="my-4" />
 
         <div className="d-flex justify-content-end">
-          <a
-            className="btn btn-success"
+        <button
+            type="button"
+            className="btn btn"
             data-bs-toggle="modal"
             data-bs-target="#ModalCANCEL"
-            disabled={!puedeEnviarPDF}
+            disabled={historialData2.length > 0}
           >
             Subir archivo PDF
-          </a>
+        </button>
+
           <ModalCargarPDFCancelaciones setPuedeEnviarPDF={setPuedeEnviarPDF}/>
         </div>
 
@@ -337,10 +368,14 @@ const MenuCancelaciones = () => {
           Solitudes de cancelaciones enviadas
         </h1>
         <p className="text-xl font-normal pt-4 text-gray-900 sm:text-1xl text-left">
-        Asegúrese de haber subido el archivo PDF para poder visualizar su solicitud
+
         </p>
-        <DataTable columns={columnas} data={historialData2} noDataComponent={<NoDataComponent2 />}/>
+        <br />
+        <DataTable columns={columnas} data={historialData2} 
+        customStyles={customStyles}
+        noDataComponent={<NoDataComponent2 />}/>
       </div>
+      <br />
     </div>
   );
 };

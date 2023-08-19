@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import "styled-components";
 import { Input } from "reactstrap";
+import styled from 'styled-components';
+
 const opcionesPaginacion = {
   pagination: {
     previous: "Anterior",
@@ -32,34 +34,63 @@ const MenuHistorialAdmin = () => {
     showData(inputValue);
   }, [inputValue]); // Ejecutar el efecto cada vez que inputValue cambie
   //configuramos las columnas para DataTable
+
+  const customStyles = {
+    headCells: {
+        style: {
+            backgroundColor: '#145eb9',
+            color: 'white',
+            borderBottom: '1px solid #c6c6c6', 
+        },
+        },
+        rows: {
+        style: {
+            border: '1px solid #c6c6c6', 
+            textAlign: 'center',
+        },
+        },
+    };
+    
+    const TableHeaderCell = styled.div`
+    margin: auto;
+    `;
+
   const columnas = [
     {
-      name: "CODIGO",
+      name: <TableHeaderCell>CÓDIGO</TableHeaderCell>,
       selector: (row) => row.CODIGO,
+      cell: row => <TableHeaderCell>{row.CODIGO}</TableHeaderCell>
     },
     {
-      name: "ASIGNATURA",
+      name: "ASIGNATURA", 
       selector: (row) => row.ASIGNATURA,
+      width: "18%",
+    },
+    {
+      name: "SECCIÓN",
+      selector: (row) => row.SECCION,
+      center:true,
     },
     {
       name: "UV",
       selector: (row) => row.UV,
+      center:true,
     },
-    {
-      name: "SECCION",
-      selector: (row) => row.SECCION,
-    },
+
     {
       name: "AÑO",
       selector: (row) => row.Año,
+      center:true,
     },
     {
-      name: "PERIODO",
+      name: "PERÍODO",
       selector: (row) => row.PERIODO,
+      center:true,
     },
     {
-      name: "CALIFICACION",
+      name: "CALIFICACIÓN",
       selector: (row) => row.CALIFIACION,
+      center:true,
     },
     {
       name: "OBS",
@@ -73,13 +104,18 @@ const MenuHistorialAdmin = () => {
   };
   return (
     <div className="App">
+      <div className="container ">
+      <div className="row">
       <div>
         <Input
           style={{
             textAlign: "center",
             marginTop: "20px",
+            marginBottom: "20px",
             marginLeft: "30px",
             maxWidth: "300px",
+            border: "1px solid #c6c6c6 ",
+            borderRadius: "5px"
           }}
           id="inputCuenta"
           type="text"
@@ -88,9 +124,11 @@ const MenuHistorialAdmin = () => {
           placeholder="Ingresar número de cuenta"
         />
       </div>
-
-
-      <DataTable columns={columnas} data={users} pagination options={opcionesPaginacion} noDataComponent={<NoDataComponent />}></DataTable>
+      <DataTable columns={columnas} data={users} pagination options={opcionesPaginacion} 
+      customStyles={customStyles}
+      noDataComponent={<NoDataComponent />}></DataTable>
+    </div>
+    </div>
     </div>
   );
 };

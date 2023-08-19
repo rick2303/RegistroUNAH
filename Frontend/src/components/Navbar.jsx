@@ -107,7 +107,7 @@ export default function Navbar() {
         className="p-1 font-normal "
         title="Regresar"
       >
-       {currentPath !== "/src/html/Administracion.html" &&
+      {currentPath !== "/src/html/Administracion.html" &&
  (
         <a href={redirectTo} style={{ color: "white" }} className="flex items-center">
           <h1 className="text-5xl cursor-pointer">
@@ -128,7 +128,7 @@ export default function Navbar() {
         </a>
       </Typography>
       
-       
+    
     </ul>
   );
 
@@ -151,7 +151,7 @@ export default function Navbar() {
             
             
             <button
-           
+          
               variant="text"
               className="mx-auto text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
               ripple={false}
