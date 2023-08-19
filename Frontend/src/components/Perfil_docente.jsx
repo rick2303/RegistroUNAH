@@ -55,7 +55,7 @@ function Perfil_docente() {
             <div class=" col-md-12">
               <div class="card user-card-full h-full">
                 <div class="row m-l-0 m-r-0">
-                  <div class="col-sm-6 col-md-2  bg-c-lite-green user-profile">
+                <div class="col-sm-6 col-md-2  user-profile" style={{background: "#145eb9"}}>
                     <div class="card-block text-center text-white">
                       <div
                         id="myCarousel"
@@ -82,6 +82,7 @@ function Perfil_docente() {
                           </div>
                         </div>
                       </div>
+                      <br />
                       <h4 class="f-w-600 text-xl">Descripción:</h4>
                       <div>
                         <EditableParagraph descripcion={descripcion} />

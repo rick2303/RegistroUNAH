@@ -109,7 +109,7 @@ const EstudiantesFiltradosMatriculados = () => {
     //Mostramos la data en DataTable
     const NoDataComponent = () => {
         return <div>No hay registros para mostrar</div>;
-      };
+        };
     return (
         <div className="App">
             <div className="container ">
