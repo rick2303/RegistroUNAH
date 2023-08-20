@@ -224,13 +224,41 @@ console.log(a);
     },
     {
       name: "ELIMINAR PLANIFICACIÓN",
-      cell: (row) => (
-        <h1  className="cursor-pointer"
-        onClick={() => eliminarFila(row)}>
-          <FcDeleteRow />
-        </h1>
-        
-      ),
+      cell: (row) => {
+        // Compara las fechas como objetos Date
+        const fechaInicioDate = new Date(row.FechaInicio);
+        const fechaActualDate = new Date();
+        const fechaInicioMenorOIgual = fechaInicioDate <= fechaActualDate;
+
+        console.log(fechaInicioMenorOIgual);
+
+        return (
+          <h1
+            title={
+              fechaInicioMenorOIgual
+                ? "Esta planificación no puede ser eliminada"
+                : "Eliminar"
+            }
+            onClick={() => {
+              if (!fechaInicioMenorOIgual) {
+                eliminarFila(row);
+              } else {
+                // Aquí puedes mostrar un mensaje de que no se permite la eliminación
+                alert("Esta planificación no puede ser eliminada.");
+              }
+            }}
+            className={
+              fechaInicioMenorOIgual ? "cursor-not-allowed" : "cursor-pointer"
+            }
+          >
+            <FcDeleteRow
+              className={
+                fechaInicioMenorOIgual ? "cursor-not-allowed" : "cursor-pointer"
+              }
+            />
+          </h1>
+        );
+      },
       center: true,
     },
   ];
