@@ -106,39 +106,30 @@ const fetchAulas = async (edificio) => {
   const diasConcatenados = diasSeleccionados.join("");
   const handleCuposClick = (row) => {
     const cantidad = prompt("Ingrese la cantidad de cupos a agregar:");
-  //.trim para eliminar los espacios y isNaN para asegurarse que sea un numero
-    if (cantidad !== null && !isNaN(cantidad) && cantidad.trim() !== '') {
-      const parsedCantidad = parseInt(cantidad);
   
-      if (parsedCantidad > 0) {
-        fetch(`http://localhost:5000/agregarCupos/${row.IdSeccion}`, {
-          method: "PUT",
-          body: JSON.stringify({
-            Cupos: parsedCantidad,
-            // Otros datos necesarios para la solicitud
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
+    if (cantidad) {
+      fetch(`http://localhost:5000/agregarCupos/${row.IdSeccion}`, {
+        method: "PUT",
+        body: JSON.stringify({
+          Cupos: parseInt(cantidad),
+          // Otros datos necesarios para la solicitud
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
         .then((response) => response.json())
         .then((data) => {
             alert(data.message);
-            if (data.status === 200) {
+            if(data.status ===200){
                 window.location.reload();
             }
         })
         .catch((error) => {
           // Manejar el error
         });
-      } else {
-        alert('La cantidad debe ser mayor que 0');
-      }
-    } else {
-      alert('Por favor, ingrese una cantidad válida.');
     }
   };
-  
   
   const handleEdificioChange = (event) => {
     setEdificio(event.target.value);
