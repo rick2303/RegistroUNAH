@@ -197,17 +197,11 @@ export const agregarCupos = async (req, res) => {
   const { Cupos } = req.body;
   const pool = await getConnection();
 
-  try {
-    const result = await pool.request()
+  const result = await pool.request()
     .input("idseccion", sql.Int, idseccion)
     .input("Cupos", sql.Int, Cupos)
     .query(queries.agregarCupos)
 
   res.json({ message: "Cupos agregados: " + Cupos, status: 200 });
-  } catch (error) {
-    res.status(500)
-  } finally{
-    pool.close();
-  }
 }
 
