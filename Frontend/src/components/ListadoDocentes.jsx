@@ -342,6 +342,7 @@ const fetchData = () => {
                     textAlign: "center",
                   }}
                   type="text"
+                  maxLength= "13"
                   value={editedData.DNI}
                   onChange={(e) => setEditedData({ ...editedData, DNI: e.target.value })}
                 />
