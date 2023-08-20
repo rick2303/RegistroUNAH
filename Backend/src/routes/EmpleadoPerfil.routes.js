@@ -1,7 +1,7 @@
 import {Router} from 'express';
 const multer = require('multer');
 import path from 'path';
-import {insertPerfilEmpleado,updatePerfilEmpleado, insertVideoPerfilEmpleado, updateVideoPerfilEmpleado, insertDescripcionPerfilEmpleado, updateDescripcionPerfilEmpleado} from '../controllers/EmpleadosPerfil';
+import {insertPerfilEmpleado,updatePerfilEmpleado, insertVideoPerfilEmpleado, updateVideoPerfilEmpleado, insertDescripcionPerfilEmpleado, updateDescripcionPerfilEmpleado, updateCorreoPersonalEmpleado} from '../controllers/EmpleadosPerfil';
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -29,5 +29,8 @@ routerEmpleadoPerfil.post('/perfilEmpleadoUpdateDescripcion', updateDescripcionP
 routerEmpleadoPerfil.post('/perfilEmpleadoVideo',upload.array('files', 1), insertVideoPerfilEmpleado);
 
 routerEmpleadoPerfil.post('/perfilEmpleadoUpdateVideo',upload.array('files', 1), updateVideoPerfilEmpleado);
+
+routerEmpleadoPerfil.post('/updateCorreo', updateCorreoPersonalEmpleado);
+
 
 export default routerEmpleadoPerfil;

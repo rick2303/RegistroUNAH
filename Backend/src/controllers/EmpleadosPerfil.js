@@ -86,3 +86,13 @@ export const updateVideoPerfilEmpleado = async (req, res) => {
         console.error(error);
     }
 }
+
+export const updateCorreoPersonalEmpleado = async (req, res) => {
+    const { id, CorreoPersonal } = req.body;
+    const pool = await getConnection();
+    const result = await pool.request()
+        .input("id", sql.VarChar, id)
+        .input("CorreoPersonal", sql.VarChar, CorreoPersonal)
+        .query(queries.updateCorreoPersonalEmpleado);
+    res.status(200).json({ message: 'Operación completada exitosamente' });
+}

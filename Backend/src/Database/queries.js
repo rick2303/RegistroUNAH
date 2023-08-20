@@ -21,6 +21,7 @@ export const queries = {
 
     updateDescripcionPerfilEstudiantep: 'update perfil_estudiante set descripcion = @descripcion where IdPerfil = @id',
     updateCorreoPersonalEstudiante: 'update estudiantes set CorreoPersonal = @CorreoPersonal where NumCuenta = @id',
+    updateCorreoPersonalEmpleado: 'update empleados set CorreoPersonal = @CorreoPersonal where NumEmpleado = @id',
     updateDescripcionPerfilEmpleado: 'update perfil_empleados set descripcion = @descripcion where IdPerfil = @id',
 
     insertVideoEmpleado: "Insert into perfil_empleados(IdPerfil, Video) values (@Id, @Video)",
@@ -169,7 +170,24 @@ export const querysADMIN = {
     s.IdSeccion, e.NumCuenta, e.Nombre + ' ' + e.Apellido 'Estudiante', e.CorreoInstitucional, c.idclase, c.nombre 'Asignatura', s.Seccion, s.Periodo from secciones s inner join registro_estudiante_clases res
     on res.IdSeccion = s.IdSeccion inner join estudiantes e on e.NumCuenta = res.IdEstudiante inner join clases c on c.IdClase = s.IdClase
     where s.IdSeccion = @IdSeccion`,
-    pagoSimulado: `update estudiantes_pagos set estado = 'PAGADO'`
+    pagoSimulado: `update estudiantes_pagos set estado = 'PAGADO'`,
+    getJefeExistente: `SELECT CASE WHEN EXISTS (
+        SELECT 1
+        FROM empleados
+        WHERE subrol = 'Jefe departamento'
+        AND carrera = @Carrera
+        AND centroregional = @CentroRegional
+    ) THEN 1 ELSE 0 END AS existe_empleado;`,
+    getCoordiExistente: `SELECT CASE
+    WHEN (SELECT COUNT(*)
+          FROM empleados
+          WHERE subrol = 'Coordinador'
+          AND centroregional = @CentroRegional
+          AND carrera = @Carrera) < 2
+    THEN 1
+    ELSE 0
+END AS existencia;
+`
 
 }
 
