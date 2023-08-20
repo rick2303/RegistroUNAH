@@ -400,7 +400,7 @@ export const Contactos = async (req,res)=>{
     .input('NumCuenta',sql.VarChar,NumCuenta)
     .query(queries.getContactos)
 
-    console.log(contactos.recordset)
+    //console.log(contactos.recordset)
 
     res.json(contactos.recordset)
 
@@ -425,36 +425,38 @@ export const buscarEstudiante = async (req,res)=>{
 
 }
 
-export const MensajesChat = async (io, socket) => {
-  socket.on('chat message', async (messageData) => {
-    const emisorId = messageData.emisorId;
-    const receptorId = messageData.receptorId;
-    const mensaje = messageData.mensaje;
 
-    const query = `
-      INSERT INTO historialChat (EmisorId, receptorId, mensaje)
-      VALUES (@emisorId, @receptorId, @mensaje)
-    `;
-    try {
-    const pool = await getConnection()
-    const mensajes= await pool.request()
-        .input('emisorId', sql.VarChar, emisorId)
-        .input('receptorId', sql.VarChar, receptorId)
-        .input('mensaje', sql.VarChar, mensaje)
-        .query(query);
-
-      io.to(messageData.receiverSocketId).emit('chat message', messageData);
-    } catch (error) {
-      console.error('Error al guardar el mensaje en la base de datos:', error);
-    }
-  });
-};
-
-export const getHistorialChat = async (req, res) => {
-  const { emisorId, receptorId } = req.params;
+export const enviarMensaje = async (req, res) => {
+  const { emisorId, receptorId, mensaje } = req.body;
+  const fechaMensaje = new Date(); // Obtiene la fecha y hora actual
 
   const query = `
-    SELECT EmisorId, receptorId, mensaje, fecha_Mensaje
+    INSERT INTO historialChat (EmisorId, receptorId, mensaje, fecha_Mensaje)
+    VALUES (@emisorId, @receptorId, @mensaje, @fechaMensaje)
+  `;
+
+  try {
+    const pool = await getConnection();
+    const result = await pool.request()
+      .input('emisorId', sql.VarChar, emisorId)
+      .input('receptorId', sql.VarChar, receptorId)
+      .input('mensaje', sql.VarChar, mensaje)
+      .input('fechaMensaje', sql.DateTime, fechaMensaje)
+      .query(query);
+
+    res.status(200).json({ success: true, message: 'Mensaje enviado exitosamente' });
+  } catch (error) {
+    console.error('Error al guardar el mensaje en la base de datos:', error);
+    res.status(500).json({ success: false, error: 'Error al enviar el mensaje' });
+  }
+};
+
+
+export const getHistorialChat = async (req, res) => {
+  const { emisorId, receptorId } = req.body;
+
+  const query = `
+    SELECT Id_Historial,EmisorId, receptorId, mensaje, fecha_Mensaje
     FROM historialChat
     WHERE (EmisorId = @emisorId AND receptorId = @receptorId)
     OR (EmisorId = @receptorId AND receptorId = @emisorId)

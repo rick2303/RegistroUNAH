@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import '../cssChat.css'; // Ajusta la ruta de tu archivo CSS si es necesario
 import "bootstrap/dist/css/bootstrap.min.css";
 import ModalAgregarContacto from './ModalAgregarContacto'
@@ -11,11 +11,42 @@ function ChatApp() {
     const [searchTerm, setSearchTerm] = useState("");
     const [modalOpen, setModalOpen] = useState(false);
     const [socket, setSocket] = useState(null); // Estado para almacenar la instancia de socket
-    
-    const toggleModal = () => {
-      setModalOpen(!modalOpen);
-      console.log("toggle modal");
+    const [selectedContact, setSelectedContact] = useState(null);
+    const [chatHistory, setChatHistory] = useState([]);
+    const [messageInput, setMessageInput] = useState(""); // Estado para almacenar el mensaje ingresado
+    const chatHistoryRef = useRef(null);
+
+    const handleSendMessage = (message) => {
+        if (message.trim() !== "") {
+            sendMessage(message);
+            fetchChatHistory(NumCuenta, selectedContact.IdEstudianteAgregado)
+            setMessageInput('')
+        }
     };
+
+    const handleContactSelect = (contacto) => {
+        setSelectedContact(contacto);
+        fetchChatHistory(NumCuenta, contacto.IdEstudianteAgregado);
+    };
+
+    const toggleModal = () => {
+        setModalOpen(!modalOpen);
+        console.log("toggle modal");
+      };
+      
+      useEffect(() => {
+        if (chatHistoryRef.current) {
+          chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
+          fetchChatHistory(NumCuenta, selectedContact.IdEstudianteAgregado)
+        }
+      }, [chatHistory]);
+      
+      useEffect(() => {
+        if (selectedContact) {
+            fetchChatHistory(NumCuenta, selectedContact.IdEstudianteAgregado);
+        }
+    }, [selectedContact]);
+
 
   useEffect(() => {
     const socket = socketIOClient("http://localhost:9000"); // Cambia la URL por la dirección de tu servidor de Socket.IO
@@ -39,6 +70,7 @@ function ChatApp() {
             socket.emit('userConnectRequest', { userId: numCuenta }); // Enviar el ID al servidor
             });
             console.log(numCuenta);
+            console.log(selectedContact)
             setNumCuenta(numCuenta);
             fetchContactos(numCuenta); // Obtener contactos con el NumCuenta actualizado
             
@@ -46,18 +78,42 @@ function ChatApp() {
         
     }, []);
 
-    const sendMessage = (message,receiverSocketId) => {
-        if (socket) {
-          socket.emit("chat message", {
-            senderId: NumCuenta, // Cambia esto por el ID correcto
-            receiverId:"20191009775" /* ID del receptor */,
-            message: message,
-            receiverSocketId: receiverSocketId,
-            isOnline: true
-          });
+    useEffect(() => {
+        if (NumCuenta) {
+            fetchContactos(NumCuenta);
         }
-      };
+    }, [contactos]);
+
+
+    const sendMessage = async (message) => {
+        try {
+            const currentDate = new Date();
+            const response = await fetch("http://localhost:5000/mandarMensajes", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    emisorId: NumCuenta,
+                    receptorId: selectedContact.IdEstudianteAgregado,
+                    mensaje: message,
+                    fechaMensaje:currentDate
+                }),
+            });
+
+            if (response.ok) {
+                console.log("Mensaje enviado exitosamente");
+                // Actualizar el historial de chat o realizar otras acciones necesarias
+            } else {
+                console.error("Error al enviar el mensaje");
+            }
+        } catch (error) {
+            console.error("Error de red:", error);
+        }
+    };
+    
       
+
     const fetchContactos = async (NumCuenta) => {
         try {
             const response = await fetch('http://localhost:5000/contactos', {
@@ -71,7 +127,7 @@ function ChatApp() {
             });
 
             const data = await response.json();
-            console.log(data);
+            //console.log(data);
             setContactos(data);
         } catch (error) {
             console.error('Error fetching contactos:', error);
@@ -79,14 +135,47 @@ function ChatApp() {
         
     };
 
+    const fetchChatHistory = async (emisorId,receptorId) => {
+        try {
+            const response = await fetch('http://localhost:5000/historialChat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    emisorId: emisorId,
+                    receptorId: receptorId,
+                })
+            });
 
+            const data = await response.json();
+            console.log('Historial:',data);
+            setChatHistory(data);
+        } catch (error) {
+            console.error('Error fetching contactos:', error);
+        }
+        
+    };
+    
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
     };
 
+    function FormatoTiempo(dateString) {
+        const date = new Date(dateString);
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        const ampm = hours >= 12 ? "p.m." : "a.m.";
+    
+        const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    
+        return `${formattedHours}:${formattedMinutes} ${ampm}`;
+    }
+
     const filteredContactos = contactos.filter(contacto => {
-        fetchContactos(NumCuenta)
+        
         return contacto.Nombre.toLowerCase().includes(searchTerm.toLowerCase());
     });
     
@@ -114,8 +203,8 @@ function ChatApp() {
             <br />
                 <div class="row clearfix">
                     <div class="col-lg-12">
-                        <div class="card chat-app">
-                            <div id="plist" class="people-list">
+                        <div class="card chat-app" >
+                        <div id="plist" class="people-list"  >
                                 <div class="input-group">
                                     <input
                                         type="text"
@@ -125,10 +214,11 @@ function ChatApp() {
                                         onChange={handleSearchChange}
                                     />
                                 </div>
+                                <div className="contact-list-container mt-3">
                                 <ul className="list-unstyled chat-list mt-2 mb-0">
                                     {searchTerm ? (
                                         filteredContactos.map((contacto) => (
-                                        <li key={contacto.IdEstudianteAgregado} className="clearfix">
+                                        <li key={contacto.IdEstudianteAgregado} className="clearfix" onClick={() => handleContactSelect(contacto)}>
                                             <img src={`../img/uploads/${contacto.Imagen1}`} alt="avatar" />
                                             <div className="about">
                                             <div className="name">{contacto.Nombre}</div>
@@ -145,7 +235,7 @@ function ChatApp() {
                                         ))
                                     ) : (
                                         contactos.map((contacto) => (
-                                        <li key={contacto.IdEstudianteAgregado} className="clearfix">
+                                        <li key={contacto.IdEstudianteAgregado} className="clearfix" onClick={() => handleContactSelect(contacto)}>
                                             <img src={`../img/uploads/${contacto.Imagen1}`} alt="avatar" />
                                             <div className="about">
                                             <div className="name">{contacto.Nombre}</div>
@@ -162,53 +252,71 @@ function ChatApp() {
                                         ))
                                     )}
                                 </ul>
-                                    
+                                </div>   
                             </div>
-                            <div class="chat">
+                            <div class="chat" style={{ height: '440px'}}>
+                            {selectedContact && (
                                 <div class="chat-header clearfix">
                                     <div class="row">
                                         <div class="col-lg-6">
-                                            <a href="javascript:void(0);" data-toggle="modal" data-target="#view_info">
-                                                <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="avatar" />
-                                            </a>
-                                            <div class="chat-about">
-                                                <h6 class="m-b-0">Ricardo Milos</h6>
-                                                <small>En línea</small>
-                                            </div>
+                                            {selectedContact && (
+                                                <>
+                                                    <img src={`../img/uploads/${selectedContact.Imagen1}`} alt="avatar" />
+                                                    <div class="chat-about">
+                                                        <h6 class="m-b-0">{selectedContact.Nombre}</h6>
+                                                        <small>{selectedContact.IsOnline ? "En línea" : "Desconectado"}</small>
+                                                    </div>
+                                                </>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="chat-history">
+                            )}
+                            {selectedContact && (
+                                <div class="chat-history" style={{ maxHeight: '300px', overflowY: 'auto' }} ref={chatHistoryRef}>
                                     <ul class="m-b-0">
-                                    <li class="clearfix">
-                                            <div class="message-data text-left">
-                                                <span class="message-data-time">10:10 AM, Hoy</span>
-                                            </div>
-                                            <div class="message other-message float-left"> Hola, como estas?? </div>
-                                            </li>
-                                            <li class="clearfix text-right">
+                                    {chatHistory.map((message) => (
+                                        <li
+                                            key={message.Id_Historial} /* Cambia esto al identificador adecuado de tu mensaje */
+                                            className={message.EmisorId === NumCuenta ? "clearfix text-right" : "clearfix text-left"} /* Ajusta las clases CSS según el emisor del mensaje */
+                                        >
                                             <div class="message-data">
-                                                <span class="message-data-time">10:12 AM, Hoy</span>
+                                            <span className="message-data-time">
+                                                {FormatoTiempo(message.fecha_Mensaje)}
+                                            </span>
                                             </div>
-                                            <div class="message my-message">Nos reunimos hoy?</div>                                    
-                                            </li>                               
-                                            <li class="clearfix text-right">
-                                            <div class="message-data">
-                                                <span class="message-data-time">10:15 AM, Hoy</span>
+                                            <div className={message.EmisorId === NumCuenta ? "message my-message float-right" : "message other-message float-left"}> {/* Ajusta las clases CSS según el emisor del mensaje */}
+                                                {message.mensaje}
                                             </div>
-                                            <div class="message my-message">Creo que el proyecto se termina hoy.</div>
-                                            </li>
+                                        </li>
+                                    ))}
                                     </ul>
                                 </div>
+                            )}
+                            {selectedContact && (
                                 <div class="chat-message clearfix">
                                     <div class="input-group mb-0">
-                                        <input type="text" class="form-control" placeholder="Ingrese texto" />
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        placeholder="Ingrese texto"
+                                        value={messageInput}
+                                        onChange={(event) => setMessageInput(event.target.value)}
+                                        onKeyDown={(event) => {
+                                            if (event.key === 'Enter') {
+                                                handleSendMessage();
+                                            }
+                                        }}
+                                    />
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fa fa-send btn-lg"></i></span>
+                                        <button class="input-group-text" onClick={() => handleSendMessage(messageInput)}>
+                                            <i class="fa fa-send btn-lg"></i>
+                                        </button>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            )}
+                        </div>
                         </div>
                     </div>
                 </div>

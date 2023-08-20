@@ -110,15 +110,15 @@ io.on('connection', async (socket) => {
           updateOnlineStatus(userId, true);
           // Emitir evento de conexión solo al usuario actual
           io.emit('userConnected', { userId: userId, isOnline: true });
-          console.log('Usuario conectado:', userId);
+          //console.log('Usuario conectado:', userId);
         });
         
         socket.broadcast.emit('userConnected', { userId: userId, isOnline: true });
-        console.log('Usuarios conectados:', userConnections);
+        //console.log('Usuarios conectados:', userConnections);
 
         
         // Llamar a la función para manejar los mensajes de chat
-        MensajesChat(io, socket);
+       // MensajesChat(io, socket);
     
         socket.on('disconnect', () => {
           userIds.forEach(userId => {
@@ -127,8 +127,8 @@ io.on('connection', async (socket) => {
             io.emit('userDisconnected', { userId: userId, isOnline: false });
             // Emitir evento de desconexión al usuario
             socket.broadcast.emit('userDisconnected', { userId: userId, isOnline: false });
-            console.log('Usuario desconectado:', userId);
-            console.log('Usuarios conectados:', userConnections)
+           // console.log('Usuario desconectado:', userId);
+           // console.log('Usuarios conectados:', userConnections)
           });
         });
       } catch (error) {
