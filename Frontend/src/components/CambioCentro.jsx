@@ -126,8 +126,9 @@ margin: auto;
 `;
 
 const tieneSolicitudesEnEspera = () => {
+  console.log(filteredData);
   // Verificar si el estudiante tiene alguna solicitud "EN ESPERA"
-  return !filteredData.every((solicitud) => solicitud.CentroNuevo === null);
+  return filteredData.some((solicitud) => solicitud.Dictamen  === "EN ESPERA");
 };
 
   

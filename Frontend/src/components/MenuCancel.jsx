@@ -289,8 +289,15 @@ const MenuCancelaciones = () => {
         setPuedeEnviarSolicitud(false);
         setPuedeEnviarPDF(false);
         setHistorialData2([...historialData2, ...datosCancelaciones]);
+        console.log("Solicitud enviada exitosamente:", data);
       });
   };
+
+  const tieneSolicitudesEnEspera = () => {
+    // Verificar si el estudiante tiene alguna solicitud "EN ESPERA"
+    return historialData2.some((solicitud) => solicitud.ESTADO === "Pendiente");
+};
+
 
   return (
     <div className="App">
@@ -341,7 +348,7 @@ const MenuCancelaciones = () => {
               type="button"
               className="btn btn"
               onClick={enviarCancelaciones}
-              disabled={historialData2.length > 0}
+              disabled={tieneSolicitudesEnEspera()}
             >
               Procesar solicitud
             </button>
@@ -356,7 +363,7 @@ const MenuCancelaciones = () => {
             className="btn btn"
             data-bs-toggle="modal"
             data-bs-target="#ModalCANCEL"
-            disabled={historialData2.length > 0}
+            disabled={tieneSolicitudesEnEspera()}
           >
             Subir archivo PDF
         </button>
