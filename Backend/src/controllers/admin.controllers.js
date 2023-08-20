@@ -342,3 +342,44 @@ export const pagarTodo = async (req, res) => {
         pool.close();
     }
 }
+
+export const validacionJefe = async (req, res) => {
+    const pool = await getConnection();
+    const { Carrera, CentroRegional } = req.body;
+
+    try {
+        const result = await pool.request()
+        .input('Carrera', sql.VarChar, Carrera)
+        .input('CentroRegional', sql.VarChar, CentroRegional)
+        .query(querysADMIN.getJefeExistente);
+        if(result.recordset[0].existe_empleado == 1){
+            res.status(500).send('Ya existe un Jefe de departamento')
+        }else{
+            res.status(200).send('No existe un Jefe')
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }finally{
+        pool.close();
+    }
+}
+
+export const validacionCoordi = async (req, res) => {
+    const pool = await getConnection();
+    const { Carrera, CentroRegional } = req.body;
+    try {
+        const result = await pool.request()
+        .input('Carrera', sql.VarChar, Carrera)
+        .input('CentroRegional', sql.VarChar, CentroRegional)
+        .query(querysADMIN.getCoordiExistente);
+        if(result.recordset[0].existencia == 0){
+            res.status(500).send('Maximos coordinadores asignados')
+        }else{
+            res.status(200).send('Plaza disponible')
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }finally{
+        pool.close();
+    }
+}
