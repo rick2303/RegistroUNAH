@@ -12,9 +12,6 @@ import {
 } from "reactstrap";
 import "../App.css"
 
-
-
-
 const ModalDocentes = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [Nombre, setNombre] = useState("");
@@ -69,8 +66,6 @@ const ModalDocentes = () => {
       setDNI(inputDNI);
     }
   };
-
-
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -201,7 +196,6 @@ const ModalDocentes = () => {
                 value={DNI}
                 onChange={handleDNIChange}
                 onKeyDown={(event) => {
-                 
                   if (event.target.value.length >= 13 && event.key !== "Backspace") {
                     event.preventDefault();
                   }
