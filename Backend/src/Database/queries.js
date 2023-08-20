@@ -49,11 +49,12 @@ export const queries = {
 
     insertSolicitudCambioCentro:"INSERT INTO solicitud_cambiocentro VALUES (@NumCuenta,@CentroRegional,@CentroNuevo,@Justificacion,@FechaSolicitud,'EN ESPERA','NO PAGADO')",
 
-    getSolicitudesCambioCentro:`SELECT DISTINCT es.NumCuenta,es.Nombre, es.Apellido, esp.TipoPago as Solicitud, scc.Justificacion, es.CorreoInstitucional,  
+    getSolicitudesCambioCentro:`SELECT DISTINCT es.NumCuenta,es.Nombre, es.Apellido, pe.Imagen1, esp.TipoPago as Solicitud, scc.Justificacion, es.CorreoInstitucional,  
     es.IndiceGlobal, es.CentroRegional as 'CentroActual', scc.CentroNuevo  as 'CentroNuevo',esp.Estado, scc.Dictamen 
     FROM estudiantes as es 
     LEFT JOIN solicitud_cambiocentro as scc ON es.NumCuenta = scc.NumCuenta 
     LEFT JOIN estudiantes_pagos as esp ON es.NumCuenta = esp.NumCuenta 
+    INNER JOIN [dbo].[perfil_estudiante] pe ON pe.IdPerfil = es.NumCuenta
     WHERE esp.TipoPago = 'CAMBIO DE CENTRO' 
     AND esp.Estado = 'PAGADO'
     AND scc.CentroNuevo= @CentroRegional
