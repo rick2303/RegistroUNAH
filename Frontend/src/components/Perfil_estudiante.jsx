@@ -4,6 +4,7 @@ import Fotos_estudiante from "./Fotos_estudiante";
 import "../Perfil_estudiante.css";
 import ModalCargarFotos from "./ModalCargarFotos";
 import EditableParagraph from "./EditarDescEstudiante";
+import EditableEmail from "./EditarCorreoEstudiante";
 import { TiArrowBackOutline } from "react-icons/ti";
 import { MdAddAPhoto } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
@@ -168,8 +169,11 @@ function Perfil_estudiante() {
                             href="../html/Estudiante.html"
                             className="text-end fas fa-pencil-alt"
                             title="Regresar"
+
                           >
-                            <label><TiArrowBackOutline className="cursor-pointer"/></label>
+                            <label><TiArrowBackOutline 
+                            style={{ color: "#145eb9" }}
+                            className="cursor-pointer"/></label>
                           </a>
                         </div>
                       </h5>
@@ -188,7 +192,7 @@ function Perfil_estudiante() {
                       </div>
                       <div class="row mb-5">
                         <div class="col-sm-6">
-                          <hatch class="m-b-10 f-w-600">Correo:</hatch>
+                          <hatch class="m-b-10 f-w-600">Correo institucional:</hatch>
                           <h6 class="text-muted f-w-400">
                             {correoInstitucional}
                           </h6>
@@ -202,7 +206,8 @@ function Perfil_estudiante() {
                         <div class="col-sm-6">
                           <hatch class="m-b-10 f-w-600">Correo personal:</hatch>
                           <h6 class="text-muted f-w-400">
-                            {correoPersonal}
+                          <EditableEmail CorreoPersonal={correoPersonal}/>
+                            
                           </h6>
                         </div>
                         
