@@ -15,9 +15,9 @@ function ModalCargarVideo() {
 <div class="modal fade" id="docente" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header text-black">
+      <div class="modal-header  text-white bg-blue-800 text-2xl">
         <h1 class="modal-title fs-5 " id="staticBackdropLabel">Cargar video descriptivo</h1>
-        <button type="button" class="btn bg-blue-800 hover:bg-blue-500 text-white shadow" data-bs-dismiss="modal" aria-label="Close">X</button>
+        <button  style={{ color: "#145eb9" }} type="button" class="btn text-white shadow" data-bs-dismiss="modal" aria-label="Close">X</button>
       </div>
       <div class="modal-body h-36 pt-10  text-black">
         <VideoDocente />

@@ -7,7 +7,7 @@ import { TiArrowBackOutline } from "react-icons/ti";
 import { MdAddAPhoto } from "react-icons/md";
 import { AiOutlineVideoCameraAdd } from "react-icons/ai";
 import ModalCargarVideo from "./ModalCargarvideo";
-
+import EditableEmail from "./EditarCorreoEstudiante";
 function Perfil_docente() {
   const [nombre, setNombre] = useState("");
   const [centroRegional, setCentroRegional] = useState("");
@@ -94,6 +94,7 @@ function Perfil_docente() {
                             <MdAddAPhoto
                               className="text-2xl fas fa-pencil-alt cursor-pointer"
                               title="foto de perfil"
+                              
                             />
                           </h2>
                         </a>
@@ -111,7 +112,8 @@ function Perfil_docente() {
                             className="text-end fas fa-pencil-alt"
                             title="Regresar"
                           ><label>
-                            <TiArrowBackOutline className="cursor-pointer" />
+                            <TiArrowBackOutline className="cursor-pointer" 
+                            style={{ color: "#145eb9" }}/>
                             </label>
                           </a>
                         </div>
@@ -143,7 +145,7 @@ function Perfil_docente() {
                       <div class="col-sm-6">
                           <hatch class="m-b-10 f-w-600">Correo Personal:</hatch>
                           <h6 class="text-muted f-w-400">
-                            {correoPersonal}
+                          <EditableEmail CorreoPersonal={correoPersonal}/>
                           </h6>
                         </div>
                       </div>
@@ -156,7 +158,8 @@ function Perfil_docente() {
                             className="text-end fas fa-pencil-alt"
                             title="Cargar video"
                           >
-                            <label><AiOutlineVideoCameraAdd className="cursor-pointer" /></label>
+                            <label><AiOutlineVideoCameraAdd className="cursor-pointer" 
+                            style={{ color: "#145eb9" }}/></label>
                           </a>
                           <ModalCargarVideo />
                         </div>

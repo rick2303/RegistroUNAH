@@ -6,14 +6,13 @@ import { FaUserEdit } from "react-icons/fa";
 import { Input, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { format, parseISO } from "date-fns";
 import "../App.css";
-import styled from 'styled-components';
-
+import styled from "styled-components";
 
 const paginationComponentOptions = {
-  rowsPerPageText: 'Filas por página',
-  rangeSeparatorText: 'de',
+  rowsPerPageText: "Filas por página",
+  rangeSeparatorText: "de",
   selectAllRowsItem: true,
-  selectAllRowsItemText: 'Todos',
+  selectAllRowsItemText: "Todos",
 };
 
 const ListadoDocentes = () => {
@@ -36,7 +35,6 @@ const ListadoDocentes = () => {
         console.error("Error al obtener los datos:", error);
       });
   }, []);
-
 
   useEffect(() => {
     // Fetch data whenever the inputValue changes
@@ -63,7 +61,6 @@ const ListadoDocentes = () => {
     {
       name: "ROL",
       selector: (row) => row.SubRol,
-
     },
     {
       name: "ESTADO",
@@ -82,7 +79,7 @@ const ListadoDocentes = () => {
       name: "EDITAR",
       cell: (row) => (
         <h1 className="cursor-pointer" onClick={() => editarInformacion(row)}>
-          <FaUserEdit style={{ color: "#1e40af "}} />
+          <FaUserEdit style={{ color: "#1e40af " }} />
         </h1>
       ),
     },
@@ -90,23 +87,23 @@ const ListadoDocentes = () => {
 
   const customStyles = {
     headCells: {
-        style: {
-            backgroundColor: '#145eb9',
-            color: 'white',
-            borderBottom: '1px solid #c6c6c6', 
-        },
-        },
-        rows: {
-        style: {
-            border: '1px solid #c6c6c6', 
-            textAlign: 'center',
-        },
-        },
-    };
-    
-    const TableHeaderCell = styled.div`
+      style: {
+        backgroundColor: "#145eb9",
+        color: "white",
+        borderBottom: "1px solid #c6c6c6",
+      },
+    },
+    rows: {
+      style: {
+        border: "1px solid #c6c6c6",
+        textAlign: "center",
+      },
+    },
+  };
+
+  const TableHeaderCell = styled.div`
     margin: auto;
-    `;
+  `;
 
   const mostrarInformacion = (row) => {
     setSelectedRow(row);
@@ -133,13 +130,16 @@ const ListadoDocentes = () => {
     console.log("Datos actualizados:", editedData);
 
     // Realizar la solicitud fetch al backend para enviar los datos actualizados
-    fetch(`http://localhost:5000/actualizarDocente/${selectedRow.NumEmpleado}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(editedData),
-    })
+    fetch(
+      `http://localhost:5000/actualizarDocente/${selectedRow.NumEmpleado}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editedData),
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         console.log("Respuesta del servidor:", data);
@@ -157,37 +157,40 @@ const ListadoDocentes = () => {
 
         // Realizar cualquier acción adicional después de guardar los cambios
         // Por ejemplo, mostrar una notificación de éxito, etc.
-      }).then(() => {
-        alert('Datos actualizados correctamente');
+      })
+      .then(() => {
+        alert("Datos actualizados correctamente");
       })
       .catch((error) => {
         console.error("Error al guardar los cambios:", error);
         // Realizar cualquier acción adicional en caso de error
       });
   };
-// Function to fetch data based on the input value
-const fetchData = () => {
-  console.log(JSON.stringify({ DNI: inputValue }))
-  fetch("http://localhost:5000/docentesDNI", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ DNI: inputValue }), // Send input value as JSON
-  })
-  .then((response) => response.json())
-    .then((data) => {
-      // Si el JSON no es un array, conviértelo en un array con un solo elemento
-      const dataArray = Array.isArray(data) ? data : [data];
-      console.log("Array recibido del backend:", dataArray); // Imprime el array recibido en la consola
-      setHistorialData(dataArray);
+  // Function to fetch data based on the input value
+  const fetchData = () => {
+    console.log(JSON.stringify({ DNI: inputValue }));
+    fetch("http://localhost:5000/docentesDNI", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ DNI: inputValue }), // Send input value as JSON
     })
-    .catch((error) => {
-      console.error("Error al obtener los datos:", error);
-    });
-};
+      .then((response) => response.json())
+      .then((data) => {
+        // Si el JSON no es un array, conviértelo en un array con un solo elemento
+        const dataArray = Array.isArray(data) ? data : [data];
+        console.log("Array recibido del backend:", dataArray); // Imprime el array recibido en la consola
+        setHistorialData(dataArray);
+      })
+      .catch((error) => {
+        console.error("Error al obtener los datos:", error);
+      });
+  };
   // Para poner las filas no encontradas en español
-  const filteredData = historialData.filter((row) => row.DNI.includes(inputValue));
+  const filteredData = historialData.filter((row) =>
+    row.DNI.includes(inputValue)
+  );
   const NoDataComponent = () => {
     return <div>No hay registros para mostrar</div>;
   };
@@ -253,7 +256,8 @@ const fetchData = () => {
                 <strong>DNI:</strong> {selectedRow.DNI}
               </li>
               <li>
-                <strong>Nombre:</strong> {selectedRow.Nombre + " " + selectedRow.Apellido}
+                <strong>Nombre:</strong>{" "}
+                {selectedRow.Nombre + " " + selectedRow.Apellido}
               </li>
               <li>
                 <strong>Rol:</strong> {selectedRow.SubRol}
@@ -268,7 +272,8 @@ const fetchData = () => {
                 <strong>Centro Regional:</strong> {selectedRow.CentroRegional}
               </li>
               <li>
-                <strong>Correo Institucional:</strong> {selectedRow.CorreoInstitucional}
+                <strong>Correo Institucional:</strong>{" "}
+                {selectedRow.CorreoInstitucional}
               </li>
               <li>
                 <strong>Correo Personal:</strong> {selectedRow.CorreoPersonal}
@@ -313,7 +318,9 @@ const fetchData = () => {
                   }}
                   type="text"
                   value={editedData.Nombre}
-                  onChange={(e) => setEditedData({ ...editedData, Nombre: e.target.value })}
+                  onChange={(e) =>
+                    setEditedData({ ...editedData, Nombre: e.target.value })
+                  }
                 />
               </div>
             </div>
@@ -328,7 +335,9 @@ const fetchData = () => {
                   }}
                   type="text"
                   value={editedData.Apellido}
-                  onChange={(e) => setEditedData({ ...editedData, Apellido: e.target.value })}
+                  onChange={(e) =>
+                    setEditedData({ ...editedData, Apellido: e.target.value })
+                  }
                 />
               </div>
             </div>
@@ -342,9 +351,11 @@ const fetchData = () => {
                     textAlign: "center",
                   }}
                   type="text"
-                  maxLength= "13"
+                  maxLength="13"
                   value={editedData.DNI}
-                  onChange={(e) => setEditedData({ ...editedData, DNI: e.target.value })}
+                  onChange={(e) =>
+                    setEditedData({ ...editedData, DNI: e.target.value })
+                  }
                 />
               </div>
             </div>
@@ -359,7 +370,9 @@ const fetchData = () => {
                     textAlign: "center",
                   }}
                   value={editedData.SubRol}
-                  onChange={(e) => setEditedData({ ...editedData, SubRol: e.target.value })}
+                  onChange={(e) =>
+                    setEditedData({ ...editedData, SubRol: e.target.value })
+                  }
                 >
                   <option value="JEFE DEPARTAMENTO">Jefe Departamento</option>
                   <option value="COORDINADOR">Coordinador</option>
@@ -378,7 +391,9 @@ const fetchData = () => {
                     textAlign: "center",
                   }}
                   value={editedData.Estado}
-                  onChange={(e) => setEditedData({ ...editedData, Estado: e.target.value })}
+                  onChange={(e) =>
+                    setEditedData({ ...editedData, Estado: e.target.value })
+                  }
                 >
                   <option value="ACTIVO">Activo</option>
                   <option value="INACTIVO">Inactivo</option>
@@ -396,7 +411,9 @@ const fetchData = () => {
                   }}
                   type="text"
                   value={editedData.Carrera}
-                  onChange={(e) => setEditedData({ ...editedData, Carrera: e.target.value })}
+                  onChange={(e) =>
+                    setEditedData({ ...editedData, Carrera: e.target.value })
+                  }
                 />
               </div>
             </div>
@@ -412,7 +429,10 @@ const fetchData = () => {
                   }}
                   value={editedData.CentroRegional}
                   onChange={(e) =>
-                    setEditedData({ ...editedData, CentroRegional: e.target.value })
+                    setEditedData({
+                      ...editedData,
+                      CentroRegional: e.target.value,
+                    })
                   }
                 >
                   <option value="CU">CU</option>
@@ -438,7 +458,10 @@ const fetchData = () => {
                   type="text"
                   value={editedData.CorreoPersonal}
                   onChange={(e) =>
-                    setEditedData({ ...editedData, CorreoPersonal: e.target.value })
+                    setEditedData({
+                      ...editedData,
+                      CorreoPersonal: e.target.value,
+                    })
                   }
                 />
               </div>
@@ -455,7 +478,10 @@ const fetchData = () => {
                   type="text"
                   value={editedData.NumeroTelefono}
                   onChange={(e) =>
-                    setEditedData({ ...editedData, NumeroTelefono: e.target.value })
+                    setEditedData({
+                      ...editedData,
+                      NumeroTelefono: e.target.value,
+                    })
                   }
                 />
               </div>

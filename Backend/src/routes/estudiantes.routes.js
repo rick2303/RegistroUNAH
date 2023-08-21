@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import { ingresarEvaluacionesDocentes } from '../controllers/estudiantes.controllers';
+import { existenciaEvaluacion, ingresarEvaluacionesDocentes } from '../controllers/estudiantes.controllers';
 import { informarNotas } from '../controllers/enviarCorreos.controllers';
 
 const routerEstudiante = Router();
@@ -8,4 +8,7 @@ const routerEstudiante = Router();
 routerEstudiante.post('/subirEvaluacionDocente', ingresarEvaluacionesDocentes)
 
 routerEstudiante.post('/informarNotas', informarNotas)
+
+routerEstudiante.post('/existenciaEvaluacion', existenciaEvaluacion)
+
 export default routerEstudiante;

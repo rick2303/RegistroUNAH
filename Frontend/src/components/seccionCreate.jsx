@@ -23,6 +23,7 @@ const SeccionesMain = () => {
   const [edificio, setEdificio] = useState("");
   const [aulaSeleccionada, setAulaSeleccionada] = useState("");
   const [claseSeleccionada, setClaseSeleccionada] = useState("");
+  const [uvSeleccionada, setUVSeleccionada] = useState("");
   const [docenteSeleccionado, setDocenteSeleccionado] = useState("");
   const [periodoSeleccionado, setPeriodoSeleccionado] = useState("");
   const [hiSeleccionado, setHiSeleccionado] = useState("");
@@ -96,12 +97,18 @@ const SeccionesMain = () => {
   const handleCheckboxChange = (event) => {
     const valorCheckbox = event.target.value;
     const isChecked = event.target.checked;
+    console.log(uvSeleccionada)
     if (isChecked) {
       // Agregar el valor a los días seleccionados
       setDiasSeleccionados((prevDiasSeleccionados) => [
         ...prevDiasSeleccionados,
         valorCheckbox,
       ]);
+
+      if(diasSeleccionados.length >= uvSeleccionada){
+        alert("No puede poner más días que las UV de la clase, por favor, deseleccione un día")
+      }
+
     } else {
       // Remover el valor de los días seleccionados
       setDiasSeleccionados((prevDiasSeleccionados) =>
@@ -170,7 +177,13 @@ const SeccionesMain = () => {
     setHfSeleccionado(event.target.value);
   };
   const handleClaseChange = (event) => {
-    setClaseSeleccionada(event.target.value);
+    const selectedOption = event.target.options[event.target.selectedIndex];
+    const uvValue = selectedOption.getAttribute("data-uv");
+    const idValue = selectedOption.getAttribute("data-id");
+    console.log("estas son las uvs", uvValue);
+    console.log("estas son las id", idValue);
+    setClaseSeleccionada(idValue);
+    setUVSeleccionada(uvValue);
   };
   const handleDocenteChange = (event) => {
     setDocenteSeleccionado(event.target.value);
@@ -412,7 +425,11 @@ const SeccionesMain = () => {
             >
               <option>Clase</option>
               {clases.map((clase) => (
-                <option key={clase.IdClase} value={clase.IdClase}>
+                <option        
+                key={clase.IdClase}
+                value={clase.IdClase}
+                data-uv={clase.UV}
+                data-id={clase.IdClase}>
                   {clase.Nombre}
                 </option>
               ))}
