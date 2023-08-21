@@ -23,6 +23,90 @@ const ListadoDocentes = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalEditarOpen, setModalEditarOpen] = useState(false);
   const [editedData, setEditedData] = useState({});
+  const [respuestaJefe, setRespuestaJefe] = useState();
+  const [respuestaCoordi, setRespuestaCoordi] = useState();
+
+  const jefeExistente = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/jefeDepto", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          Carrera: editedData.Carrera,
+          CentroRegional: editedData.CentroRegional,
+        }),
+      });
+      const data = await response.json();
+      setRespuestaJefe(data);
+    } catch (error) {
+      console.error("Error al guardar cambios", error);
+    }
+  };
+  const coordiMax = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/coordiDepto", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          Carrera: editedData.Carrera,
+          CentroRegional: editedData.CentroRegional,
+        }),
+      });
+
+      const data = await response.json();
+      setRespuestaCoordi(data);
+      console.log("Coordinador", data);
+    } catch (error) {
+      console.error("Error al guardar cambios", error);
+    }
+  };
+
+  const actualizarDatos = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/actualizarDocente/${selectedRow.NumEmpleado}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(editedData),
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Respuesta del servidor:", data);
+
+          // Actualizar los datos de la tabla
+          setHistorialData((prevData) => {
+            const updatedData = prevData.map((row) =>
+              row.NumEmpleado === selectedRow.NumEmpleado ? editedData : row
+            );
+            return updatedData;
+          });
+
+          // Cerrar el modal de edición
+          toggleEditarModal();
+
+          // Realizar cualquier acción adicional después de guardar los cambios
+          // Por ejemplo, mostrar una notificación de éxito, etc.
+        })
+        .then(() => {
+          alert("Datos actualizados correctamente");
+        })
+        .catch((error) => {
+          console.error("Error al guardar los cambios:", error);
+          // Realizar cualquier acción adicional en caso de error
+        });
+    } catch (error) {
+      console.error("Error al guardar cambios", error);
+    }
+  };
+  // Realizar la solicitud fetch al backend para enviar los datos actualizados
 
   useEffect(() => {
     fetch("http://localhost:5000/docentes")
@@ -111,6 +195,8 @@ const ListadoDocentes = () => {
   };
 
   const editarInformacion = (row) => {
+    jefeExistente();
+    coordiMax();
     setSelectedRow(row);
     setEditedData(row);
     toggleEditarModal();
@@ -126,45 +212,25 @@ const ListadoDocentes = () => {
 
   const guardarCambios = () => {
     // Aquí puedes realizar la lógica para enviar los datos actualizados al backend
-    console.log("Datos actualizados:", JSON.stringify(editedData));
-    console.log("Datos actualizados:", editedData);
-
-    // Realizar la solicitud fetch al backend para enviar los datos actualizados
-    fetch(
-      `http://localhost:5000/actualizarDocente/${selectedRow.NumEmpleado}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(editedData),
+    if (editedData.SubRol == "JEFE DEPARTAMENTO") {
+      jefeExistente();
+      if (!respuestaJefe) {
+        actualizarDatos();
+      } else {
+        alert("Ya existe un jefe de departamento");
       }
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Respuesta del servidor:", data);
-
-        // Actualizar los datos de la tabla
-        setHistorialData((prevData) => {
-          const updatedData = prevData.map((row) =>
-            row.NumEmpleado === selectedRow.NumEmpleado ? editedData : row
-          );
-          return updatedData;
-        });
-
-        // Cerrar el modal de edición
-        toggleEditarModal();
-
-        // Realizar cualquier acción adicional después de guardar los cambios
-        // Por ejemplo, mostrar una notificación de éxito, etc.
-      })
-      .then(() => {
-        alert("Datos actualizados correctamente");
-      })
-      .catch((error) => {
-        console.error("Error al guardar los cambios:", error);
-        // Realizar cualquier acción adicional en caso de error
-      });
+    } 
+    if (editedData.SubRol == "COORDINADOR") {
+      coordiMax();
+      if (respuestaCoordi) {
+        actualizarDatos();
+      } else {
+        alert("Maximos coordinadores alcanzados");
+      }
+    }
+    if(editedData.SubRol == 'DOCENTE'){
+      actualizarDatos()
+    }
   };
   // Function to fetch data based on the input value
   const fetchData = () => {
