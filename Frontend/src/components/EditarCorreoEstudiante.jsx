@@ -29,6 +29,8 @@ function EditableEmail(props) {
       }
       
     }
+    console.log(id2);
+    console.log(id1);
   }, []);
 
 
@@ -72,8 +74,8 @@ function EditableEmail(props) {
     //     // Manejar errores si la solicitud falla
     //     console.error(error);
     //   });
-    
-     fetch("http://localhost:5000/perfilEstudianteUpdateCorreo", {
+    if (!rol) {
+      fetch("http://localhost:5000/perfilEstudianteUpdateCorreo", {
        method: "POST",
        body: JSON.stringify({id: id1, CorreoPersonal: emailContent }),
        headers: {
@@ -89,6 +91,25 @@ function EditableEmail(props) {
         // Manejar errores si la solicitud falla
         console.error(error);
       });
+    } else {
+      fetch("http://localhost:5000/updateCorreo", {
+        method: "POST",
+        body: JSON.stringify({id: id2, CorreoPersonal: emailContent }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // Manejar la respuesta del backend si es necesario
+          console.log(data);
+       })
+       .catch((error) => {
+         // Manejar errores si la solicitud falla
+         console.error(error);
+       });
+    }
+     
   };
 
   return (
