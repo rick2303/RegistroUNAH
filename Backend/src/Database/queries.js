@@ -171,13 +171,16 @@ export const querysADMIN = {
     on res.IdSeccion = s.IdSeccion inner join estudiantes e on e.NumCuenta = res.IdEstudiante inner join clases c on c.IdClase = s.IdClase
     where s.IdSeccion = @IdSeccion`,
     pagoSimulado: `update estudiantes_pagos set estado = 'PAGADO'`,
-    getJefeExistente: `SELECT CASE WHEN EXISTS (
-        SELECT 1
-        FROM empleados
-        WHERE subrol = 'Jefe departamento'
-        AND carrera = @Carrera
-        AND centroregional = @CentroRegional
-    ) THEN 1 ELSE 0 END AS existe_empleado;`,
+    getJefeExistente: `SELECT CAST(CASE
+        WHEN EXISTS (
+            SELECT 1
+            FROM empleados
+            WHERE subrol = 'Jefe departamento'
+            AND carrera = @Carrera
+            AND centroregional = @CentroRegional
+        ) THEN 1
+        ELSE 0
+    END AS BIT) AS existe_empleado;`,
     getCoordiExistente: `SELECT CASE
     WHEN (SELECT COUNT(*)
           FROM empleados
@@ -201,7 +204,15 @@ export const queryEstudiante = {
     getNotas: `select res.nota, res.EstadoClase
     from registro_estudiante_clases res
     inner join secciones s on s.idseccion = res.idseccion
-    where res.IdEstudiante = @IdEstudiante and s.idseccion = @IdSeccion`
+    where res.IdEstudiante = @IdEstudiante and s.idseccion = @IdSeccion`,
+    getEvaluacionExistente: `SELECT CASE WHEN EXISTS (
+        SELECT 1
+        FROM evaluaciones_docentes
+        WHERE IdEstudiante = @IdEstudiante
+          AND IdSeccion = @IdSeccion
+          AND IdDocente = @IdDocente
+    ) THEN 1 ELSE 0 END AS ExisteEvaluacion;
+    `
 }
 
 export const queryDocente = {
