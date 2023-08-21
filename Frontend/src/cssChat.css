@@ -31,7 +31,7 @@ body{
 }
 
 .contact-list-container {
-    max-height: 180px; /* Ajusta la altura máxima según tus necesidades */
+    max-height: 440px; /* Ajusta la altura máxima según tus necesidades */
     overflow-y: auto; /* Habilita el desplazamiento vertical si es necesario */
 }
 

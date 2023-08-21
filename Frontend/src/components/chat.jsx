@@ -15,18 +15,21 @@ function ChatApp() {
     const [chatHistory, setChatHistory] = useState([]);
     const [messageInput, setMessageInput] = useState(""); // Estado para almacenar el mensaje ingresado
     const chatHistoryRef = useRef(null);
+    const [autoScroll, setAutoScroll] = useState(true);
+    
 
     const handleSendMessage = (message) => {
         if (message.trim() !== "") {
             sendMessage(message);
-            fetchChatHistory(NumCuenta, selectedContact.IdEstudianteAgregado)
             setMessageInput('')
         }
     };
 
     const handleContactSelect = (contacto) => {
         setSelectedContact(contacto);
+        setAutoScroll(true);
         fetchChatHistory(NumCuenta, contacto.IdEstudianteAgregado);
+
     };
 
     const toggleModal = () => {
@@ -35,17 +38,24 @@ function ChatApp() {
       };
       
       useEffect(() => {
-        if (chatHistoryRef.current) {
+        if (autoScroll && chatHistoryRef.current) {
           chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
+          setAutoScroll(false);
+          console.log(autoScroll)
           fetchChatHistory(NumCuenta, selectedContact.IdEstudianteAgregado)
         }
-      }, [chatHistory]);
+        if(selectedContact != null){
+            fetchChatHistory(NumCuenta, selectedContact.IdEstudianteAgregado)
+        }
+        
+      }, [chatHistory,autoScroll]);
+      
       
       useEffect(() => {
         if (selectedContact) {
             fetchChatHistory(NumCuenta, selectedContact.IdEstudianteAgregado);
         }
-    }, [selectedContact]);
+    }, [selectedContact,autoScroll]);
 
 
   useEffect(() => {
@@ -103,7 +113,8 @@ function ChatApp() {
 
             if (response.ok) {
                 console.log("Mensaje enviado exitosamente");
-                // Actualizar el historial de chat o realizar otras acciones necesarias
+                await fetchChatHistory(NumCuenta, selectedContact.IdEstudianteAgregado); // Esperar a que se actualice el historial de chat
+                setAutoScroll(true); // Establecer autoscroll después de actualizar el historial
             } else {
                 console.error("Error al enviar el mensaje");
             }
@@ -149,7 +160,8 @@ function ChatApp() {
             });
 
             const data = await response.json();
-            console.log('Historial:',data);
+            //console.log('Historial:',data);
+            
             setChatHistory(data);
         } catch (error) {
             console.error('Error fetching contactos:', error);
