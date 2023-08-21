@@ -15,6 +15,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "../App.css";
 import "../horizontal-columns.css"
 import "../Perfil_estudiante.css"
+import styled from 'styled-components';
 
 const paginationComponentOptions = {
   rowsPerPageText: 'Filas por página',
@@ -101,20 +102,50 @@ const MenuIngresoNotas = () => {
     }
   }, [inputValue]);
 
+
+  const customStyles = {
+    headCells: {
+        style: {
+            backgroundColor: '#145eb9',
+            color: 'white',
+            borderBottom: '1px solid #c6c6c6', 
+        },
+        },
+        rows: {
+        style: {
+            border: '1px solid #c6c6c6', 
+            textAlign: 'center',
+        },
+        },
+    };
+    
+    const TableHeaderCell = styled.div`
+    margin: auto;
+    `;
+
+
+
   // Configuramos las columnas para DataTable
   const columnas1 = [
     {
-      name: "N° DE EMPLEADO",
+      name:"NÚMERO DE EMPLEADO",
       selector: (row) => row.NumEmpleado,
+      sortable: true,
+      width: "190px",
+      center: true,
     },
     {
-      name: "DNI",
+      name: "NÚMERO DE IDENTIDAD",
       selector: (row) => row.DNI,
+      sortable: true,
+      center: true,
+      
     },
     {
       name: "NOMBRE",
       selector: (row) => row.Nombre + " " + row.Apellido,
-      width: "300px",
+      width: "400px",
+      sortable: true,
     },
     {
       name: "VER NOTAS",
@@ -123,6 +154,7 @@ const MenuIngresoNotas = () => {
           <FcShare style={{ color: "#1e40af "}} />
         </h1>
       ),
+      width: "200px",
     },
   ];
 
@@ -234,6 +266,8 @@ const MenuIngresoNotas = () => {
         Notas Ingresadas
       </h1>
       <div>
+      <div className="container ">
+      <div className="row">
         <Input
           style={{
             textAlign: "center",
@@ -248,12 +282,15 @@ const MenuIngresoNotas = () => {
           placeholder="Ingresar DNI para filtrar"
         />
       </div>
+      </div>
+      </div>
       <br />
 
       <div className="container">
         <DataTable
           columns={columnas1}
           className="mi-tabla"
+          customStyles={customStyles}
           data={filteredData}
           pagination
           paginationComponentOptions={paginationComponentOptions}
@@ -277,27 +314,26 @@ const MenuIngresoNotas = () => {
   className="modal-fullscreen"
 >
   <ModalHeader
-    className="text-white bg-blue-800 text-2xl modal-header-custom"
+    className="text-white text-2xl modal-header-custom"
+    style={{ backgroundColor:"#145eb9"}}
   >
     <strong>DETALLE DE NOTAS</strong>
     <button
+
       className="close boton_cierre"
       onClick={() => setModalOpen(false)}
     >
-      <span aria-hidden="true">X</span>
+      <span aria-hidden="true" >X</span>
     </button>
   </ModalHeader>
-  <ModalBody className="modal-content">
-          {dataObtenida.length === 0 ? (
-            <div className="text-center">El docente no ha subido notas</div>
-          ) : (
-            <div className="horizontal-columns">
-              <Carousel
-                showThumbs={false}
-                showStatus={false}
-                dynamicHeight={true}
-                emulateTouch={true}
-              >
+        <ModalBody className="modal-content">
+         
+        <Carousel
+  showThumbs={false}    // Para ocultar los puntos de navegación
+  showStatus={false}   // Para ocultar el estado (número de diapositivas)
+  dynamicHeight={true} // Para permitir la altura dinámica
+  emulateTouch={true}  // Para habilitar la emulación de toque en dispositivos no táctiles
+>
             {Object.entries(
                   dataObtenida.reduce((sections, nota) => {
                   const seccionKey = `${nota.Seccion}-${nota.Asignatura}`;
@@ -337,12 +373,12 @@ const MenuIngresoNotas = () => {
                       ))}
                     </tbody>
                   </table>
-                  </div>
-                ))}
-              </Carousel>
-            </div>
-          )}
+                </div>
+              ))}
+            </Carousel>
+         
         </ModalBody>
+       
       </Modal>
     </div>
   );

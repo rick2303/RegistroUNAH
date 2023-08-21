@@ -38,9 +38,9 @@ export const solicitudCambioCentro = async (req,res) =>{
                 .input("FechaSolicitud", sql.Date, fechaSinHora)
                 .query(queries.insertSolicitudCambioCentro)
 
-            res.json({message:"Solicitud creada con Exito"})
+            res.json({message:"Archivo cargado exitosamente, ahora seleccione el centro al que desea cambiarse"})
         }else{
-            res.json({message:"Ya tiene una solicitud para cambio de centro en marcha"})
+            res.json({message:"Ya tiene una solicitud para cambio de centro en marcha, no es necesario volver a subir otro archivo"})
         }
 
     

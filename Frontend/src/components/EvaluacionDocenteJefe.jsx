@@ -2,6 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { FcAbout } from "react-icons/fc";
+import styled from 'styled-components';
 import {
   Input,
   Modal,
@@ -99,10 +100,31 @@ const EvaluacionDocenteJefe = () => {
     }
   }, [inputValue]);
 
+
+  const customStyles = {
+    headCells: {
+        style: {
+            backgroundColor: '#145eb9',
+            color: 'white',
+            borderBottom: '1px solid #c6c6c6', 
+        },
+        },
+        rows: {
+        style: {
+            border: '1px solid #c6c6c6', 
+            textAlign: 'center',
+        },
+        },
+    };
+    
+    const TableHeaderCell = styled.div`
+    margin: auto;
+    `;
+
   // Configuramos las columnas para DataTable
   const columnas1 = [
     {
-      name: "N° DE EMPLEADO",
+      name: <TableHeaderCell>N° DE EMPLEADO</TableHeaderCell>,
       selector: (row) => row.NumEmpleado,
       sortable: true,
       width: "150px",
@@ -302,12 +324,16 @@ const EvaluacionDocenteJefe = () => {
         Evaluación Docente
       </h1>
       <div>
+      <div className="container ">
+      <div className="row " >
         <Input
           style={{
             textAlign: "center",
             marginTop: "20px",
             marginLeft: "80px",
             maxWidth: "300px",
+            border: "1px solid #c6c6c6 ",
+            borderRadius: "5px"
           }}
           id="inputCuenta"
           type="text"
@@ -315,6 +341,7 @@ const EvaluacionDocenteJefe = () => {
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="Ingresar DNI para filtrar"
         />
+
       </div>
       <br />
 
@@ -322,6 +349,7 @@ const EvaluacionDocenteJefe = () => {
         <DataTable
           columns={columnas1}
           className="mi-tabla"
+          customStyles={customStyles}
           data={filteredData}
           pagination
           paginationComponentOptions={paginationComponentOptions}
@@ -338,7 +366,8 @@ const EvaluacionDocenteJefe = () => {
           ]}
         />
       </div>
-
+      </div>
+      </div>
       {selectedRow && (
         <Modal isOpen={modalOpen} toggle={toggleModal} className="modal-lg">
           <ModalHeader className="text-white bg-blue-800 text-2xl">

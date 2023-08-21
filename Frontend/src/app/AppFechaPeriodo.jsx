@@ -4,7 +4,7 @@ import DataTable from "react-data-table-component";
 import { format, addWeeks, subWeeks } from "date-fns";
 import { FcDeleteRow } from "react-icons/fc";
 import "../FechaMatricula.css";
-
+import styled from 'styled-components';
 const AppFechaPeriodo = () => {
   const [fechaInicioSeleccionada, setFechaInicioSeleccionada] = useState(
     new Date()
@@ -112,34 +112,54 @@ const AppFechaPeriodo = () => {
       });
   }, [clickCount]);
 
+
+  const customStyles = {
+    headCells: {
+        style: {
+            backgroundColor: '#145eb9',
+            color: 'white',
+            borderBottom: '1px solid #c6c6c6', 
+        },
+        },
+        rows: {
+        style: {
+            border: '1px solid #c6c6c6', 
+            textAlign: 'center',
+        },
+        },
+    };
+    
+    const TableHeaderCell = styled.div`
+    margin: auto;
+    `;
+
   // Configuramos las columnas para DataTable
   const columnas = [
     {
-      name: "Fecha Inicial",
+      name: "FECHA INICIAL",
       selector: (row) => new Date(row.FechaInicio).toLocaleDateString(),
-      sortable: true,
+
       center: true,
     },
     {
-      name: "Fecha Final",
+      name: "FECHA INICIAL",
       selector: (row) => new Date(row.FechaFinal).toLocaleDateString(),
-      sortable: true,
+
       center: true,
     },
     {
-      name: "Periodo Académico",
+      name: "PERÍODO ACADÉMICO",
       selector: (row) => row.PeriodoAcademico,
-      sortable: true,
+
       center: true,
     },
     {
-      name: "Sistema",
+      name: "SISTEMA",
       selector: (row) => row.Sistema,
-      sortable: true,
       center: true,
     },
     {
-      name: "Eliminar",
+      name: "ELIMINAR PLANIFICACIÓN",
       cell: (row) => (
         <h1 onClick={() => eliminarFila(row)} className="cursor-pointer">
           <FcDeleteRow className="cursor-pointer" />
@@ -164,14 +184,41 @@ const AppFechaPeriodo = () => {
   return (
     <>
       <div className="d-flex mt-5">
-        <h1 className="text-2xl mb-4 text-center font-bold pt-2 text-gray-900 sm:text-3xl col-12">
-          Planificación de períodos-trimestrales
+        <h1 className="text-2xl mb-4 text-center font-bold pt-4 text-gray-900 sm:text-3xl col-12">
+        PLANIFICACIÓN DE PERÍODOS ACADÉMICOS TRIMESTRALES
         </h1>
+        <br />
       </div>
       <div className="contenedor mx-24">
         <div className="container m-4">
+
           <div className="row m-4">
-             <div className="col-md-4">
+          <div className="col-md-4">
+              <label htmlFor="pac" className="mb-3">
+                Seleccione el PAC
+              </label>
+              <select
+                className="form-control"
+                value={pacSeleccionado}
+                onChange={handlePacChange}
+                style={{border: "1px solid #c6c6c6 ",borderRadius: "5px"}}
+              >
+                <option
+                  className=" text-xs"
+                  value="1PAC"
+                  disabled={isPac1Disabled}
+                >
+                  1PAC
+                </option>
+                <option value="2PAC" disabled={isPac2Disabled}>
+                  2PAC
+                </option>
+                <option value="3PAC" disabled={isPac3Disabled}>
+                  3PAC
+                </option>
+              </select>
+            </div>
+            <div className="col-md-4">
         <label htmlFor="fechaInicio">Inicio de Período</label>
         <DatePicker
           className="form-control"
@@ -200,30 +247,7 @@ const AppFechaPeriodo = () => {
                 okLabel="Aceptar" // Establecer texto para el botón Aceptar en español
         />
       </div>
-            <div className="col-md-4">
-              <label htmlFor="pac" className="mb-3">
-                Seleccione el PAC
-              </label>
-              <select
-                className="form-control"
-                value={pacSeleccionado}
-                onChange={handlePacChange}
-              >
-                <option
-                  className=" text-xs"
-                  value="1PAC"
-                  disabled={isPac1Disabled}
-                >
-                  1PAC
-                </option>
-                <option value="2PAC" disabled={isPac2Disabled}>
-                  2PAC
-                </option>
-                <option value="3PAC" disabled={isPac3Disabled}>
-                  3PAC
-                </option>
-              </select>
-            </div>
+
           </div>
           <div className="row m-4">
             <div className="col-md-4 col-sm-6"></div>
@@ -254,14 +278,23 @@ const AppFechaPeriodo = () => {
                 <strong>Guardar</strong>
               </button>
             </div>
+
+
             <div className="col-md-4"></div>
+            
           </div>
         </div>
       </div>
       <div className="my-5 mx-24">
+      
+      <h1 style={{fontSize:"14px"}}>
+        Obs. Los períodos trimestrales tienen una duración de 13 a 16 semanas, el sistema toma dicha restricciones en cuenta al momento de programar en el calendario.
+      </h1>
+        <br></br>
         <DataTable
           className="mi-tabla"
           columns={columnas}
+          customStyles={customStyles}
           data={historialData2}
           noHeader
           noDataComponent={<NoDataComponent />}

@@ -2,16 +2,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import "styled-components";
-import { FcCancel, FcFinePrint } from "react-icons/fc";
-import { Input, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-import ModalCargarPDFCambioCentro from "./modalCargarPDFCambioCentro";
+import ModalCargarPDFCambioCentroLISTO from "./modalCargarPDFCambioCentro";
+import styled from 'styled-components';
 
 const MenuCambioCentro = () => {
   const [NumCuenta, setNumCuenta] = useState("");
   const [Nombre, setNombre] = useState("");
   const [Apellido, setApellido] = useState("");
-  const [CentroRegional, setCentroRegional] = useState("");
-  const [selectedRow, setSelectedRow] = useState(null);
   const [centroSeleccionado, setCentroSeleccionado] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -108,6 +105,25 @@ const fetchInfoAndCentros = async () => {
   }
 };
 
+const customStyles = {
+  headCells: {
+    style: {
+      backgroundColor: '#145eb9',
+      color: 'white',
+      borderBottom: '1px solid #c6c6c6', 
+    },
+  },
+  rows: {
+    style: {
+      border: '1px solid #c6c6c6', 
+      textAlign: 'center',
+    },
+  },
+};
+
+const TableHeaderCell = styled.div`
+margin: auto;
+`;
 
 const tieneSolicitudesEnEspera = () => {
   // Verificar si el estudiante tiene alguna solicitud "EN ESPERA"
@@ -117,27 +133,32 @@ const tieneSolicitudesEnEspera = () => {
   
   const columnas = [
     {
-      name: "FECHA DE SOLICITUD",
+      name: <TableHeaderCell>FECHA DE SOLICITUD</TableHeaderCell>,
       selector: (row) => row.FechaSolicitud.split("T")[0],
+      cell: row => <TableHeaderCell>{row.FechaSolicitud.split("T")[0]}</TableHeaderCell>
   },
   {
-      name: "N° CUENTA",
+      name:<TableHeaderCell>NÚMERO DE CUENTA</TableHeaderCell>,
       selector: (row) => row.NumCuenta,
       width: "300px",
+      cell: row => <TableHeaderCell>{row.NumCuenta}</TableHeaderCell>
   },
 
 {
-  name: "CENTRO DE CAMBIO",
+  name: <TableHeaderCell>CENTRO AL QUE REALIZÓ LA SOLICITUD</TableHeaderCell>,
   selector: (row) => row.CentroNuevo,
   width: "300px",
+  cell: row => <TableHeaderCell>{row.CentroNuevo}</TableHeaderCell>
 },
   {
-      name: "DICTAMEN",
+      name:<TableHeaderCell>DICTAMEN</TableHeaderCell>,
       selector: (row) => row.Dictamen,
+      cell: row => <TableHeaderCell>{row.Dictamen}</TableHeaderCell>
   },
   {
-      name: "Estado",
+      name: <TableHeaderCell>ESTADO</TableHeaderCell>,
       selector: (row) => row.Estado.toUpperCase(),
+      cell: row => <TableHeaderCell>{row.Estado}</TableHeaderCell>
   },
 
 
@@ -152,24 +173,32 @@ const tieneSolicitudesEnEspera = () => {
     setModalOpen(!modalOpen);
   };
 
-
-
- 
   return (
     <div className="App">
       <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
         Cambio de Centro Regional
       </h1>
-     
-        <div className="container ">
+        <div className="container">
+          <div className="d-flex align-items-center">
+            <label htmlFor="centroRegional">Suba el archivo pdf que contenga la justificación del cambio de centro   </label>
+            <button
+              type="button"
+              className="btn ml-3"
+              data-bs-toggle="modal"
+              data-bs-target="#ModalCAMBIO"
+              disabled={tieneSolicitudesEnEspera()}
+          >
+            Subir archivo PDF
+        </button>
+          </div>
 
-   
-          <div className="container pt-5">
-            <label htmlFor="centroRegional">Seleccione el Centro Regional al que desea trasladarse:</label>
+
+            <label htmlFor="centroRegional" className="pt-3">Seleccione el Centro regional al que desea trasladarse:</label>
             <br />
             <br />
           <select
             className="form-select border-1 w-50"
+            style={{border: "1px solid #c6c6c6 ",borderRadius: "5px"}}
             id="centro"
             aria-label="Default select example"
             value={centroSeleccionado}
@@ -183,39 +212,31 @@ const tieneSolicitudesEnEspera = () => {
                 </option>
             ))}
           </select>
-          </div>
+
 
           <br />
-            <br />
-         
 
-    <div className="d-flex align-items-center">
-     <label htmlFor="centroRegional">Suba el archivo pdf que contenga la justificacion del cambio de centro   </label>
-        <a
-            className="btn btn-primary ml-5"
-            data-bs-toggle="modal"
-            data-bs-target="#ModalCANCEL"
-            disabled={!puedeEnviarPDF}
-          >
-            Subir archivo PDF
-          </a>
-    </div>
-          <div className="pt-4">
-          <button type="button" className="btn btn-success" onClick={handleSubmit} disabled={tieneSolicitudesEnEspera()}>
+    
+          <label htmlFor="centroRegional">Despúes de asegurar sus datos de click en enviar solicitud, para que se actualicé la tabla.</label><br></br>
+          <br></br>
+          <button type="button" className="btn btn" onClick={handleSubmit} disabled={tieneSolicitudesEnEspera()}>
               Enviar Solicitud
           </button>
-          </div>
+
 
     <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
         Solicitudes realizadas
         </h1>
-      
-        <br />
+
+            
+        <label htmlFor="centroRegional">Tiene que pagar para que la solicitud sea enviada al coordinador.</label><br></br>
+          <br></br>
         <DataTable
         columns={columnas}
         className="mi-tabla"
         noDataComponent={<NoDataComponent />}
         data={filteredData}
+        customStyles={customStyles}
         />
 
     </div>
@@ -226,7 +247,7 @@ const tieneSolicitudesEnEspera = () => {
     </br>
     <div className="d-flex justify-content-center">
 
-          <ModalCargarPDFCambioCentro setPuedeEnviarPDF={setPuedeEnviarPDF}/>
+          <ModalCargarPDFCambioCentroLISTO setPuedeEnviarPDF={setPuedeEnviarPDF}/>
         </div>
 
     </div>

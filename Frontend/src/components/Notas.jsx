@@ -3,7 +3,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input, Bu
 import { FcFinePrint, FcInfo } from "react-icons/fc";
 import DataTable from "react-data-table-component";
 import { parseISO } from "date-fns";
-
+import styled from 'styled-components';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../Perfil_estudiante.css";
 import "../App.css";
@@ -294,28 +294,47 @@ const Notas = () => {
     }
   };
 
+  const customStyles = {
+    headCells: {
+        style: {
+            backgroundColor: '#145eb9',
+            color: 'white',
+            borderBottom: '1px solid #c6c6c6', 
+        },
+        },
+        rows: {
+        style: {
+            border: '1px solid #c6c6c6', 
+            textAlign: 'center',
+        },
+        },
+    };
+    
+    const TableHeaderCell = styled.div`
+    margin: auto;
+    `;
 
 
   // Configuramos las columnas para DataTable
   const columnas1 = [
     {
-      name: "CODIGO",
+      name: "CÓDIGO",
       selector: (row) => row.CODIGO,
       center: true,
     },
     {
       name: "ASIGNATURA",
       selector: (row) => row.ASIGNATURA,
-      center: true,
+      width: "18%",
     },
     {
-      name: "SECCION",
+      name: "SECCIÓN",
       selector: (row) => row.SECCION,
       center: true,
     },
     
     {
-      name: "PERIODO",
+      name: "PERÍODO",
       selector: (row) => row.PERIODO,
       center: true,
     },
@@ -436,15 +455,16 @@ const Notas = () => {
       </h1>
       <div className="container">
         <DataTable
-         className="mi-tabla"
-         columns={columnas1} 
-         data={historialData} 
+          className="mi-tabla"
+          columns={columnas1} 
+          data={historialData} 
+          customStyles={customStyles}
           noDataComponent={<NoDataComponent />}></DataTable>
       </div>
       {selectedRow && (
         <Modal isOpen={modalOpen} toggle={toggleModal} className="modal-fullscreen"> {/* Agregar la clase 'modal-fullscreen' */}
           <ModalHeader className="text-white bg-blue-800 text-2xl">
-            <strong>Perfil de docente</strong>
+            <strong>PERFIL DEL DOCENTE</strong>
             <button className="close boton_cierre" onClick={toggleModal}>
               <span aria-hidden="true">X</span>
             </button>
@@ -585,7 +605,7 @@ const Notas = () => {
       <div>
 
       <Modal isOpen={isModalOpen2} toggle={mostrarInformacion2} className="evaluacionmodal">
-        <ModalHeader>EVALUACION DOCENTES</ModalHeader>
+        <ModalHeader>EVALUACIÓN DOCENTES</ModalHeader>
         <ModalHeader>
           <button className="close boton_cierre" onClick={mostrarInformacion2}>
             <span aria-hidden="true">X</span>
@@ -593,14 +613,15 @@ const Notas = () => {
         </ModalHeader>
         <ModalBody>
           <FormGroup>
-            <Label>El docente ha entregado la planificación 
-            de contenido y rubricas para el desarrollo de la clase, 
+            <Label style={{fontSize:"16px"}}> El docente ha entregado la planificación 
+            de contenido y rúbricas para el desarrollo de la clase, 
             siguiendo la normativa pedagógica y curricular. </Label>
             <Input
               type="select"
               name="pregunta1"
               value={evaluationData.pregunta1}
               onChange={handleInputChange2}
+              style={{border: "1px solid #c6c6c6 ",borderRadius: "5px"}} 
               className={evaluationData.pregunta1 === '' ? '' : ''}
             >
               <option value="">Seleccione una opción</option>
@@ -610,39 +631,41 @@ const Notas = () => {
             </Input>
           </FormGroup>
           <FormGroup>
-            <Label>El docente ha cumplido con los tiempos estipulados para la entrega de resultados 
+            <Label style={{fontSize:"16px"}}>El docente ha cumplido con los tiempos estipulados para la entrega de resultados 
             de las evaluaciones.</Label>
             <Input
               type="select"
               name="pregunta2"
               value={evaluationData.pregunta2}
               onChange={handleInputChange2}
+              style={{border: "1px solid #c6c6c6 ",borderRadius: "5px"}}
               className={evaluationData.pregunta2 === '' ? '' : ''}
             >
-              <option value="">Seleccione una opción</option>
+              <option  value="">Seleccione una opción</option>
               {[1, 2, 3, 4, 5].map(value => (
                 <option key={value} value={value}>{value}</option>
               ))}
             </Input>
           </FormGroup>
           <FormGroup>
-            <Label>El docente se ha comportado bajo el 
+            <Label style={{fontSize:"16px"}}>El docente se ha comportado bajo el 
             marco de la ética moral y profesional</Label>
             <Input
               type="select"
               name="pregunta3"
               value={evaluationData.pregunta3}
               onChange={handleInputChange2}
+              style={{border: "1px solid #c6c6c6 ",borderRadius: "5px"}}
               className={evaluationData.pregunta3 === '' ? '' : ''}
             >
-              <option value="">Seleccione una opción</option>
+              <option  value="">Seleccione una opción</option>
               {[1, 2, 3, 4, 5].map(value => (
                 <option key={value} value={value}>{value}</option>
               ))}
             </Input>
           </FormGroup>
           <FormGroup>
-            <Label>Proporciona retroalimentación sobre las evaluaciones realizadas:</Label>
+            <Label style={{fontSize:"16px"}}>Proporciona retroalimentación sobre las evaluaciones realizadas:</Label>
             <FormGroup check>
               <Label check>
                 <Input
@@ -669,7 +692,7 @@ const Notas = () => {
             </FormGroup>
           </FormGroup>
           <FormGroup>
-            <Label>El docente proporciona la pauta de los exámenes realizados:</Label>
+            <Label style={{fontSize:"16px"}}>El docente proporciona la pauta de los exámenes realizados:</Label>
             <FormGroup check>
               <Label check>
                 <Input
@@ -696,12 +719,13 @@ const Notas = () => {
             </FormGroup>
           </FormGroup>
           <FormGroup>
-            <Label>Observacion:</Label>
+            <Label style={{fontSize:"16px"}}>Observaciones:</Label>
             <Input
               type="textarea"
               name="Observacion" 
               value={evaluationData.Observacion} 
               onChange={handleInputChange2}
+              style={{border: "1px solid #c6c6c6 ",borderRadius: "5px"}}
             />
           </FormGroup>
         </ModalBody>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { format, parseISO, set } from "date-fns";
 import "styled-components";
-
+import styled from 'styled-components';
 
 const MenuCancelaciones = () => {
 const [NumCuenta, setNumCuenta] = useState("");
@@ -14,6 +14,8 @@ const año = fechaActual.getFullYear();
 const [carrera, setCarreraUsuario] = useState("");
 const [centroRegional, setCentroRegional] = useState("");
 const [idClase, setIdClase] = useState("");
+
+
 
 useEffect(() => {
     const storedData = localStorage.getItem("userData");
@@ -146,14 +148,32 @@ try {
     console.error("Error al obtener los datos:", error);
 }
 
-
-
-
 };
+
+const customStyles = {
+    headCells: {
+        style: {
+            backgroundColor: '#145eb9',
+            color: 'white',
+            borderBottom: '1px solid #c6c6c6', 
+        },
+        },
+        rows: {
+        style: {
+            border: '1px solid #c6c6c6', 
+            textAlign: 'center',
+        },
+        },
+    };
+    
+    const TableHeaderCell = styled.div`
+    margin: auto;
+    `;
+
 // Configuramos las columnas para DataTable
 const columnas1 = [
 {
-    name: "CODIGO",
+    name: "CÓDIGO",
     selector: (row) => row.IdClase,
 },
 {
@@ -165,11 +185,11 @@ const columnas1 = [
     selector: (row) => row.UV,
 },
 {
-    name: "SECCION",
+    name: "SECCIÓN",
     selector: (row) => row.Seccion,
 },
 {
-    name: "PERIODO",
+    name: "PERÍODO",
     selector: (row) => row.Periodo,
 },
 {
@@ -399,9 +419,11 @@ return (
         <div className="table-container" style={{ maxWidth: "1100px", margin: "auto" , position: "relative", zIndex: 1 }}>
             <TablaCancelaciones
             data={historialData}
+            customStyles={customStyles}
             columnas={columnas1}
             onSelectedRowsChange={handleSelectedRowsChange}
             filasSeleccionadas={filasSeleccionadas}
+
         />
         </div>
 

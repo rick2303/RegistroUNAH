@@ -6,6 +6,7 @@ import { FaUserEdit } from "react-icons/fa";
 import { Input, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { format, parseISO } from "date-fns";
 import "../App.css";
+import styled from 'styled-components';
 
 
 const paginationComponentOptions = {
@@ -44,17 +45,17 @@ const ListadoDocentes = () => {
   // Configuramos las columnas para DataTable
   const columnas1 = [
     {
-      name: "N° DE EMPLEADO",
+      name: "NÚMERO DE EMPLEADO",
       selector: (row) => row.NumEmpleado,
-      sortable: true,
+      center: true,
     },
     {
       name: "DNI",
       selector: (row) => row.DNI,
-      sortable: true,
+      center: true,
     },
     {
-      name: "NOMBRE",
+      name: "NOMBRE DEL DOCENTE",
       selector: (row) => row.Nombre + " " + row.Apellido,
       width: "300px",
       sortable: true,
@@ -62,15 +63,15 @@ const ListadoDocentes = () => {
     {
       name: "ROL",
       selector: (row) => row.SubRol,
-      sortable: true,
+
     },
     {
-      name: "Estado",
+      name: "ESTADO",
       selector: (row) => row.Estado.toUpperCase(),
-      sortable: true,
+      center: true,
     },
     {
-      name: "Ver",
+      name: "VER",
       cell: (row) => (
         <h1 className="cursor-pointer" onClick={() => mostrarInformacion(row)}>
           <FcFinePrint />
@@ -78,7 +79,7 @@ const ListadoDocentes = () => {
       ),
     },
     {
-      name: "Editar",
+      name: "EDITAR",
       cell: (row) => (
         <h1 className="cursor-pointer" onClick={() => editarInformacion(row)}>
           <FaUserEdit style={{ color: "#1e40af "}} />
@@ -86,6 +87,26 @@ const ListadoDocentes = () => {
       ),
     },
   ];
+
+  const customStyles = {
+    headCells: {
+        style: {
+            backgroundColor: '#145eb9',
+            color: 'white',
+            borderBottom: '1px solid #c6c6c6', 
+        },
+        },
+        rows: {
+        style: {
+            border: '1px solid #c6c6c6', 
+            textAlign: 'center',
+        },
+        },
+    };
+    
+    const TableHeaderCell = styled.div`
+    margin: auto;
+    `;
 
   const mostrarInformacion = (row) => {
     setSelectedRow(row);
@@ -176,7 +197,7 @@ const fetchData = () => {
       <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
         Docentes registrados
       </h1>
-      <div>
+      <div className="container">
         <Input
           style={{
             textAlign: "center",
@@ -199,6 +220,7 @@ const fetchData = () => {
           className="mi-tabla"
           data={filteredData}
           pagination
+          customStyles={customStyles}
           paginationComponentOptions={paginationComponentOptions}
           noHeader
           // Para poner las filas no encontradas en español
@@ -320,6 +342,7 @@ const fetchData = () => {
                     textAlign: "center",
                   }}
                   type="text"
+                  maxLength= "13"
                   value={editedData.DNI}
                   onChange={(e) => setEditedData({ ...editedData, DNI: e.target.value })}
                 />

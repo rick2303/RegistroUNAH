@@ -51,3 +51,7 @@
   .modal-header-custom .close:hover {
     opacity: 1;
   }
+  
+  .carousel .thumbs {
+    display: none !important; /* Agrega !important para asegurarte de que se aplique */
+  }

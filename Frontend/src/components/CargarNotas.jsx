@@ -7,6 +7,8 @@ import { Input, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { format, parseISO } from "date-fns";
 import "../App.css";
 import { FcUpload } from "react-icons/fc";
+import styled from 'styled-components';
+
 
 const paginationComponentOptions = {
   rowsPerPageText: "Filas por página",
@@ -103,33 +105,50 @@ const CargarNotas = () => {
         alert("Error al enviar correos");
       });
   };
+
+  const customStyles = {
+    headCells: {
+        style: {
+            backgroundColor: '#145eb9',
+            color: 'white',
+            borderBottom: '1px solid #c6c6c6', 
+        },
+        },
+        rows: {
+        style: {
+            border: '1px solid #c6c6c6', 
+            textAlign: 'center',
+        },
+        },
+    };
+    
+    const TableHeaderCell = styled.div`
+    margin: auto;
+    `;
+
   const columnas1 = [
     {
-      name: "CUENTA",
+      name: "NÚMERO DE CUENTA",
       selector: (row) => row.IdEstudiante,
       sortable: true,
     },
     {
-      name: "NOMBRE",
+      name: "NOMBRE DEL ESTUDIANTE",
       selector: (row) => row.Estudiante + " " + row.Apellido,
       width: "300px",
-      sortable: true,
-      // Estilos personalizados solo para el título
-      style: {
-        textAlign: "center",
-      },
+      center: true,
     },
     {
       name: "NOTA",
       selector: (row) => row.Nota,
-      sortable: true,
-      center: true, // Centrar el título
+
+      center: true, 
     },
     {
       name: "ESTADO",
       selector: (row) => row.EstadoClase,
-      sortable: true,
-      center: true, // Centrar el título
+
+      center: true, 
     },
     {
       name: "CARGAR NOTA",
@@ -357,6 +376,7 @@ const CargarNotas = () => {
               columns={columnas1}
               className="mi-tabla"
               data={data}
+              customStyles={customStyles}
               pagination
               paginationComponentOptions={paginationComponentOptions}
               noHeader
