@@ -4,6 +4,7 @@ import DataTable from "react-data-table-component";
 import "styled-components";
 import { Input, Button } from "reactstrap";
 import { format, parseISO, set } from "date-fns";
+import styled from 'styled-components';
 const MenuHistorialAdmin = () => {
   const [users, setUsers] = useState([]);
   const [inputValue, setInputValue] = useState("");
@@ -101,6 +102,27 @@ const MenuHistorialAdmin = () => {
       console.error("Error al obtener los datos:", error);
     }
   };
+
+  const customStyles = {
+    headCells: {
+        style: {
+            backgroundColor: '#145eb9',
+            color: 'white',
+            borderBottom: '1px solid #c6c6c6', 
+        },
+        },
+        rows: {
+        style: {
+            border: '1px solid #c6c6c6', 
+            textAlign: 'center',
+        },
+        },
+    };
+    
+    const TableHeaderCell = styled.div`
+    margin: auto;
+    `;
+
   // Configuramos las columnas para DataTable
   const columnas1 = [
     {
@@ -140,7 +162,7 @@ const MenuHistorialAdmin = () => {
       selector: (row) => row.OBS,
     },
     {
-      name: "PERIODO",
+      name: "PERÍODO",
       selector: (row) => row.PERIODO,
     },
   ];
@@ -149,16 +171,20 @@ const MenuHistorialAdmin = () => {
   };
   return (
     <div className="App">
-      <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
+      <h1 className="text-2xl text-center font-bold pt-4 pb-3 text-gray-900 sm:text-3xl">
         Forma 03
       </h1>
       <div>
+      <div className="container ">
+    <div className="row text-center" >
         <Input
           style={{
             textAlign: "center",
             marginTop: "20px",
             marginLeft: "80px",
             maxWidth: "300px",
+            border: "1px solid #c6c6c6 ",
+            borderRadius: "5px"
           }}
           id="inputCuenta"
           type="text"
@@ -166,6 +192,8 @@ const MenuHistorialAdmin = () => {
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="Ingresar número de cuenta"
         />
+      </div>
+      </div>
       </div>
       <br></br>
       {users.length > 0 ? (
@@ -176,45 +204,37 @@ const MenuHistorialAdmin = () => {
             style={{
               width: "100px",
               height: "100px",
-              borderRadius: "50%",
+              borderRadius: "20%",
               objectFit: "cover",
               margin: "auto",
+              marginBottom: "20px",
             }}
           />
-          <h3 className="text-2xl text-center font-bold pt-4 pb-3 text-gray-900 sm:text-2xl">
-            {users[0].Nombre} {users[0].Apellido}
-          </h3>
-          <ul>
-            <li>
-              <p className="font-normal pt-4 pb-1 text-gray-900 sm:text-1xl text-center">
-                Carrera: {users[0].Carrera}
-              </p>
-            </li>
-            <li>
-              <p className="font-normal pt-4 pb-1 text-gray-900 sm:text-1xl text-center">
-                Centro regional: {users[0].CentroRegional}
-              </p>
-            </li>
-            <li>
-              <p className="font-normal pt-4 pb-1 text-gray-900 sm:text-1xl text-center">
-                Indice del Periodo: {users[0].IndicePeriodo}
-              </p>
-            </li>
-            <li>
-              <p className="font-normal pt-4 pb-5 text-gray-900 sm:text-1xl text-center">
-                Indice Global: {users[0].IndiceGlobal}
-              </p>
-            </li>
-          </ul>
+    <div className="container ">
+    <div className="row text-center" >
+      <div className="col-md-6 " style={{margin:"auto"}}>
+        <p className="pt-2 pb-1"><b>{users[0].Nombre} {users[0].Apellido}</b></p>
+        <p className="pt-2 pb-1 ">Carrera: {users[0].Carrera} </p>
+        <p className="pt-2 pb-1 "> Centro regional: {users[0].CentroRegional}</p>
+        <p className="pt-2 pb-1 "> Índice del Período: &nbsp; {users[0].IndicePeriodo} %</p>  
+        <p className="pt-2 pb-1 ">Índice Global: &nbsp; {users[0].IndiceGlobal} %</p>
+      </div>
+
+      </div>
+      <br></br>
+      </div>
         </>
       ) : (
         <p>.</p>
       )}
-
-      <div className="container">
-        <DataTable columns={columnas1} data={historialData}  noDataComponent={<NoDataComponent />}></DataTable>
+      <div className="container ">
+      <div className="row">
+        <DataTable columns={columnas1} data={historialData}  
+        customStyles={customStyles}
+        noDataComponent={<NoDataComponent />}></DataTable>
       </div>
-    </div>
+      </div>
+      </div>
   );
 };
 export default MenuHistorialAdmin;

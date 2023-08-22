@@ -40,6 +40,9 @@ export default function NavbarEstudiante() {
   if (currentPath === "/src/html/Solicitudes.html") {
     redirectTo = "../html/Estudiante.html";
   }
+  if (currentPath === "/src/html/chat.html") {
+    redirectTo = "../html/Estudiante.html";
+  }
   if (currentPath === "/src/html/Historial.html") {
     redirectTo = "../html/Estudiante.html";
   }
@@ -101,11 +104,13 @@ export default function NavbarEstudiante() {
         className="p-1 font-normal"
       >
         <a href="../html/Perfil_estudiante.html">
-          <img
-            className="rounded-full h-20 w-20"
-            src={`../img/uploads/${imagenUsuario}`}
-            alt="Perfil"
-          />
+        <img
+          className="rounded-full h-20 w-20"
+          // className="rounded-full h-auto w-auto max-h-20 max-w-20"
+          src={`../img/uploads/${imagenUsuario}`}
+          alt="Perfil"
+        />
+
         </a>
       </Typography>
     </ul>

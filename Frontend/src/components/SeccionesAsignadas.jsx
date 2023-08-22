@@ -7,6 +7,7 @@ import { Input, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { format, parseISO } from "date-fns";
 import "../App.css";
 import { FcUpload } from "react-icons/fc";
+import styled from 'styled-components';
 
 const paginationComponentOptions = {
   rowsPerPageText: "Filas por página",
@@ -119,31 +120,45 @@ const SeccionesAsignadas = () => {
   
   const columnas1 = [
     {
-      name: "CUENTA",
+      name: "NÚMERO DE CUENTA",
       width: "300px",
       selector: (row) => row.IdEstudiante,
-      sortable: true,
+      center: true,
     },
     {
-      name: "NOMBRE",
+      name: "NOMBRE DEL ESTUDIANTE",
       selector: (row) => row.Estudiante + " " + row.Apellido,
-      sortable: true,
-      // Estilos personalizados solo para el título
-      style: {
-        textAlign: "center",
-      },
+      center: true,
+
     },
     {
       name: "CORREO INSTITUCIONAL",
       selector: (row) => row.CorreoInstitucional,
-      
-      // Estilos personalizados solo para el título
-      style: {
-        textAlign: "center",
-      },
+      center: true,
     },
     
   ];
+
+  
+  const customStyles = {
+    headCells: {
+        style: {
+            backgroundColor: '#145eb9',
+            color: 'white',
+            borderBottom: '1px solid #c6c6c6', 
+        },
+        },
+        rows: {
+        style: {
+            border: '1px solid #c6c6c6', 
+            textAlign: 'center',
+        },
+        },
+    };
+    
+    const TableHeaderCell = styled.div`
+    margin: auto;
+    `;
 
   const NoDataComponent = () => {
     return <div>No hay registros para mostrar</div>;
@@ -174,7 +189,7 @@ const SeccionesAsignadas = () => {
               </div>
               <div className="col-3">
                 <h2 className="text-lg font-bold text-gray-900 mb-3">
-                   {data[0].Periodo}
+                  {data[0].Periodo}
                 </h2>
               </div>
               <div className="col-2">
@@ -198,6 +213,7 @@ const SeccionesAsignadas = () => {
               className="mi-tabla"
               data={data}
               pagination
+              customStyles={customStyles}
               paginationComponentOptions={paginationComponentOptions}
               noHeader
               noDataComponent={<NoDataComponent />}

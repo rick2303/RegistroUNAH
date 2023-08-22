@@ -6,7 +6,7 @@ import "styled-components";
 import { FcCancel, FcFinePrint } from "react-icons/fc";
 import { format, parseISO, set } from "date-fns";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
-
+import styled from 'styled-components';
 
 const MenuMatricula = () => {
 const [NumCuenta, setNumCuenta] = useState("");
@@ -36,7 +36,25 @@ const fechaActualString = `${year}-${month}-${day}`;
 
 const añoActual = fechaActual.getFullYear();
 
-
+const customStyles = {
+    headCells: {
+        style: {
+            backgroundColor: '#145eb9',
+            color: 'white',
+            borderBottom: '1px solid #c6c6c6', 
+        },
+        },
+        rows: {
+        style: {
+            border: '1px solid #c6c6c6', 
+            textAlign: 'center',
+        },
+        },
+    };
+    
+    const TableHeaderCell = styled.div`
+    margin: auto;
+    `;
 
 const SubirContador = async (row) => {
     console.log(row);
@@ -260,8 +278,9 @@ const fechINFO = async (cuenta, periodo, year)=> {
 
 const columnas1 = [
     {
-    name: "CODIGO",
+    name: <TableHeaderCell>CÓDIGO</TableHeaderCell>,
     selector: (row) => row.CODIGO,
+    cell: row => <TableHeaderCell>{row.CODIGO}</TableHeaderCell>
     },
     {
     name: "ASIGNATURA", 
@@ -269,7 +288,7 @@ const columnas1 = [
     width: "18%",
     },
     {
-    name: "SECCION",
+    name: "SECCIÓN",
     selector: (row) => row.SECCION,
     },
     {
@@ -281,7 +300,7 @@ const columnas1 = [
     selector: (row) => row.HORA_FINAL,
     },
     {
-    name: "Dias",
+    name: "DÍAS",
     selector: (row) => row.Dias,
     width: "10%",
     },
@@ -298,7 +317,7 @@ const columnas1 = [
         selector: (row) => row.UV,
         },
     {
-        name: "Eliminar",
+        name: "ELIMINAR",
         cell: (row) => (
         <h1 className="cursor-pointer" onClick={() => eliminarClaseMatriculada(row)}>
             <FcCancel />
@@ -313,8 +332,9 @@ const NoDataComponent = () => {
 
 const columnas2 = [
     {
-    name: "CODIGO",
+    name: <TableHeaderCell>CÓDIGO</TableHeaderCell>,
     selector: (row) => row.CODIGO,
+    cell: row => <TableHeaderCell>{row.CODIGO}</TableHeaderCell>
     },
     {
     name: "ASIGNATURA", 
@@ -322,7 +342,7 @@ const columnas2 = [
     width: "18%",
     },
     {
-    name: "SECCION",
+    name: "SECCIÓN",
     selector: (row) => row.SECCION,
     },
     {
@@ -334,7 +354,7 @@ const columnas2 = [
     selector: (row) => row.HORA_FINAL,
     },
     {
-    name: "Dias",
+    name: "DÍAS",
     selector: (row) => row.Dias,
     width: "10%",
     },
@@ -351,7 +371,7 @@ const columnas2 = [
         selector: (row) => row.UV,
         },
     {
-        name: "Eliminar",
+        name: "ELIMINAR",
         cell: (row) => (
         <h1 className="cursor-pointer" onClick={() => eliminarClaseEnEspera(row)}>
             <FcCancel />
@@ -730,6 +750,7 @@ setShowDependentListModal(false);
 };
 
 
+
 return (
     <div className="App">
     <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
@@ -739,14 +760,14 @@ return (
 
     <div className="container ">
     <div className="row">
-    <div className="border" style={{ borderRadius: "5px", padding: "5px", backgroundColor:"#145eb9"}}>
-    <p className="pt-2 pb-1 text-center" style={{color:"white", fontSize:"20px"}}>Datos del estudiante</p>
+    <div style={{ borderRadius: "5px",  padding: "5px", backgroundColor:"#145eb9"}}>
+    <p className="pt-2 pb-1 text-center" style={{color:"white", fontSize:"20px"}}>DATOS DEL ESTUDIANTE</p>
     </div>
-    <div className="col-md-6 border" style={{ borderRadius: "5px", padding: "10px" }}>
+    <div className="col-md-6 border-1" style={{ borderRadius: "5px", padding: "10px",border: "1px solid #c6c6c6" }}>
     <p className="pt-2 pb-1 text-center">Nombre:  &nbsp;{Nombre} {Apellido}</p>
-    <p className="pt-2 pb-1 text-center">Año: {añoActual} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Periodo: {periodoAcademicoActual}</p>
+    <p className="pt-2 pb-1 text-center">Año: {añoActual} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Período: {periodoAcademicoActual}</p>
     </div>
-    <div className="col-md-6 border" style={{ borderRadius: "5px", padding: "10px"}}>
+    <div className="col-md-6 border-1" style={{ borderRadius: "5px", padding: "10px",border: "1px solid #c6c6c6" }}>
     <p className="pt-2 pb-1 text-center">Carrera: &nbsp; {Carrera}</p>
     
     <p className="pt-2 pb-1 text-center">UV Disponibles: &nbsp; {ContadorUVS}</p>
@@ -761,7 +782,9 @@ return (
     </button>
 
     </div>
-    <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
+    </div>
+
+    <h1 className="text-2xl text-center font-bold pt-2 pb-3 text-gray-900 sm:text-3xl">
         Asignaturas matriculadas
         </h1>
         <br />
@@ -770,22 +793,21 @@ return (
         className="mi-tabla"
         data={historialData}
         noDataComponent={<NoDataComponent />}
+        customStyles={customStyles}
         />
-    
-    <br />
 
     <h1 className="text-2xl text-center font-bold pt-5 pb-5 text-gray-900 sm:text-3xl">
         Asignaturas en Lista de Espera
         </h1>
-        <br />
+
         <DataTable
         columns={columnas2}
         className="mi-tabla"
         data={historialDataListaEspera}
         noDataComponent={<NoDataComponent2 />}
+        customStyles={customStyles}
         />
-    </div>
-
+        <br />
     </div>
     <Modal isOpen={showModal} toggle={cancelarEliminacion}>
         <div className="d-flex justify-content-between align-items-center border-bottom p-3">

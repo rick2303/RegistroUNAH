@@ -27,6 +27,7 @@ const MenuCambioCentroCoordi = () => {
             .then((res) => res.json())
             .then((data) => {
                 setUsers(data);
+                console.log(data);
         });
     } catch (error) {
         console.error("Error al obtener los datos:", error);
@@ -48,49 +49,49 @@ const MenuCambioCentroCoordi = () => {
     const descargarJustificacion = async (cuenta) => {
         const URL = `http://localhost:5000/descargarPDFCambioCarrera/${cuenta}`;
         const response = await fetch(URL, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const buffer = await response.arrayBuffer();
-        const blob = new Blob([buffer], { type: "application/pdf" });
-      
-        const url = window.URL.createObjectURL(blob);
-      
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `Justificacion-${cuenta}.pdf`
-        a.click();
-      
-        window.URL.revokeObjectURL(url);
-      };
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            });
+            const buffer = await response.arrayBuffer();
+            const blob = new Blob([buffer], { type: "application/pdf" });
+        
+            const url = window.URL.createObjectURL(blob);
+        
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `Justificacion-${cuenta}.pdf`
+            a.click();
+        
+            window.URL.revokeObjectURL(url);
+        };
 
-      const Dictamen = (cuenta, dictamen) => {
-        const URL = `http://localhost:5000/DictamenCambioCentro/${cuenta}`;
-        fetch(URL, {
-          method: "PUT",
-          
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ Dictamen: dictamen }),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Algo crashea");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            alert(JSON.stringify(data.message));
-            window.location.reload();
-          })
-          .catch((error) => {
-            console.error("Error al hacer la solicitud:", error);
-          });
-          showData(); 
-      };
+        const Dictamen = (cuenta, dictamen) => {
+            const URL = `http://localhost:5000/DictamenCambioCentro/${cuenta}`;
+            fetch(URL, {
+            method: "PUT",
+            
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ Dictamen: dictamen }),
+            })
+            .then((response) => {
+                if (!response.ok) {
+                throw new Error("Algo crashea");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                alert(JSON.stringify(data.message));
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.error("Error al hacer la solicitud:", error);
+            });
+            showData(); 
+        };
 
     
 
@@ -118,7 +119,7 @@ const MenuCambioCentroCoordi = () => {
             key={index}
             className={index === activeIndex ? "carousel-item active" : "carousel-item"}
             >
-                    <img
+            <img
             src={"../img/uploads/" + user.Imagen1}
             alt="No tiene imagen de perfil"
             style={{

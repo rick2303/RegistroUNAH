@@ -25,6 +25,6 @@ routerEstudiantePerfil.post('/perfilEstudianteUpdate',upload.array('files', 3), 
 routerEstudiantePerfil.post('/perfilEstudianteDescripcion', insertDescripcionPerfilEstudiante);
 
 routerEstudiantePerfil.post('/perfilEstudianteUpdateDescripcion', updateDescripcionPerfilEstudiante);
-routerEstudiantePerfil.put('/perfilEstudianteUpdateCorreo/:id', updateCorreoPersonalEstudiante);
+routerEstudiantePerfil.post('/perfilEstudianteUpdateCorreo', updateCorreoPersonalEstudiante);
 
 export default routerEstudiantePerfil;

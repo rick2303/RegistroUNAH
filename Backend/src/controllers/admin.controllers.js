@@ -342,3 +342,40 @@ export const pagarTodo = async (req, res) => {
         pool.close();
     }
 }
+
+export const validacionJefe = async (req, res) => {
+    const pool = await getConnection();
+    const { Carrera, CentroRegional } = req.body;
+
+    try {
+        const result = await pool.request()
+        .input('Carrera', sql.VarChar, Carrera)
+        .input('CentroRegional', sql.VarChar, CentroRegional)
+        .query(querysADMIN.getJefeExistente);
+        if(result.recordset[0].existe_empleado == 1){
+            res.status(200).send(true)
+        }else{
+            res.status(200).send(false)
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+}
+
+export const validacionCoordi = async (req, res) => {
+    const pool = await getConnection();
+    const { Carrera, CentroRegional } = req.body;
+    try {
+        const result = await pool.request()
+        .input('Carrera', sql.VarChar, Carrera)
+        .input('CentroRegional', sql.VarChar, CentroRegional)
+        .query(querysADMIN.getCoordiExistente);
+        if(result.recordset[0].existencia == 1){
+            res.status(200).send(true)
+        }else{
+            res.status(200).send(false)
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+}

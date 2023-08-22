@@ -4,7 +4,7 @@ import DataTable from "react-data-table-component";
 import "styled-components";
 import { FcCancel, FcFinePrint } from "react-icons/fc";
 import { Input, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-
+import styled from 'styled-components';
 
 const MenuCambioCarrera = () => {
 const [NumCuenta, setNumCuenta] = useState("");
@@ -132,34 +132,59 @@ const tieneSolicitudesEnEspera = () => {
 };
 
 
+const customStyles = {
+    headCells: {
+        style: {
+            backgroundColor: '#145eb9',
+            color: 'white',
+            borderBottom: '1px solid #c6c6c6', 
+        },
+        },
+        rows: {
+        style: {
+            border: '1px solid #c6c6c6', 
+            textAlign: 'center',
+        },
+        },
+    };
+    
+    const TableHeaderCell = styled.div`
+    margin: auto;
+    `;
+
 const columnas1 = [
     {
-    name: "FECHA DE SOLICITUD",
+    name: <TableHeaderCell>FECHA DE SOLICITUD</TableHeaderCell>,
     selector: (row) => row.FechaSolicitud.split("T")[0],
+    cell: row => <TableHeaderCell>{row.FechaSolicitud.split("T")[0]}</TableHeaderCell>
 },
 {
-    name: "CARRERA ACTUAL",
+    name: <TableHeaderCell>CARRERA ACTUAL</TableHeaderCell>,
     selector: (row) => row.Carrera,
+    cell: row => <TableHeaderCell>{row.Carrera}</TableHeaderCell>
 },
 {
-    name: "CARRERA DE CAMBIO",
+    name: <TableHeaderCell>CARRERA DE LA SOLICITUD</TableHeaderCell>,
+    width: "200px",
     selector: (row) => row.CarreraDeCambio,
+    cell: row => <TableHeaderCell>{row.CarreraDeCambio}</TableHeaderCell>
 },
 {
-    name: "NOMBRE",
+    name: <TableHeaderCell>ESTUDIANTE</TableHeaderCell>,
     selector: (row) => row.Nombre + " " + row.Apellido,
     width: "300px",
+    cell: row => <TableHeaderCell>{row.Nombre + " " + row.Apellido}</TableHeaderCell>
 },
 {
     name: "DICTAMEN",
     selector: (row) => row.Dictamen,
 },
 {
-    name: "Estado",
+    name: "ESTADO",
     selector: (row) => row.Estado.toUpperCase(),
 },
 {
-    name: "Ver",
+    name: "VER",
     cell: (row) => (
     <h1 className="cursor-pointer" onClick={() => mostrarInformacion(row)}>
         <FcFinePrint />
@@ -167,7 +192,7 @@ const columnas1 = [
     ),
 },
 {
-    name: "Eliminar",
+    name: "ELIMINAR",
     cell: (row) => (
     <h1 className="cursor-pointer" onClick={() => EliminarInformacion(row)}>
         <FcCancel />
@@ -177,7 +202,7 @@ const columnas1 = [
 ];
 const NoDataComponent = () => {
     return <div>No hay registros para mostrar</div>;
-  };
+};
 
 const mostrarInformacion = (row) => {
     setSelectedRow(row);
@@ -221,10 +246,6 @@ const EliminarInformacion = (row) => {
     });
 };
 
-
-
-
-
 const toggleModal = () => {
     setModalOpen(!modalOpen);
 };
@@ -238,12 +259,13 @@ return (
     <div className="container ">
     <div className="row">
 
-    <div className="col-md-6 border" style={{ borderRadius: "5px", padding: "10px" }}>
+    <div className="col-md-6 border-1" style={{ borderRadius: "5px", padding: "10px", border: "1px solid #c6c6c6" }}>
     <p className="pt-2 pb-1 text-center">Centro de estudios: {InfoEstudiante[0].CentroRegional}</p>
     <p className="pt-2 pb-1 text-center">Carrera actual: {InfoEstudiante[0].Carrera}</p>
     </div>
-    <div className="col-md-6 border" style={{ borderRadius: "5px", padding: "10px" }}>
-    <p className="pt-2 pb-1 text-center">Indice global: {InfoEstudiante[0].IndiceGlobal}</p>
+
+    <div className="col-md-6 border-1" style={{ borderRadius: "5px", padding: "10px", border: "1px solid #c6c6c6" }}>
+    <p className="pt-2 pb-1 text-center">Indice global: {InfoEstudiante[0].IndiceGlobal} %</p>
     <p className="pt-2 pb-1 text-center">Indice de admisión: {InfoEstudiante[0].PuntajePAA}</p>
     </div>
 
@@ -251,12 +273,13 @@ return (
 
 
     <div className="container pt-5 ">
-        <label htmlFor="carrera">Seleccione la carrera a la cual desea hacer el cambio: </label>
+        <label htmlFor="carrera" >Seleccione la carrera a la cual desea hacer el cambio: </label>
         <br />
         <br />
         <select
         className="form-select border-1 w-50"
         id="carrera"
+        style={{border: "1px solid #c6c6c6 ",borderRadius: "5px"}}
         aria-label="Default select example"
         value={carreraSeleccionada}
         onChange={handleCarreraChange}
@@ -276,9 +299,10 @@ return (
     </p>
 
     <div className="d-flex align-items-center">
-        <div className="mb-2 me-2 w-75">
+        <div className="mb-2 me-2 w-75"   style={{border: "1px solid #c6c6c6 ",borderRadius: "5px"}}>
         <textarea
-            className="form-control form-control-sm border border-2 p-4 rounded"
+            className="form-control form-control-sm border  p-4 rounded"
+
             id="exampleFormControlTextarea1"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
@@ -291,20 +315,21 @@ return (
         </button>
         </div>
     </div>
-    <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
+        <h1 className="text-2xl text-center font-bold pt-4 pb-3 text-gray-900 sm:text-3xl">
         Solicitudes realizadas
         </h1>
         <p className="pt-4 pb-3 text-gray-900 sm:text-1xl text-left">
-            Para que el coordinador pueda revisar su solicitud realice el pago que le aparece en su estado de cuenta
+            Para que el coordinador pueda revisar su solicitud realice el pago que le aparece en su estado de cuenta.
         </p>
         <br />
-        <DataTable
+    </div>
+    <DataTable
         columns={columnas1}
         className="mi-tabla"
         data={filteredData}
         noDataComponent={<NoDataComponent />}
+        customStyles={customStyles}
         />
-    </div>
     {selectedRow && (
         <Modal isOpen={modalOpen} toggle={toggleModal}>
             <ModalHeader className="text-white bg-blue-800 text-2xl">

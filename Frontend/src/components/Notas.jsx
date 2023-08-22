@@ -3,7 +3,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input, Bu
 import { FcFinePrint, FcInfo } from "react-icons/fc";
 import DataTable from "react-data-table-component";
 import { parseISO } from "date-fns";
-
+import styled from 'styled-components';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../Perfil_estudiante.css";
 import "../App.css";
@@ -30,11 +30,7 @@ const Notas = () => {
   const [imagen, setImagen] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [video, setVideo] = useState("");
-  const [Nota, setNota] = useState("");
-  const [evaluationSubmitted, setEvaluationSubmitted] = useState(false);
-  const [submittedForm, setSubmittedForm] = useState({});
-  const [allFormsSubmitted, setAllFormsSubmitted] = useState(false);
-  const [evaluationFormsSubmitted, setEvaluationFormsSubmitted] = useState({});
+  const [Tru, setTru] = useState("")
   
   const [evaluationData, setEvaluationData] = useState({
     pregunta1: '',
@@ -47,29 +43,15 @@ const Notas = () => {
     IdDocente: ''
   });
 
-  useEffect(() => {
-    const storedData = localStorage.getItem(`submittedForm_${NumCuenta}`);
-    if (storedData) {
-      setSubmittedForm(JSON.parse(storedData));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem(`submittedForm_${NumCuenta}`, JSON.stringify(submittedForm));
-  }, [submittedForm]);
-
   
 
+
   const mostrarInformacion2 = (row) => {
-    setSelectedRow(row);
-    const formKey = `${row.IDSECCION}`;
-    if (submittedForm[formKey]) {
-      alert("El formulario ya ha sido enviado para este docente.");
-      return;
+    if (row.IsEvaluated) {
+      alert("Ya has evaluado a este docente. No puedes volver a evaluarlo.");
+    } else {
+      toggleModal2();
     }
-
-
-    toggleModal2();
     fetch(`http://localhost:5000/mostrarPerfilDocente`, {
       method: "POST",
       headers: {
@@ -106,8 +88,7 @@ const Notas = () => {
       setNumCuenta(numCuenta);
 
       // Cargar el estado de los formularios enviados desde el Local Storage
-      const submittedFormsData = JSON.parse(localStorage.getItem(`submittedForm_${numCuenta}`)) || {};
-      setSubmittedForm(submittedFormsData);
+    
     }
   }, []);
 
@@ -127,18 +108,9 @@ const Notas = () => {
   const handleSubmit2 = async e => {
     e.preventDefault();
   
-    if (!PreguntasContestadas()) {
+    if (!PreguntasContestadas())
       return;
-    }
 
-    const formKey = `${selectedRow.IDSECCION}`;
-
-    if (submittedForm[formKey]) { 
-      alert("El formulario ya ha sido enviado para este docente.");
-      resetForm();
-      toggleModal2();
-      return;
-    }
   
     try {
       const response = await fetch('http://localhost:5000/subirEvaluacionDocente', {
@@ -162,26 +134,14 @@ const Notas = () => {
       console.log('Response:', response);
   
       if (response.ok) {
+        
+        showData(NumCuenta, periodoAcademicoActual, año);
         console.log('Evaluación enviada con éxito');
         alert("Evaluación enviada correctamente");
+       // Actualiza los datos después de enviar la evaluación
         resetForm();
         toggleModal2();
-        setEvaluationSubmitted(true);
-        
-        setSubmittedForm((prevForms) => ({
-          ...prevForms,
-          [formKey]: true,
-        }));
-        localStorage.setItem(`submittedForm_${NumCuenta}`, JSON.stringify(submittedForm));
-        const updatedFormsSubmitted = {
-          ...evaluationFormsSubmitted,
-          [IdDocente]: true,
-        };
-        setEvaluationFormsSubmitted(updatedFormsSubmitted);
-        // Verificar si todos los formularios han sido enviados
-        const allFormsSubmitted = Object.values(submittedForm).every((value) => value === true);
-        setAllFormsSubmitted(allFormsSubmitted);
-  
+       
       } else {
         console.error('Error al enviar la evaluación');
       }
@@ -212,7 +172,7 @@ const Notas = () => {
       Observacion: ''
     });
   };
-
+ 
 
   const obtenerFechasMinMaxIPAC = async () => {
     try {
@@ -263,59 +223,131 @@ const Notas = () => {
   obtenerFechasMinMaxIIPAC();
   obtenerFechasMinMaxIIIPAC();
 
-  useEffect(() => {
-    if (NumCuenta && periodoAcademicoActual && año) {
-      showData(NumCuenta, periodoAcademicoActual, año);
-    }
-    console.log(periodoAcademicoActual);
-  }, [NumCuenta, periodoAcademicoActual, año]);
-  const showData = async (cuenta, periodo, year) => {
+
+  const getEvaluationStatus = async (NumCuenta, IdDocente, IdSeccion) => {
     try {
-      const URL = "http://localhost:5000/enviarClasesQueEstaCursando";
-      const response = await fetch(URL, {
-        method: "POST",
+      const response = await fetch('http://localhost:5000/existenciaEvaluacion', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          NumCuenta: cuenta,
-          Periodo: periodo,
-          año: year,
-        }),
-        
+          "IdEstudiante": NumCuenta,
+          "IdDocente": IdDocente,
+          "IdSeccion": IdSeccion
+        })
       });
-      
-      const data = await response.json();
-      console.log(data);
-      setHistorialData(data);
-      
+  
+      if (response.ok) {
+        const data = await response.json();
+        const Tru = data;
+        console.log(Tru);
+        return Tru; // Return the evaluation status from the server
+      } else {
+        console.error('Error al verificar la existencia de evaluación:', response.status);
+        return false; // Handle the error condition as needed
+      }
     } catch (error) {
-      console.error("Error al obtener los datos:", error);
+      console.error('Error al verificar la existencia de evaluación:', error);
+      return false; // Handle the error condition as needed
     }
   };
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      if (NumCuenta && periodoAcademicoActual && año) {
+        const evaluationStatus = await getEvaluationStatus(NumCuenta, IdDocente, IdSeccion);
+        setTru(evaluationStatus); // Update Tru based on the evaluation status
+        showData(NumCuenta, periodoAcademicoActual, año);
+      }
+      console.log(periodoAcademicoActual);
+      console.log(Tru); // Check Tru here to see if it has been updated
+    };
+  
+    fetchData(); // Call the async function
+  }, [NumCuenta, periodoAcademicoActual, año, IdDocente, IdSeccion]);
+  
+  const showData = async (cuenta, periodo, year) => {
+  try {
+    const URL = "http://localhost:5000/enviarClasesQueEstaCursando";
+    const response = await fetch(URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        NumCuenta: cuenta,
+        Periodo: periodo,
+        año: year,
+      }),
+    });
 
+    const data = await response.json();
+    console.log(data);
+    const updatedData = await Promise.all(
+      data.map(async (row) => {
+        const isEvaluated = await getEvaluationStatus(NumCuenta, 
+          row.IdDocente, // Usa el campo apropiado de los datos de la fila
+          row.IDSECCION);
 
+        if (isEvaluated === true) {
+          row.NotaDisplay = row.Nota;
+          row.IsEvaluated = true; // Add a flag indicating if the row is evaluated
+        } else {
+          row.NotaDisplay = "";
+          row.IsEvaluated = false; // Add a flag indicating if the row is not evaluated
+        }
+
+        return row;
+      })
+    );
+
+    setHistorialData(updatedData);
+  } catch (error) {
+    console.error("Error al obtener los datos:", error);
+  }
+};
+
+  const customStyles = {
+    headCells: {
+        style: {
+            backgroundColor: '#145eb9',
+            color: 'white',
+            borderBottom: '1px solid #c6c6c6', 
+        },
+        },
+        rows: {
+        style: {
+            border: '1px solid #c6c6c6', 
+            textAlign: 'center',
+        },
+        },
+    };
+    
+    const TableHeaderCell = styled.div`
+    margin: auto;
+    `;
 
   // Configuramos las columnas para DataTable
   const columnas1 = [
     {
-      name: "CODIGO",
+      name: "CÓDIGO",
       selector: (row) => row.CODIGO,
       center: true,
     },
     {
       name: "ASIGNATURA",
       selector: (row) => row.ASIGNATURA,
-      center: true,
+      width: "18%",
     },
     {
-      name: "SECCION",
+      name: "SECCIÓN",
       selector: (row) => row.SECCION,
       center: true,
     },
     
     {
-      name: "PERIODO",
+      name: "PERÍODO",
       selector: (row) => row.PERIODO,
       center: true,
     },
@@ -326,7 +358,6 @@ const Notas = () => {
         <h1 className="cursor-pointer">
           <FcInfo
             onClick={() => mostrarInformacion2(row)}
-            disabled={evaluationFormsSubmitted[row.IdDocente]}
           />
         </h1>
       ),
@@ -334,13 +365,8 @@ const Notas = () => {
     },
     {
       name: "NOTA FINAL",
-      selector: (row) => row.Nota,
+      selector: (row) => row.NotaDisplay, 
       center: true,
-      cell: (row) => (
-        submittedForm[`${row.IDSECCION}`]
-          ? <span>{row.Nota}</span>
-          : null
-      ),
     },
     
     {
@@ -436,15 +462,17 @@ const Notas = () => {
       </h1>
       <div className="container">
         <DataTable
-         className="mi-tabla"
-         columns={columnas1} 
-         data={historialData} 
+          className="mi-tabla"
+          columns={columnas1} 
+          data={historialData} 
+          keyField="IDSECCION"
+          customStyles={customStyles}
           noDataComponent={<NoDataComponent />}></DataTable>
       </div>
       {selectedRow && (
         <Modal isOpen={modalOpen} toggle={toggleModal} className="modal-fullscreen"> {/* Agregar la clase 'modal-fullscreen' */}
           <ModalHeader className="text-white bg-blue-800 text-2xl">
-            <strong>Perfil de docente</strong>
+            <strong>PERFIL DEL DOCENTE</strong>
             <button className="close boton_cierre" onClick={toggleModal}>
               <span aria-hidden="true">X</span>
             </button>
@@ -584,23 +612,24 @@ const Notas = () => {
       )}
       <div>
 
-      <Modal isOpen={isModalOpen2} toggle={mostrarInformacion2} className="evaluacionmodal">
-        <ModalHeader>EVALUACION DOCENTES</ModalHeader>
+      <Modal isOpen={isModalOpen2} toggle={toggleModal2} className="evaluacionmodal">
+        <ModalHeader>EVALUACIÓN DOCENTES</ModalHeader>
         <ModalHeader>
-          <button className="close boton_cierre" onClick={mostrarInformacion2}>
+          <button className="close boton_cierre" onClick={toggleModal2}>
             <span aria-hidden="true">X</span>
           </button>
         </ModalHeader>
         <ModalBody>
           <FormGroup>
-            <Label>El docente ha entregado la planificación 
-            de contenido y rubricas para el desarrollo de la clase, 
+            <Label style={{fontSize:"16px"}}> El docente ha entregado la planificación 
+            de contenido y rúbricas para el desarrollo de la clase, 
             siguiendo la normativa pedagógica y curricular. </Label>
             <Input
               type="select"
               name="pregunta1"
               value={evaluationData.pregunta1}
               onChange={handleInputChange2}
+              style={{border: "1px solid #c6c6c6 ",borderRadius: "5px"}} 
               className={evaluationData.pregunta1 === '' ? '' : ''}
             >
               <option value="">Seleccione una opción</option>
@@ -610,39 +639,41 @@ const Notas = () => {
             </Input>
           </FormGroup>
           <FormGroup>
-            <Label>El docente ha cumplido con los tiempos estipulados para la entrega de resultados 
+            <Label style={{fontSize:"16px"}}>El docente ha cumplido con los tiempos estipulados para la entrega de resultados 
             de las evaluaciones.</Label>
             <Input
               type="select"
               name="pregunta2"
               value={evaluationData.pregunta2}
               onChange={handleInputChange2}
+              style={{border: "1px solid #c6c6c6 ",borderRadius: "5px"}}
               className={evaluationData.pregunta2 === '' ? '' : ''}
             >
-              <option value="">Seleccione una opción</option>
+              <option  value="">Seleccione una opción</option>
               {[1, 2, 3, 4, 5].map(value => (
                 <option key={value} value={value}>{value}</option>
               ))}
             </Input>
           </FormGroup>
           <FormGroup>
-            <Label>El docente se ha comportado bajo el 
+            <Label style={{fontSize:"16px"}}>El docente se ha comportado bajo el 
             marco de la ética moral y profesional</Label>
             <Input
               type="select"
               name="pregunta3"
               value={evaluationData.pregunta3}
               onChange={handleInputChange2}
+              style={{border: "1px solid #c6c6c6 ",borderRadius: "5px"}}
               className={evaluationData.pregunta3 === '' ? '' : ''}
             >
-              <option value="">Seleccione una opción</option>
+              <option  value="">Seleccione una opción</option>
               {[1, 2, 3, 4, 5].map(value => (
                 <option key={value} value={value}>{value}</option>
               ))}
             </Input>
           </FormGroup>
           <FormGroup>
-            <Label>Proporciona retroalimentación sobre las evaluaciones realizadas:</Label>
+            <Label style={{fontSize:"16px"}}>Proporciona retroalimentación sobre las evaluaciones realizadas:</Label>
             <FormGroup check>
               <Label check>
                 <Input
@@ -669,7 +700,7 @@ const Notas = () => {
             </FormGroup>
           </FormGroup>
           <FormGroup>
-            <Label>El docente proporciona la pauta de los exámenes realizados:</Label>
+            <Label style={{fontSize:"16px"}}>El docente proporciona la pauta de los exámenes realizados:</Label>
             <FormGroup check>
               <Label check>
                 <Input
@@ -696,12 +727,13 @@ const Notas = () => {
             </FormGroup>
           </FormGroup>
           <FormGroup>
-            <Label>Observacion:</Label>
+            <Label style={{fontSize:"16px"}}>Observaciones:</Label>
             <Input
               type="textarea"
               name="Observacion" 
               value={evaluationData.Observacion} 
               onChange={handleInputChange2}
+              style={{border: "1px solid #c6c6c6 ",borderRadius: "5px"}}
             />
           </FormGroup>
         </ModalBody>
