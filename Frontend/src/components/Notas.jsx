@@ -43,13 +43,11 @@ const Notas = () => {
     IdDocente: ''
   });
 
-
-
-
   
 
+
   const mostrarInformacion2 = (row) => {
-    if (Tru === true) {
+    if (row.IsEvaluated) {
       alert("Ya has evaluado a este docente. No puedes volver a evaluarlo.");
     } else {
       toggleModal2();
@@ -74,9 +72,7 @@ const Notas = () => {
         console.log("IdDocente:", IdDocente);
         setIdDocente(IdDocente);
       }
-
     })
-   
     .catch((error) => {
       console.error("Error al obtener los datos:", error);
     });
@@ -287,10 +283,12 @@ const Notas = () => {
     });
 
     const data = await response.json();
-
+    console.log(data);
     const updatedData = await Promise.all(
       data.map(async (row) => {
-        const isEvaluated = await getEvaluationStatus(NumCuenta, IdDocente, IdSeccion);
+        const isEvaluated = await getEvaluationStatus(NumCuenta, 
+          row.IdDocente, // Usa el campo apropiado de los datos de la fila
+          row.IDSECCION);
 
         if (isEvaluated === true) {
           row.NotaDisplay = row.Nota;
@@ -329,10 +327,6 @@ const Notas = () => {
     const TableHeaderCell = styled.div`
     margin: auto;
     `;
-
-
-
-
 
   // Configuramos las columnas para DataTable
   const columnas1 = [
@@ -618,10 +612,10 @@ const Notas = () => {
       )}
       <div>
 
-      <Modal isOpen={isModalOpen2} toggle={mostrarInformacion2} className="evaluacionmodal">
+      <Modal isOpen={isModalOpen2} toggle={toggleModal2} className="evaluacionmodal">
         <ModalHeader>EVALUACIÓN DOCENTES</ModalHeader>
         <ModalHeader>
-          <button className="close boton_cierre" onClick={mostrarInformacion2}>
+          <button className="close boton_cierre" onClick={toggleModal2}>
             <span aria-hidden="true">X</span>
           </button>
         </ModalHeader>
