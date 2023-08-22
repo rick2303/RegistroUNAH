@@ -45,7 +45,7 @@ export const queries = {
     WHERE Edificio = @Edificio
       AND Aula = @Aula
       AND Periodo = @Periodo
-      AND ((HI <= @HI AND HF >= @HI) OR (HI >= @HI AND HF <= @HI))
+      AND ((HI = @HI AND HF >= @HI) OR (HI >= @HI AND HF <= @HI))
       AND (
           (@Dias LIKE '%Lu%' AND Dias LIKE '%Lu%')
           OR (@Dias LIKE '%Ma%' AND Dias LIKE '%Ma%')
