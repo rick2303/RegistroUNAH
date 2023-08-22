@@ -40,7 +40,21 @@ export const queries = {
 
     validarSeccionExistente: `SELECT * FROM Secciones WHERE IdClase = @IdClase AND Seccion = @Seccion AND Periodo = @Periodo AND YEAR(Fecha) = YEAR(@FechaActual)`,
 
-    validarSeccionAulaQuery: `SELECT * FROM Secciones WHERE Edificio = @Edificio  AND Aula = @Aula  AND Periodo = @Periodo  AND ((HI <= @HI AND HF >= @HI) OR (HI>= @HI AND HF <= @HI)) AND dias = @Dias`,
+    validarSeccionAulaQuery: `SELECT *
+    FROM Secciones
+    WHERE Edificio = @Edificio
+      AND Aula = @Aula
+      AND Periodo = @Periodo
+      AND ((HI <= @HI AND HF >= @HI) OR (HI >= @HI AND HF <= @HI))
+      AND (
+          (@Dias LIKE '%Lu%' AND Dias LIKE '%Lu%')
+          OR (@Dias LIKE '%Ma%' AND Dias LIKE '%Ma%')
+          OR (@Dias LIKE '%Mi%' AND Dias LIKE '%Mi%')
+          OR (@Dias LIKE '%Ju%' AND Dias LIKE '%Ju%')
+          OR (@Dias LIKE '%Vi%' AND Dias LIKE '%Vi%')
+          OR (@Dias LIKE '%Sa%' AND Dias LIKE '%Sa%')
+      );
+    `,
 
     deleteSeccion: "EXEC SP_EliminarSeccion @IdSeccion = @idseccion, @Justificacion = @justificado, @Asignatura = @clase, @UV = @uvs;",
 

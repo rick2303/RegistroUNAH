@@ -76,6 +76,8 @@ export const crearSeccion = async (req, res) => {
       .input("Periodo", sql.VarChar, Periodo)
       .query(queries.validarDocenteSeccion);
 
+      console.log(validarDocenteSeccionQuery.recordset)
+
     if (validarDocenteSeccionQuery.recordset.length > 0) {
       res.status(400).json({ message: 'El docente seleccionado ya tiene una sección asignada a los mismos días, hora y periodo.' });
       return;
@@ -86,10 +88,12 @@ export const crearSeccion = async (req, res) => {
       .input("Edificio", sql.VarChar, Edificio)
       .input("Aula", sql.VarChar, Aula)
       .input("HI", sql.VarChar, HI)
+      .input("HF", sql.VarChar, HF)
       .input("Dias", sql.VarChar, Dias)
       .input("Periodo", sql.VarChar, Periodo)
       .query(queries.validarSeccionAulaQuery);
 
+      console.log(seccionAulaExistenteQuery.recordset)
     if (seccionAulaExistenteQuery.recordset.length > 0) {
       res.status(400).json({ message: 'Ya existe una sección asignada al mismo aula, hora inicial, días y periodo.' });
       return;

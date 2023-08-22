@@ -97,25 +97,31 @@ const SeccionesMain = () => {
   const handleCheckboxChange = (event) => {
     const valorCheckbox = event.target.value;
     const isChecked = event.target.checked;
-    console.log(uvSeleccionada)
+  
     if (isChecked) {
       // Agregar el valor a los días seleccionados
-      setDiasSeleccionados((prevDiasSeleccionados) => [
-        ...prevDiasSeleccionados,
-        valorCheckbox,
-      ]);
-
-      if(diasSeleccionados.length >= uvSeleccionada){
-        alert("No puede poner más días que las UV de la clase, por favor, deseleccione un día")
+      setDiasSeleccionados((prevDiasSeleccionados) => {
+        const updatedDays = [...prevDiasSeleccionados, valorCheckbox];
+        return updatedDays.sort((a, b) => {
+          const daysOrder = 'LuMaMiJuViSa';
+          return daysOrder.indexOf(a) - daysOrder.indexOf(b);
+        });
+      });
+  
+      if (diasSeleccionados.length >= uvSeleccionada) {
+        alert("No puede poner más días que las UV de la clase, por favor, deseleccione un día");
       }
 
+      
     } else {
       // Remover el valor de los días seleccionados
       setDiasSeleccionados((prevDiasSeleccionados) =>
         prevDiasSeleccionados.filter((dia) => dia !== valorCheckbox)
       );
     }
+    console.log(diasSeleccionados)
   };
+  
   const diasConcatenados = diasSeleccionados.join("");
   const handleCuposClick = (row) => {
     const cantidad = prompt("Ingrese la cantidad de cupos a agregar:");
