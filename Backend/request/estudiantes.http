@@ -49,6 +49,18 @@ Content-Type: application/json
     "año": 2023
 }
 
+
+### ver clases Existencia de evaluacion
+
+post http://localhost:5000/existenciaEvaluacion
+Content-Type: application/json
+
+{
+    "IdEstudiante": "20192003632",
+    "IdDocente": 15198,
+    "IdSeccion": 19
+}
+
 ### ver clases que esta cursando un estudiante
 post http://localhost:5000/subirEvaluacionDocente
 Content-Type: application/json

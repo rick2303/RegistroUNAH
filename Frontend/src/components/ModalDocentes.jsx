@@ -12,7 +12,6 @@ import {
 } from "reactstrap";
 import "../App.css"
 
-
 const ModalDocentes = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [Nombre, setNombre] = useState("");
