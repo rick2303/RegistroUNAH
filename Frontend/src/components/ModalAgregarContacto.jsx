@@ -121,7 +121,7 @@ function ModalAgregarContacto({ isOpen, onClose }) {
             name:'ENVIAR SOLICITUD',
             selector: (row) => (
                 <button className="btn btn-link" onClick={() => handleEnviarSolicitud(row)}>
-                  <i className="fa fa-plus btn-lg"></i>
+                  <i className="fa fa-paper-plane btn-lg"></i>
                 </button>
               ),
             center: true,
@@ -154,19 +154,21 @@ function ModalAgregarContacto({ isOpen, onClose }) {
           </div>
           <br />
           {searchTerm !== "" && estudiante ? (
-              estudiante.NumCuenta === searchTerm ? (
+            NumCuentaPropio === searchTerm ? (
+              <NoDataComponent />
+            ) : (
+              estudiante.NumCuenta === searchTerm && (
                 <DataTable
                   columns={columnas}
                   data={[estudiante]} // Wrap estudiante in an array
                   paginationComponentOptions={paginationComponentOptions}
                   maxHeight="60vh"
                 />
-              ) : (
-                <NoDataComponent />
               )
-            ) : (
-              <NoDataComponent />
-            )}
+            )
+          ) : (
+            <NoDataComponent />
+          )}
               </div>
             </ModalBody>
             <ModalFooter style={{ marginTop: '10px' }}>

@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import { getConnection,sql, queries} from "../Database"
-import {SolicitudAmistad,aceptarSolicitud,rechazarSolicitud,Contactos,buscarEstudiante,getHistorialChat,enviarMensaje} from '../controllers/chat.controller';
+import {SolicitudAmistad,aceptarSolicitud,rechazarSolicitud,Contactos,buscarEstudiante,getHistorialChat,enviarMensaje, ContactosEspera} from '../controllers/chat.controller';
 
 const routerChat = Router();
 
@@ -11,6 +11,8 @@ routerChat.post('/aceptarSolicitud/:id/:id2',aceptarSolicitud)
 routerChat.post('/rechazarSolicitud/:id/:id2',rechazarSolicitud)
 
 routerChat.post('/contactos',Contactos)
+
+routerChat.post('/contactosEspera',ContactosEspera)
 
 routerChat.post('/buscarEstudiante',buscarEstudiante)
 

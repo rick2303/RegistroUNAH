@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import '../cssChat.css'; // Ajusta la ruta de tu archivo CSS si es necesario
 import "bootstrap/dist/css/bootstrap.min.css";
 import ModalAgregarContacto from './ModalAgregarContacto'
+import ModalSolicitudesAmistad from './ModalSolicitudesAmistad'
 import socketIOClient from "socket.io-client";
 import io from 'socket.io-client';
 
@@ -10,6 +11,7 @@ function ChatApp() {
     const [contactos, setContactos] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [modalOpen, setModalOpen] = useState(false);
+    const [showSolicitudesModal, setShowSolicitudesModal] = useState(false);
     const [socket, setSocket] = useState(null); // Estado para almacenar la instancia de socket
     const [selectedContact, setSelectedContact] = useState(null);
     const [chatHistory, setChatHistory] = useState([]);
@@ -17,12 +19,18 @@ function ChatApp() {
     const chatHistoryRef = useRef(null);
     const [autoScroll, setAutoScroll] = useState(true);
     
+    
+    
 
     const handleSendMessage = (message) => {
         if (message.trim() !== "") {
             sendMessage(message);
             setMessageInput('')
         }
+    };
+
+        const toggleSolicitudesModal = () => {
+        setShowSolicitudesModal(!showSolicitudesModal);
     };
 
     const handleContactSelect = (contacto) => {
@@ -206,7 +214,16 @@ function ChatApp() {
             <div class="container">
             <div class="input-group-prepend">
                 
-                <button className="btn btn-link" onClick={toggleModal}>
+                <button className="btn btn-link" onClick={toggleSolicitudesModal}>
+                <i className="fa fa-eye btn-lg"> Ver solicitudes</i>
+                </button>
+
+            <ModalSolicitudesAmistad isOpen={showSolicitudesModal} onClose={toggleSolicitudesModal} />
+            
+            
+            
+                
+                <button className="btn btn-link ml-6" onClick={toggleModal}>
                 <i className="fa fa-plus btn-lg"> Agregar un contacto</i>
                 </button>
 
@@ -266,7 +283,7 @@ function ChatApp() {
                                 </ul>
                                 </div>   
                             </div>
-                            <div class="chat" style={{ height: '440px'}}>
+                            <div class="chat" style={{ height: '750px'}}>
                             {selectedContact && (
                                 <div class="chat-header clearfix">
                                     <div class="row">
@@ -285,7 +302,7 @@ function ChatApp() {
                                 </div>
                             )}
                             {selectedContact && (
-                                <div class="chat-history" style={{ maxHeight: '300px', overflowY: 'auto' }} ref={chatHistoryRef}>
+                                <div class="chat-history" style={{ maxHeight: '600px', overflowY: 'auto' }} ref={chatHistoryRef}>
                                     <ul class="m-b-0">
                                     {chatHistory.map((message) => (
                                         <li
@@ -306,7 +323,7 @@ function ChatApp() {
                                 </div>
                             )}
                             {selectedContact && (
-                                <div class="chat-message clearfix">
+                                <div class="chat-message clearfix" >
                                     <div class="input-group mb-0">
                                     <input
                                         type="text"

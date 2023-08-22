@@ -57,29 +57,21 @@ export const SolicitudAmistad = async (req,res)=>{
     const existencia = await pool.request()
     .input("NumCuentaPropietario",sql.VarChar,NumCuentaPropietario)
     .input("NumCuentaAmigo",sql.VarChar,NumCuentaAmigo)
-    .query(`SELECT *
-    FROM contactos AS c1
+    .query(`SELECT COUNT(*) AS TotalSolicitudes
+    FROM contactos
     WHERE 
-        (c1.IdEstudiantePropietario = ${NumCuentaPropietario} -- Reemplaza esto con el valor del propietario
-        AND EXISTS (
-            SELECT 1
-            FROM contactos AS c2
-            WHERE c2.IdEstudianteAgregado = ${NumCuentaAmigo}  -- Valor que deseas verificar
-                AND c2.IdEstudiantePropietario = c1.IdEstudiantePropietario AND EstadoSolicitud='AGREGADO'
-        ))
+        ((IdEstudiantePropietario = ${NumCuentaPropietario} AND IdEstudianteAgregado = ${NumCuentaAmigo})
         OR
-        (c1.IdEstudianteAgregado = ${NumCuentaAmigo} -- Valor que deseas verificar
-        AND EXISTS (
-            SELECT 1
-            FROM contactos AS c3
-            WHERE c3.IdEstudiantePropietario = ${NumCuentaPropietario}  -- Reemplaza esto con el valor del propietario
-                AND c3.IdEstudianteAgregado = c1.IdEstudianteAgregado AND EstadoSolicitud='AGREGADO'
-        ));
-    ;` )
+        (IdEstudiantePropietario = ${NumCuentaAmigo} AND IdEstudianteAgregado = ${NumCuentaPropietario}))
+        AND EstadoSolicitud IN ('AGREGADO', 'EN ESPERA');
+    ;
+    ` )
     
-    if(existencia.recordset[0] !=null ){
-        res.status(200).json({message:"Solicitud rechazada, ya tienes este contacto agregado"})
-    }else{
+    const totalSolicitudes = existencia.recordset[0].TotalSolicitudes;
+
+if (totalSolicitudes > 0) {
+    res.status(500).json({ message: "Solicitud rechazada, ya tienes este contacto agregado o en lista de espera" });
+}else{
 
     const correo = await pool.request()
     .input("NumCuentaAmigo",sql.VarChar,NumCuentaAmigo)
@@ -97,10 +89,16 @@ export const SolicitudAmistad = async (req,res)=>{
 
     enviarEmailAmistad(correo.recordset[0].CorreoPersonal,solicitante.recordset[0].Nombre,NumCuentaPropietario,NumCuentaAmigo)
 
+    const insert2 = await pool.request().query(`INSERT INTO Contactos (IdEstudiantePropietario, IdEstudianteAgregado, EstadoSolicitud) VALUES (${NumCuentaAmigo}, ${NumCuentaPropietario}, 'EN ESPERA')`)
+
+
+
     res.status(200).json({message:"Solicitud enviada"})
     }
 
 }
+
+
 
 export const aceptarSolicitud = async (req, res) => {
     const NumCuentaPropietario = req.params.id
@@ -184,16 +182,15 @@ export const aceptarSolicitud = async (req, res) => {
       res.send(mensaje);
     }else{
 
-            const aceptar = await pool.request()
-                .input("NumCuentaAmigo",sql.VarChar,NumCuentaAmigo)
-                .input("NumCuentaPropietario",sql.VarChar,NumCuentaPropietario)
-                .query(`INSERT INTO Contactos (IdEstudiantePropietario,IdEstudianteAgregado,EstadoSolicitud) values(${NumCuentaPropietario},${NumCuentaAmigo},'AGREGADO')`)
-
-                const aceptar2 = await pool.request()
-                .input("NumCuentaAmigo",sql.VarChar,NumCuentaAmigo)
-                .input("NumCuentaPropietario",sql.VarChar,NumCuentaPropietario)
-                .query(`INSERT INTO Contactos (IdEstudiantePropietario,IdEstudianteAgregado,EstadoSolicitud) values(${NumCuentaAmigo},${NumCuentaPropietario},'AGREGADO')`)
-
+        const aceptar = await pool.request()
+        .input("NumCuentaAmigo", sql.VarChar, NumCuentaAmigo)
+        .input("NumCuentaPropietario", sql.VarChar, NumCuentaPropietario)
+        .query(`UPDATE Contactos SET EstadoSolicitud = 'AGREGADO' WHERE IdEstudiantePropietario = @NumCuentaPropietario AND IdEstudianteAgregado = @NumCuentaAmigo AND EstadoSolicitud = 'EN ESPERA'`);
+    
+        const aceptar2 = await pool.request()
+        .input("NumCuentaAmigo", sql.VarChar, NumCuentaAmigo)
+        .input("NumCuentaPropietario", sql.VarChar, NumCuentaPropietario)
+        .query(`INSERT INTO Contactos (IdEstudiantePropietario, IdEstudianteAgregado, EstadoSolicitud) VALUES (${NumCuentaAmigo}, ${NumCuentaPropietario}, 'AGREGADO')`);
 
                 const mensaje = `
                 <!DOCTYPE html>
@@ -329,17 +326,16 @@ export const rechazarSolicitud = async (req, res) => {
       res.send(mensaje);
 
     }else{
-            const rechazar = await pool.request()
-            .input("NumCuentaAmigo",sql.VarChar,NumCuentaAmigo)
-            .input("NumCuentaPropietario",sql.VarChar,NumCuentaPropietario)
-            .query(`INSERT INTO Contactos values(${NumCuentaPropietario},${NumCuentaAmigo},'RECHAZADO')`)
-
-
-            const aceptar2 = await pool.request()
-            .input("NumCuentaAmigo",sql.VarChar,NumCuentaAmigo)
-            .input("NumCuentaPropietario",sql.VarChar,NumCuentaPropietario)
-            .query(`INSERT INTO Contactos (IdEstudiantePropietario,IdEstudianteAgregado,EstadoSolicitud) values(${NumCuentaAmigo},${NumCuentaPropietario},'RECHAZADO')`)
-            
+        const rechazar = await pool.request()
+        .input("NumCuentaAmigo", sql.VarChar, NumCuentaAmigo)
+        .input("NumCuentaPropietario", sql.VarChar, NumCuentaPropietario)
+        .query(`UPDATE Contactos SET EstadoSolicitud = 'RECHAZADO' WHERE IdEstudiantePropietario = @NumCuentaPropietario AND IdEstudianteAgregado = @NumCuentaAmigo AND EstadoSolicitud = 'EN ESPERA'`);
+    
+        const aceptar2 = await pool.request()
+        .input("NumCuentaAmigo", sql.VarChar, NumCuentaAmigo)
+        .input("NumCuentaPropietario", sql.VarChar, NumCuentaPropietario)
+        .query(`INSERT INTO Contactos (IdEstudiantePropietario, IdEstudianteAgregado, EstadoSolicitud) VALUES (${NumCuentaAmigo}, ${NumCuentaPropietario}, 'RECHAZADO')`);
+    
             const mensaje = `
             <!DOCTYPE html>
             <html lang="es">
@@ -404,6 +400,25 @@ export const Contactos = async (req,res)=>{
 
     res.json(contactos.recordset)
 
+}
+
+export const ContactosEspera = async (req, res) => {
+    const {NumCuenta}= req.body
+
+    
+    const pool = await getConnection()
+    const ListaEspera= await pool.request()
+    .input('NumCuenta',sql.VarChar,NumCuenta)
+    .query(`select distinct c.IdEstudiantePropietario, c.IdEstudianteAgregado,pe.Imagen1,es.Nombre,es.Apellido, eu.IsOnline, es.CorreoInstitucional, es.Carrera from contactos as c 
+    left join perfil_estudiante as pe 
+    on c.IdEstudianteAgregado = pe.IdPerfil
+    left join estudiantes as es
+    on c.IdEstudianteAgregado = es.NumCuenta
+    left join EstadoUsuarios as eu
+	on c.IdEstudianteAgregado = eu.UserId
+    where c.IdEstudiantePropietario= @NumCuenta AND EstadoSolicitud='EN ESPERA'`)
+
+    res.json(ListaEspera.recordset)
 }
 
 export const buscarEstudiante = async (req,res)=>{
