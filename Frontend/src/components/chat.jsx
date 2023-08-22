@@ -18,9 +18,9 @@ function ChatApp() {
     const [messageInput, setMessageInput] = useState(""); // Estado para almacenar el mensaje ingresado
     const chatHistoryRef = useRef(null);
     const [autoScroll, setAutoScroll] = useState(true);
-    
-    
-    
+
+
+
 
     const handleSendMessage = (message) => {
         if (message.trim() !== "") {
@@ -29,7 +29,7 @@ function ChatApp() {
         }
     };
 
-        const toggleSolicitudesModal = () => {
+    const toggleSolicitudesModal = () => {
         setShowSolicitudesModal(!showSolicitudesModal);
     };
 
@@ -43,40 +43,40 @@ function ChatApp() {
     const toggleModal = () => {
         setModalOpen(!modalOpen);
         console.log("toggle modal");
-      };
-      
-      useEffect(() => {
+    };
+
+    useEffect(() => {
         if (autoScroll && chatHistoryRef.current) {
-          chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
-          setAutoScroll(false);
-          console.log(autoScroll)
-          fetchChatHistory(NumCuenta, selectedContact.IdEstudianteAgregado)
-        }
-        if(selectedContact != null){
+            chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
+            setAutoScroll(false);
+            console.log(autoScroll)
             fetchChatHistory(NumCuenta, selectedContact.IdEstudianteAgregado)
         }
-        
-      }, [chatHistory,autoScroll]);
-      
-      
-      useEffect(() => {
+        if (selectedContact != null) {
+            fetchChatHistory(NumCuenta, selectedContact.IdEstudianteAgregado)
+        }
+
+    }, [chatHistory, autoScroll]);
+
+
+    useEffect(() => {
         if (selectedContact) {
             fetchChatHistory(NumCuenta, selectedContact.IdEstudianteAgregado);
         }
-    }, [selectedContact,autoScroll]);
+    }, [selectedContact, autoScroll]);
 
 
-  useEffect(() => {
-    const socket = socketIOClient("http://localhost:9000"); // Cambia la URL por la dirección de tu servidor de Socket.IO
-    setSocket(socket);
-    
-    return () => {
-      socket.disconnect(); // Desconecta el socket al desmontar el componente
-    };
-  }, []);
+    useEffect(() => {
+        const socket = socketIOClient("http://localhost:9000"); // Cambia la URL por la dirección de tu servidor de Socket.IO
+        setSocket(socket);
+
+        return () => {
+            socket.disconnect(); // Desconecta el socket al desmontar el componente
+        };
+    }, []);
 
 
-  
+
     useEffect(() => {
         const storedData = localStorage.getItem("userData");
         if (storedData) {
@@ -85,15 +85,15 @@ function ChatApp() {
 
             const socket = io.connect('http://localhost:9000');
             socket.on('connect', () => {
-            socket.emit('userConnectRequest', { userId: numCuenta }); // Enviar el ID al servidor
+                socket.emit('userConnectRequest', { userId: numCuenta }); // Enviar el ID al servidor
             });
             console.log(numCuenta);
             console.log(selectedContact)
             setNumCuenta(numCuenta);
             fetchContactos(numCuenta); // Obtener contactos con el NumCuenta actualizado
-            
+
         }
-        
+
     }, []);
 
     useEffect(() => {
@@ -115,7 +115,7 @@ function ChatApp() {
                     emisorId: NumCuenta,
                     receptorId: selectedContact.IdEstudianteAgregado,
                     mensaje: message,
-                    fechaMensaje:currentDate
+                    fechaMensaje: currentDate
                 }),
             });
 
@@ -130,8 +130,8 @@ function ChatApp() {
             console.error("Error de red:", error);
         }
     };
-    
-      
+
+
 
     const fetchContactos = async (NumCuenta) => {
         try {
@@ -151,10 +151,10 @@ function ChatApp() {
         } catch (error) {
             console.error('Error fetching contactos:', error);
         }
-        
+
     };
 
-    const fetchChatHistory = async (emisorId,receptorId) => {
+    const fetchChatHistory = async (emisorId, receptorId) => {
         try {
             const response = await fetch('http://localhost:5000/historialChat', {
                 method: 'POST',
@@ -169,14 +169,14 @@ function ChatApp() {
 
             const data = await response.json();
             //console.log('Historial:',data);
-            
+
             setChatHistory(data);
         } catch (error) {
             console.error('Error fetching contactos:', error);
         }
-        
+
     };
-    
+
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
@@ -187,53 +187,53 @@ function ChatApp() {
         const hours = date.getHours();
         const minutes = date.getMinutes();
         const ampm = hours >= 12 ? "p.m." : "a.m.";
-    
+
         const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
         const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-    
+
         return `${formattedHours}:${formattedMinutes} ${ampm}`;
     }
 
     const filteredContactos = contactos.filter(contacto => {
-        
+
         return contacto.Nombre.toLowerCase().includes(searchTerm.toLowerCase());
     });
-    
+
 
     const spanStyle = {
         width: '200px', // Ajusta el valor según tus necesidades
-      };
+    };
 
 
     return (
         <div className="container">
-        
+
             <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
             <br />
-            
+
             <div class="container">
-            <div class="input-group-prepend">
-                
-                <button className="btn btn-link" onClick={toggleSolicitudesModal}>
-                <i className="fa fa-eye btn-lg"> Ver solicitudes</i>
-                </button>
+                <div class="input-group-prepend">
 
-            <ModalSolicitudesAmistad isOpen={showSolicitudesModal} onClose={toggleSolicitudesModal} />
-            
-            
-            
-                
-                <button className="btn btn-link ml-6" onClick={toggleModal}>
-                <i className="fa fa-plus btn-lg"> Agregar un contacto</i>
-                </button>
+                    <button className="btn btn-link" onClick={toggleSolicitudesModal}>
+                        <i className="fa fa-eye btn-lg"> Ver solicitudes</i>
+                    </button>
 
-            <ModalAgregarContacto isOpen={modalOpen} onClose={toggleModal} />
-            </div>
-            <br />
+                    <ModalSolicitudesAmistad isOpen={showSolicitudesModal} onClose={toggleSolicitudesModal} />
+
+
+
+
+                    <button className="btn btn-link ml-6" onClick={toggleModal}>
+                        <i className="fa fa-plus btn-lg"> Agregar un contacto</i>
+                    </button>
+
+                    <ModalAgregarContacto isOpen={modalOpen} onClose={toggleModal} />
+                </div>
+                <br />
                 <div class="row clearfix">
                     <div class="col-lg-12">
                         <div class="card chat-app" >
-                        <div id="plist" class="people-list"  >
+                            <div id="plist" class="people-list"  >
                                 <div class="input-group">
                                     <input
                                         type="text"
@@ -244,108 +244,108 @@ function ChatApp() {
                                     />
                                 </div>
                                 <div className="contact-list-container mt-3">
-                                <ul className="list-unstyled chat-list mt-2 mb-0">
-                                    {searchTerm ? (
-                                        filteredContactos.map((contacto) => (
-                                        <li key={contacto.IdEstudianteAgregado} className="clearfix" onClick={() => handleContactSelect(contacto)}>
-                                            <img src={`../img/uploads/${contacto.Imagen1}`} alt="avatar" />
-                                            <div className="about">
-                                            <div className="name">{contacto.Nombre}</div>
-                                            <div className="status">
-                                                {contacto.IsOnline === true ? (
-                                                <i className="fa fa-circle online"></i>
-                                                ) : (
-                                                <i className="fa fa-circle offline"></i>
-                                                )}
-                                                {contacto.IsOnline === true ? "En línea" : "Desconectado"}
-                                            </div>
-                                            </div>
-                                        </li>
-                                        ))
-                                    ) : (
-                                        contactos.map((contacto) => (
-                                        <li key={contacto.IdEstudianteAgregado} className="clearfix" onClick={() => handleContactSelect(contacto)}>
-                                            <img src={`../img/uploads/${contacto.Imagen1}`} alt="avatar" />
-                                            <div className="about">
-                                            <div className="name">{contacto.Nombre}</div>
-                                            <div className="status">
-                                                {contacto.IsOnline === true ? (
-                                                <i className="fa fa-circle online"></i>
-                                                ) : (
-                                                <i className="fa fa-circle offline"></i>
-                                                )}
-                                                {contacto.IsOnline === true ? "En línea" : "Desconectado"}
-                                            </div>
-                                            </div>
-                                        </li>
-                                        ))
-                                    )}
-                                </ul>
-                                </div>   
-                            </div>
-                            <div class="chat" style={{ height: '750px'}}>
-                            {selectedContact && (
-                                <div class="chat-header clearfix">
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            {selectedContact && (
-                                                <>
-                                                    <img src={`../img/uploads/${selectedContact.Imagen1}`} alt="avatar" />
-                                                    <div class="chat-about">
-                                                        <h6 class="m-b-0">{selectedContact.Nombre}</h6>
-                                                        <small>{selectedContact.IsOnline ? "En línea" : "Desconectado"}</small>
+                                    <ul className="list-unstyled chat-list mt-2 mb-0">
+                                        {searchTerm ? (
+                                            filteredContactos.map((contacto) => (
+                                                <li key={contacto.IdEstudianteAgregado} className="clearfix" onClick={() => handleContactSelect(contacto)}>
+                                                    <img src={`../img/uploads/${contacto.Imagen1}`} alt="avatar" />
+                                                    <div className="about">
+                                                        <div className="name">{contacto.Nombre}</div>
+                                                        <div className="status">
+                                                            {contacto.IsOnline === true ? (
+                                                                <i className="fa fa-circle online"></i>
+                                                            ) : (
+                                                                <i className="fa fa-circle offline"></i>
+                                                            )}
+                                                            {contacto.IsOnline === true ? "En línea" : "Desconectado"}
+                                                        </div>
                                                     </div>
-                                                </>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                            {selectedContact && (
-                                <div class="chat-history" style={{ maxHeight: '600px', overflowY: 'auto' }} ref={chatHistoryRef}>
-                                    <ul class="m-b-0">
-                                    {chatHistory.map((message) => (
-                                        <li
-                                            key={message.Id_Historial} /* Cambia esto al identificador adecuado de tu mensaje */
-                                            className={message.EmisorId === NumCuenta ? "clearfix text-right" : "clearfix text-left"} /* Ajusta las clases CSS según el emisor del mensaje */
-                                        >
-                                            <div class="message-data">
-                                            <span className="message-data-time">
-                                                {FormatoTiempo(message.fecha_Mensaje)}
-                                            </span>
-                                            </div>
-                                            <div className={message.EmisorId === NumCuenta ? "message my-message float-right" : "message other-message float-left"}> {/* Ajusta las clases CSS según el emisor del mensaje */}
-                                                {message.mensaje}
-                                            </div>
-                                        </li>
-                                    ))}
+                                                </li>
+                                            ))
+                                        ) : (
+                                            contactos.map((contacto) => (
+                                                <li key={contacto.IdEstudianteAgregado} className="clearfix" onClick={() => handleContactSelect(contacto)}>
+                                                    <img src={`../img/uploads/${contacto.Imagen1}`} alt="avatar" />
+                                                    <div className="about">
+                                                        <div className="name">{contacto.Nombre}</div>
+                                                        <div className="status">
+                                                            {contacto.IsOnline === true ? (
+                                                                <i className="fa fa-circle online"></i>
+                                                            ) : (
+                                                                <i className="fa fa-circle offline"></i>
+                                                            )}
+                                                            {contacto.IsOnline === true ? "En línea" : "Desconectado"}
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            ))
+                                        )}
                                     </ul>
                                 </div>
-                            )}
-                            {selectedContact && (
-                                <div class="chat-message clearfix" >
-                                    <div class="input-group mb-0">
-                                    <input
-                                        type="text"
-                                        class="form-control"
-                                        placeholder="Ingrese texto"
-                                        value={messageInput}
-                                        onChange={(event) => setMessageInput(event.target.value)}
-                                        onKeyDown={(event) => {
-                                            if (event.key === 'Enter') {
-                                                handleSendMessage();
-                                            }
-                                        }}
-                                    />
-                                        <div class="input-group-prepend">
-                                        <button class="input-group-text" onClick={() => handleSendMessage(messageInput)}>
-                                            <i class="fa fa-send btn-lg"></i>
-                                        </button>
+                            </div>
+                            <div class="chat" style={{ height: '750px' }}>
+                                {selectedContact && (
+                                    <div class="chat-header clearfix">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                {selectedContact && (
+                                                    <>
+                                                        <img src={`../img/uploads/${selectedContact.Imagen1}`} alt="avatar" />
+                                                        <div class="chat-about">
+                                                            <h6 class="m-b-0">{selectedContact.Nombre}</h6>
+                                                            <small>{selectedContact.IsOnline ? "En línea" : "Desconectado"}</small>
+                                                        </div>
+                                                    </>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            )}
-                        </div>
+                                )}
+                                {selectedContact && (
+                                    <div class="chat-history" style={{ maxHeight: '600px', overflowY: 'auto' }} ref={chatHistoryRef}>
+                                        <ul class="m-b-0">
+                                            {chatHistory.map((message) => (
+                                                <li
+                                                    key={message.Id_Historial} /* Cambia esto al identificador adecuado de tu mensaje */
+                                                    className={message.EmisorId === NumCuenta ? "clearfix text-right" : "clearfix text-left"} /* Ajusta las clases CSS según el emisor del mensaje */
+                                                >
+                                                    <div class="message-data">
+                                                        <span className="message-data-time">
+                                                            {FormatoTiempo(message.fecha_Mensaje)}
+                                                        </span>
+                                                    </div>
+                                                    <div className={message.EmisorId === NumCuenta ? "message my-message float-right" : "message other-message float-left"}> {/* Ajusta las clases CSS según el emisor del mensaje */}
+                                                        {message.mensaje}
+                                                    </div>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+                                {selectedContact && (
+                                    <div class="chat-message clearfix" >
+                                        <div class="input-group mb-0">
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                placeholder="Ingrese texto"
+                                                value={messageInput}
+                                                onChange={(event) => setMessageInput(event.target.value)}
+                                                onKeyDown={(event) => {
+                                                    if (event.key === 'Enter') {
+                                                        handleSendMessage();
+                                                    }
+                                                }}
+                                            />
+                                            <div class="input-group-prepend">
+                                                <button class="input-group-text" onClick={() => handleSendMessage(messageInput)}>
+                                                    <i class="fa fa-send btn-lg"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
