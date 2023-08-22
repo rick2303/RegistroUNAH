@@ -30,11 +30,7 @@ const Notas = () => {
   const [imagen, setImagen] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [video, setVideo] = useState("");
-  const [Nota, setNota] = useState("");
-  const [evaluationSubmitted, setEvaluationSubmitted] = useState(false);
-  const [submittedForm, setSubmittedForm] = useState({});
-  const [allFormsSubmitted, setAllFormsSubmitted] = useState(false);
-  const [evaluationFormsSubmitted, setEvaluationFormsSubmitted] = useState({});
+  const [Tru, setTru] = useState("")
   
   const [evaluationData, setEvaluationData] = useState({
     pregunta1: '',
@@ -47,29 +43,15 @@ const Notas = () => {
     IdDocente: ''
   });
 
-  useEffect(() => {
-    const storedData = localStorage.getItem(`submittedForm_${NumCuenta}`);
-    if (storedData) {
-      setSubmittedForm(JSON.parse(storedData));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem(`submittedForm_${NumCuenta}`, JSON.stringify(submittedForm));
-  }, [submittedForm]);
-
   
 
+
   const mostrarInformacion2 = (row) => {
-    setSelectedRow(row);
-    const formKey = `${row.IDSECCION}`;
-    if (submittedForm[formKey]) {
-      alert("El formulario ya ha sido enviado para este docente.");
-      return;
+    if (row.IsEvaluated) {
+      alert("Ya has evaluado a este docente. No puedes volver a evaluarlo.");
+    } else {
+      toggleModal2();
     }
-
-
-    toggleModal2();
     fetch(`http://localhost:5000/mostrarPerfilDocente`, {
       method: "POST",
       headers: {
@@ -106,8 +88,7 @@ const Notas = () => {
       setNumCuenta(numCuenta);
 
       // Cargar el estado de los formularios enviados desde el Local Storage
-      const submittedFormsData = JSON.parse(localStorage.getItem(`submittedForm_${numCuenta}`)) || {};
-      setSubmittedForm(submittedFormsData);
+    
     }
   }, []);
 
@@ -127,18 +108,9 @@ const Notas = () => {
   const handleSubmit2 = async e => {
     e.preventDefault();
   
-    if (!PreguntasContestadas()) {
+    if (!PreguntasContestadas())
       return;
-    }
 
-    const formKey = `${selectedRow.IDSECCION}`;
-
-    if (submittedForm[formKey]) { 
-      alert("El formulario ya ha sido enviado para este docente.");
-      resetForm();
-      toggleModal2();
-      return;
-    }
   
     try {
       const response = await fetch('http://localhost:5000/subirEvaluacionDocente', {
@@ -162,26 +134,14 @@ const Notas = () => {
       console.log('Response:', response);
   
       if (response.ok) {
+        
+        showData(NumCuenta, periodoAcademicoActual, año);
         console.log('Evaluación enviada con éxito');
         alert("Evaluación enviada correctamente");
+       // Actualiza los datos después de enviar la evaluación
         resetForm();
         toggleModal2();
-        setEvaluationSubmitted(true);
-        
-        setSubmittedForm((prevForms) => ({
-          ...prevForms,
-          [formKey]: true,
-        }));
-        localStorage.setItem(`submittedForm_${NumCuenta}`, JSON.stringify(submittedForm));
-        const updatedFormsSubmitted = {
-          ...evaluationFormsSubmitted,
-          [IdDocente]: true,
-        };
-        setEvaluationFormsSubmitted(updatedFormsSubmitted);
-        // Verificar si todos los formularios han sido enviados
-        const allFormsSubmitted = Object.values(submittedForm).every((value) => value === true);
-        setAllFormsSubmitted(allFormsSubmitted);
-  
+       
       } else {
         console.error('Error al enviar la evaluación');
       }
@@ -212,7 +172,7 @@ const Notas = () => {
       Observacion: ''
     });
   };
-
+ 
 
   const obtenerFechasMinMaxIPAC = async () => {
     try {
@@ -263,36 +223,90 @@ const Notas = () => {
   obtenerFechasMinMaxIIPAC();
   obtenerFechasMinMaxIIIPAC();
 
-  useEffect(() => {
-    if (NumCuenta && periodoAcademicoActual && año) {
-      showData(NumCuenta, periodoAcademicoActual, año);
-    }
-    console.log(periodoAcademicoActual);
-  }, [NumCuenta, periodoAcademicoActual, año]);
-  const showData = async (cuenta, periodo, year) => {
+
+  const getEvaluationStatus = async (NumCuenta, IdDocente, IdSeccion) => {
     try {
-      const URL = "http://localhost:5000/enviarClasesQueEstaCursando";
-      const response = await fetch(URL, {
-        method: "POST",
+      const response = await fetch('http://localhost:5000/existenciaEvaluacion', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          NumCuenta: cuenta,
-          Periodo: periodo,
-          año: year,
-        }),
-        
+          "IdEstudiante": NumCuenta,
+          "IdDocente": IdDocente,
+          "IdSeccion": IdSeccion
+        })
       });
-      
-      const data = await response.json();
-      console.log(data);
-      setHistorialData(data);
-      
+  
+      if (response.ok) {
+        const data = await response.json();
+        const Tru = data;
+        console.log(Tru);
+        return Tru; // Return the evaluation status from the server
+      } else {
+        console.error('Error al verificar la existencia de evaluación:', response.status);
+        return false; // Handle the error condition as needed
+      }
     } catch (error) {
-      console.error("Error al obtener los datos:", error);
+      console.error('Error al verificar la existencia de evaluación:', error);
+      return false; // Handle the error condition as needed
     }
   };
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      if (NumCuenta && periodoAcademicoActual && año) {
+        const evaluationStatus = await getEvaluationStatus(NumCuenta, IdDocente, IdSeccion);
+        setTru(evaluationStatus); // Update Tru based on the evaluation status
+        showData(NumCuenta, periodoAcademicoActual, año);
+      }
+      console.log(periodoAcademicoActual);
+      console.log(Tru); // Check Tru here to see if it has been updated
+    };
+  
+    fetchData(); // Call the async function
+  }, [NumCuenta, periodoAcademicoActual, año, IdDocente, IdSeccion]);
+  
+  const showData = async (cuenta, periodo, year) => {
+  try {
+    const URL = "http://localhost:5000/enviarClasesQueEstaCursando";
+    const response = await fetch(URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        NumCuenta: cuenta,
+        Periodo: periodo,
+        año: year,
+      }),
+    });
+
+    const data = await response.json();
+    console.log(data);
+    const updatedData = await Promise.all(
+      data.map(async (row) => {
+        const isEvaluated = await getEvaluationStatus(NumCuenta, 
+          row.IdDocente, // Usa el campo apropiado de los datos de la fila
+          row.IDSECCION);
+
+        if (isEvaluated === true) {
+          row.NotaDisplay = row.Nota;
+          row.IsEvaluated = true; // Add a flag indicating if the row is evaluated
+        } else {
+          row.NotaDisplay = "";
+          row.IsEvaluated = false; // Add a flag indicating if the row is not evaluated
+        }
+
+        return row;
+      })
+    );
+
+    setHistorialData(updatedData);
+  } catch (error) {
+    console.error("Error al obtener los datos:", error);
+  }
+};
 
   const customStyles = {
     headCells: {
@@ -313,7 +327,6 @@ const Notas = () => {
     const TableHeaderCell = styled.div`
     margin: auto;
     `;
-
 
   // Configuramos las columnas para DataTable
   const columnas1 = [
@@ -345,7 +358,6 @@ const Notas = () => {
         <h1 className="cursor-pointer">
           <FcInfo
             onClick={() => mostrarInformacion2(row)}
-            disabled={evaluationFormsSubmitted[row.IdDocente]}
           />
         </h1>
       ),
@@ -353,13 +365,8 @@ const Notas = () => {
     },
     {
       name: "NOTA FINAL",
-      selector: (row) => row.Nota,
+      selector: (row) => row.NotaDisplay, 
       center: true,
-      cell: (row) => (
-        submittedForm[`${row.IDSECCION}`]
-          ? <span>{row.Nota}</span>
-          : null
-      ),
     },
     
     {
@@ -458,6 +465,7 @@ const Notas = () => {
           className="mi-tabla"
           columns={columnas1} 
           data={historialData} 
+          keyField="IDSECCION"
           customStyles={customStyles}
           noDataComponent={<NoDataComponent />}></DataTable>
       </div>
@@ -604,10 +612,10 @@ const Notas = () => {
       )}
       <div>
 
-      <Modal isOpen={isModalOpen2} toggle={mostrarInformacion2} className="evaluacionmodal">
+      <Modal isOpen={isModalOpen2} toggle={toggleModal2} className="evaluacionmodal">
         <ModalHeader>EVALUACIÓN DOCENTES</ModalHeader>
         <ModalHeader>
-          <button className="close boton_cierre" onClick={mostrarInformacion2}>
+          <button className="close boton_cierre" onClick={toggleModal2}>
             <span aria-hidden="true">X</span>
           </button>
         </ModalHeader>
