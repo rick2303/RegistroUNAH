@@ -38,19 +38,19 @@ const handleSubmit = (event) => {
     })
     .then((response) => {
         if (!response.ok) {
-          throw new Error("Algo crashea");
+            throw new Error("Algo crashea");
         }
         return response.json();
-      })
-      .then((data) => {
+        })
+        .then((data) => {
         if(data.ok) {
-        alert(JSON.stringify(data.message));
-        
+            console.log("SI ES AQUI");
+        alert(JSON.stringify("Solictud enviada con éxito"));
         }else{
             alert(JSON.stringify(data.message));
-            
+
         }
-      })
+    })
         .finally(() => {
         setSelectedFile(null); // Reiniciar la selección de archivo
         if (inputFileRef.current) {
@@ -69,7 +69,7 @@ return (
         ref={inputFileRef}
         accept=".pdf"
     />
-    <button type="submit">Cargar</button>
+    <button type="submit" data-bs-dismiss="modal" aria-label="Close">Cargar</button>
     </form>
 );
 }

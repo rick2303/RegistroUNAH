@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import "styled-components";
 import { format, parseISO, set } from "date-fns";
+import styled from 'styled-components';
 const MenuForma = () => {
   const [NumCuenta, setNumCuenta] = useState("");
   const [historialData, setHistorialData] = useState([]);
@@ -91,26 +92,50 @@ const MenuForma = () => {
       console.error("Error al obtener los datos:", error);
     }
   };
+
+
+  const customStyles = {
+    headCells: {
+        style: {
+            backgroundColor: '#145eb9',
+            color: 'white',
+            borderBottom: '1px solid #c6c6c6', 
+        },
+        },
+        rows: {
+        style: {
+            border: '1px solid #c6c6c6', 
+            textAlign: 'center',
+        },
+        },
+    };
+    
+    const TableHeaderCell = styled.div`
+    margin: auto;
+    `;
+
   // Configuramos las columnas para DataTable
   const columnas1 = [
     {
-      name: "CODIGO",
+      name: <TableHeaderCell>CÓDIGO</TableHeaderCell>,
       selector: (row) => row.CODIGO,
+      cell: row => <TableHeaderCell>{row.CODIGO}</TableHeaderCell>
     },
     {
-      name: "ASIGNATURA",
+      name: "ASIGNATURA", 
       selector: (row) => row.ASIGNATURA,
+      width: "18%",
     },
     {
-      name: "SECCION",
+      name: "SECCIÓN",
       selector: (row) => row.SECCION,
     },
     {
-      name: "HORA DE INICIO",
+      name: "HI",
       selector: (row) => row.HORA_INICIO,
     },
     {
-      name: "HORA FINAL",
+      name: "HF",
       selector: (row) => row.HORA_FINAL,
     },
     {
@@ -128,9 +153,10 @@ const MenuForma = () => {
     {
       name: "OBSERVACIONES",
       selector: (row) => row.OBS,
+      width: "12%",
     },
     {
-      name: "PERIODO",
+      name: "PERÍODO",
       selector: (row) => row.PERIODO,
     },
   ];
@@ -143,7 +169,9 @@ const MenuForma = () => {
         Forma 03
       </h1>
       <div className="container">
-        <DataTable columns={columnas1} data={historialData}  noDataComponent={<NoDataComponent />}></DataTable>
+        <DataTable columns={columnas1} data={historialData}  
+        customStyles={customStyles}
+        noDataComponent={<NoDataComponent />}></DataTable>
       </div>
     </div>
   );

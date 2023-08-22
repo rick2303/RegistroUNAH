@@ -6,6 +6,8 @@ import es from "date-fns/locale/es";
 import "../FechaMatricula.css";
 import { TiArrowBackOutline } from "react-icons/ti";
 import {FcDeleteRow} from "react-icons/fc"
+import styled from 'styled-components';
+
 const AppFechaMatricula = () => {
   const [fechaInicioSeleccionada, setFechaInicioSeleccionada] = useState(new Date());
   const [fechaFinalSeleccionada, setFechaFinalSeleccionada] = useState(new Date());
@@ -171,19 +173,39 @@ console.log(a);
       });
   };
 
+  const customStyles = {
+    headCells: {
+        style: {
+            backgroundColor: '#145eb9',
+            color: 'white',
+            borderBottom: '1px solid #c6c6c6', 
+        },
+        },
+        rows: {
+        style: {
+            border: '1px solid #c6c6c6', 
+            textAlign: 'center',
+        },
+        },
+    };
+    
+    const TableHeaderCell = styled.div`
+    margin: auto;
+    `;
+
   const columnas = [
     {
-      name: "Fecha Inicial",
+      name: "FECHA INICIAL",
       selector: (row) => new Date(row.FechaInicio).toLocaleDateString(),
-      sortable: true,
+      center: true,
     },
     {
-      name: "Fecha Final",
+      name: "FECHA FINAL",
       selector: (row) => new Date(row.FechaFinal).toLocaleDateString(),
-      sortable: true,
+      center: true,
     },
     {
-      name: "Hora Inicial",
+      name: "HORA INICIAL",
       selector: (row) => {
         const fechaHoraInicio = new Date(row.FechaInicio);
         fechaHoraInicio.setHours(row.HoraInicio.split(":")[0]);
@@ -191,10 +213,10 @@ console.log(a);
         fechaHoraInicio.setSeconds(row.HoraInicio.split(":")[2]);
         return format(fechaHoraInicio, "h:mm a");
       },
-      sortable: true,
+      center: true,
     },
     {
-      name: "Hora Final",
+      name: "HORA FINAL",
       selector: (row) => {
         const fechaHoraFinal = new Date(row.FechaFinal);
         fechaHoraFinal.setHours(row.HoraFinal.split(":")[0]);
@@ -202,30 +224,58 @@ console.log(a);
         fechaHoraFinal.setSeconds(row.HoraFinal.split(":")[2]);
         return format(fechaHoraFinal, "h:mm a");
       },
-      sortable: true,
+      center: true,
     },
     {
-      name: "Periodo Académico",
+      name: "PERÍODO ACADÉMICO",
       selector: (row) => row.PeriodoAcademico,
-      sortable: true,
+
       center: true,
     },
     {
-      name: "Sistema",
+      name: "SISTEMA",
       selector: (row) => row.Sistema,
-      sortable: true,
+
       center: true,
     },
     {
-      name: "Eliminar",
-      cell: (row) => (
-        <h1 
-        className="cursor-pointer"
-        onClick={() => eliminarFila(row)}>
-        <FcDeleteRow />
-       </h1>
-      ),
-      sortable: true,
+      name: "ELIMINAR PLANIFICACIÓN",
+      cell: (row) => {
+        // Compara las fechas como objetos Date
+        const fechaInicioDate = new Date(row.FechaInicio);
+        const fechaActualDate = new Date();
+        const fechaInicioMenorOIgual = fechaInicioDate <= fechaActualDate;
+
+        console.log(fechaInicioMenorOIgual);
+
+        return (
+          <h1
+            title={
+              fechaInicioMenorOIgual
+                ? "Esta planificación no puede ser eliminada"
+                : "Eliminar"
+            }
+            onClick={() => {
+              if (!fechaInicioMenorOIgual) {
+                eliminarFila(row);
+              } else {
+                // Aquí puedes mostrar un mensaje de que no se permite la eliminación
+                alert("Esta planificación no puede ser eliminada.");
+              }
+            }}
+            className={
+              fechaInicioMenorOIgual ? "cursor-not-allowed" : "cursor-pointer"
+            }
+          >
+            <FcDeleteRow
+              className={
+                fechaInicioMenorOIgual ? "cursor-not-allowed" : "cursor-pointer"
+              }
+            />
+          </h1>
+        );
+      },
+
       center: true,
     },
   ];
@@ -237,14 +287,35 @@ console.log(a);
     <>
       <div className="d-flex mt-5">
   <h1 className="text-2xl mb-4 text-center font-bold pt-2 text-gray-900 sm:text-3xl col-12">
-    Planificación de Matrícula-Trimestral
+    PLANIFICACIÓN DE MATRÍCULA - SISTEMA TRIMESTRAL
   </h1>
   
 </div>
       <div className="contenedor mx-24">
         <div className="container m-4">
           <div className="row m-4">
+          <div className="col-md-4">
+              <label htmlFor="pac" className="mb-3">
+                Seleccione el PAC
+              </label>
+              <select
+                className="form-control"
+                value={pacSeleccionado}
+                onChange={handlePacChange}
+              >
+                <option value="1PAC" disabled={isPac1Disabled}>
+                  1PAC
+                </option>
+                <option value="2PAC" disabled={isPac2Disabled}>
+                  2PAC
+                </option>
+                <option value="3PAC" disabled={isPac3Disabled}>
+                  3PAC
+                </option>
+              </select>
+            </div>
             <div className="col-md-4">
+            
               <label htmlFor="fechaInicio">Inicio de Matricula</label>
               <DateTimePicker
                 className="form-control"
@@ -276,26 +347,7 @@ console.log(a);
                 okLabel="Aceptar" // Establecer texto para el botón Aceptar en español
               />
             </div>
-            <div className="col-md-4">
-              <label htmlFor="pac" className="mb-3">
-                Seleccione el PAC
-              </label>
-              <select
-                className="form-control"
-                value={pacSeleccionado}
-                onChange={handlePacChange}
-              >
-                <option value="1PAC" disabled={isPac1Disabled}>
-                  1PAC
-                </option>
-                <option value="2PAC" disabled={isPac2Disabled}>
-                  2PAC
-                </option>
-                <option value="3PAC" disabled={isPac3Disabled}>
-                  3PAC
-                </option>
-              </select>
-            </div>
+
           </div>
           <div className="row m-4">
             <div className="col-md-4 col-sm-6"></div>
@@ -332,9 +384,14 @@ console.log(a);
         </div>
       </div>
       <div className="my-5 mx-24">
+
+      <h1 style={{fontSize:"14px"}}>
+              Obs.La matricula se contempla que tenga una duración de 4 días para poder asignar los días dependiendo del índice global de cada estudiante.
+        </h1>
         <DataTable
           className="mi-tabla"
           columns={columnas}
+          customStyles={customStyles}
           data={historialData2}
           noHeader
           noDataComponent={<NoDataComponent />}

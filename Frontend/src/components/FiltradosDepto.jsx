@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import 'styled-components';
-
+import styled from 'styled-components';
 
 const paginationComponentOptions = {
     rowsPerPageText: 'Filas por página',
@@ -51,10 +51,30 @@ const EstudiantesFiltradosMatriculados = () => {
     };
     //configuramos las columnas para DataTable
 
+    const customStyles = {
+        headCells: {
+            style: {
+                backgroundColor: '#145eb9',
+                color: 'white',
+                borderBottom: '1px solid #c6c6c6', 
+            },
+            },
+            rows: {
+            style: {
+                border: '1px solid #c6c6c6', 
+                textAlign: 'center',
+            },
+            },
+        };
+        
+        const TableHeaderCell = styled.div`
+        margin: auto;
+        `;
     const columnas = [
         {
-        name:'NÚMERO DE CUENTA',
-        selector : row => row.NumCuenta
+        name:<TableHeaderCell>NÚMERO DE CUENTA</TableHeaderCell>,
+        selector : row => row.NumCuenta,
+        cell: row => <TableHeaderCell>{row.NumCuenta}</TableHeaderCell>
         },
         {
         name:'NOMBRE',
@@ -66,32 +86,42 @@ const EstudiantesFiltradosMatriculados = () => {
         },
         {
         name:'CARRERA',
-        selector : row => row.Carrera.toUpperCase()
+        selector : row => row.Carrera.toUpperCase(),
+
+        with: "18%"
         },
         {
         name:'CORREO INSTITUCIONAL',
         selector : row => row.CorreoInstitucional.toLowerCase()
         },
         {
-        name:'ÍNDICE GLOBAL',
-        selector : row => row.IndiceGlobal
+        name:<TableHeaderCell>ÍNDICE GLOBAL</TableHeaderCell>,
+        selector : row => row.IndiceGlobal,
+        cell: row => <TableHeaderCell>{row.IndiceGlobal}</TableHeaderCell>
         },
         {
-        name:'ÍNDICE DEL PERIODO',
-        selector :row => row.IndicePeriodo
+        name:<TableHeaderCell>ÍNDICE DEL PERIODO</TableHeaderCell>,
+        selector :row => row.IndicePeriodo,
+        cell: row => <TableHeaderCell>{row.IndicePeriodo}</TableHeaderCell>
 },
 
 ]
     //Mostramos la data en DataTable
     const NoDataComponent = () => {
         return <div>No hay registros para mostrar</div>;
-      };
+        };
     return (
         <div className="App">
-            <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
-                Listado de estudiantes Matriculados en {carreraUsuario}
-            </h1>
-            <DataTable columns={columnas} data={users} pagination paginationComponentOptions={paginationComponentOptions} noDataComponent={<NoDataComponent />}/>
+            <div className="container ">
+            <div className="row">
+                <h1 className="text-2xl text-center font-bold pt-4 pb-5 text-gray-900 sm:text-3xl">
+                    Listado de estudiantes Matriculados en {carreraUsuario}
+                </h1>
+                <DataTable columns={columnas} data={users} pagination paginationComponentOptions={paginationComponentOptions} 
+                customStyles={customStyles}
+                noDataComponent={<NoDataComponent />}/>
+            </div>
+            </div>
         </div>
     );
     

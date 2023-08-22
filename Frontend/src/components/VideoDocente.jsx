@@ -94,7 +94,7 @@ function VideoDocente() {
         ref={inputFileRef}
         accept="video/*" // Solo aceptar archivos de video
       />
-      <button className="rounded-lg bg-blue-800 hover:bg-blue-500 text-white shadow h-8 w-14" type="submit">
+      <button  style={{ background: "#145eb9" }}className="rounded-lg text-white shadow h-8 w-14" type="submit">
         Cargar
       </button>
     </form>

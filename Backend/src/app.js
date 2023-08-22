@@ -22,6 +22,7 @@ import routerChat from "./routes/chat.routes"
 import {MensajesChat} from "./controllers/chat.controller"
 import { getConnection,sql, queries} from "./Database"
 import {loginUsuarios} from './controllers/login.controllers';
+import routerEstadisticas from "./routes/estadisticas.routes";
 //import {} from "./csv/csv";
 const app= express();
 const cors = require('cors');
@@ -54,7 +55,7 @@ app.get('/download-PDF', (req, res) => {
 console.log(config.port);
 
 app.use(empleadosRoute,loginRoute,perfilEstudiante,perfilEmpleado,routerCargaAcademica,routerChat);
-app.use(usuariosRoute, historialAcademico, routerCancelacionesExep,routerSolicitudes);
+app.use(usuariosRoute, historialAcademico, routerCancelacionesExep,routerSolicitudes,routerEstadisticas);
 app.use(routerSecciones, routerAdmin, routerEstado, routerCambioCarrera, routerEstudiante, routerMatricula);
 
 // Crear el servidor HTTP
