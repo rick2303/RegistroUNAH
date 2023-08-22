@@ -27,7 +27,7 @@ export const cargaAcademicaPDF = async (req, res) => {
       .input("Departamento", sql.VarChar, Departamento)
       .input("CentroRegional", sql.VarChar, CentroRegional)
       .query(`select 
-            sc.IdClase,cl.Nombre,Edificio,sc.Aula,sc.CantidadAlumnos,sc.HI,sc.HF,sc.Seccion,sc.IdDocente, sc.CentroRegional, 
+            sc.IdClase,cl.Nombre,Edificio,sc.Aula,sc.Cupos,sc.HI,sc.HF,sc.Seccion,sc.IdDocente, sc.CentroRegional, 
             concat(emp.Nombre,' ', emp.Apellido) as NombreDocente, sc.Dias
             from secciones as sc
             right join clases as cl on sc.IdClase=cl.IdClase
@@ -107,7 +107,7 @@ export const cargaAcademicaPDF = async (req, res) => {
                 { text: item.Nombre, alignment: 'center' },
                 { text: item.Edificio, alignment: 'center' },
                 { text: item.Aula, alignment: 'center' },
-                { text: item.CantidadAlumnos ?? 'N/A', alignment: 'center' },
+                { text: item.Cupos ?? 'N/A', alignment: 'center' },
                 { text: item.HI, alignment: 'center' },
                 { text: item.HF, alignment: 'center' },
                 { text: item.Seccion, alignment: 'center' },
@@ -188,7 +188,7 @@ export const cargaAcademicaEXCEL = async (req, res) => {
       .input('Departamento', sql.VarChar, Departamento)
       .input('CentroRegional', sql.VarChar, CentroRegional)
       .query(`select 
-      sc.IdClase,cl.Nombre,Edificio,sc.Aula,sc.CantidadAlumnos,sc.HI,sc.HF,sc.Seccion,sc.IdDocente, sc.CentroRegional, 
+      sc.IdClase,cl.Nombre,Edificio,sc.Aula,sc.Cupos,sc.HI,sc.HF,sc.Seccion,sc.IdDocente, sc.CentroRegional, 
       concat(emp.Nombre,' ', emp.Apellido) as NombreDocente, sc.Dias
       from secciones as sc
       right join clases as cl on sc.IdClase=cl.IdClase
@@ -255,7 +255,7 @@ export const cargaAcademicaEXCEL = async (req, res) => {
         NombreClase: item.Nombre,
         Edificio: item.Edificio,
         Aula: item.Aula,
-        Cupos: item.CantidadAlumnos ?? 'N/A',
+        Cupos: item.Cupos ?? 'N/A',
         HoraInicial: item.HI,
         HoraFinal: item.HF,
         Seccion: item.Seccion,

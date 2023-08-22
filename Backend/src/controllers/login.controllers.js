@@ -1,7 +1,7 @@
 import { getConnection,sql, queries} from "../Database"
+import {MensajesChat} from "./chat.controller"
 
-
-export const loginUsuarios = async (req,res)=>{
+export const loginUsuarios = async (req,res,io)=>{
     
     const {Id,contraseña} = req.body;//Requests
     try {
@@ -44,6 +44,8 @@ export const loginUsuarios = async (req,res)=>{
                 .query(queries.getEstudiantes);
                 console.log(estudiante);
                 const perfilEstudiante = await pool.request().input("Id", sql.VarChar, Id).query(queries.getPerfilestudiante);
+
+                
                 res.json({url:'http://127.0.0.1:5173/src/html/Estudiante.html', data: estudiante.recordset[0], perfil: perfilEstudiante.recordset[0]});                
             }
             if(rol=='DOCENTE' && subrol=='JEFE DEPARTAMENTO'){
@@ -53,6 +55,8 @@ export const loginUsuarios = async (req,res)=>{
                 const perfilEmpleado = await pool.request().input("Id",sql.VarChar,Id).query(queries.getPerfilEmpleado)
                 res.json({url:'http://127.0.0.1:5173/src/html/Jefatura_menu.html', data:jefe.recordset[0],perfil:perfilEmpleado.recordset[0]});
             }
+   
+              
         }if(contraseñaBD!=contraseña || estado == 'INACTIVO'){
             res.status(500).json({ error: "Acceso inválido. Por favor, inténtelo otra vez." });
         }

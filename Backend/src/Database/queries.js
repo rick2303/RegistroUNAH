@@ -80,12 +80,14 @@ export const queries = {
     FROM planificacion_academica
     WHERE GETDATE() BETWEEN FechaInicio AND FechaFinal AND Sistema = @Sistema`,
 
-    getContactos: `select c.IdEstudiantePropietario, c.IdEstudianteAgregado,pe.Imagen1,es.Nombre,es.Apellido  from contactos as c 
+    getContactos:`select distinct c.IdEstudiantePropietario, c.IdEstudianteAgregado,pe.Imagen1,es.Nombre,es.Apellido, eu.IsOnline from contactos as c 
     left join perfil_estudiante as pe 
     on c.IdEstudianteAgregado = pe.IdPerfil
     left join estudiantes as es
     on c.IdEstudianteAgregado = es.NumCuenta
-    where c.IdEstudiantePropietario= @NumCuenta
+    left join EstadoUsuarios as eu
+	on c.IdEstudianteAgregado = eu.UserId
+    where c.IdEstudiantePropietario= @NumCuenta  AND EstadoSolicitud='AGREGADO' 
     `
 
 

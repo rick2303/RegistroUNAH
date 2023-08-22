@@ -23,7 +23,9 @@
     "nodemailer": "^6.9.3",
     "pdfkit": "^0.13.0",
     "pdfmake": "^0.2.7",
-    "react-data-table-component": "^7.5.3"
+    "react-data-table-component": "^7.5.3",
+    "socket.io": "^4.7.2",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.4",
