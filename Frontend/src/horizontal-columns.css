@@ -10,13 +10,15 @@
   }
   
   /* Estilos para las tablas dentro del carrusel */
-.modal-content table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  margin-bottom: 20px;
-  background-color: #f0f0f0;
-}
+  .modal-content table {
+    width: 97%; /* Reduce el ancho de la tabla según tus preferencias */
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 20px;
+    background-color: #f0f0f0;
+    margin-left: 23px;
+    
+  }
   
   /* Estilos para las celdas de la tabla */
   .modal-content table td,
@@ -55,3 +57,31 @@
   .carousel .thumbs {
     display: none !important; /* Agrega !important para asegurarte de que se aplique */
   }
+
+  .carousel.carousel-slider .control-dots {
+    display: none;
+  }
+
+  /* Estilo para los botones izquierdo y derecho del carrusel */
+/* Estilo para los botones izquierdo y derecho del carrusel con mayor especificidad */
+.carousel.carousel.carousel-slider .control-next {
+  right: -5px;
+  font-size: 0px; /* Tamaño de fuente del botón izquierdo */
+  font-weight: lighter; /* Grosor del botón izquierdo */
+  margin-top: 52px;
+  background-color: transparent;
+  border: none; /* Elimina cualquier borde */
+  
+}
+
+.carousel.carousel.carousel-slider .control-prev {
+  left:-5px;
+  font-size: 0px; /* Tamaño de fuente del botón derecho (más delgado) */
+  font-weight: lighter; /* Grosor del botón derecho (más delgado) */
+  margin-top: 52px;
+  background-color: transparent;
+  border: none; /* Elimina cualquier borde */
+  
+}
+
+

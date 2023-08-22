@@ -1,0 +1,21 @@
+.custom-carousel-styles .react-responsive-carousel .control-arrow {
+  font-size: 24px; /* Tamaño de fuente para las flechas */
+  margin-top: 20px;
+  background-color: transparent;
+  border: none; /* Elimina cualquier borde */
+}
+
+/* Estilo para el botón izquierdo del carrusel */
+.custom-carousel-styles .react-responsive-carousel .control-prev {
+  left: 10px;
+}
+
+/* Estilo para el botón derecho del carrusel */
+.custom-carousel-styles .react-responsive-carousel .control-next {
+  right: 10px;
+}
+
+/* Estilo para hacer las flechas más delgadas */
+.custom-carousel-styles .react-responsive-carousel .control-arrow::before {
+  font-weight: normal; /* Reduce el grosor de las flechas */
+}

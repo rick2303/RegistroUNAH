@@ -16,6 +16,7 @@ import "../App.css";
 import "../horizontal-columns.css"
 import "../Perfil_estudiante.css"
 import styled from 'styled-components';
+import "../custom-carousel-styles.css";
 
 const paginationComponentOptions = {
   rowsPerPageText: 'Filas por página',
@@ -23,9 +24,6 @@ const paginationComponentOptions = {
   selectAllRowsItem: true,
   selectAllRowsItemText: 'Todos',
 };
-
-
-
 
 const MenuIngresoNotas = () => {
     const [inputValue, setInputValue] = useState("");
@@ -307,7 +305,6 @@ const MenuIngresoNotas = () => {
         />
       </div>
 
-
       <Modal
   isOpen={modalOpen}
   toggle={() => setModalOpen(false)}
@@ -327,55 +324,61 @@ const MenuIngresoNotas = () => {
     </button>
   </ModalHeader>
         <ModalBody className="modal-content">
-         
-        <Carousel
-  showThumbs={false}    // Para ocultar los puntos de navegación
-  showStatus={false}   // Para ocultar el estado (número de diapositivas)
-  dynamicHeight={true} // Para permitir la altura dinámica
-  emulateTouch={true}  // Para habilitar la emulación de toque en dispositivos no táctiles
+     <Carousel
+  showThumbs={false} 
+  showStatus={false} 
+  dynamicHeight={true} 
+  emulateTouch={true} 
+
 >
-            {Object.entries(
-                  dataObtenida.reduce((sections, nota) => {
-                  const seccionKey = `${nota.Seccion}-${nota.Asignatura}`;
-                  if (!sections[seccionKey]) {
-                  sections[seccionKey] = { seccion: nota.Seccion, asignatura: nota.Asignatura, notas: [] };
-                   }
-                    sections[seccionKey].notas.push(nota);
-                    return sections;
-                }, {})
-              ).map(([seccionKey, { seccion, asignatura, notas }]) => (
-                    <div key={seccionKey} className="column">
-                    <h4 style={{ fontWeight: "bold", fontSize: "1.5rem", textTransform: "uppercase" }}>Sección: {seccion} - Asignatura: {asignatura}</h4>
-                      <br></br>
-                      <table>
-                    <thead>
-                      <tr>
-                        <th>Nº</th> 
-                        <th>NUMERO CUENTA</th>
-                        <th>NOMBRE</th>
-                        <th>APELLIDO</th>
-                        <th>CORREO INSTITUCIONAL</th>
-                        <th>NOTA</th>
-                        <th>ESTADO</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {notas.map((nota, index) => (
-                        <tr key={nota.IdEstudiante + "-" + index}>
-                        <td>{index + 1}</td> {/* Conteo de filas */}
-                        <td>{nota.IdEstudiante}</td>
-                        <td>{nota.Estudiante}</td>
-                        <td>{nota.Apellido}</td>
-                        <td>{nota.CorreoInstitucional}</td>
-                        <td>{nota.Nota}</td>
-                        <td>{nota.EstadoClase}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ))}
-            </Carousel>
+  {Object.entries(
+    dataObtenida.reduce((sections, nota) => {
+      const seccionKey = `${nota.Seccion}-${nota.Asignatura}`;
+      if (!sections[seccionKey]) {
+        sections[seccionKey] = {
+          seccion: nota.Seccion,
+          asignatura: nota.Asignatura,
+          notas: [],
+        };
+      }
+      sections[seccionKey].notas.push(nota);
+      return sections;
+    }, {})
+  ).map(([seccionKey, { seccion, asignatura, notas }]) => (
+    <div key={seccionKey} className="column">
+      <h4 style={{ fontWeight: "bold", fontSize: "1.5rem", textTransform: "uppercase" }}>
+        Sección: {seccion} - Asignatura: {asignatura}
+      </h4>
+      <br></br>
+      <table>
+        <thead>
+          <tr>
+            <th>Nº</th>
+            <th>NUMERO CUENTA</th>
+            <th>NOMBRE</th>
+            <th>APELLIDO</th>
+            <th>CORREO INSTITUCIONAL</th>
+            <th>NOTA</th>
+            <th>ESTADO</th>
+          </tr>
+        </thead>
+        <tbody>
+          {notas.map((nota, index) => (
+            <tr key={nota.IdEstudiante + "-" + index}>
+              <td>{index + 1}</td> {/* Conteo de filas */}
+              <td>{nota.IdEstudiante}</td>
+              <td>{nota.Estudiante}</td>
+              <td>{nota.Apellido}</td>
+              <td>{nota.CorreoInstitucional}</td>
+              <td>{nota.Nota}</td>
+              <td>{nota.EstadoClase}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  ))}
+</Carousel>
          
         </ModalBody>
        

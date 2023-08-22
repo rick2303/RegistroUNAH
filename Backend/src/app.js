@@ -18,6 +18,7 @@ import routerEstudiante from "./routes/estudiantes.routes";
 import routerMatricula from "./routes/matricula.routes";
 import routerChat from "./routes/chat.routes"
 import routerEstadisticas from "./routes/estadisticas.routes";
+
 //import {} from "./csv/csv";
 const app= express();
 const cors = require('cors');

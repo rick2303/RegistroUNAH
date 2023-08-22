@@ -30,11 +30,7 @@ const Notas = () => {
   const [imagen, setImagen] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [video, setVideo] = useState("");
-  const [Nota, setNota] = useState("");
-  const [evaluationSubmitted, setEvaluationSubmitted] = useState(false);
-  const [submittedForm, setSubmittedForm] = useState({});
-  const [allFormsSubmitted, setAllFormsSubmitted] = useState(false);
-  const [evaluationFormsSubmitted, setEvaluationFormsSubmitted] = useState({});
+  const [Tru, setTru] = useState("")
   
   const [evaluationData, setEvaluationData] = useState({
     pregunta1: '',
@@ -47,29 +43,17 @@ const Notas = () => {
     IdDocente: ''
   });
 
-  useEffect(() => {
-    const storedData = localStorage.getItem(`submittedForm_${NumCuenta}`);
-    if (storedData) {
-      setSubmittedForm(JSON.parse(storedData));
-    }
-  }, []);
 
-  useEffect(() => {
-    localStorage.setItem(`submittedForm_${NumCuenta}`, JSON.stringify(submittedForm));
-  }, [submittedForm]);
+
 
   
 
   const mostrarInformacion2 = (row) => {
-    setSelectedRow(row);
-    const formKey = `${row.IDSECCION}`;
-    if (submittedForm[formKey]) {
-      alert("El formulario ya ha sido enviado para este docente.");
-      return;
+    if (Tru === true) {
+      alert("Ya has evaluado a este docente. No puedes volver a evaluarlo.");
+    } else {
+      toggleModal2();
     }
-
-
-    toggleModal2();
     fetch(`http://localhost:5000/mostrarPerfilDocente`, {
       method: "POST",
       headers: {
@@ -90,7 +74,9 @@ const Notas = () => {
         console.log("IdDocente:", IdDocente);
         setIdDocente(IdDocente);
       }
+
     })
+   
     .catch((error) => {
       console.error("Error al obtener los datos:", error);
     });
@@ -106,8 +92,7 @@ const Notas = () => {
       setNumCuenta(numCuenta);
 
       // Cargar el estado de los formularios enviados desde el Local Storage
-      const submittedFormsData = JSON.parse(localStorage.getItem(`submittedForm_${numCuenta}`)) || {};
-      setSubmittedForm(submittedFormsData);
+    
     }
   }, []);
 
@@ -127,18 +112,9 @@ const Notas = () => {
   const handleSubmit2 = async e => {
     e.preventDefault();
   
-    if (!PreguntasContestadas()) {
+    if (!PreguntasContestadas())
       return;
-    }
 
-    const formKey = `${selectedRow.IDSECCION}`;
-
-    if (submittedForm[formKey]) { 
-      alert("El formulario ya ha sido enviado para este docente.");
-      resetForm();
-      toggleModal2();
-      return;
-    }
   
     try {
       const response = await fetch('http://localhost:5000/subirEvaluacionDocente', {
@@ -162,26 +138,14 @@ const Notas = () => {
       console.log('Response:', response);
   
       if (response.ok) {
+        
+        showData(NumCuenta, periodoAcademicoActual, año);
         console.log('Evaluación enviada con éxito');
         alert("Evaluación enviada correctamente");
+       // Actualiza los datos después de enviar la evaluación
         resetForm();
         toggleModal2();
-        setEvaluationSubmitted(true);
-        
-        setSubmittedForm((prevForms) => ({
-          ...prevForms,
-          [formKey]: true,
-        }));
-        localStorage.setItem(`submittedForm_${NumCuenta}`, JSON.stringify(submittedForm));
-        const updatedFormsSubmitted = {
-          ...evaluationFormsSubmitted,
-          [IdDocente]: true,
-        };
-        setEvaluationFormsSubmitted(updatedFormsSubmitted);
-        // Verificar si todos los formularios han sido enviados
-        const allFormsSubmitted = Object.values(submittedForm).every((value) => value === true);
-        setAllFormsSubmitted(allFormsSubmitted);
-  
+       
       } else {
         console.error('Error al enviar la evaluación');
       }
@@ -212,7 +176,7 @@ const Notas = () => {
       Observacion: ''
     });
   };
-
+ 
 
   const obtenerFechasMinMaxIPAC = async () => {
     try {
@@ -269,6 +233,7 @@ const Notas = () => {
     }
     console.log(periodoAcademicoActual);
   }, [NumCuenta, periodoAcademicoActual, año]);
+  
   const showData = async (cuenta, periodo, year) => {
     try {
       const URL = "http://localhost:5000/enviarClasesQueEstaCursando";
@@ -282,17 +247,34 @@ const Notas = () => {
           Periodo: periodo,
           año: year,
         }),
-        
       });
-      
+  
       const data = await response.json();
       console.log(data);
-      setHistorialData(data);
-      
+  
+      const updatedData = await Promise.all(
+        data.map(async (row) => {
+          const isEvaluated = await getEvaluationStatus(
+            row.IdDocente,
+            row.IDSECCION
+          );
+  
+          if (isEvaluated) {
+            row.NotaDisplay = row.Nota;
+          } else {
+            row.NotaDisplay = "";
+          }
+  
+          return row;
+        })
+      );
+  
+      setHistorialData(updatedData);
     } catch (error) {
       console.error("Error al obtener los datos:", error);
     }
   };
+  
 
   const customStyles = {
     headCells: {
@@ -313,6 +295,37 @@ const Notas = () => {
     const TableHeaderCell = styled.div`
     margin: auto;
     `;
+
+const getEvaluationStatus = async () => {
+  try {
+    const response = await fetch('http://localhost:5000/existenciaEvaluacion', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "IdEstudiante": NumCuenta,
+        "IdDocente": IdDocente,
+        "IdSeccion": IdSeccion
+      })
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      const Tru = data;
+      setTru(Tru)
+      return data; // Debe ser true o false según si el docente está evaluado o no
+    } else {
+      console.error('Error al verificar la existencia de evaluación:', response.status);
+      return false; // Maneja la condición de error según sea necesario.
+    }
+  } catch (error) {
+    console.error('Error al verificar la existencia de evaluación:', error);
+    return false; // Maneja la condición de error según sea necesario.
+  }
+};
+
+
 
 
   // Configuramos las columnas para DataTable
@@ -345,7 +358,6 @@ const Notas = () => {
         <h1 className="cursor-pointer">
           <FcInfo
             onClick={() => mostrarInformacion2(row)}
-            disabled={evaluationFormsSubmitted[row.IdDocente]}
           />
         </h1>
       ),
@@ -353,13 +365,8 @@ const Notas = () => {
     },
     {
       name: "NOTA FINAL",
-      selector: (row) => row.Nota,
+      selector: (row) => row.NotaDisplay, 
       center: true,
-      cell: (row) => (
-        submittedForm[`${row.IDSECCION}`]
-          ? <span>{row.Nota}</span>
-          : null
-      ),
     },
     
     {
@@ -458,6 +465,7 @@ const Notas = () => {
           className="mi-tabla"
           columns={columnas1} 
           data={historialData} 
+          keyField="IDSECCION"
           customStyles={customStyles}
           noDataComponent={<NoDataComponent />}></DataTable>
       </div>
