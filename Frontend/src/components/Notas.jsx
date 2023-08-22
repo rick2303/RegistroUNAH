@@ -227,54 +227,88 @@ const Notas = () => {
   obtenerFechasMinMaxIIPAC();
   obtenerFechasMinMaxIIIPAC();
 
-  useEffect(() => {
-    if (NumCuenta && periodoAcademicoActual && año) {
-      showData(NumCuenta, periodoAcademicoActual, año);
-    }
-    console.log(periodoAcademicoActual);
-  }, [NumCuenta, periodoAcademicoActual, año]);
-  
-  const showData = async (cuenta, periodo, year) => {
+
+  const getEvaluationStatus = async (NumCuenta, IdDocente, IdSeccion) => {
     try {
-      const URL = "http://localhost:5000/enviarClasesQueEstaCursando";
-      const response = await fetch(URL, {
-        method: "POST",
+      const response = await fetch('http://localhost:5000/existenciaEvaluacion', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          NumCuenta: cuenta,
-          Periodo: periodo,
-          año: year,
-        }),
+          "IdEstudiante": NumCuenta,
+          "IdDocente": IdDocente,
+          "IdSeccion": IdSeccion
+        })
       });
   
-      const data = await response.json();
-      console.log(data);
-  
-      const updatedData = await Promise.all(
-        data.map(async (row) => {
-          const isEvaluated = await getEvaluationStatus(
-            row.IdDocente,
-            row.IDSECCION
-          );
-  
-          if (isEvaluated) {
-            row.NotaDisplay = row.Nota;
-          } else {
-            row.NotaDisplay = "";
-          }
-  
-          return row;
-        })
-      );
-  
-      setHistorialData(updatedData);
+      if (response.ok) {
+        const data = await response.json();
+        const Tru = data;
+        console.log(Tru);
+        return Tru; // Return the evaluation status from the server
+      } else {
+        console.error('Error al verificar la existencia de evaluación:', response.status);
+        return false; // Handle the error condition as needed
+      }
     } catch (error) {
-      console.error("Error al obtener los datos:", error);
+      console.error('Error al verificar la existencia de evaluación:', error);
+      return false; // Handle the error condition as needed
     }
   };
   
+  useEffect(() => {
+    const fetchData = async () => {
+      if (NumCuenta && periodoAcademicoActual && año) {
+        const evaluationStatus = await getEvaluationStatus(NumCuenta, IdDocente, IdSeccion);
+        setTru(evaluationStatus); // Update Tru based on the evaluation status
+        showData(NumCuenta, periodoAcademicoActual, año);
+      }
+      console.log(periodoAcademicoActual);
+      console.log(Tru); // Check Tru here to see if it has been updated
+    };
+  
+    fetchData(); // Call the async function
+  }, [NumCuenta, periodoAcademicoActual, año, IdDocente, IdSeccion]);
+  
+  const showData = async (cuenta, periodo, year) => {
+  try {
+    const URL = "http://localhost:5000/enviarClasesQueEstaCursando";
+    const response = await fetch(URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        NumCuenta: cuenta,
+        Periodo: periodo,
+        año: year,
+      }),
+    });
+
+    const data = await response.json();
+
+    const updatedData = await Promise.all(
+      data.map(async (row) => {
+        const isEvaluated = await getEvaluationStatus(NumCuenta, IdDocente, IdSeccion);
+
+        if (isEvaluated === true) {
+          row.NotaDisplay = row.Nota;
+          row.IsEvaluated = true; // Add a flag indicating if the row is evaluated
+        } else {
+          row.NotaDisplay = "";
+          row.IsEvaluated = false; // Add a flag indicating if the row is not evaluated
+        }
+
+        return row;
+      })
+    );
+
+    setHistorialData(updatedData);
+  } catch (error) {
+    console.error("Error al obtener los datos:", error);
+  }
+};
 
   const customStyles = {
     headCells: {
@@ -296,34 +330,6 @@ const Notas = () => {
     margin: auto;
     `;
 
-const getEvaluationStatus = async () => {
-  try {
-    const response = await fetch('http://localhost:5000/existenciaEvaluacion', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        "IdEstudiante": NumCuenta,
-        "IdDocente": IdDocente,
-        "IdSeccion": IdSeccion
-      })
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      const Tru = data;
-      setTru(Tru)
-      return data; // Debe ser true o false según si el docente está evaluado o no
-    } else {
-      console.error('Error al verificar la existencia de evaluación:', response.status);
-      return false; // Maneja la condición de error según sea necesario.
-    }
-  } catch (error) {
-    console.error('Error al verificar la existencia de evaluación:', error);
-    return false; // Maneja la condición de error según sea necesario.
-  }
-};
 
 
 
