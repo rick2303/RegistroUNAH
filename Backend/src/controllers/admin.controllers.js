@@ -353,14 +353,12 @@ export const validacionJefe = async (req, res) => {
         .input('CentroRegional', sql.VarChar, CentroRegional)
         .query(querysADMIN.getJefeExistente);
         if(result.recordset[0].existe_empleado == 1){
-            res.status(500).send('Ya existe un Jefe de departamento')
+            res.status(200).send(true)
         }else{
-            res.status(200).send('No existe un Jefe')
+            res.status(200).send(false)
         }
     } catch (error) {
         res.status(500).send(error.message);
-    }finally{
-        pool.close();
     }
 }
 
@@ -372,14 +370,12 @@ export const validacionCoordi = async (req, res) => {
         .input('Carrera', sql.VarChar, Carrera)
         .input('CentroRegional', sql.VarChar, CentroRegional)
         .query(querysADMIN.getCoordiExistente);
-        if(result.recordset[0].existencia == 0){
-            res.status(500).send('Maximos coordinadores asignados')
+        if(result.recordset[0].existencia == 1){
+            res.status(200).send(true)
         }else{
-            res.status(200).send('Plaza disponible')
+            res.status(200).send(false)
         }
     } catch (error) {
         res.status(500).send(error.message);
-    }finally{
-        pool.close();
     }
 }
