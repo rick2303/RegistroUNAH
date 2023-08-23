@@ -28,64 +28,45 @@ export const obtenerCupos = async (req, res) => {
 
 
 // Función para verificar si hay conflictos de horarios
-export async function verificarConflictosHorarios(IdEstudiante, Dias, HI, HF, Periodo) {
+export const verificarConflictosHorarios = async (req, res) => {
+    const { IdEstudiante, Dias, HI, HF, Periodo } = req.body;
     try {
         const pool = await getConnection();
 
+        // Parsear HI y HF como enteros
+        const parsedHI = parseInt(HI);
+        const parsedHF = parseInt(HF);
+
         const query = `
-            SELECT COUNT(*) AS Total
+        SELECT count(*) as Total
         FROM [dbo].[registro_estudiante_clases] rec
         INNER JOIN [dbo].[secciones] s ON rec.IdSeccion = s.IdSeccion
         WHERE rec.IdEstudiante = @IdEstudiante
         AND s.Periodo = @Periodo
-        AND (
-            (@HI BETWEEN s.HI AND s.HF OR @HF BETWEEN s.HI AND s.HF OR s.HI BETWEEN @HI AND @HF OR s.HF BETWEEN @HI AND @HF)
-            AND (
-                s.Dias LIKE '%Lu%' AND CHARINDEX('Lu', @Dias) > 0
-                OR s.Dias LIKE '%Ma%' AND CHARINDEX('Ma', @Dias) > 0
-                OR s.Dias LIKE '%Mi%' AND CHARINDEX('Mi', @Dias) > 0
-                OR s.Dias LIKE '%Ju%' AND CHARINDEX('Ju', @Dias) > 0
-                OR s.Dias LIKE '%Vi%' AND CHARINDEX('Vi', @Dias) > 0
-                OR s.Dias LIKE '%Sa%' AND CHARINDEX('Sa', @Dias) > 0
-                -- Añade aquí otras combinaciones de días si es necesario (por ejemplo, Jueves, Viernes, etc.)
+        AND ((HI = @parsedHI AND HF > @parsedHI) )  AND (
+                (@Dias LIKE '%Lu%' AND Dias LIKE '%Lu%')
+                OR (@Dias LIKE '%Ma%' AND Dias LIKE '%Ma%')
+                OR (@Dias LIKE '%Mi%' AND Dias LIKE '%Mi%')
+                OR (@Dias LIKE '%Ju%' AND Dias LIKE '%Ju%')
+                OR (@Dias LIKE '%Vi%' AND Dias LIKE '%Vi%')
+                OR (@Dias LIKE '%Sa%' AND Dias LIKE '%Sa%')
             )
-            AND EXISTS (
-                SELECT 1
-                FROM [dbo].[registro_estudiante_clases] rec2
-                INNER JOIN [dbo].[secciones] s2 ON rec2.IdSeccion = s2.IdSeccion
-                WHERE rec2.IdEstudiante = @IdEstudiante
-                AND s2.Periodo = @Periodo
-                AND (
-                    (@HI BETWEEN s2.HI AND s2.HF OR @HF BETWEEN s2.HI AND s2.HF OR s2.HI BETWEEN @HI AND @HF OR s2.HF BETWEEN @HI AND @HF)
-                    AND (
-                        s2.Dias LIKE '%Lu%' AND CHARINDEX('Lu', @Dias) > 0
-                        OR s2.Dias LIKE '%Ma%' AND CHARINDEX('Ma', @Dias) > 0
-                        OR s2.Dias LIKE '%Mi%' AND CHARINDEX('Mi', @Dias) > 0
-                        OR s2.Dias LIKE '%Ju%' AND CHARINDEX('Ju', @Dias) > 0
-                        OR s2.Dias LIKE '%Vi%' AND CHARINDEX('Vi', @Dias) > 0
-                        OR s2.Dias LIKE '%Sa%' AND CHARINDEX('Sa', @Dias) > 0
-                        -- Añade aquí otras combinaciones de días si es necesario (por ejemplo, Jueves, Viernes, etc.)
-                    )
-                )
-                AND rec2.IdEstudiante = rec.IdEstudiante
-                AND rec2.IdSeccion != rec.IdSeccion
-            )
-        );
         `;
 
         const result = await pool.request()
         .input('IdEstudiante', sql.VarChar, IdEstudiante)
         .input('Dias', sql.VarChar, Dias)
-        .input('HI', sql.VarChar, HI)
-        .input('HF', sql.VarChar, HF)
+        .input('parsedHI', sql.Int, parsedHI) // Usar sql.Int para los valores enteros
+        .input('parsedHF', sql.Int, parsedHF)
         .input('Periodo', sql.VarChar, Periodo)
         .query(query);
-
-        return result.recordset[0].Total;  // Devuelve el resultado de la consulta (0 si no hay conflictos, otro valor si hay conflictos)
+        console.log("este es de controllers: ", result.recordset[0].Total);
+        res.json(result.recordset[0].Total);  // Devuelve el resultado de la consulta (0 si no hay conflictos, otro valor si hay conflictos)
     } catch (error) {
         throw error;
     }
 }
+
 
 
 // Función para verificar si hay conflictos de horarios

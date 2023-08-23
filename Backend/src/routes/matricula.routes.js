@@ -11,17 +11,7 @@ routerMatricula.post('/MostrarSeccionesMatricula',mostrarSeccionesMatricula)
 
 routerMatricula.post('/verificarCupos', obtenerCupos)
 
-routerMatricula.post('/verificarConflicto', async (req, res) => {
-    try {
-    const { IdEstudiante, Dias, HI, HF, Periodo } = req.body;
-    const totalConflicts = await verificarConflictosHorarios(IdEstudiante, Dias, HI, HF, Periodo);
-    console.log(totalConflicts);
-    res.json({ totalConflicts });
-    } catch (error) {
-        console.error("Error al verificar conflictos de horarios:", error);
-        res.status(500).json({ message: "Error al verificar conflictos de horarios" });
-    }
-});
+routerMatricula.post('/verificarConflicto', verificarConflictosHorarios);
 
 routerMatricula.post('/verificarClaseMatriculaONo', async (req, res) => {
     try {
