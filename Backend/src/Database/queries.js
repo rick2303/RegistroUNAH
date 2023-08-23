@@ -34,7 +34,17 @@ export const queries = {
 
     getAulas: "select au.Nombre from aulas au inner join edificios as ed on au.IdEdificio=ed.IdEdificio where ed.IdEdificio=@IdEdificio",
 
-    validarDocenteSeccion: `SELECT * FROM Secciones WHERE IdDocente = @IdDocente AND Dias = @Dias AND ((HI <= @HI AND HF >= @HI) OR (HI <= @HF AND HF >= @HF) OR (HI >= @HI AND HF <= @HF)) AND Periodo = @Periodo`,
+    validarDocenteSeccion: `SELECT * FROM Secciones
+    WHERE IdDocente = @IdDocente 
+    AND ((HI = @HI AND HF >= @HI) OR (HI <= @HF AND HF >= @HF) OR (HI >= @HI AND HF <= @HF))       AND (
+        (@Dias LIKE '%Lu%' AND Dias LIKE '%Lu%')
+        OR (@Dias LIKE '%Ma%' AND Dias LIKE '%Ma%')
+        OR (@Dias LIKE '%Mi%' AND Dias LIKE '%Mi%')
+        OR (@Dias LIKE '%Ju%' AND Dias LIKE '%Ju%')
+        OR (@Dias LIKE '%Vi%' AND Dias LIKE '%Vi%')
+        OR (@Dias LIKE '%Sa%' AND Dias LIKE '%Sa%')
+    )
+    AND Periodo = @Periodo`,
 
     obtenerSeccionMaxima: `SELECT MAX(Seccion) AS MaxSeccion FROM Secciones WHERE HI = @HI AND Periodo = @Periodo`,
 
@@ -109,7 +119,7 @@ export const queries = {
 
 export const querys = {
     getAllStudents: "SELECT * from [dbo].[estudiantes]",
-    addNewStudent: "INSERT INTO [dbo].[estudiantes] (NumCuenta, DNI, Nombre, Apellido,NumeroTelefono, CorreoInstitucional, CorreoPersonal, Contrasena, FechaNacimiento, Carrera, Direccion, CentroRegional, PuntajePAA) VALUES (@NumCuenta, @DNI, @Nombre, @Apellido,@NumeroTelefono, @CorreoInstitucional, @CorreoPersonal, @Contrasena, @FechaNacimiento, @Carrera, @Direccion, @CentroRegional, @PuntajePAA);",
+    addNewStudent: "INSERT INTO [dbo].[estudiantes] (NumCuenta, DNI, Nombre, Apellido,NumeroTelefono, CorreoInstitucional, CorreoPersonal, Contrasena, FechaNacimiento, Carrera, Direccion, CentroRegional, PuntajePAA, PuntajePAM, PuntajePCCNS) VALUES (@NumCuenta, @DNI, @Nombre, @Apellido,@NumeroTelefono, @CorreoInstitucional, @CorreoPersonal, @Contrasena, @FechaNacimiento, @Carrera, @Direccion, @CentroRegional, @PuntajePAA, @PuntajePAM, @PuntajePCCNS);",
     getEstudiantesMatriculados: "SELECT Distinct NumCuenta, Nombre, Apellido, CorreoInstitucional, Carrera, IndiceGlobal, IndicePeriodo FROM [dbo].[estudiantes] e inner join registro_estudiante_clases re on re.IdEstudiante = numCuenta inner join secciones s on re.idSeccion = s.idseccion where YEAR(re.fecha) = year(getdate()) and month(RE.Fecha) > '05'",
     insertNuevaPlanificacion: "INSERT INTO [dbo].[planificacion_academica] (FechaInicio, FechaFinal, PeriodoAcademico, Sistema) VALUES (@FechaInicio, @FechaFinal, @PeriodoAcademico, @Sistema)",
     getPlanificacionAcademica: "SELECT * FROM [dbo].[planificacion_academica] WHERE Sistema='Trimestral'Order by FechaInicio",

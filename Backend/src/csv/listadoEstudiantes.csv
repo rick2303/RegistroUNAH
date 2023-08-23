@@ -1,6 +1,2 @@
-nombre,apellido,telefono,FechaNacimiento,puntajePAA,DNI,carrera,correo,centro,direccion,periodoIngreso,anioIngreso,dia,mes,anio
-Gelen Fabiola,Amador Pavon,88572809,2000-06-27,1000,0801200016054,Ingenieria en Sistemas,gelenamador26@gmail.com,CU,reparto por arriba,I PAC,2024,22,06,2019 
-Gerardo Josue,Montoya Amaya,89572859,2000-10-02,1452,0801200023495,Ingenieria en Sistemas,hpgerardomontoya@gmail.com,CURC,Res.Honduras,I PAC,2022,22,06,2023
-Nicolas Antonio,Lovo Montenegro,87572810,2000-08-16,1600,0704199801066,Ingenieria en Sistemas,nicolastislovomontenegro@gmail.com,CURLA,Res. Palma Real,II PAC,2021,22,06,2023
-Lleymi Nohemi,Cruz Montoya,86575287,2000-07-30,1416,0801200015275,Ingenieria en Sistemas,lleymicruz18@gmail.com,CU,Col. Villa Olímpica,III PAC,2020,22,06,2022
-Franky Ricardo,Interiano Garcia,89572852,2002-05-20,1000,0801200306301,Ingenieria en Sistemas,ricky95hnd@gmail.com,CU,Hato,I PAC,2019,22,06,2020
+nombre,apellido,telefono,FechaNacimiento,puntajePAA,DNI,carrera,correo,centro,direccion,periodoIngreso,anioIngreso,dia,mes,anio,puntajePAM,puntajePCCNS, 
+Maria Fabiola,Amador Pavon,88572810,2000-06-25,1000,0804200416057,Ingenieria en Sistemas,gelenamador26@gmail.com,CU,reparto por arriba,II PAC,2024,22,06,2019,700,800,

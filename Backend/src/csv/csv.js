@@ -1,3 +1,4 @@
+import { Console } from "console";
 import {USEREMAIL,PASS} from "../../.env"
 import {createNewStudent} from '../controllers/usuarios.controllers';
 
@@ -31,6 +32,8 @@ fs.createReadStream(csvFilePath)
       dia,
       mes,
       anio,
+      puntajePAM,
+      puntajePCCNS
     } = data;
     const student = {
       nombre,
@@ -48,6 +51,8 @@ fs.createReadStream(csvFilePath)
       dia,
       mes,
       anio,
+      puntajePAM,
+      puntajePCCNS
     };
     students.push(student);
   })
@@ -55,7 +60,7 @@ fs.createReadStream(csvFilePath)
 
     // console.log("Datos cargados:", students);
     for (let index = 0; index < students.length; index++) {
-      CreacionCCC(students[index].correo,students[index].DNI,students[index].nombre, students[index].apellido,students[index].telefono,students[index].FechaNacimiento,students[index].anioIngreso,students[index].direccion, students[index].centro, students[index].periodoIngreso, students[index].carrera, students[index].puntajePAA)      
+      CreacionCCC(students[index].correo,students[index].DNI,students[index].nombre, students[index].apellido,students[index].telefono,students[index].FechaNacimiento,students[index].anioIngreso,students[index].direccion, students[index].centro, students[index].periodoIngreso, students[index].carrera, students[index].puntajePAA, students[index].puntajePAM, students[index].puntajePCCNS)      
       
     }
 
@@ -64,7 +69,7 @@ fs.createReadStream(csvFilePath)
 }
 //export default students;
 
-function CreacionCCC(correopersonal,dni, firstName, lastName,tel,fechaNaci, anioIngresoPAC,direc, centro, periodo, carreraIngreso, puntaje) {
+function CreacionCCC(correopersonal,dni, firstName, lastName,tel,fechaNaci, anioIngresoPAC,direc, centro, periodo, carreraIngreso, puntaje, puntajePAM, puntajePCCNS) {
 
   const firstSpaceIndex = firstName.indexOf(' ');
   const firstNameOnly = firstSpaceIndex !== -1 ? firstName.substring(0, firstSpaceIndex) : firstName;
@@ -219,12 +224,12 @@ const numerosCuentaGenerados = [];
   // console.log('Contraseña:', password);
   //console.log('Número de cuenta:',  Cuenta);
 
-  //enviarEmail(correopersonal,firstName,lastName,uniqueEmail, Cuenta,password, carreraIngreso);
+  enviarEmail(correopersonal,firstName,lastName,uniqueEmail, Cuenta,password, carreraIngreso);
 
 
   const express = require('express');
   const app = express();
-  
+  console.log("PUNTAJE PCCNS", puntajePCCNS);
   const req = {
     body: {
       NumCuenta: Cuenta,
@@ -239,7 +244,9 @@ const numerosCuentaGenerados = [];
       Carrera: carreraIngreso,
       Direccion: direc,
       CentroRegional: centro,
-      PuntajePAA: puntaje
+      PuntajePAA: puntaje,
+      PuntajePAM: puntajePAM,
+      PuntajePCCNS: puntajePCCNS,
     }
   };
 

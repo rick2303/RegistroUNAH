@@ -13,10 +13,10 @@ export const getEstudiantes = async (req, res) => {
 };
 
 export const createNewStudent = async (req, res) => {
-    const {NumCuenta, DNI, Nombre, Apellido,NumeroTelefono, CorreoInstitucional, CorreoPersonal, Contrasena, FechaNacimiento, Carrera, Direccion, CentroRegional, PuntajePAA } = req.body;
+    const {NumCuenta, DNI, Nombre, Apellido,NumeroTelefono, CorreoInstitucional, CorreoPersonal, Contrasena, FechaNacimiento, Carrera, Direccion, CentroRegional, PuntajePAA, PuntajePAM, PuntajePCCNS } = req.body;
 
     // validating
-    if (NumCuenta == null || DNI == null || Nombre == null || Apellido == null || NumeroTelefono == null || CorreoInstitucional == null || CorreoPersonal == null || Contrasena == null || FechaNacimiento == null || Carrera == null || Direccion == null || CentroRegional == null || PuntajePAA == null) {
+    if (NumCuenta == null || DNI == null || Nombre == null || Apellido == null || NumeroTelefono == null || CorreoInstitucional == null || CorreoPersonal == null || Contrasena == null || FechaNacimiento == null || Carrera == null || Direccion == null || CentroRegional == null || PuntajePAA == null ) {
         return res.status(400).json({ msg: "Peticion denegada. Por favor, llenar todos los espacios" });
     }
 
@@ -38,9 +38,11 @@ export const createNewStudent = async (req, res) => {
         .input("Direccion", sql.VarChar,Direccion)
         .input("CentroRegional", sql.VarChar, CentroRegional)
         .input("PuntajePAA", sql.Int, PuntajePAA)
+        .input("PuntajePAM", sql.Int, PuntajePAM)
+        .input("PuntajePCCNS", sql.Int, PuntajePCCNS)
         .query(querys.addNewStudent);
 
-        res.json({NumCuenta, DNI, Nombre, Apellido,NumeroTelefono, CorreoInstitucional, CorreoPersonal, Contrasena, FechaNacimiento, Carrera, Direccion, CentroRegional, PuntajePAA});
+        res.json({NumCuenta, DNI, Nombre, Apellido,NumeroTelefono, CorreoInstitucional, CorreoPersonal, Contrasena, FechaNacimiento, Carrera, Direccion, CentroRegional, PuntajePAA, PuntajePAM, PuntajePCCNS});
     } catch (error) {
         res.status(500);
         res.send(error.message);
