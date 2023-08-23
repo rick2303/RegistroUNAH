@@ -24,6 +24,7 @@ function CargarArchivo() {
           if (response.status == 200) {
             alert('Archivo recibido y procesado correctamente');
             console.log(response)
+            window.location.reload();
             return response;
           }
         })

@@ -25,6 +25,7 @@ const ModalDocentes = () => {
   const [Foto, setFoto] = useState("");
   const [Carrera, setCarrera] = useState([]);
   const [carreraSeleccionada, setCarreraSeleccionada] = useState("");
+ 
 
   const toggleModal = () => {
     setModalOpen(!modalOpen);
@@ -34,8 +35,23 @@ const ModalDocentes = () => {
     setCarreraSeleccionada(event.target.value);
   };
 
+  const fecharango = (date) => {
+    const minDate = new Date("1900-01-01");
+    const maxDate = new Date("2000-01-01");
+    return date >= minDate && date <= maxDate;
+  };
+
   const handleOpcionChange = (event) => {
     setCentroRegional(event.target.value);
+  };
+
+  const handleDNIcambio = (e) => {
+    const inputDNI = e.target.value;
+    
+    // Limit input to 13 characters
+    if (inputDNI.length <= 13) {
+      setDNI(inputDNI);
+    }
   };
 
   const borrarCampos = () => {
@@ -87,6 +103,13 @@ const ModalDocentes = () => {
   const AgregarDocente = (event) => {
     event.preventDefault();
 
+    const dateObject = new Date(FechaNacimiento);
+
+    if (!fecharango(dateObject)) {
+      alert("La fecha de nacimiento debe ser igual o anterior a 2000");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("DNI", DNI);
     formData.append("Nombre", Nombre);
@@ -96,7 +119,7 @@ const ModalDocentes = () => {
     formData.append("FechaNacimiento", FechaNacimiento);
     formData.append("Carrera", carreraSeleccionada);
     formData.append("Direccion", Direccion);
-    formData.append("files", Foto);
+    formData.append("files", document.getElementById("foto").files[0]);
     formData.append("CentroRegional", CentroRegional);
 
     toggleModal();
@@ -166,20 +189,19 @@ const ModalDocentes = () => {
               />
             </FormGroup>
             <FormGroup>
-              <Label for="DNI">DNI</Label>
-              <Input
-                type="text"
-                
-                id="DNI"
-                value={DNI}
-                onChange={(e) => setDNI(e.target.value)}
-                onKeyPress={(event) => {
-            const charCode = event.which ? event.which : event.keyCode;
-            if (charCode < 48 || charCode > 57) {
-            event.preventDefault();
-            }
-        }}
-              />
+                <Label for="DNI">DNI</Label>
+                <Input
+                  type="text"
+                  id="DNI"
+                  value={DNI}
+                  onChange={handleDNIcambio} 
+                  onKeyDown={(event) => {
+                    
+                    if (event.target.value.length >= 13 && event.key !== "Backspace") {
+                      event.preventDefault();
+                    }
+                  }}
+                />
             </FormGroup>
             <FormGroup>
               <Label for="email">Correo Personal</Label>
@@ -207,14 +229,16 @@ const ModalDocentes = () => {
               />
             </FormGroup>
             <FormGroup>
-              <Label for="fechaNacimiento">Fecha De Nacimiento</Label>
-              <Input
-                type="date"
-                id="fechaNacimiento"
-                value={FechaNacimiento}
-                onChange={(e) => setFechaNacimiento(e.target.value)}
-              />
-            </FormGroup>
+                <Label for="fechaNacimiento">Fecha De Nacimiento</Label>
+                <Input
+                  type="date"
+                  id="fechaNacimiento"
+                  value={FechaNacimiento}
+                  onChange={(e) => setFechaNacimiento(e.target.value)}
+                  max="2000-01-01" 
+                  min="1900-01-01" 
+                />
+              </FormGroup>
             <FormGroup>
               <Label for="carrera">Carrera</Label>
               <select
@@ -275,13 +299,10 @@ const ModalDocentes = () => {
           <Button color="boton_guardar" onClick={AgregarDocente}>
             Registrar
           </Button>
-          <Button color="secondary" onClick={toggleModal}>
-            Cancelar
-          </Button>
         </ModalFooter>
       </Modal>
     </div>
   );
 };
 
-export default ModalDocentes;
+export default ModalDocentes;

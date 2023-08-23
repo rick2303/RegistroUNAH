@@ -46,6 +46,28 @@ function ChatApp() {
     };
 
     useEffect(() => {
+        if (socket) {
+            socket.on('userConnected', ({ userId, isOnline }) => {
+                if (selectedContact && selectedContact.IdEstudianteAgregado === userId) {
+                    setSelectedContact((prevContact) => ({
+                        ...prevContact,
+                        IsOnline: isOnline
+                    }));
+                }
+            });
+
+            socket.on('userDisconnected', ({ userId, isOnline }) => {
+                if (selectedContact && selectedContact.IdEstudianteAgregado === userId) {
+                    setSelectedContact((prevContact) => ({
+                        ...prevContact,
+                        IsOnline: isOnline
+                    }));
+                }
+            });
+        }
+    }, [socket, selectedContact]);
+    
+    useEffect(() => {
         if (autoScroll && chatHistoryRef.current) {
             chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
             setAutoScroll(false);
