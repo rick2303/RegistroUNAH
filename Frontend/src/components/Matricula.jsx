@@ -495,7 +495,7 @@ const verificarConflictosHorarios = async (IdEstudiante, Dias, HI, HF, Periodo) 
     });
     const data = await response.json();
     console.log("La respuesta de la API para conflictos de horarios es:", data);
-    return data.totalConflicts;
+    return data;
 } catch (error) {
     console.error("Error al verificar conflictos de horarios:", error);
     throw error;
@@ -554,9 +554,9 @@ const handleRowClickObtenerClase = async (row) => {
 
         if (verificarClaseSiEstaMatriculada == 0) {
 
-        if (conflictosHorariosEspera > 1) {
+        if (conflictosHorariosEspera > 0) {
             // Hay conflictos de horarios para la clase en espera
-            alert("No puedes matricular la clase en espera. Existen conflictos de horarios.");
+            alert("No puedes matricular la clase. Existen conflictos de horarios.");
         } else if (cuposDisponibles === 0) {
             // Los cupos están agotados
             const confirmacion = window.confirm("No puedes matricular la clase. Los cupos están agotados. ¿Deseas poner la clase en lista de espera?");
@@ -573,10 +573,8 @@ const handleRowClickObtenerClase = async (row) => {
                 DecrementarContador(row);
                 window.location.reload();
                 alert("La clase ha sido añadida a la lista de espera.");
-                
-
             }
-        } else {
+        } else  {
             // Verificar conflictos de horarios antes de matricular
             const conflictosHorarios = await verificarConflictosHorarios(
                 NumCuenta,
@@ -585,8 +583,9 @@ const handleRowClickObtenerClase = async (row) => {
                 row.HF,
                 periodoAcademicoActual
             );
+            console.log("Conflictos de horarios:", conflictosHorarios)
 
-            if (conflictosHorarios > 1) {
+            if (conflictosHorarios > 0) {
                 // Hay conflictos de horarios para la matrícula
                 alert("No puedes matricular la clase. Existen conflictos de horarios.");
             } else {
@@ -610,7 +609,7 @@ const handleRowClickObtenerClase = async (row) => {
             }
         }
     } else {
-        alert("La clase ya está matriculada o ya esta en lista de espera.");
+        alert("No puedes matricular la clase. Existen conflictos de horarios.");
     }
 }
 else {
