@@ -66,17 +66,18 @@ export const crearSeccion = async (req, res) => {
     const { IdClase, Edificio, Aula, HI, HF, Periodo, Obs, IdDocente, Dias, Cupos, CentroRegional, ClaseServicio } = req.body;
     const fechaActual = new Date();  // Obtiene la fecha actual del sistema
     const pool = await getConnection();
+    
+    const intHI = parseInt(HI); // Convertir HI a entero
+    const intHF = parseInt(HF); // Convertir HF a entero
 
     // Validar si el docente seleccionado ya tiene una sección asignada a los mismos días, hora y periodo
     const validarDocenteSeccionQuery = await pool.request()
       .input("IdDocente", sql.Int, IdDocente)
       .input("Dias", sql.VarChar, Dias)
-      .input("HI", sql.VarChar, HI)
-      .input("HF", sql.VarChar, HF)
+      .input("HI", sql.Int, intHI) // Pasar intHI como entero
+      .input("HF", sql.Int, intHF) // Pasar intHF como entero
       .input("Periodo", sql.VarChar, Periodo)
       .query(queries.validarDocenteSeccion);
-
-      console.log(validarDocenteSeccionQuery.recordset)
 
     if (validarDocenteSeccionQuery.recordset.length > 0) {
       res.status(400).json({ message: 'El docente seleccionado ya tiene una sección asignada a los mismos días, hora y periodo.' });
@@ -87,25 +88,24 @@ export const crearSeccion = async (req, res) => {
     const seccionAulaExistenteQuery = await pool.request()
       .input("Edificio", sql.VarChar, Edificio)
       .input("Aula", sql.VarChar, Aula)
-      .input("HI", sql.VarChar, HI)
-      .input("HF", sql.VarChar, HF)
+      .input("HI", sql.Int, intHI) // Pasar intHI como entero
+      .input("HF", sql.Int, intHF) // Pasar intHF como entero
       .input("Dias", sql.VarChar, Dias)
       .input("Periodo", sql.VarChar, Periodo)
       .query(queries.validarSeccionAulaQuery);
 
-      console.log(seccionAulaExistenteQuery.recordset)
     if (seccionAulaExistenteQuery.recordset.length > 0) {
       res.status(400).json({ message: 'Ya existe una sección asignada al mismo aula, hora inicial, días y periodo.' });
       return;
     }
 
     // Validar si la HI es mayor que la HF
-    if (parseInt(HI) >= parseInt(HF)) {
+    if (intHI >= intHF) {
       res.status(400).json({ message: 'La HI debe ser menor a la HF.' });
       return;
     }
 
-    let Seccion = HI
+    let Seccion = intHI;
     // Validar si la sección ya existe para la clase, periodo y año seleccionados
     const seccionExistenteQuery = await pool.request()
       .input("IdClase", sql.VarChar, IdClase)
@@ -119,7 +119,7 @@ export const crearSeccion = async (req, res) => {
       // Obtener la sección máxima de la clase
       const seccionMaximaQuery = await pool.request()
         .input("IdClase", sql.VarChar, IdClase)
-        .input("HI", sql.VarChar, HI)
+        .input("HI", sql.VarChar, intHI)
         .input("Periodo", sql.VarChar, Periodo)
         .query(queries.obtenerSeccionMaxima);
 
@@ -132,9 +132,9 @@ export const crearSeccion = async (req, res) => {
       .input("IdClase", sql.VarChar, IdClase)
       .input("Edificio", sql.VarChar, Edificio)
       .input("Aula", sql.VarChar, Aula)
-      .input("HI", sql.VarChar, HI)
+      .input("HI", sql.Int, intHI) // Pasar intHI como entero
       .input("Seccion", sql.Int, Seccion)
-      .input("HF", sql.VarChar, HF)
+      .input("HF", sql.Int, intHF) // Pasar intHF como entero
       .input("Periodo", sql.VarChar, Periodo)
       .input("Obs", sql.VarChar, Obs)
       .input("IdDocente", sql.Int, IdDocente)
