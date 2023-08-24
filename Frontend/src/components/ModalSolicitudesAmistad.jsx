@@ -68,8 +68,9 @@ function ModalSolicitudesAmistad({ isOpen, onClose }) {
             );
 
             // const data = await response.json();
-            alert('Usuario aceptado');
+            alert('Solicitud de amistad aceptada');
             ContactosEspera();
+            
 
         } catch (error) {
             console.error('Error Aceptar solicitud:', error);
@@ -95,6 +96,7 @@ function ModalSolicitudesAmistad({ isOpen, onClose }) {
             alert('Usuario rechazado');
             ContactosEspera();
 
+
         } catch (error) {
             console.error('Error Aceptar solicitud:', error);
         } finally {
@@ -116,7 +118,7 @@ function ModalSolicitudesAmistad({ isOpen, onClose }) {
         },
         {
             name: 'CARRERA',
-            selector: row => row.Carrera,
+            selector: row => row.Carrera.toUpperCase(),
             center: true,
         },
         {
@@ -149,7 +151,7 @@ function ModalSolicitudesAmistad({ isOpen, onClose }) {
         <>
             {/* <!-- Modal --> */}
             <Modal isOpen={isOpen} toggle={handleCloseModal} className="modal-dialog" style={{ maxWidth: '1500px', width: '80%' }}>
-                <ModalHeader className="text-black">
+                <ModalHeader className="text-white " style={{backgroundColor:'#1E40AF'}}>
                     <h1 className="modal-title fs-5 text-center" id="exampleModalLabel">
                         <strong>Solicitudes de contacto</strong>
                     </h1>

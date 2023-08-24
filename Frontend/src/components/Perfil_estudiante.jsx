@@ -8,6 +8,7 @@ import EditableEmail from "./EditarCorreoEstudiante";
 import { TiArrowBackOutline } from "react-icons/ti";
 import { MdAddAPhoto } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
+import imgDefault from "../img/uploads/1688323336413-804346209-64572.png"
 
 function Perfil_estudiante() {
   const [descripcion, setDescripcion] = useState("");
@@ -42,23 +43,36 @@ function Perfil_estudiante() {
       const correoPersonal = userData.data.CorreoPersonal;
       setCorreoPersonal(correoPersonal);
 
-      if (!userData.perfil) {
-        const imagen = "1688356529392-947749500-Sin tÃ­tulo.png";
-        setImagen1(imagen);
-        const imagen2 = "1688356529392-947749500-Sin tÃ­tulo.png";
+      if (!userData.perfil.Imagen1) {
+        const imagen1 = "1688323336413-804346209-64572.png";
+        setImagen1(imagen1);
+        console.log("No hay imagen 1");
+    } else {
+        const imagen1 = userData.perfil.Imagen1;
+        setImagen1(imagen1);
+    }
+    
+    if (!userData.perfil.Imagen2) {
+        const imagen2 = "1688323336413-804346209-64572.png";
         setImagen2(imagen2);
-        const imagen3 = "1688356529392-947749500-Sin tÃ­tulo.png";
-        setImagen3(imagen3);
-      } else {
-        const imagen = userData.perfil.Imagen1;
-        setImagen1(imagen);
+        console.log("No hay imagen 2");
+    } else {
         const imagen2 = userData.perfil.Imagen2;
         setImagen2(imagen2);
+    }
+    
+    if (!userData.perfil.Imagen3) {
+        const imagen3 = "1688323336413-804346209-64572.png";
+        setImagen3(imagen3);
+        console.log("No hay imagen 3");
+    } else {
         const imagen3 = userData.perfil.Imagen3;
         setImagen3(imagen3);
-        const descripcion = userData.perfil.Descripcion;
-        setDescripcion(descripcion);
-      }
+    }
+    
+    const descripcion = userData.perfil.Descripcion;
+    setDescripcion(descripcion);
+    
     }
   }, []);
 

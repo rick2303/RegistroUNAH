@@ -35,7 +35,7 @@ function Perfil_docente() {
      
       
       if(!userData.perfil ){
-        const imagen = '../1688323336413-804346209-64572.png';
+        const imagen = '1688323336413-804346209-64572.png';
         setImagen(imagen);
         const video = '../Video docente.mp4';
         setVideo(video);

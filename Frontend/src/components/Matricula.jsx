@@ -609,7 +609,7 @@ const handleRowClickObtenerClase = async (row) => {
             }
         }
     } else {
-        alert("No puedes matricular la clase. Existen conflictos de horarios.");
+        alert("La clase ya esta matriculada o en lista de espera.");
     }
 }
 else {

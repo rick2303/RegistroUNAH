@@ -55,7 +55,6 @@ function ChatApp() {
                     }));
                 }
             });
-
             socket.on('userDisconnected', ({ userId, isOnline }) => {
                 if (selectedContact && selectedContact.IdEstudianteAgregado === userId) {
                     setSelectedContact((prevContact) => ({
@@ -152,7 +151,12 @@ function ChatApp() {
             console.error("Error de red:", error);
         }
     };
-
+    const imagenExiste = (path) => {
+        const img = new Image();
+        img.src = path;
+        return img.complete || img.width > 0 || img.height > 0;
+    };
+    
 
 
     const fetchContactos = async (NumCuenta) => {
@@ -266,13 +270,14 @@ function ChatApp() {
                                     />
                                 </div>
                                 <div className="contact-list-container mt-3">
-                                    <ul className="list-unstyled chat-list mt-2 mb-0">
+                                <ul className="list-unstyled chat-list mt-2 mb-0" >
                                         {searchTerm ? (
                                             filteredContactos.map((contacto) => (
-                                                <li key={contacto.IdEstudianteAgregado} className="clearfix" onClick={() => handleContactSelect(contacto)}>
-                                                    <img src={`../img/uploads/${contacto.Imagen1}`} alt="avatar" />
+                                                <li key={contacto.IdEstudianteAgregado} className="clearfix" onClick={() => handleContactSelect(contacto)}  >
+                                                    <img 
+                                                    src={`../img/uploads/${contacto.Imagen1}`} alt="avatar" />
                                                     <div className="about">
-                                                        <div className="name">{contacto.Nombre}</div>
+                                                        <div className="name">{contacto.Nombre} {contacto.Apellido[0]}</div>
                                                         <div className="status">
                                                             {contacto.IsOnline === true ? (
                                                                 <i className="fa fa-circle online"></i>
@@ -287,9 +292,13 @@ function ChatApp() {
                                         ) : (
                                             contactos.map((contacto) => (
                                                 <li key={contacto.IdEstudianteAgregado} className="clearfix" onClick={() => handleContactSelect(contacto)}>
-                                                    <img src={`../img/uploads/${contacto.Imagen1}`} alt="avatar" />
+                                                {imagenExiste(`../img/uploads/${contacto.Imagen1}`) ? (
+                                                    <img src={`../img/uploads/${contacto.Imagen1}`} alt="avatar" style={{ height: '45px' }}/>
+                                                ) : (
+                                                    <img src={`../img/uploads/1688323336413-804346209-64572.png`} alt="imagen por defecto" style={{ height: '45px' }}/>//Recuerden que deben cambiar la ruta de la imagen por defecto, segun donde las tengan o si se llaman distinto
+                                                )}
                                                     <div className="about">
-                                                        <div className="name">{contacto.Nombre}</div>
+                                                        <div className="name">{contacto.Nombre} {contacto.Apellido[0]}</div>
                                                         <div className="status">
                                                             {contacto.IsOnline === true ? (
                                                                 <i className="fa fa-circle online"></i>
@@ -312,9 +321,13 @@ function ChatApp() {
                                             <div class="col-lg-6">
                                                 {selectedContact && (
                                                     <>
-                                                        <img src={`../img/uploads/${selectedContact.Imagen1}`} alt="avatar" />
+                                                    {imagenExiste(`../img/uploads/${selectedContact.Imagen1}`) ? (
+                                                        <img src={`../img/uploads/${selectedContact.Imagen1}`} alt="avatar" style={{ height: '40px' }}/>
+                                                    ) : (
+                                                        <img src={`../img/uploads/1688323336413-804346209-64572.png`} alt="imagen por defecto" style={{ height: '40px' }}/>
+                                                    )}
                                                         <div class="chat-about">
-                                                            <h6 class="m-b-0">{selectedContact.Nombre}</h6>
+                                                            <h6 class="m-b-0">{selectedContact.Nombre} {selectedContact.Apellido}</h6>
                                                             <small>{selectedContact.IsOnline ? "En línea" : "Desconectado"}</small>
                                                         </div>
                                                     </>
@@ -328,15 +341,15 @@ function ChatApp() {
                                         <ul class="m-b-0">
                                             {chatHistory.map((message) => (
                                                 <li
-                                                    key={message.Id_Historial} /* Cambia esto al identificador adecuado de tu mensaje */
-                                                    className={message.EmisorId === NumCuenta ? "clearfix text-right" : "clearfix text-left"} /* Ajusta las clases CSS según el emisor del mensaje */
+                                                    key={message.Id_Historial} 
+                                                    className={message.EmisorId === NumCuenta ? "clearfix text-right" : "clearfix text-left"} 
                                                 >
                                                     <div class="message-data">
                                                         <span className="message-data-time">
                                                             {FormatoTiempo(message.fecha_Mensaje)}
                                                         </span>
                                                     </div>
-                                                    <div className={message.EmisorId === NumCuenta ? "message my-message float-right" : "message other-message float-left"}> {/* Ajusta las clases CSS según el emisor del mensaje */}
+                                                    <div className={message.EmisorId === NumCuenta ? "message my-message float-right" : "message other-message float-left"}> 
                                                         {message.mensaje}
                                                     </div>
                                                 </li>

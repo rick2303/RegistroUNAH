@@ -12,13 +12,15 @@ export default function NavbarEstudiante() {
     const storedData = localStorage.getItem("userData");
     if (storedData) {
       const userData = JSON.parse(storedData);
-      if (!userData.perfil) {
-        const alternativaImagen = "UNAH.png";
-        setImagenUsuario(alternativaImagen);
-      } else {
-        const alternativaImagen = userData.perfil.Imagen1;
-        setImagenUsuario(alternativaImagen);
-      }
+      if (!userData.perfil.Imagen1) {
+        const imagen1 = "1688323336413-804346209-64572.png";
+        setImagenUsuario(imagen1);
+        console.log("No hay imagen 1");
+    } else {
+        const imagen1 = userData.perfil.Imagen1;
+        setImagenUsuario(imagen1);
+    }
+    
     }
   }, []);
   const [openNav, setOpenNav] = React.useState(false);

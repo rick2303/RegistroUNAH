@@ -47,6 +47,8 @@ function ModalAgregarContacto({ isOpen, onClose }) {
   const handleEnviarSolicitud = (row) => {
     const NumCuentaAmigo = row.NumCuenta;
     fetchSolicitud(NumCuentaAmigo);
+    setSearchTerm("");
+    
   };
 
   const fetchEstudiante = async (NumCuenta) => {
@@ -86,8 +88,10 @@ function ModalAgregarContacto({ isOpen, onClose }) {
       if (data.status === 200) {
         console.log(data);
         alert(data.message);
+        onClose();
       } else {
         alert(data.message)
+        onClose();
       }
     } catch (error) {
       console.error('Error fetching solicitud:', error);
@@ -135,7 +139,7 @@ function ModalAgregarContacto({ isOpen, onClose }) {
     <>
       {/* <!-- Modal --> */}
       <Modal isOpen={isOpen} toggle={handleCloseModal} className="modal-dialog" style={{ maxWidth: '1500px', width: '80%' }}>
-        <ModalHeader className="text-black">
+        <ModalHeader className="text-white " style={{backgroundColor:'#1E40AF'}}>
           <h1 className="modal-title fs-5 text-center" id="exampleModalLabel">
             <strong>Agregar Contacto</strong>
           </h1>
