@@ -61,8 +61,12 @@ router.post('/estudiantesMatriculadosDepto', async (req, res) => {
     try {
         const { Carrera, CentroRegional} = req.body;
         const pool = await getConnection();
-        const result = await pool.request().query(`SELECT DISTINCT NumCuenta, Nombre, Apellido, CorreoInstitucional, Carrera, IndiceGlobal, IndicePeriodo FROM [dbo].[estudiantes] e left join registro_estudiante_clases re on re.IdEstudiante = numCuenta left join secciones s on re.idSeccion = s.idseccion where YEAR(re.fecha) = year(getdate()) and month(RE.Fecha) > '05' and carrera = '${Carrera}' and e.CentroRegional = '${CentroRegional}'
-`);
+        const result = await pool.request().query(`        
+        select DISTINCT e.NumCuenta, e.Nombre, e.Apellido, e.CorreoInstitucional, e.Carrera, e.IndiceGlobal, e.IndicePeriodo
+        from [dbo].[registro_estudiante_clases]  rec
+        inner join estudiantes e 
+        ON rec.IdEstudiante = e.NumCuenta where e.Carrera='${Carrera}' and e.CentroRegional = '${CentroRegional}' and rec.EstadoClase IS NULL
+        `);
         res.json(result.recordset);
 
         console.log(result.recordset)
