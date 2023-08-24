@@ -43,6 +43,7 @@ export const verificarConflictosHorarios = async (req, res) => {
         INNER JOIN [dbo].[secciones] s ON rec.IdSeccion = s.IdSeccion
         WHERE rec.IdEstudiante = @IdEstudiante
         AND s.Periodo = @Periodo
+        AND year(getdate()) = year(rec.fecha)
         AND ((HI = @parsedHI AND HF > @parsedHI) )  AND (
                 (@Dias LIKE '%Lu%' AND Dias LIKE '%Lu%')
                 OR (@Dias LIKE '%Ma%' AND Dias LIKE '%Ma%')
